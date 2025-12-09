@@ -4,37 +4,40 @@ WORKDIR /app
 COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
-# Stage 2: Build Node assets
+# Stage 2: Build Node assets (kept, but no build output copied)
 FROM node:18 AS nodebuild
 WORKDIR /app
 COPY . .
 RUN npm install && npm run build
+# NOTE: Nothing is copied from this stage to final image
 
-# Stage 3: PHP Application
+# Stage 3: PHP-FPM + Nginx
 FROM php:8.2-fpm
 
-# Install required extensions
+# Install required packages
 RUN apt-get update && apt-get install -y \
-    postgresql-dev \
+    libpq-dev \
     libzip-dev \
+    unzip \
     git \
-    curl \
- && docker-php-ext-install pdo pdo_pgsql mbstring bcmath zip \
- && apt-get clean && rm -rf /var/lib/apt/lists/*
+    nginx \
+    supervisor \
+    libonig-dev \
+    zlib1g-dev \
+ && docker-php-ext-install pdo pdo_pgsql mbstring bcmath zip
 
 WORKDIR /var/www/html
 
-# Copy Laravel app from previous build stages
+# Copy Laravel app from previous build stage
 COPY --from=vendor /app/vendor ./vendor
 COPY . .
 
-# Create required directories
-RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache
+# Copy Nginx and Supervisor configs
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Set permissions
-RUN chmod -R 755 storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache
 
-EXPOSE 8000
+EXPOSE 10000
 
-# Generate Laravel key and start server
-CMD php artisan key:generate --force && php artisan serve --host=0.0.0.0 --port=8000
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
