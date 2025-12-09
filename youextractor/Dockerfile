@@ -11,15 +11,16 @@ COPY . .
 RUN npm install && npm run build
 
 # Stage 3: PHP Application
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm
 
 # Install required extensions
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     postgresql-dev \
     libzip-dev \
     git \
     curl \
- && docker-php-ext-install pdo pdo_pgsql mbstring bcmath zip
+ && docker-php-ext-install pdo pdo_pgsql mbstring bcmath zip \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
 
