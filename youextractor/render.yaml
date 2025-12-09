@@ -1,0 +1,48 @@
+services:
+  - type: web
+    name: youextractor
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        value: base64:b6fkKEA46O4acYzBOAd8g2sXaC0y7D28zSwzuhXocWw=
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: youextractor
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: youextractor
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: youextractor
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: youextractor
+          property: username
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: youextractor
+          property: password
+      - key: DB_SSLMODE
+        value: require
+      - key: CACHE_DRIVER
+        value: file
+      - key: SESSION_DRIVER
+        value: file
+      - key: LOG_CHANNEL
+        value: stack
+
+databases:
+  - name: youextractor
+    engine: postgres
+    ipAllowList: []

@@ -1,0 +1,24 @@
+{
+  "name": "youextractor",
+  "version": "1.0.0",
+  "description": "YouTube Video Extractor with AI Explanations",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd youextractor && npm run dev",
+    "build": "cd youextractor && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "youtube",
+    "extractor",
+    "ai",
+    "laravel"
+  ],
+  "author": "onyedika-glitch",
+  "license": "MIT",
+  "devDependencies": {
+    "tailwindcss": "^3.3.0",
+    "postcss": "^8.4.31",
+    "autoprefixer": "^10.4.16"
+  }
+}
