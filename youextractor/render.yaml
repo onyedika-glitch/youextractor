@@ -35,12 +35,18 @@ services:
           property: password
       - key: DB_SSLMODE
         value: require
+      - key: APP_URL
+        value: https://youextractor.onrender.com
       - key: CACHE_DRIVER
-        value: file
+        value: array
       - key: SESSION_DRIVER
         value: file
       - key: LOG_CHANNEL
         value: stack
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: YOUTUBE_API_KEY
+        sync: false
 
 databases:
   - name: youextractor
