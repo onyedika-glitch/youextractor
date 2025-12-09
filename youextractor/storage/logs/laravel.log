@@ -267,3 +267,7 @@ LINE 1: delete from \"cache\"
 #35 C:\\Users\\omogo\\Documents\\Video web\\you-extractor\\youextractor\\artisan(16): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #36 {main}
 "} 
+[2025-12-09 18:36:56] local.ERROR: Maximum execution time of 60 seconds exceeded {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 60 seconds exceeded at C:\\Users\\omogo\\Documents\\Video web\\you-extractor\\youextractor\\vendor\\composer\\ClassLoader.php:429)
+[stacktrace]
+#0 {main}
+"} 
