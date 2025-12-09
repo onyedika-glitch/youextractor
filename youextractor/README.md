@@ -9,7 +9,7 @@ A Laravel application that extracts YouTube tech videos, fetches transcripts, an
 ✅ AI-powered explanations using GPT-4  
 ✅ Automatic code snippet extraction  
 ✅ Video search and filtering  
-✅ SQLite database (default)  
+✅ PostgreSQL database (default)  
 ✅ RESTful API endpoints  
 
 ## Tech Stack
