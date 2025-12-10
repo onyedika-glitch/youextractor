@@ -19,6 +19,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Ensure storage directories exist for production
+        $directories = [
+            storage_path('framework/cache/data'),
+            storage_path('framework/sessions'),
+            storage_path('framework/views'),
+            storage_path('logs'),
+            storage_path('app/public'),
+        ];
+
+        foreach ($directories as $directory) {
+            if (!is_dir($directory)) {
+                mkdir($directory, 0755, true);
+            }
+        }
     }
 }
