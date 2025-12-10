@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use OpenAI\Laravel\Facades\OpenAI;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -14,45 +14,60 @@ class VideoController extends Controller
     /**
      * Extract YouTube video and explain it
      */
-    public function extract(Request $request)
+    public function extract(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'youtube_url' => 'required|url',
-        ]);
-
         try {
+            $validated = $request->validate([
+                'youtube_url' => 'required|string',
+            ]);
+
             // Extract video ID from URL
             $videoId = $this->extractVideoId($validated['youtube_url']);
             
-            // Check if already exists
-            $video = Video::where('youtube_id', $videoId)->first();
-            if ($video) {
-                return response()->json($video, 200);
+            if (!$videoId) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Invalid YouTube URL. Please use a valid YouTube video URL.',
+                ], 400);
             }
 
-            // Get video metadata from YouTube API
-            $videoData = $this->getYoutubeMetadata($videoId);
+            // Check if already exists
+            $existingVideo = Video::where('youtube_id', $videoId)->first();
+            if ($existingVideo) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Video already extracted',
+                    'data' => $existingVideo,
+                ], 200);
+            }
+
+            // Get video metadata (fast method using oEmbed)
+            $videoData = $this->getVideoMetadata($videoId);
             
-            // Get transcript (using a free service)
-            $transcript = $this->getTranscript($videoId);
+            if (!$videoData) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Could not fetch video information. The video might be private or unavailable.',
+                ], 400);
+            }
+
+            // Generate explanation (without waiting for transcript)
+            $explanation = $this->generateExplanation($videoData['title'], $videoData['description']);
             
-            // For now, skip OpenAI and just use a basic explanation from transcript
-            $explanation = $this->generateSimpleExplanation($transcript, $videoData['title']);
-            
-            // Extract code snippets
-            $codeSnippets = $this->extractCodeSnippets($explanation);
-            
+            // Generate summary
+            $summary = $this->generateSummary($videoData['title']);
+
             // Save to database
             $video = Video::create([
                 'youtube_id' => $videoId,
                 'title' => $videoData['title'],
-                'description' => $videoData['description'] ?? '',
-                'transcript' => $transcript,
+                'description' => $videoData['description'],
+                'transcript' => 'Transcript extraction skipped for faster processing.',
                 'explanation' => $explanation,
-                'code_snippets' => $codeSnippets,
-                'summary' => substr($explanation, 0, 300) . '...',
-                'duration' => $videoData['duration'] ?? 0,
-                'published_at' => $videoData['published_at'] ?? now(),
+                'code_snippets' => [],
+                'summary' => $summary,
+                'duration' => $videoData['duration'],
+                'published_at' => now(),
                 'extracted_at' => now(),
             ]);
 
@@ -63,39 +78,49 @@ class VideoController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
-            Log::error('Video extraction error: ' . $e->getMessage(), [
-                'url' => $validated['youtube_url'] ?? 'unknown',
-            ]);
+            Log::error('Video extraction error: ' . $e->getMessage());
+            
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
-            ], 400);
+                'error' => 'Failed to extract video: ' . $e->getMessage(),
+            ], 500);
         }
     }
 
     /**
      * Get all extracted videos
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $videos = Video::latest('extracted_at')->paginate(15);
-        return response()->json($videos);
+        try {
+            $videos = Video::latest('extracted_at')->paginate(15);
+            return response()->json($videos);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to fetch videos',
+            ], 500);
+        }
     }
 
     /**
      * Get single video
      */
-    public function show(Video $video)
+    public function show(Video $video): JsonResponse
     {
-        return response()->json($video);
+        return response()->json([
+            'success' => true,
+            'data' => $video,
+        ]);
     }
 
     /**
      * Search videos
      */
-    public function search(Request $request)
+    public function search(Request $request): JsonResponse
     {
         $query = $request->get('q', '');
+        
         $videos = Video::where('title', 'like', "%{$query}%")
             ->orWhere('description', 'like', "%{$query}%")
             ->latest('extracted_at')
@@ -107,187 +132,118 @@ class VideoController extends Controller
     /**
      * Extract video ID from YouTube URL
      */
-    private function extractVideoId(string $url): string
+    private function extractVideoId(string $url): ?string
     {
-        preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', $url, $matches);
-        return $matches[1] ?? throw new \Exception('Invalid YouTube URL format');
+        $patterns = [
+            '/(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/',
+            '/(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/',
+            '/(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/',
+            '/(?:youtube\.com\/v\/)([a-zA-Z0-9_-]{11})/',
+            '/(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/',
+            '/^([a-zA-Z0-9_-]{11})$/',
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $url, $matches)) {
+                return $matches[1];
+            }
+        }
+
+        return null;
     }
 
     /**
-     * Get YouTube video metadata
+     * Get video metadata using oEmbed (fast, no API key needed)
      */
-    private function getYoutubeMetadata(string $videoId): array
+    private function getVideoMetadata(string $videoId): ?array
     {
         try {
-            $apiKey = config('services.youtube.key');
-            if (!$apiKey) {
-                throw new \Exception('YouTube API key not configured');
-            }
-            
-            $response = Http::timeout(10)->get('https://www.googleapis.com/youtube/v3/videos', [
-                'id' => $videoId,
-                'key' => $apiKey,
-                'part' => 'snippet,contentDetails',
+            // Use oEmbed - fast and reliable
+            $response = Http::timeout(10)->get('https://www.youtube.com/oembed', [
+                'url' => "https://www.youtube.com/watch?v={$videoId}",
+                'format' => 'json',
             ]);
 
-            if ($response->failed()) {
-                throw new \Exception('YouTube API Error: ' . $response->body());
+            if ($response->successful()) {
+                $data = $response->json();
+                return [
+                    'title' => $data['title'] ?? 'Unknown Title',
+                    'description' => "Video by {$data['author_name']}. Watch on YouTube for full content.",
+                    'duration' => 0,
+                    'author' => $data['author_name'] ?? 'Unknown',
+                ];
             }
 
-            $data = $response->json();
-            if (!isset($data['items'][0])) {
-                throw new \Exception('Video not found on YouTube');
-            }
-
-            $video = $data['items'][0];
-            $snippet = $video['snippet'] ?? [];
-            
-            return [
-                'title' => $snippet['title'] ?? 'Unknown',
-                'description' => $snippet['description'] ?? '',
-                'duration' => $this->parseDuration($video['contentDetails']['duration'] ?? 'PT0S'),
-                'published_at' => $snippet['publishedAt'] ?? now(),
-            ];
+            return null;
         } catch (\Exception $e) {
-            Log::error('YouTube API error: ' . $e->getMessage());
-            throw $e;
+            Log::warning('oEmbed failed: ' . $e->getMessage());
+            return null;
         }
     }
 
     /**
-     * Get video transcript
+     * Generate explanation using OpenAI or fallback
      */
-    private function getTranscript(string $videoId): string
+    private function generateExplanation(string $title, string $description): string
     {
+        $openaiKey = env('OPENAI_API_KEY');
+        
+        // If no OpenAI key or it's invalid, use fallback
+        if (empty($openaiKey) || strlen($openaiKey) < 20) {
+            return $this->generateFallbackExplanation($title, $description);
+        }
+
         try {
-            $response = Http::timeout(10)->get("https://www.youtube.com/api/timedtext", [
-                'v' => $videoId,
-                'kind' => 'asr',
-                'lang' => 'en',
-            ]);
-            
-            if ($response->successful() && $response->body()) {
-                libxml_use_internal_errors(true);
-                $xml = simplexml_load_string($response->body());
-                
-                if ($xml) {
-                    $transcript = '';
-                    foreach ($xml->text ?? [] as $text) {
-                        $transcript .= (string)$text . ' ';
-                    }
-                    return trim($transcript) ?: 'No transcript available';
+            $response = Http::timeout(30)
+                ->withHeaders([
+                    'Authorization' => "Bearer {$openaiKey}",
+                    'Content-Type' => 'application/json',
+                ])
+                ->post('https://api.openai.com/v1/chat/completions', [
+                    'model' => 'gpt-3.5-turbo',
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a helpful assistant that explains YouTube video content based on their titles. Provide a brief, informative explanation of what the video likely covers.',
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => "Based on this video title, provide a helpful explanation of what this video likely covers:\n\nTitle: {$title}\n\nProvide a 2-3 paragraph explanation.",
+                        ],
+                    ],
+                    'temperature' => 0.7,
+                    'max_tokens' => 500,
+                ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                $content = $data['choices'][0]['message']['content'] ?? null;
+                if ($content) {
+                    return $content;
                 }
             }
             
-            return 'Transcript not available';
+            Log::warning('OpenAI request failed: ' . $response->body());
         } catch (\Exception $e) {
-            Log::warning('Transcript extraction: ' . $e->getMessage());
-            return 'Transcript not available';
+            Log::warning('OpenAI error: ' . $e->getMessage());
         }
+
+        return $this->generateFallbackExplanation($title, $description);
     }
 
     /**
-     * Generate simple explanation without OpenAI
+     * Generate fallback explanation without AI
      */
-    private function generateSimpleExplanation(string $transcript, string $title): string
+    private function generateFallbackExplanation(string $title, string $description): string
     {
-        if (empty($transcript) || strpos($transcript, 'not available') !== false) {
-            return "Video: **{$title}**\n\nNo transcript available for analysis.";
-        }
-
-        // Take first 1000 characters of transcript
-        $excerpt = substr($transcript, 0, 1000);
-        
-        return "**{$title}**\n\n**Transcript Excerpt:**\n{$excerpt}\n\n*(Full OpenAI explanation requires valid API key and longer processing)*";
-    }
-
-    /**
-     * Generate explanation using OpenAI
-     */
-    private function generateExplanation(string $transcript, string $title): string
-    {
-        try {
-            if (empty($transcript) || strpos($transcript, 'not available') !== false) {
-                return "Video: {$title}\n\nTranscript not available for this video.";
-            }
-
-            // Limit to 2000 chars to avoid token limits
-            $shortTranscript = substr($transcript, 0, 2000);
-            
-            $result = OpenAI::chat()->create([
-                'model' => 'gpt-3.5-turbo',
-                'messages' => [
-                    [
-                        'role' => 'system',
-                        'content' => 'Explain technical video content in 100-200 words.',
-                    ],
-                    [
-                        'role' => 'user',
-                        'content' => "Video: {$title}\nContent: {$shortTranscript}",
-                    ],
-                ],
-                'temperature' => 0.7,
-                'max_tokens' => 250,
-            ]);
-
-            return $result->choices[0]->message->content ?? '';
-        } catch (\Exception $e) {
-            Log::error('OpenAI error: ' . $e->getMessage());
-            return "Video: {$title}\n\nOpenAI Error: " . $e->getMessage();
-        }
+        return "## {$title}\n\n{$description}\n\n### About This Video\nThis video has been saved to your library. Click the YouTube link above to watch the full video and get all the details.\n\n### Note\nFor AI-powered explanations, ensure your OpenAI API key is properly configured in the .env file.";
     }
 
     /**
      * Generate summary
      */
-    private function generateSummary(string $explanation): string
+    private function generateSummary(string $title): string
     {
-        try {
-            $result = OpenAI::chat()->create([
-                'model' => 'gpt-3.5-turbo',
-                'messages' => [
-                    [
-                        'role' => 'user',
-                        'content' => "Summarize in 1-2 sentences: " . substr($explanation, 0, 500),
-                    ],
-                ],
-                'max_tokens' => 100,
-            ]);
-
-            return $result->choices[0]->message->content ?? '';
-        } catch (\Exception $e) {
-            return substr($explanation, 0, 200) . '...';
-        }
-    }
-
-    /**
-     * Extract code snippets
-     */
-    private function extractCodeSnippets(string $explanation): array
-    {
-        $snippets = [];
-        preg_match_all('/```(\w+)?\n(.*?)\n```/s', $explanation, $matches);
-        
-        foreach ($matches[2] ?? [] as $code) {
-            if (trim($code)) {
-                $snippets[] = trim($code);
-            }
-        }
-
-        return $snippets;
-    }
-
-    /**
-     * Parse ISO 8601 duration
-     */
-    private function parseDuration(string $duration): int
-    {
-        preg_match('/PT(\d+H)?(\d+M)?(\d+S)?/', $duration, $matches);
-        
-        $hours = (int)preg_replace('/H/', '', $matches[1] ?? 0);
-        $minutes = (int)preg_replace('/M/', '', $matches[2] ?? 0);
-        $seconds = (int)preg_replace('/S/', '', $matches[3] ?? 0);
-        
-        return ($hours * 3600) + ($minutes * 60) + $seconds;
+        return "Video: " . substr($title, 0, 200);
     }
 }

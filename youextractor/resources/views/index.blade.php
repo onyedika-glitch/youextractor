@@ -41,7 +41,7 @@
                             <span id="spinner" class="hidden ml-2">⏳</span>
                         </button>
                         
-                        <a href="/api/videos" 
+                        <a href="/videos" 
                            class="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded font-semibold transition">
                             View All Videos
                         </a>
@@ -178,7 +178,7 @@
 
                     ${codeSnippetsHtml}
 
-                    ${video.transcript ? `
+                    ${video.transcript && !video.transcript.includes('not available') ? `
                         <details class="mt-6">
                             <summary class="cursor-pointer font-semibold text-gray-300 hover:text-white">📄 Full Transcript</summary>
                             <div class="bg-gray-700 p-4 rounded mt-3 text-sm text-gray-300 max-h-64 overflow-y-auto">
@@ -210,6 +210,7 @@
         }
 
         function escapeHtml(text) {
+            if (!text) return '';
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;

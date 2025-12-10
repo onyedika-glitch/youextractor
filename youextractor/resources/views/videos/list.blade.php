@@ -68,11 +68,8 @@
                 const response = await fetch('/api/videos');
                 const data = await response.json();
                 
-                if (!data.success) {
-                    throw new Error(data.error || 'Failed to load videos');
-                }
-
-                allVideos = data.data || [];
+                // Handle paginated response
+                allVideos = data.data || data || [];
                 displayVideos(allVideos);
             } catch (error) {
                 videosContainer.innerHTML = `
@@ -125,22 +122,14 @@
             try {
                 const response = await fetch(`/api/videos/search?q=${encodeURIComponent(query)}`);
                 const data = await response.json();
-                
-                if (data.success) {
-                    displayVideos(data.data || []);
-                }
+                displayVideos(data.data || data || []);
             } catch (error) {
                 console.error('Search error:', error);
             }
         });
 
         function viewVideo(videoId) {
-            // In a full app, you'd navigate to a detail page
-            // For now, show alert
-            const video = allVideos.find(v => v.id === videoId);
-            if (video) {
-                alert(`Video: ${video.title}\n\n${video.explanation}`);
-            }
+            window.location.href = `/videos/${videoId}`;
         }
 
         function formatDuration(seconds) {

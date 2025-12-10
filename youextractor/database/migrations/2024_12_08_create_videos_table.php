@@ -12,11 +12,11 @@ return new class extends Migration
             $table->id();
             $table->string('youtube_id')->unique();
             $table->string('title');
-            $table->longText('description')->nullable();
-            $table->longText('transcript')->nullable();
-            $table->longText('explanation');
+            $table->text('description')->nullable();
+            $table->text('transcript')->nullable();
+            $table->text('explanation');
             $table->json('code_snippets')->nullable();
-            $table->longText('summary');
+            $table->text('summary');
             $table->integer('duration')->default(0);
             $table->timestamp('published_at')->nullable();
             $table->timestamp('extracted_at');
@@ -24,7 +24,6 @@ return new class extends Migration
             
             $table->index('youtube_id');
             $table->index('extracted_at');
-            $table->fullText(['title', 'explanation', 'summary']);
         });
     }
 
