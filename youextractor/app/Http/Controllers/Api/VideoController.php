@@ -26,6 +26,9 @@ class VideoController extends Controller
      */
     public function extract(Request $request): JsonResponse
     {
+        // Increase execution time for AI processing
+        set_time_limit(300);
+        
         try {
             $validated = $request->validate([
                 'youtube_url' => 'required|string',
@@ -86,6 +89,11 @@ class VideoController extends Controller
                 'tech_stack' => $codeData['stack'] ?? null,
                 'setup_instructions' => $codeData['setup_instructions'] ?? '',
                 'dependencies' => $codeData['dependencies'] ?? [],
+                'tutorial_guide' => $codeData['tutorial_guide'] ?? null,
+                'ide_recommendations' => $codeData['ide_recommendations'] ?? null,
+                'prerequisites' => $codeData['prerequisites'] ?? null,
+                'setup_guide' => $codeData['setup_guide'] ?? null,
+                'run_guide' => $codeData['run_guide'] ?? null,
                 'summary' => $summary,
                 'duration' => $videoData['duration'],
                 'published_at' => now(),
@@ -157,6 +165,9 @@ class VideoController extends Controller
      */
     public function reExtractCode(Video $video): JsonResponse
     {
+        // Increase execution time for AI processing
+        set_time_limit(300);
+        
         try {
             $transcript = $video->transcript;
             
@@ -175,6 +186,11 @@ class VideoController extends Controller
                 'tech_stack' => $codeData['stack'] ?? null,
                 'setup_instructions' => $codeData['setup_instructions'] ?? '',
                 'dependencies' => $codeData['dependencies'] ?? [],
+                'tutorial_guide' => $codeData['tutorial_guide'] ?? null,
+                'ide_recommendations' => $codeData['ide_recommendations'] ?? null,
+                'prerequisites' => $codeData['prerequisites'] ?? null,
+                'setup_guide' => $codeData['setup_guide'] ?? null,
+                'run_guide' => $codeData['run_guide'] ?? null,
                 'explanation' => $this->generateExplanation($video->title, $codeData),
             ]);
 
