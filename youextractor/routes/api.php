@@ -11,7 +11,7 @@ Route::get('/health', function () {
     ]);
 });
 
-Route::get('/videos', [VideoController::class, 'index']);
-Route::get('/videos/search', [VideoController::class, 'search']);
 Route::post('/videos/extract', [VideoController::class, 'extract']);
-Route::get('/videos/{video}', [VideoController::class, 'show']);
+Route::get('/videos', [VideoController::class, 'index']);
+Route::get('/videos/search', [VideoController::class, 'search']);  // static route
+Route::get('/videos/{video}', [VideoController::class, 'show']);   // dynamic route last
