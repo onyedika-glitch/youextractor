@@ -18,14 +18,14 @@
         .prose p { color: #d1d5db; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen">
     <div class="min-h-screen flex flex-col">
         <!-- Header -->
         <header class="bg-black/30 backdrop-blur-sm border-b border-purple-500/20">
             <div class="max-w-7xl mx-auto px-4 py-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        <h1 class="text-3xl font-bold text-purple-400">
                             🎬 YouTube Code Extractor
                         </h1>
                         <p class="text-gray-400 mt-1">Extract code + Get complete tutorials from programming videos</p>
@@ -65,7 +65,7 @@
                             <button 
                                 type="submit" 
                                 id="submitBtn"
-                                class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-xl font-bold text-lg transition transform hover:scale-105 flex items-center gap-2">
+                                class="px-8 py-4 bg-purple-600 hover:bg-purple-700 rounded-xl font-bold text-lg transition transform hover:scale-105 flex items-center gap-2">
                                 <span id="submitText">🚀 Extract & Learn</span>
                                 <span id="spinner" class="hidden">
                                     <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -250,7 +250,7 @@
                                 </div>
                             </div>
                             ${hasCode ? `
-                            <a href="/api/videos/${video.id}/download" class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg font-bold transition flex items-center gap-2 ml-4">
+                            <a href="/api/videos/${video.id}/download" class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition flex items-center gap-2 ml-4">
                                 ⬇️ Download ZIP
                             </a>` : ''}
                         </div>
@@ -377,7 +377,7 @@
                 html += `
                     <div class="mb-8">
                         <h3 class="text-xl font-bold mb-4 text-purple-400">⭐ Recommended IDE</h3>
-                        <div class="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-6 border border-purple-500/30">
+                        <div class="bg-purple-900/50 rounded-xl p-6 border border-purple-500/30">
                             <div class="flex items-start justify-between">
                                 <div>
                                     <h4 class="text-2xl font-bold text-white">${escapeHtml(ide.primary.name)}</h4>
