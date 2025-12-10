@@ -3,16 +3,26 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Video;
+use App\Services\CodeExtractorService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class VideoController extends Controller
 {
+    private CodeExtractorService $codeExtractor;
+
+    public function __construct()
+    {
+        $this->codeExtractor = new CodeExtractorService();
+    }
+
     /**
-     * Extract YouTube video and explain it
+     * Extract YouTube video and code snippets
      */
     public function extract(Request $request): JsonResponse
     {
@@ -21,7 +31,6 @@ class VideoController extends Controller
                 'youtube_url' => 'required|string',
             ]);
 
-            // Extract video ID from URL
             $videoId = $this->extractVideoId($validated['youtube_url']);
             
             if (!$videoId) {
@@ -41,7 +50,7 @@ class VideoController extends Controller
                 ], 200);
             }
 
-            // Get video metadata (fast method using oEmbed)
+            // Get video metadata
             $videoData = $this->getVideoMetadata($videoId);
             
             if (!$videoData) {
@@ -51,29 +60,46 @@ class VideoController extends Controller
                 ], 400);
             }
 
-            // Generate explanation (without waiting for transcript)
-            $explanation = $this->generateExplanation($videoData['title'], $videoData['description']);
+            // Get transcript for code extraction
+            $transcript = $this->getTranscript($videoId);
+
+            // Extract code using AI
+            $codeData = $this->codeExtractor->extractCodeFromTranscript(
+                $videoData['title'],
+                $transcript
+            );
+
+            // Generate explanation
+            $explanation = $this->generateExplanation($videoData['title'], $codeData);
             
             // Generate summary
-            $summary = $this->generateSummary($videoData['title']);
+            $summary = $this->generateSummary($videoData['title'], $codeData);
 
             // Save to database
             $video = Video::create([
                 'youtube_id' => $videoId,
                 'title' => $videoData['title'],
                 'description' => $videoData['description'],
-                'transcript' => 'Transcript extraction skipped for faster processing.',
+                'transcript' => $transcript,
                 'explanation' => $explanation,
-                'code_snippets' => [],
+                'code_snippets' => $codeData['files'] ?? [],
+                'tech_stack' => $codeData['stack'] ?? null,
+                'setup_instructions' => $codeData['setup_instructions'] ?? '',
+                'dependencies' => $codeData['dependencies'] ?? [],
                 'summary' => $summary,
                 'duration' => $videoData['duration'],
                 'published_at' => now(),
                 'extracted_at' => now(),
             ]);
 
+            // Generate ZIP file
+            if (!empty($codeData['files'])) {
+                $this->codeExtractor->generateZipFile($videoId, $codeData);
+            }
+
             return response()->json([
                 'success' => true,
-                'message' => 'Video extracted successfully',
+                'message' => 'Video and code extracted successfully',
                 'data' => $video,
             ], 201);
 
@@ -88,19 +114,97 @@ class VideoController extends Controller
     }
 
     /**
+     * Download code as ZIP
+     */
+    public function downloadCode(Video $video): BinaryFileResponse|JsonResponse
+    {
+        $zipPath = storage_path("app/downloads/{$video->youtube_id}.zip");
+
+        if (!file_exists($zipPath)) {
+            // Generate ZIP if not exists
+            $codeData = [
+                'stack' => $video->tech_stack,
+                'files' => $video->code_snippets ?? [],
+                'setup_instructions' => $video->setup_instructions ?? '',
+                'dependencies' => $video->dependencies ?? [],
+            ];
+
+            if (empty($codeData['files'])) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'No code files available for download',
+                ], 404);
+            }
+
+            $zipPath = $this->codeExtractor->generateZipFile($video->youtube_id, $codeData);
+        }
+
+        if (!$zipPath || !file_exists($zipPath)) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to generate download file',
+            ], 500);
+        }
+
+        $filename = preg_replace('/[^a-zA-Z0-9_-]/', '_', $video->title);
+        $filename = substr($filename, 0, 50) . '_code.zip';
+
+        return response()->download($zipPath, $filename);
+    }
+
+    /**
+     * Re-extract code from existing video
+     */
+    public function reExtractCode(Video $video): JsonResponse
+    {
+        try {
+            $transcript = $video->transcript;
+            
+            if (empty($transcript) || str_contains($transcript, 'skipped')) {
+                $transcript = $this->getTranscript($video->youtube_id);
+            }
+
+            $codeData = $this->codeExtractor->extractCodeFromTranscript(
+                $video->title,
+                $transcript
+            );
+
+            $video->update([
+                'transcript' => $transcript,
+                'code_snippets' => $codeData['files'] ?? [],
+                'tech_stack' => $codeData['stack'] ?? null,
+                'setup_instructions' => $codeData['setup_instructions'] ?? '',
+                'dependencies' => $codeData['dependencies'] ?? [],
+                'explanation' => $this->generateExplanation($video->title, $codeData),
+            ]);
+
+            // Regenerate ZIP
+            if (!empty($codeData['files'])) {
+                $this->codeExtractor->generateZipFile($video->youtube_id, $codeData);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Code re-extracted successfully',
+                'data' => $video->fresh(),
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Re-extraction error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to re-extract code: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
      * Get all extracted videos
      */
     public function index(): JsonResponse
     {
-        try {
-            $videos = Video::latest('extracted_at')->paginate(15);
-            return response()->json($videos);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Failed to fetch videos',
-            ], 500);
-        }
+        $videos = Video::latest('extracted_at')->paginate(15);
+        return response()->json($videos);
     }
 
     /**
@@ -153,12 +257,11 @@ class VideoController extends Controller
     }
 
     /**
-     * Get video metadata using oEmbed (fast, no API key needed)
+     * Get video metadata using oEmbed
      */
     private function getVideoMetadata(string $videoId): ?array
     {
         try {
-            // Use oEmbed - fast and reliable
             $response = Http::timeout(10)->get('https://www.youtube.com/oembed', [
                 'url' => "https://www.youtube.com/watch?v={$videoId}",
                 'format' => 'json',
@@ -168,7 +271,7 @@ class VideoController extends Controller
                 $data = $response->json();
                 return [
                     'title' => $data['title'] ?? 'Unknown Title',
-                    'description' => "Video by {$data['author_name']}. Watch on YouTube for full content.",
+                    'description' => "Video by {$data['author_name']}",
                     'duration' => 0,
                     'author' => $data['author_name'] ?? 'Unknown',
                 ];
@@ -182,68 +285,151 @@ class VideoController extends Controller
     }
 
     /**
-     * Generate explanation using OpenAI or fallback
+     * Get video transcript
      */
-    private function generateExplanation(string $title, string $description): string
+    private function getTranscript(string $videoId): string
     {
-        $openaiKey = env('OPENAI_API_KEY');
-        
-        // If no OpenAI key or it's invalid, use fallback
-        if (empty($openaiKey) || strlen($openaiKey) < 20) {
-            return $this->generateFallbackExplanation($title, $description);
-        }
-
         try {
-            $response = Http::timeout(30)
-                ->withHeaders([
-                    'Authorization' => "Bearer {$openaiKey}",
-                    'Content-Type' => 'application/json',
-                ])
-                ->post('https://api.openai.com/v1/chat/completions', [
-                    'model' => 'gpt-3.5-turbo',
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => 'You are a helpful assistant that explains YouTube video content based on their titles. Provide a brief, informative explanation of what the video likely covers.',
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => "Based on this video title, provide a helpful explanation of what this video likely covers:\n\nTitle: {$title}\n\nProvide a 2-3 paragraph explanation.",
-                        ],
-                    ],
-                    'temperature' => 0.7,
-                    'max_tokens' => 500,
-                ]);
+            // Method 1: Try YouTube's timedtext API
+            $response = Http::timeout(15)->get("https://www.youtube.com/api/timedtext", [
+                'v' => $videoId,
+                'lang' => 'en',
+                'kind' => 'asr',
+            ]);
 
-            if ($response->successful()) {
-                $data = $response->json();
-                $content = $data['choices'][0]['message']['content'] ?? null;
-                if ($content) {
-                    return $content;
+            if ($response->successful() && $response->body()) {
+                $transcript = $this->parseTimedText($response->body());
+                if ($transcript && strlen($transcript) > 50) {
+                    return $transcript;
                 }
             }
-            
-            Log::warning('OpenAI request failed: ' . $response->body());
+
+            // Method 2: Try to get caption URL from video page
+            $transcript = $this->getTranscriptFromPage($videoId);
+            if ($transcript && strlen($transcript) > 50) {
+                return $transcript;
+            }
+
         } catch (\Exception $e) {
-            Log::warning('OpenAI error: ' . $e->getMessage());
+            Log::warning('Transcript fetch failed: ' . $e->getMessage());
         }
 
-        return $this->generateFallbackExplanation($title, $description);
+        return 'Transcript not available. Code extraction will be based on video title and metadata.';
     }
 
     /**
-     * Generate fallback explanation without AI
+     * Parse timedtext XML
      */
-    private function generateFallbackExplanation(string $title, string $description): string
+    private function parseTimedText(string $xml): ?string
     {
-        return "## {$title}\n\n{$description}\n\n### About This Video\nThis video has been saved to your library. Click the YouTube link above to watch the full video and get all the details.\n\n### Note\nFor AI-powered explanations, ensure your OpenAI API key is properly configured in the .env file.";
+        try {
+            libxml_use_internal_errors(true);
+            $doc = simplexml_load_string($xml);
+            
+            if (!$doc) return null;
+
+            $transcript = '';
+            foreach ($doc->text ?? [] as $text) {
+                $content = (string) $text;
+                $content = html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $transcript .= $content . ' ';
+            }
+
+            return trim($transcript) ?: null;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Get transcript from YouTube page
+     */
+    private function getTranscriptFromPage(string $videoId): ?string
+    {
+        try {
+            $response = Http::timeout(15)
+                ->withHeaders(['Accept-Language' => 'en-US,en;q=0.9'])
+                ->get("https://www.youtube.com/watch?v={$videoId}");
+
+            if (!$response->successful()) return null;
+
+            $html = $response->body();
+            
+            if (preg_match('/"captionTracks":\s*\[(.*?)\]/', $html, $matches)) {
+                $tracksJson = '[' . $matches[1] . ']';
+                $tracks = json_decode($tracksJson, true);
+                
+                if ($tracks && isset($tracks[0]['baseUrl'])) {
+                    $captionUrl = str_replace('\u0026', '&', $tracks[0]['baseUrl']);
+                    $captionResponse = Http::timeout(10)->get($captionUrl);
+                    
+                    if ($captionResponse->successful()) {
+                        return $this->parseTimedText($captionResponse->body());
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Log::warning('Page transcript failed: ' . $e->getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Generate explanation with code context
+     */
+    private function generateExplanation(string $title, array $codeData): string
+    {
+        $explanation = "## {$title}\n\n";
+
+        $stack = $codeData['stack'] ?? null;
+        if ($stack) {
+            $explanation .= "### Tech Stack\n";
+            $explanation .= "**Primary Language**: {$stack['primary']}\n\n";
+            
+            if (!empty($stack['frameworks'])) {
+                $explanation .= "**Frameworks/Libraries**: " . implode(', ', $stack['frameworks']) . "\n\n";
+            }
+            
+            if (!empty($stack['description'])) {
+                $explanation .= "{$stack['description']}\n\n";
+            }
+        }
+
+        $files = $codeData['files'] ?? [];
+        if (!empty($files)) {
+            $explanation .= "### Extracted Files (" . count($files) . " files)\n\n";
+            foreach ($files as $file) {
+                $explanation .= "- **{$file['filename']}** - {$file['description']}\n";
+            }
+            $explanation .= "\n";
+        }
+
+        if (!empty($codeData['setup_instructions'])) {
+            $explanation .= "### Setup Instructions\n```bash\n{$codeData['setup_instructions']}\n```\n\n";
+        }
+
+        $explanation .= "---\n*Click \"Download Code\" to get all the code files in a ZIP archive.*";
+
+        return $explanation;
     }
 
     /**
      * Generate summary
      */
-    private function generateSummary(string $title): string
+    private function generateSummary(string $title, array $codeData): string
     {
-        return "Video: " . substr($title, 0, 200);
+        $stack = $codeData['stack'] ?? null;
+        $fileCount = count($codeData['files'] ?? []);
+
+        $summary = $title;
+        if ($stack) {
+            $summary .= " | {$stack['primary']}";
+        }
+        if ($fileCount > 0) {
+            $summary .= " | {$fileCount} code files";
+        }
+
+        return substr($summary, 0, 300);
     }
 }

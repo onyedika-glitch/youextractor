@@ -13,5 +13,7 @@ Route::get('/health', function () {
 
 Route::post('/videos/extract', [VideoController::class, 'extract']);
 Route::get('/videos', [VideoController::class, 'index']);
-Route::get('/videos/search', [VideoController::class, 'search']);  // static route
-Route::get('/videos/{video}', [VideoController::class, 'show']);   // dynamic route last
+Route::get('/videos/search', [VideoController::class, 'search']);
+Route::get('/videos/{video}', [VideoController::class, 'show']);
+Route::get('/videos/{video}/download', [VideoController::class, 'downloadCode']);
+Route::post('/videos/{video}/re-extract', [VideoController::class, 'reExtractCode']);
