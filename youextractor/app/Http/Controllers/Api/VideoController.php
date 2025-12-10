@@ -32,9 +32,11 @@ class VideoController extends Controller
         try {
             $validated = $request->validate([
                 'youtube_url' => 'required|string',
+                'force_refresh' => 'sometimes|boolean',
             ]);
 
             $videoId = $this->extractVideoId($validated['youtube_url']);
+            $forceRefresh = $validated['force_refresh'] ?? false;
             
             if (!$videoId) {
                 return response()->json([
@@ -45,12 +47,28 @@ class VideoController extends Controller
 
             // Check if already exists
             $existingVideo = Video::where('youtube_id', $videoId)->first();
-            if ($existingVideo) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Video already extracted',
-                    'data' => $existingVideo,
-                ], 200);
+            
+            // Return cached result only if it has tutorial data AND not forcing refresh
+            if ($existingVideo && !$forceRefresh) {
+                // Check if tutorial data exists - if not, we need to re-extract
+                $hasTutorialData = !empty($existingVideo->tutorial_guide) 
+                    && !empty($existingVideo->setup_guide)
+                    && !empty($existingVideo->run_guide);
+                
+                if ($hasTutorialData) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Video already extracted',
+                        'data' => $existingVideo,
+                    ], 200);
+                }
+                
+                // Tutorial data missing - delete old record and re-extract
+                Log::info("Re-extracting video {$videoId} - missing tutorial data");
+                $existingVideo->delete();
+            } elseif ($existingVideo && $forceRefresh) {
+                Log::info("Force refreshing video {$videoId}");
+                $existingVideo->delete();
             }
 
             // Get video metadata
