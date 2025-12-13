@@ -51,8 +51,8 @@
                             <button type="submit" class="px-4 py-2 text-gray-300 hover:text-white transition">Logout</button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="px-4 py-2 text-gray-300 hover:text-white transition">Login</a>
-                        <a href="{{ route('register') }}" class="px-5 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition">
+                        <a href="{{ route('signin') }}" class="px-4 py-2 text-gray-300 hover:text-white transition">Login</a>
+                        <a href="{{ route('signup') }}" class="px-5 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition">
                             Get Started Free
                         </a>
                     @endauth
