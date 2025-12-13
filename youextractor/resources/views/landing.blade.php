@@ -80,7 +80,7 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-                    <a href="{{ route('register') }}" class="w-full sm:w-auto px-8 py-4 bg-purple-600 hover:bg-purple-700 rounded-xl font-bold text-lg transition transform hover:scale-105 flex items-center justify-center gap-2">
+                    <a href="{{ route('signup') }}" class="w-full sm:w-auto px-8 py-4 bg-purple-600 hover:bg-purple-700 rounded-xl font-bold text-lg transition transform hover:scale-105 flex items-center justify-center gap-2">
                         🚀 Start Extracting Free
                     </a>
                     <a href="#features" class="w-full sm:w-auto px-8 py-4 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl font-bold text-lg transition flex items-center justify-center gap-2">
@@ -247,7 +247,7 @@
             <p class="text-xl text-gray-300 mb-8">
                 Join developers who are accelerating their learning with AI-powered extraction.
             </p>
-            <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-white text-gray-900 rounded-xl font-bold text-lg transition transform hover:scale-105">
+            <a href="{{ route('signup') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-white text-gray-900 rounded-xl font-bold text-lg transition transform hover:scale-105">
                 🚀 Get Started Free
             </a>
             <p class="mt-4 text-gray-400 text-sm">No credit card required • Free forever for personal use</p>
