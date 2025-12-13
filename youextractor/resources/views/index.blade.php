@@ -25,14 +25,36 @@
             <div class="max-w-7xl mx-auto px-4 py-4 sm:py-6">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
-                        <h1 class="text-2xl sm:text-3xl font-bold text-purple-400">
+                        <a href="{{ route('landing') }}" class="text-2xl sm:text-3xl font-bold text-purple-400 hover:text-purple-300 transition">
                             🎬 YouTube Code Extractor
-                        </h1>
+                        </a>
                         <p class="text-gray-400 mt-1 text-sm sm:text-base">Extract code + Get complete tutorials from programming videos</p>
                     </div>
-                    <a href="/videos" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition flex items-center gap-2 w-fit">
-                        📚 My Extractions
-                    </a>
+                    <div class="flex items-center gap-4">
+                       
+                        @auth
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center gap-2">
+                                    @if(Auth::user()->avatar)
+                                        <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-8 h-8 rounded-full">
+                                    @else
+                                        <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-bold">
+                                            {{ substr(Auth::user()->name, 0, 1) }}
+                                        </div>
+                                    @endif
+                                    <span class="text-gray-300 hidden sm:inline">{{ Auth::user()->name }}</span>
+                                </div>
+                                <form method="POST" action="{{ route('logout') }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="px-3 py-2 text-gray-400 hover:text-white transition text-sm">
+                                        Logout
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            <a href="{{ route('signin') }}" class="px-4 py-2 text-gray-300 hover:text-white transition">Sign In</a>
+                        @endauth
+                    </div>
                 </div>
             </div>
         </header>
@@ -659,5 +681,12 @@
             return div.innerHTML;
         }
     </script>
-</body>
+
+ <!-- Floating Donate Button -->
+    <a href="https://buymeacoffee.com/omogo" target="_blank" 
+       class="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-yellow-500 hover:bg-yellow-400 text-gray-900 rounded-full shadow-lg font-semibold transition-all hover:scale-105">
+        ☕ Buy me a coffee
+    </a>
+
+    </body>
 </html>
