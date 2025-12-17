@@ -33,5 +33,9 @@ class AppServiceProvider extends ServiceProvider
                 mkdir($directory, 0755, true);
             }
         }
+
+        if (app()->environment('production')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 }
