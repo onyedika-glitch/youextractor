@@ -18,19 +18,19 @@
         .prose p { color: #d1d5db; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen">
     <div class="min-h-screen flex flex-col">
         <!-- Header -->
         <header class="bg-black/30 backdrop-blur-sm border-b border-purple-500/20">
-            <div class="max-w-7xl mx-auto px-4 py-6">
-                <div class="flex items-center justify-between">
+            <div class="max-w-7xl mx-auto px-4 py-4 sm:py-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
-                        <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        <h1 class="text-2xl sm:text-3xl font-bold text-purple-400">
                             🎬 YouTube Code Extractor
                         </h1>
-                        <p class="text-gray-400 mt-1">Extract code + Get complete tutorials from programming videos</p>
+                        <p class="text-gray-400 mt-1 text-sm sm:text-base">Extract code + Get complete tutorials from programming videos</p>
                     </div>
-                    <a href="/videos" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition flex items-center gap-2">
+                    <a href="/videos" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition flex items-center gap-2 w-fit">
                         📚 My Extractions
                     </a>
                 </div>
@@ -40,9 +40,9 @@
         <!-- Main Content -->
         <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-8">
             <!-- Hero Section -->
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold mb-4">Learn Faster, Code Smarter</h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-4xl font-bold mb-4">Learn Faster, Code Smarter</h2>
+                <p class="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto px-2">
                     Paste any programming tutorial URL and get all the code snippets, 
                     <span class="text-purple-400 font-semibold">complete setup guides</span>, 
                     <span class="text-pink-400 font-semibold">IDE recommendations</span>, and 
@@ -52,20 +52,20 @@
 
             <!-- Input Section -->
             <div class="bg-gray-800/50 backdrop-blur rounded-2xl p-8 mb-8 border border-purple-500/30 shadow-2xl">
-                <form id="videoForm" class="space-y-6">
+                <form id="videoForm" class="space-y-4 sm:space-y-6">
                     <div>
-                        <label class="block text-lg font-medium mb-3">YouTube Video URL</label>
-                        <div class="flex gap-4">
+                        <label class="block text-base sm:text-lg font-medium mb-3">YouTube Video URL</label>
+                        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                             <input 
                                 type="text" 
                                 id="youtubeUrl" 
                                 placeholder="https://www.youtube.com/watch?v=..."
-                                class="flex-1 px-5 py-4 bg-gray-900 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-lg"
+                                class="w-full sm:flex-1 px-4 sm:px-5 py-3 sm:py-4 bg-gray-900 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-base sm:text-lg"
                                 required>
                             <button 
                                 type="submit" 
                                 id="submitBtn"
-                                class="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-xl font-bold text-lg transition transform hover:scale-105 flex items-center gap-2">
+                                class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-purple-600 hover:bg-purple-700 rounded-xl font-bold text-base sm:text-lg transition transform hover:scale-105 flex items-center justify-center gap-2">
                                 <span id="submitText">🚀 Extract & Learn</span>
                                 <span id="spinner" class="hidden">
                                     <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -232,17 +232,17 @@
             }
 
             const html = `
-                <div class="space-y-6 animate-fadeIn">
+                <div class="space-y-4 sm:space-y-6 animate-fadeIn">
                     <!-- Video Info Card -->
-                    <div class="bg-gray-800/50 rounded-xl p-6 border border-purple-500/30">
-                        <div class="flex items-start justify-between">
-                            <div class="flex-1">
-                                <h3 class="text-2xl font-bold mb-3">${escapeHtml(video.title)}</h3>
+                    <div class="bg-gray-800/50 rounded-xl p-4 sm:p-6 border border-purple-500/30">
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-xl sm:text-2xl font-bold mb-3 break-words">${escapeHtml(video.title)}</h3>
                                 <div class="flex flex-wrap gap-2 mb-4">
                                     ${stackBadges}
                                     ${hasCode ? `<span class="px-3 py-1 bg-green-600 rounded-full text-sm">${video.code_snippets.length} files</span>` : ''}
                                 </div>
-                                <div class="flex gap-4 text-sm">
+                                <div class="flex flex-wrap gap-3 sm:gap-4 text-sm">
                                     <a href="https://youtube.com/watch?v=${video.youtube_id}" target="_blank" class="text-purple-400 hover:text-purple-300 flex items-center gap-1">
                                         🔗 Watch on YouTube
                                     </a>
@@ -250,7 +250,7 @@
                                 </div>
                             </div>
                             ${hasCode ? `
-                            <a href="/api/videos/${video.id}/download" class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg font-bold transition flex items-center gap-2 ml-4">
+                            <a href="/api/videos/${video.id}/download" class="w-full sm:w-auto px-4 sm:px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-bold transition flex items-center justify-center gap-2 text-center">
                                 ⬇️ Download ZIP
                             </a>` : ''}
                         </div>
@@ -259,25 +259,25 @@
                     <!-- Tabs -->
                     <div class="bg-gray-800/50 rounded-xl border border-gray-700 overflow-hidden">
                         <div class="flex border-b border-gray-700 overflow-x-auto">
-                            <button onclick="showTab('overview', '${video.id}')" id="tab-overview" class="px-6 py-4 font-semibold hover:bg-gray-700/50 transition tab-active whitespace-nowrap">
-                                📖 Tutorial Guide
+                            <button onclick="showTab('overview', '${video.id}')" id="tab-overview" class="px-4 sm:px-6 py-3 sm:py-4 font-semibold hover:bg-gray-700/50 transition tab-active whitespace-nowrap text-sm sm:text-base">
+                                📖 Tutorial
                             </button>
-                            <button onclick="showTab('ide', '${video.id}')" id="tab-ide" class="px-6 py-4 font-semibold hover:bg-gray-700/50 transition whitespace-nowrap">
-                                💻 IDE & Tools
+                            <button onclick="showTab('ide', '${video.id}')" id="tab-ide" class="px-4 sm:px-6 py-3 sm:py-4 font-semibold hover:bg-gray-700/50 transition whitespace-nowrap text-sm sm:text-base">
+                                💻 IDE
                             </button>
-                            <button onclick="showTab('setup', '${video.id}')" id="tab-setup" class="px-6 py-4 font-semibold hover:bg-gray-700/50 transition whitespace-nowrap">
-                                🛠️ Setup Guide
+                            <button onclick="showTab('setup', '${video.id}')" id="tab-setup" class="px-4 sm:px-6 py-3 sm:py-4 font-semibold hover:bg-gray-700/50 transition whitespace-nowrap text-sm sm:text-base">
+                                🛠️ Setup
                             </button>
-                            <button onclick="showTab('run', '${video.id}')" id="tab-run" class="px-6 py-4 font-semibold hover:bg-gray-700/50 transition whitespace-nowrap">
-                                ▶️ Run Guide
+                            <button onclick="showTab('run', '${video.id}')" id="tab-run" class="px-4 sm:px-6 py-3 sm:py-4 font-semibold hover:bg-gray-700/50 transition whitespace-nowrap text-sm sm:text-base">
+                                ▶️ Run
                             </button>
-                            <button onclick="showTab('code', '${video.id}')" id="tab-code" class="px-6 py-4 font-semibold hover:bg-gray-700/50 transition whitespace-nowrap">
-                                📁 Code Files (${video.code_snippets?.length || 0})
+                            <button onclick="showTab('code', '${video.id}')" id="tab-code" class="px-4 sm:px-6 py-3 sm:py-4 font-semibold hover:bg-gray-700/50 transition whitespace-nowrap text-sm sm:text-base">
+                                📁 Code (${video.code_snippets?.length || 0})
                             </button>
                         </div>
 
                         <!-- Tab Content -->
-                        <div class="p-6">
+                        <div class="p-4 sm:p-6">
                             <!-- Overview Tab -->
                             <div id="content-overview" class="tab-content">
                                 ${renderTutorialGuide(tutorialGuide)}
@@ -377,7 +377,7 @@
                 html += `
                     <div class="mb-8">
                         <h3 class="text-xl font-bold mb-4 text-purple-400">⭐ Recommended IDE</h3>
-                        <div class="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-6 border border-purple-500/30">
+                        <div class="bg-purple-900/50 rounded-xl p-6 border border-purple-500/30">
                             <div class="flex items-start justify-between">
                                 <div>
                                     <h4 class="text-2xl font-bold text-white">${escapeHtml(ide.primary.name)}</h4>
