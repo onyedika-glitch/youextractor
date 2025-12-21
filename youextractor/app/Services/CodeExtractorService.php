@@ -68,17 +68,105 @@ class CodeExtractorService
      */
     public function extractCodeFromTranscript(string $title, string $transcript): array
     {
+        // Try Gemini first (preferred)
+        $geminiKey = env('GEMINI_API_KEY');
         $openaiKey = env('OPENAI_API_KEY');
-        
+        $aiProvider = env('AI_PROVIDER', 'gemini');
+
         if (empty($openaiKey) || strlen($openaiKey) < 20) {
             Log::info('No OpenAI API key - using fallback extraction');
             return $this->generateFallbackProject($title);
         }
 
+        // Use Gemini if key exists and provider is gemini
+        if (!empty($geminiKey) && strlen($geminiKey) > 20) {
+            Log::info('Using Gemini AI for extraction');
+            $result = $this->extractWithGemini($title, $transcript, $geminiKey);
+            if ($result !== null) {
+                return $result;
+            }
+        }
+
+        // Fallback to OpenAI
+        if (!empty($openaiKey) && strlen($openaiKey) > 20) {
+            Log::info('Using OpenAI for extraction');
+            $result = $this->extractWithOpenAI($title, $transcript, $openaiKey);
+            if ($result !== null) {
+                return $result;
+            }
+        }
+
+        Log::info('No AI API available - using fallback extraction');
+        return $this->generateFallbackProject($title);
+    }
+
+    /**
+     * Extract using Google Gemini AI
+     */
+    private function extractWithGemini(string $title, string $transcript, string $apiKey): ?array
+    {
+        try {
+            $prompt = "Video Title: {$title}\n\nTranscript (if available):\n{$transcript}\n\nIMPORTANT: Generate a COMPLETE project structure with all necessary files based on the video title, even if transcript is limited.";
+
+            // Try multiple Gemini models - gemini-2.5-flash works with Pro for Students
+            $models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash-latest'];
+
+            foreach ($models as $model) {
+                $response = Http::timeout(180)
+                    ->withHeaders([
+                        'Content-Type' => 'application/json',
+                    ])
+                    ->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
+                        'contents' => [
+                            [
+                                'parts' => [
+                                    ['text' => $this->getSystemPrompt() . "\n\n" . $prompt]
+                                ]
+                            ]
+                        ],
+                        'generationConfig' => [
+                            'temperature' => 0.4,
+                            'maxOutputTokens' => 8000,
+                        ],
+                    ]);
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $content = $data['candidates'][0]['content']['parts'][0]['text'] ?? '';
+                    if (!empty($content)) {
+                        Log::info("Gemini extraction successful with model: {$model}");
+                        return $this->parseAIResponse($content);
+                    }
+                }
+
+                $errorBody = $response->body();
+
+                // If quota exhausted, try next model
+                if (str_contains($errorBody, 'RESOURCE_EXHAUSTED') || str_contains($errorBody, 'quota')) {
+                    Log::warning("Gemini {$model} quota exhausted, trying next model...");
+                    continue;
+                }
+
+                // Other error, log and try next model
+                Log::warning("Gemini {$model} request failed: " . substr($errorBody, 0, 200));
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Gemini extraction error: ' . $e->getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Extract using OpenAI
+     */
+    private function extractWithOpenAI(string $title, string $transcript, string $apiKey): ?array
+    {
         try {
             $response = Http::timeout(180)
                 ->withHeaders([
-                    'Authorization' => "Bearer {$openaiKey}",
+                    'Authorization' => "Bearer {$apiKey}",
                     'Content-Type' => 'application/json',
                 ])
                 ->post('https://api.openai.com/v1/chat/completions', [
@@ -100,22 +188,25 @@ class CodeExtractorService
             if ($response->successful()) {
                 $data = $response->json();
                 $content = $data['choices'][0]['message']['content'] ?? '';
-                return $this->parseAIResponse($content);
+                if (!empty($content)) {
+                    Log::info('OpenAI extraction successful');
+                    return $this->parseAIResponse($content);
+                }
             }
 
             // Check for quota exceeded
             $errorBody = $response->body();
             if (str_contains($errorBody, 'insufficient_quota')) {
-                Log::warning('OpenAI quota exceeded - using fallback extraction');
-                return $this->generateFallbackProject($title);
+                Log::warning('OpenAI quota exceeded');
+                return null;
             }
 
             Log::warning('OpenAI request failed: ' . $errorBody);
         } catch (\Exception $e) {
-            Log::error('Code extraction error: ' . $e->getMessage());
+            Log::error('OpenAI extraction error: ' . $e->getMessage());
         }
 
-        return $this->generateFallbackProject($title);
+        return null;
     }
 
     /**
