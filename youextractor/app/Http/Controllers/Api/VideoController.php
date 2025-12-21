@@ -43,15 +43,8 @@ class VideoController extends Controller
                 ], 400);
             }
 
-            // Check if already exists
-            $existingVideo = Video::where('youtube_id', $videoId)->first();
-            if ($existingVideo) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Video already extracted',
-                    'data' => $existingVideo,
-                ], 200);
-            }
+            // Always extract fresh - no caching from DB
+            // Removed check for existing video to force re-extraction
 
             // Get video metadata
             $videoData = $this->getVideoMetadata($videoId);
