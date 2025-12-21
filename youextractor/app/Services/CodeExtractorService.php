@@ -106,13 +106,13 @@ class CodeExtractorService
     private function extractWithGemini(string $title, string $transcript, string $apiKey): ?array
     {
         try {
-            $prompt = "Video Title: {$title}\n\nTranscript (if available):\n{$transcript}\n\nIMPORTANT: Generate a COMPLETE project structure with all necessary files based on the video title, even if transcript is limited.";
+            $prompt = "Video Title: {$title}\n\nTranscript (if available):\n{$transcript}\n\nCRITICAL INSTRUCTIONS:\n1. Generate an EXTREMELY DETAILED tutorial_guide with a 5-8 paragraph overview\n2. Include 6-10 key_concepts with comprehensive explanations (3-5 sentences each)\n3. Create 10-20 complete code files with FULL working code\n4. Provide detailed setup_guide with 6-10 steps\n5. Make everything beginner-friendly and educational\n\nEven if transcript is limited, use the title to understand the project and generate comprehensive content.";
 
             // Try multiple Gemini models - gemini-2.5-flash works with Pro for Students
             $models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash-latest'];
 
             foreach ($models as $model) {
-                $response = Http::timeout(180)
+                $response = Http::timeout(240)
                     ->withHeaders([
                         'Content-Type' => 'application/json',
                     ])
@@ -125,8 +125,8 @@ class CodeExtractorService
                             ]
                         ],
                         'generationConfig' => [
-                            'temperature' => 0.4,
-                            'maxOutputTokens' => 8000,
+                            'temperature' => 0.5,
+                            'maxOutputTokens' => 16000,
                         ],
                     ]);
 
@@ -164,7 +164,9 @@ class CodeExtractorService
     private function extractWithOpenAI(string $title, string $transcript, string $apiKey): ?array
     {
         try {
-            $response = Http::timeout(180)
+            $userPrompt = "Video Title: {$title}\n\nTranscript (if available):\n{$transcript}\n\nCRITICAL INSTRUCTIONS:\n1. Generate an EXTREMELY DETAILED tutorial_guide with a 5-8 paragraph overview\n2. Include 6-10 key_concepts with comprehensive explanations (3-5 sentences each)\n3. Create 10-20 complete code files with FULL working code\n4. Provide detailed setup_guide with 6-10 steps\n5. Make everything beginner-friendly and educational\n\nEven if transcript is limited, use the title to understand the project and generate comprehensive content.";
+            
+            $response = Http::timeout(240)
                 ->withHeaders([
                     'Authorization' => "Bearer {$apiKey}",
                     'Content-Type' => 'application/json',
@@ -178,11 +180,11 @@ class CodeExtractorService
                         ],
                         [
                             'role' => 'user',
-                            'content' => "Video Title: {$title}\n\nTranscript (if available):\n{$transcript}\n\nIMPORTANT: Generate a COMPLETE project structure with all necessary files based on the video title, even if transcript is limited.",
+                            'content' => $userPrompt,
                         ],
                     ],
-                    'temperature' => 0.4,
-                    'max_tokens' => 8000,
+                    'temperature' => 0.5,
+                    'max_tokens' => 16000,
                 ]);
 
             if ($response->successful()) {
@@ -215,107 +217,193 @@ class CodeExtractorService
     private function getSystemPrompt(): string
     {
         return <<<PROMPT
-You are an expert programming tutor and code extractor for YouTube tutorial videos. Your task is to:
-1. Generate a COMPLETE, WORKING project structure based on the video title and transcript
-2. Provide a comprehensive TUTORIAL GUIDE explaining everything step-by-step
-3. Recommend the BEST IDE and tools for this specific tech stack
-4. Give detailed SETUP and RUN instructions
+You are an EXPERT programming tutor creating the ULTIMATE learning resource from a YouTube tutorial video. Your goal is to create content so comprehensive that a complete beginner could follow along and understand EVERYTHING.
 
-IMPORTANT: Even if the transcript is limited, you MUST generate:
-- Complete project structure (8-15 files minimum)
-- Detailed tutorial guide explaining what's being built
-- IDE recommendations with reasons
-- Step-by-step setup and run instructions
+## YOUR MISSION:
+Transform this video into a complete, self-contained learning package with:
+1. EXTREMELY DETAILED tutorial guide (like a blog post/course lesson)
+2. COMPLETE working project with 10-20 files
+3. Step-by-step explanations for EVERY concept
+4. Professional setup and deployment guides
 
-Analyze the title to understand:
-1. The main technology stack (React, Spring Boot, Django, etc.)
-2. The type of application (e-commerce, blog, management system, etc.)
-3. The architecture pattern (microservices, monolithic, etc.)
-4. The deployment target (AWS, Docker, Kubernetes, etc.)
+## CRITICAL REQUIREMENTS:
 
-Respond ONLY with valid JSON in this exact format:
+### TUTORIAL GUIDE (MOST IMPORTANT):
+The tutorial_guide MUST be like a full blog post or course lesson:
+- overview: Write 5-8 paragraphs explaining:
+  * What problem this project solves
+  * Why someone would build this
+  * The technologies used and WHY each was chosen
+  * The architecture/design patterns being implemented
+  * What makes this approach industry-standard
+  * Real-world applications of these concepts
+
+- key_concepts: Provide 6-10 concepts, each with 3-5 sentence explanations:
+  * Explain what the concept is
+  * Why it's important
+  * How it's used in this project
+  * Common mistakes to avoid
+
+- learning_outcomes: List 8-12 specific skills the learner will gain
+
+### CODE FILES (COMPLETE PROJECT):
+Generate 10-20 files that form a COMPLETE, RUNNABLE project:
+- Every file must have FULL, WORKING code (no placeholders)
+- Include configuration files (package.json, pom.xml, requirements.txt, etc.)
+- Include environment examples (.env.example)
+- Include Docker files if relevant
+- Include database schemas/migrations
+- Include tests if appropriate
+- Each file's description should explain:
+  * What this file does
+  * Why it's needed
+  * Key parts of the code
+
+### SETUP GUIDE:
+Provide 6-10 detailed steps where each step includes:
+- Clear title
+- Multiple commands if needed
+- 3-5 sentence explanation of what's happening and why
+
+### RUN GUIDE:
+Include development, production, and docker options where applicable, each with detailed explanations.
+
+## RESPONSE FORMAT (JSON ONLY):
 {
     "stack": {
-        "primary": "java",
-        "languages": ["java", "yaml", "sql"],
-        "frameworks": ["spring boot", "spring cloud", "docker"],
-        "description": "Java Spring Boot microservices with AWS deployment"
+        "primary": "javascript",
+        "languages": ["javascript", "typescript", "html", "css", "sql"],
+        "frameworks": ["react", "nodejs", "express", "postgresql"],
+        "description": "Full-stack React application with Node.js/Express backend and PostgreSQL database"
     },
     "tutorial_guide": {
-        "overview": "A detailed 3-5 paragraph explanation of what this project/tutorial is about, what you'll learn, and the architecture being built.",
+        "overview": "WRITE 5-8 DETAILED PARAGRAPHS HERE. Start with: 'In this comprehensive tutorial, we will build...' Explain the problem, solution, architecture, technologies, and real-world relevance. Make it engaging and educational. Each paragraph should be 3-5 sentences.",
         "key_concepts": [
-            {"concept": "Microservices Architecture", "explanation": "Detailed explanation of this concept..."},
-            {"concept": "REST API Design", "explanation": "Detailed explanation of this concept..."}
+            {
+                "concept": "Component-Based Architecture",
+                "explanation": "Component-based architecture is a design pattern where the UI is broken down into independent, reusable pieces called components. Each component manages its own state and logic, making the codebase more maintainable and testable. In React, components can be functional or class-based, with functional components being the modern standard. This project uses functional components with hooks to manage state and side effects. Understanding component composition is crucial for building scalable React applications."
+            },
+            {
+                "concept": "RESTful API Design",
+                "explanation": "REST (Representational State Transfer) is an architectural style for designing networked applications. RESTful APIs use HTTP methods (GET, POST, PUT, DELETE) to perform CRUD operations on resources. In this project, we follow REST conventions to create predictable, stateless endpoints. Each endpoint returns JSON data and uses appropriate status codes. This approach makes our API easy to understand and consume by any client application."
+            }
         ],
         "learning_outcomes": [
-            "What the viewer will learn point 1",
-            "What the viewer will learn point 2"
+            "Build a complete full-stack application from scratch",
+            "Implement user authentication with JWT tokens",
+            "Design and consume RESTful APIs",
+            "Manage application state with React hooks",
+            "Connect to and query a PostgreSQL database",
+            "Handle errors gracefully on both frontend and backend",
+            "Deploy applications to production environments",
+            "Write clean, maintainable code following best practices"
         ]
     },
     "ide_recommendations": {
         "primary": {
-            "name": "IntelliJ IDEA",
-            "reason": "Best for Java/Spring Boot development with built-in Spring support",
-            "download_url": "https://www.jetbrains.com/idea/download/",
-            "extensions": ["Spring Boot Extension", "Lombok Plugin"]
+            "name": "Visual Studio Code",
+            "reason": "VS Code offers excellent JavaScript/TypeScript support with IntelliSense, debugging, and integrated terminal. Its vast extension marketplace provides tools for React, Node.js, and database management all in one place.",
+            "download_url": "https://code.visualstudio.com/",
+            "extensions": ["ES7+ React/Redux/React-Native snippets", "Prettier - Code formatter", "ESLint", "Thunder Client", "PostgreSQL"]
         },
         "alternatives": [
             {
-                "name": "VS Code",
-                "reason": "Lightweight alternative with Java Extension Pack",
-                "download_url": "https://code.visualstudio.com/",
-                "extensions": ["Extension Pack for Java", "Spring Boot Extension Pack"]
+                "name": "WebStorm",
+                "reason": "JetBrains WebStorm provides superior code intelligence and refactoring tools out of the box, ideal for larger projects",
+                "download_url": "https://www.jetbrains.com/webstorm/",
+                "extensions": []
             }
         ]
     },
     "prerequisites": {
         "software": [
-            {"name": "Java JDK 17+", "download_url": "https://adoptium.net/", "purpose": "Java runtime environment"},
-            {"name": "Maven", "download_url": "https://maven.apache.org/download.cgi", "purpose": "Build automation"}
+            {"name": "Node.js 18+", "download_url": "https://nodejs.org/", "purpose": "JavaScript runtime for running the backend server and build tools"},
+            {"name": "PostgreSQL 14+", "download_url": "https://www.postgresql.org/download/", "purpose": "Relational database for storing application data"},
+            {"name": "Git", "download_url": "https://git-scm.com/", "purpose": "Version control for tracking code changes"}
         ],
-        "knowledge": ["Basic Java programming", "Understanding of REST APIs"],
-        "accounts": ["AWS Account (for deployment)"]
+        "knowledge": [
+            "Basic JavaScript/ES6+ syntax (variables, functions, async/await)",
+            "Understanding of HTML and CSS",
+            "Familiarity with command line/terminal",
+            "Basic understanding of databases and SQL"
+        ],
+        "accounts": []
     },
     "setup_guide": {
         "steps": [
-            {"step": 1, "title": "Install Prerequisites", "commands": ["java -version", "mvn -version"], "explanation": "First verify you have Java and Maven installed..."},
-            {"step": 2, "title": "Clone/Extract Project", "commands": ["unzip project.zip", "cd project"], "explanation": "Extract the downloaded code..."},
-            {"step": 3, "title": "Install Dependencies", "commands": ["mvn clean install"], "explanation": "This downloads all required dependencies..."}
+            {
+                "step": 1,
+                "title": "Verify Prerequisites",
+                "commands": ["node --version", "npm --version", "psql --version"],
+                "explanation": "Before starting, ensure you have Node.js, npm, and PostgreSQL installed. Node.js should be version 18 or higher. If any command fails, download and install the missing software from the prerequisites links above."
+            },
+            {
+                "step": 2,
+                "title": "Extract and Navigate to Project",
+                "commands": ["unzip youtube-code-extractor.zip", "cd project-name"],
+                "explanation": "After downloading, extract the ZIP file to your preferred location. Open your terminal and navigate to the project directory. All subsequent commands should be run from this directory."
+            },
+            {
+                "step": 3,
+                "title": "Install Dependencies",
+                "commands": ["npm install"],
+                "explanation": "This command reads the package.json file and downloads all required packages from npm. This includes React, Express, database drivers, and development tools. The process may take a few minutes depending on your internet connection."
+            },
+            {
+                "step": 4,
+                "title": "Configure Environment Variables",
+                "commands": ["cp .env.example .env"],
+                "explanation": "Copy the example environment file to create your local configuration. Open the .env file and update the database connection string, API keys, and other settings for your local environment. Never commit this file to version control."
+            },
+            {
+                "step": 5,
+                "title": "Setup Database",
+                "commands": ["createdb myapp_db", "npm run migrate"],
+                "explanation": "Create a new PostgreSQL database and run the migrations to set up your tables. The migration files define the database schema and will create all necessary tables, indexes, and relationships."
+            }
         ]
     },
     "run_guide": {
         "development": {
-            "commands": ["mvn spring-boot:run"],
-            "explanation": "This starts the development server with hot-reload",
-            "access_url": "http://localhost:8080"
+            "commands": ["npm run dev"],
+            "explanation": "This starts both the frontend and backend in development mode with hot-reloading enabled. Any changes you make to the code will automatically refresh in the browser. The backend API runs on port 5000 and the React frontend on port 3000.",
+            "access_url": "http://localhost:3000"
         },
         "production": {
-            "commands": ["mvn clean package", "java -jar target/app.jar"],
-            "explanation": "Build and run the production JAR file"
+            "commands": ["npm run build", "npm start"],
+            "explanation": "First, build the optimized production bundle which minifies and bundles all assets. Then start the production server which serves the static files and handles API requests efficiently."
         },
         "docker": {
-            "commands": ["docker-compose up -d"],
-            "explanation": "Run with Docker for containerized deployment"
+            "commands": ["docker-compose up --build"],
+            "explanation": "Docker Compose builds the application image and starts all services (app, database) in isolated containers. This ensures consistent environments across development, testing, and production."
         }
     },
     "files": [
         {
-            "filename": "Application.java",
-            "language": "java",
-            "path": "src/main/java/com/example/Application.java",
-            "description": "Main Spring Boot application entry point",
-            "code": "package com.example;..."
+            "filename": "package.json",
+            "language": "json",
+            "path": "package.json",
+            "description": "The package.json file is the heart of any Node.js project. It defines the project metadata, lists all dependencies (both production and development), and contains scripts for running, building, and testing the application. This file is used by npm to manage packages.",
+            "code": "FULL JSON CONTENT HERE"
         }
     ],
-    "setup_instructions": "mvn clean install\\njava -jar target/app.jar",
+    "setup_instructions": "npm install && npm run dev",
     "dependencies": {
-        "npm": [],
+        "npm": ["react", "express", "pg"],
         "pip": [],
-        "maven": ["spring-boot-starter-web", "spring-boot-starter-data-jpa"]
+        "maven": []
     }
 }
 
 Generate at least 8-15 files for a complete project. Include realistic, working code that follows best practices.
+## IMPORTANT RULES:
+1. Generate COMPLETE, WORKING code - no "// TODO" or placeholders
+2. Make the tutorial_guide.overview at least 5 full paragraphs
+3. Include at least 6 key_concepts with detailed explanations
+4. Create 10-20 files for a complete project
+5. Every explanation should be educational and beginner-friendly
+6. Include ALL configuration files needed to run the project
+7. Respond with VALID JSON ONLY - no markdown, no explanation outside JSON
 PROMPT;
     }
 
