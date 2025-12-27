@@ -5,9 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Code Extractor - Learn Programming Faster</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -18,7 +25,7 @@
         .prose p { color: #d1d5db; }
     </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="gradient-bg text-white min-h-screen">
     <div class="min-h-screen flex flex-col">
         <!-- Header -->
         <header class="bg-black/30 backdrop-blur-sm border-b border-purple-500/20">
@@ -55,7 +62,7 @@
                         </form>
                         @else
                         <div class="flex items-center gap-4">
-                            <a href="/login" class="text-gray-300 hover:text-white font-medium transition">Sign In</a>
+                            <a href="/signin" class="text-gray-300 hover:text-white font-medium transition">Sign In</a>
                             <a href="/signup" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold transition">
                                 Get Started
                             </a>

@@ -45,4 +45,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the user's videos.
+     */
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
+    }
 }

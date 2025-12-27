@@ -5,30 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>YouExtractor - Learn Programming Faster</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Outfit', sans-serif; }
+        body { font-family: 'Inter', sans-serif; }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .gradient-text { background: linear-gradient(to right, #c084fc, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text { background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f97316 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .gradient-bg { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%); }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
         .animate-float { animation: float 6s ease-in-out infinite; }
     </style>
 </head>
-<body class="bg-gray-900 text-white overflow-x-hidden">
+<body class="gradient-bg text-white overflow-x-hidden">
     <!-- Navbar -->
     <nav class="absolute w-full z-50 top-0">
         <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
-            <div class="flex items-center gap-2">
+            <a href="{{ route('landing') }}" class="flex items-center gap-2">
                 <span class="text-3xl">🎬</span>
                 <span class="text-xl font-bold tracking-tight">YouExtractor</span>
-            </div>
+            </a>
             <div class="hidden md:flex items-center gap-8">
                 <a href="#features" class="text-gray-400 hover:text-white transition">Features</a>
                 <a href="#how-it-works" class="text-gray-400 hover:text-white transition">How it Works</a>
             </div>
             <div class="flex items-center gap-4">
-                <a href="/login" class="text-gray-300 hover:text-white font-medium transition">Sign In</a>
-                <a href="/signup" class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 rounded-full font-bold transition shadow-lg shadow-purple-500/20">
+                <a href="{{ route('signin') }}" class="text-gray-300 hover:text-white font-medium transition">Sign In</a>
+                <a href="{{ route('signup') }}" class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 rounded-full font-bold transition shadow-lg shadow-purple-500/20">
                     Get Started
                 </a>
             </div>
@@ -53,7 +56,7 @@
                     Stop pausing and typing. Instantly extract working code projects, tutorials, and setup guides from any programming video with one click.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="/signup" class="px-8 py-4 bg-white text-gray-900 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-xl flex items-center justify-center gap-2">
+                    <a href="{{ route('signup') }}" class="px-8 py-4 bg-white text-gray-900 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-xl flex items-center justify-center gap-2">
                         Try It Free
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </a>

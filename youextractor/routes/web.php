@@ -1,47 +1,60 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
 
-// Landing Page
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
+
+// Landing page
 Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect('/app');
-    }
-    return view('welcome');
-})->name('home');
+    return view('landing');
+})->name('landing');
 
-// Auth Routes
+/*
+|--------------------------------------------------------------------------
+| Guest Routes (only for non-authenticated users)
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('guest')->group(function () {
-    Route::get('/login', function () {
-        return view('auth.login');
-    })->name('login');
+    // Sign Up
+    Route::get('/signup', [AuthController::class, 'showSignup'])->name('signup');
+    Route::post('/signup', [AuthController::class, 'signup'])->name('signup.submit');
 
-    Route::get('/signup', function () {
-        return view('auth.register');
-    })->name('register');
+    // Sign In
+    Route::get('/signin', [AuthController::class, 'showSignin'])->name('signin');
+    Route::post('/signin', [AuthController::class, 'signin'])->name('signin.submit');
 
-    Route::get('/register', function () {
-        return view('auth.register');
-    });
-
-    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle']);
-    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+    // Google OAuth
+    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 });
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+/*
+|--------------------------------------------------------------------------
+| Protected Routes (require authentication)
+|--------------------------------------------------------------------------
+*/
 
-// App Routes (Protected)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/app', function () {
-        return view('app.extractor');
-    })->name('app.extractor');
-    
+Route::middleware('auth')->group(function () {
+    // Dashboard (main extraction tool)
+    Route::get('/dashboard', function () {
+        return view('index');
+    })->name('dashboard');
+
+    // Videos
     Route::get('/videos', function () {
         return view('videos.list');
     })->name('videos.list');
-    
+
     Route::get('/videos/{video}', function ($video) {
         return view('videos.show', ['video' => $video]);
     })->name('videos.show');
+
+    // Logout
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
