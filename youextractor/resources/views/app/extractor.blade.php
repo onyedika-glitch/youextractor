@@ -30,9 +30,38 @@
                         </h1>
                         <p class="text-gray-400 mt-1 text-sm sm:text-base">Extract code + Get complete tutorials from programming videos</p>
                     </div>
-                    <a href="/videos" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition flex items-center gap-2 w-fit">
-                        📚 My Extractions
-                    </a>
+                    <div class="flex items-center gap-4">
+                        @auth
+                        <div class="flex items-center gap-3">
+                            @if(Auth::user()->avatar)
+                                <img src="{{ Auth::user()->avatar }}" class="w-8 h-8 rounded-full border border-purple-500/50" alt="{{ Auth::user()->name }}">
+                            @else
+                                <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center font-bold text-white">
+                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                </div>
+                            @endif
+                            <span class="hidden sm:inline text-sm font-medium text-gray-300">{{ Auth::user()->name }}</span>
+                        </div>
+                        
+                        <a href="/videos" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                            📚 My Library
+                        </a>
+                        
+                        <form action="/logout" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-sm font-semibold transition">
+                                Sign Out
+                            </button>
+                        </form>
+                        @else
+                        <div class="flex items-center gap-4">
+                            <a href="/login" class="text-gray-300 hover:text-white font-medium transition">Sign In</a>
+                            <a href="/signup" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-bold transition">
+                                Get Started
+                            </a>
+                        </div>
+                        @endauth
+                    </div>
                 </div>
             </div>
         </header>
@@ -671,5 +700,10 @@
             return div.innerHTML;
         }
     </script>
+    <!-- Floating Donate Button -->
+    <a href="https://buymeacoffee.com/omogo" target="_blank" 
+       class="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-yellow-500 hover:bg-yellow-400 text-gray-900 rounded-full shadow-lg font-semibold transition-all hover:scale-105">
+        ☕ Buy me a coffee
+    </a>
 </body>
 </html>
