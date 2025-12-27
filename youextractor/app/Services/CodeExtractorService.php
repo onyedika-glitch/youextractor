@@ -71,15 +71,17 @@ class CodeExtractorService
         // Try Gemini first (preferred)
         $geminiKey = env('GEMINI_API_KEY');
         $openaiKey = env('OPENAI_API_KEY');
-        $aiProvider = env('AI_PROVIDER', 'gemini');
+        
+        $hasGemini = !empty($geminiKey) && strlen($geminiKey) > 20;
+        $hasOpenAI = !empty($openaiKey) && strlen($openaiKey) > 20;
 
-        if (empty($openaiKey) || strlen($openaiKey) < 20) {
-            Log::info('No OpenAI API key - using fallback extraction');
+        if (!$hasGemini && !$hasOpenAI) {
+            Log::info('No AI API keys available - using fallback extraction');
             return $this->generateFallbackProject($title);
         }
 
-        // Use Gemini if key exists and provider is gemini
-        if (!empty($geminiKey) && strlen($geminiKey) > 20) {
+        // Use Gemini if key exists
+        if ($hasGemini) {
             Log::info('Using Gemini AI for extraction');
             $result = $this->extractWithGemini($title, $transcript, $geminiKey);
             if ($result !== null) {
@@ -88,7 +90,13 @@ class CodeExtractorService
         }
 
         // Fallback to OpenAI
-        if (!empty($openaiKey) && strlen($openaiKey) > 20) {
+        if ($hasOpenAI) {
+            // Check if we have enough time left before trying OpenAI
+            if (ini_get('max_execution_time') && time() - $_SERVER['REQUEST_TIME'] > (ini_get('max_execution_time') - 60)) {
+                 Log::warning("Running out of execution time, skipping OpenAI fallback");
+                 return $this->generateFallbackProject($title);
+            }
+
             Log::info('Using OpenAI for extraction');
             $result = $this->extractWithOpenAI($title, $transcript, $openaiKey);
             if ($result !== null) {
@@ -96,7 +104,7 @@ class CodeExtractorService
             }
         }
 
-        Log::info('No AI API available - using fallback extraction');
+        Log::info('AI extraction failed - using fallback extraction');
         return $this->generateFallbackProject($title);
     }
 
@@ -112,7 +120,13 @@ class CodeExtractorService
             $models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash-latest'];
 
             foreach ($models as $model) {
-                $response = Http::timeout(240)
+                // Check if we are running out of time (leave 30s buffer)
+                if (ini_get('max_execution_time') && time() - $_SERVER['REQUEST_TIME'] > (ini_get('max_execution_time') - 30)) {
+                    Log::warning("Running out of execution time, skipping remaining models");
+                    break;
+                }
+
+                $response = Http::timeout(120) // Reduced from 240s to prevent global timeout
                     ->withHeaders([
                         'Content-Type' => 'application/json',
                     ])
@@ -140,15 +154,13 @@ class CodeExtractorService
                 }
 
                 $errorBody = $response->body();
-
-                // If quota exhausted, try next model
-                if (str_contains($errorBody, 'RESOURCE_EXHAUSTED') || str_contains($errorBody, 'quota')) {
-                    Log::warning("Gemini {$model} quota exhausted, trying next model...");
-                    continue;
-                }
-
-                // Other error, log and try next model
                 Log::warning("Gemini {$model} request failed: " . substr($errorBody, 0, 200));
+
+                // If it was a timeout or server error (5xx), trying another model might work
+                // But if it was a client error (4xx) other than quota, it likely won't
+                if ($response->status() >= 400 && $response->status() < 500 && !str_contains($errorBody, 'RESOURCE_EXHAUSTED')) {
+                    break; 
+                }
             }
 
         } catch (\Exception $e) {
@@ -166,7 +178,7 @@ class CodeExtractorService
         try {
             $userPrompt = "Video Title: {$title}\n\nTranscript (if available):\n{$transcript}\n\nCRITICAL INSTRUCTIONS:\n1. Generate an EXTREMELY DETAILED tutorial_guide with a 5-8 paragraph overview\n2. Include 6-10 key_concepts with comprehensive explanations (3-5 sentences each)\n3. Create 10-20 complete code files with FULL working code\n4. Provide detailed setup_guide with 6-10 steps\n5. Make everything beginner-friendly and educational\n\nEven if transcript is limited, use the title to understand the project and generate comprehensive content.";
             
-            $response = Http::timeout(240)
+            $response = Http::timeout(120)
                 ->withHeaders([
                     'Authorization' => "Bearer {$apiKey}",
                     'Content-Type' => 'application/json',

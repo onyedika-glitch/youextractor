@@ -27,7 +27,7 @@ class VideoController extends Controller
     public function extract(Request $request): JsonResponse
     {
         // Increase execution time for AI processing
-        set_time_limit(300);
+        set_time_limit(600);
         
         try {
             $validated = $request->validate([
@@ -159,7 +159,7 @@ class VideoController extends Controller
     public function reExtractCode(Video $video): JsonResponse
     {
         // Increase execution time for AI processing
-        set_time_limit(300);
+        set_time_limit(600);
         
         try {
             $transcript = $video->transcript;
