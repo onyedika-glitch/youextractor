@@ -104,8 +104,9 @@ class VideoController extends Controller
                 'data' => $video,
             ], 201);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Video extraction error: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
             
             return response()->json([
                 'success' => false,

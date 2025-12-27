@@ -190,7 +190,19 @@
                     body: JSON.stringify({ youtube_url: youtubeUrl.value })
                 });
 
-                const data = await response.json();
+                let data;
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    data = await response.json();
+                } else {
+                    const text = await response.text();
+                    // Identify if it's an HTML error page
+                    if (text.trim().startsWith('<')) {
+                        console.error('Server returned HTML:', text);
+                        throw new Error('Server error (check console for details)');
+                    }
+                    data = { success: false, error: text || response.statusText };
+                }
 
                 if (!response.ok || !data.success) {
                     throw new Error(data.error || 'Failed to extract video');
