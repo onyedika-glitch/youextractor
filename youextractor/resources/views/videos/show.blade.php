@@ -6,7 +6,7 @@
     <title>Video Details - YouTube Extractor</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-br from-gray-900 to-black text-white">
+<body class="bg-gray-900 text-white">
     <div class="min-h-screen flex flex-col">
         <!-- Header -->
         <header class="bg-gray-800 border-b border-gray-700">

@@ -11,13 +11,11 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .gradient-text { background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f97316 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .gradient-bg { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%); }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
         .animate-float { animation: float 6s ease-in-out infinite; }
     </style>
 </head>
-<body class="gradient-bg text-white overflow-x-hidden">
+<body class="bg-gray-900 text-white overflow-x-hidden">
     <!-- Navbar -->
     <nav class="absolute w-full z-50 top-0">
         <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
@@ -50,7 +48,7 @@
                     ✨ AI-Powered Visual Learning
                 </div>
                 <h1 class="text-5xl lg:text-7xl font-bold leading-tight mb-8">
-                    Turn YouTube Videos into <span class="gradient-text">Real Code</span>
+                    Turn YouTube Videos into <span class="text-purple-400">Real Code</span>
                 </h1>
                 <p class="text-xl text-gray-400 mb-10 leading-relaxed max-w-lg">
                     Stop pausing and typing. Instantly extract working code projects, tutorials, and setup guides from any programming video with one click.
@@ -67,7 +65,7 @@
             </div>
             
             <div class="relative lg:h-[600px] flex items-center justify-center animate-float">
-                <div class="absolute inset-0 bg-gradient-to-tr from-purple-500/20 to-pink-500/20 rounded-3xl blur-2xl transform rotate-6"></div>
+                <div class="absolute inset-0 bg-purple-500/10 rounded-3xl blur-2xl transform rotate-6"></div>
                 <div class="relative w-full glass rounded-2xl p-6 shadow-2xl border border-gray-700/50">
                     <!-- Code Editor Mockup -->
                     <div class="flex items-center gap-2 mb-4 border-b border-gray-700/50 pb-4">

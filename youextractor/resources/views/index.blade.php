@@ -12,9 +12,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .gradient-bg {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
-        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -25,7 +22,7 @@
         .prose p { color: #d1d5db; }
     </style>
 </head>
-<body class="gradient-bg text-white min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen">
     <div class="min-h-screen flex flex-col">
         <!-- Header -->
         <header class="bg-black/30 backdrop-blur-sm border-b border-purple-500/20">
