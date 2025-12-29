@@ -71,6 +71,9 @@ class VideoController extends Controller
             // Generate summary
             $summary = $this->generateSummary($videoData['title'], $codeData);
 
+            // Delete any existing video with this ID to ensure a fresh record
+            Video::where('youtube_id', $videoId)->delete();
+
             // Save to database
             $video = Video::create([
                 'youtube_id' => $videoId,
