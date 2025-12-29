@@ -196,6 +196,19 @@
 
         let currentTab = 'overview';
 
+        // Check for URL query parameter (for Chrome Extension)
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            if (url) {
+                youtubeUrl.value = url;
+                // Auto-trigger extraction if valid URL
+                if (url.includes('youtube.com/') || url.includes('youtu.be/')) {
+                    submitBtn.click();
+                }
+            }
+        });
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             

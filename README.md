@@ -28,11 +28,9 @@ YouExtractor solves the problem of "tutorial hell" by converting video informati
 
 ## 📸 Screenshots
 
-![Dashboard](https://placehold.co/1200x600/1f2937/purple?text=Dashboard+UI)
-*The main dashboard where you can manage your extracted videos.*
-
-![Extraction View](https://placehold.co/1200x600/1f2937/blue?text=Extraction+Results)
-*Detailed view of an extracted video with code, guide, and summary.*
+![Dashboard](image.png)
+![Extraction View](image-1.png)
+![Extraction View](image-2.png)
 
 ---
 
@@ -109,5 +107,25 @@ YouExtractor solves the problem of "tutorial hell" by converting video informati
 YouExtractor was created to solve my own need for better learning tools. I am passionate about making technical education more accessible and efficient.
 
 ---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 📝 Contact
+
+For questions or support, please contact me at omogopeter48@gmail.com
+
+---
+
+> *Built with ❤️ by @onyedika-glitch*
 
 > *Project maintained by @onyedika-glitch*
