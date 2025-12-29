@@ -44,6 +44,8 @@ class CodeExtractorService
         'svelte' => 'svelte',
     ];
 
+    private string $currentTitle = '';
+
     /**
      * Stack/framework detection patterns
      */
@@ -57,7 +59,7 @@ class CodeExtractorService
         'flask' => ['flask', '@app.route', 'render_template'],
         'laravel' => ['laravel', 'artisan', 'eloquent', 'blade'],
         'nodejs' => ['require(', 'module.exports', 'npm', 'node'],
-        'spring' => ['@SpringBootApplication', '@RestController', '@Autowired'],
+        'spring' => ['@SpringBootApplication', '@RestController', '@Autowired', 'spring-boot', 'pom.xml', 'build.gradle', 'mvn', 'java'],
         'dotnet' => ['using System', 'namespace', 'public class', 'async Task'],
         'tailwind' => ['tailwind', 'className=', 'bg-', 'text-', 'flex'],
         'bootstrap' => ['bootstrap', 'btn-primary', 'container', 'row'],
@@ -457,8 +459,9 @@ PROMPT;
     /**
      * Extract code using pattern matching (fallback)
      */
-    private function extractCodeWithPatterns(string $text): array
+    private function extractCodeWithPatterns(string $text, string $title = ''): array
     {
+        $this->currentTitle = $title;
         $files = [];
         $detectedLanguages = [];
         
@@ -475,7 +478,7 @@ PROMPT;
         foreach ($patterns as $pattern => $type) {
             if (preg_match_all($pattern, $text, $matches)) {
                 foreach ($matches[0] as $i => $match) {
-                    $language = $matches[1][$i] ?? $this->detectLanguage($match);
+                    $language = $matches[1][$i] ?? $this->detectLanguage($match, $this->currentTitle ?? ''); // Use class level property if needed or pass title differently
                     $code = $matches[2][$i] ?? $match;
                     
                     if (strlen(trim($code)) > 10) {
@@ -513,23 +516,46 @@ PROMPT;
     /**
      * Detect programming language from code
      */
-    private function detectLanguage(string $code): string
+    private function detectLanguage(string $code, ?string $titleContext = null): string
     {
+        // If we have title context, check relevant languages first
+        if ($titleContext) {
+            $contextLower = strtolower($titleContext);
+            if (str_contains($contextLower, 'java') && !str_contains($contextLower, 'javascript')) {
+                // Check for Java specific indicators first
+                $javaIndicators = ['public class', 'public static', 'System.out', 'package ', 'import java.'];
+                foreach ($javaIndicators as $keyword) {
+                    if (stripos($code, $keyword) !== false) return 'java';
+                }
+            }
+            if (str_contains($contextLower, 'javascript') || str_contains($contextLower, 'js')) {
+                 // Check JS specific indicators
+                 $jsIndicators = ['const ', 'let ', 'var ', 'function', '=>', 'console.log', 'document.'];
+                 foreach ($jsIndicators as $keyword) {
+                    if (stripos($code, $keyword) !== false) return 'javascript';
+                }
+            }
+        }
+
         $indicators = [
-            'javascript' => ['const ', 'let ', 'var ', 'function', '=>', 'console.log'],
+            'javascript' => ['const ', 'let ', 'var ', 'function', '=>', 'console.log', 'document.getElementById'],
             'typescript' => ['interface ', ': string', ': number', ': boolean', '<T>'],
             'python' => ['def ', 'import ', 'from ', 'print(', 'if __name__'],
             'php' => ['<?php', '<?=', '$_', 'echo ', 'function '],
-            'java' => ['public class', 'public static', 'System.out'],
+            'java' => ['public class', 'public static', 'System.out', 'public void', 'private '],
             'csharp' => ['using System', 'namespace ', 'public class'],
-            'html' => ['<html', '<div', '<span', '<!DOCTYPE'],
-            'css' => ['{', '}', 'color:', 'background:', 'margin:'],
+            'html' => ['<html', '<div', '<span', '<!DOCTYPE', '<head', '<body'],
+            'css' => ['{', '}', 'color:', 'background:', 'margin:', 'padding:'],
             'sql' => ['SELECT', 'FROM', 'WHERE', 'INSERT', 'UPDATE'],
         ];
 
         foreach ($indicators as $lang => $keywords) {
             foreach ($keywords as $keyword) {
                 if (stripos($code, $keyword) !== false) {
+                    // Double check to avoid false positives (e.g. 'function' in comments)
+                    if ($lang === 'java' && (stripos($code, 'function') !== false || stripos($code, 'var ') !== false)) {
+                        continue;
+                    }
                     return $lang;
                 }
             }
