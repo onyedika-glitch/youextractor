@@ -1,231 +1,113 @@
-# YouTube Tech Video Extractor & Explainer
+# 🎬 YouExtractor
 
-A Laravel application that extracts YouTube tech videos, fetches transcripts, and uses AI (OpenAI) to generate detailed explanations and code snippets.
+**Turn YouTube coding tutorials into full courses and working code projects instantly using AI.**
 
-## Features
+[![Modules](https://img.shields.io/badge/STATUS-ACTIVE-374151?style=for-the-badge&labelColor=374151&color=16a34a)]()  [![Level](https://img.shields.io/badge/VERSION-2.0-374151?style=for-the-badge&labelColor=374151&color=0284c7)]()  [![Type](https://img.shields.io/badge/LICENSE-MIT-374151?style=for-the-badge&labelColor=374151&color=ea580c)]()
 
-✅ Extract YouTube video metadata  
-✅ Fetch video transcripts  
-✅ AI-powered explanations using GPT-4  
-✅ Automatic code snippet extraction  
-✅ Video search and filtering  
-✅ PostgreSQL database (default)  
-✅ RESTful API endpoints  
+YouExtractor is a powerful Laravel application that transforms passive video watching into active learning. It extracts video metadata, fetches transcripts, and uses advanced AI (Gemini Pro/GPT-4) to generate comprehensive written tutorials, code snippets, and complete runnable projects from YouTube videos.
 
-## Tech Stack
+---
 
-- **Backend**: Laravel 11
-- **Database**: SQLite (configurable to MySQL/PostgreSQL)
-- **AI**: OpenAI API (GPT-4)
-- **YouTube API**: For video metadata
-- **PHP**: 8.2+
+## 📖 Overview
 
-## Installation
+YouExtractor solves the problem of "tutorial hell" by converting video information into structured, actionable data. Instead of pausing and rewinding to copy code, YouExtractor provides you with the complete source code, a detailed written guide, and a structured learning path in seconds. It allows you to download the entire project as a ZIP file, ready to run.
+
+---
+
+## 🚀 Features
+
+*   **🤖 AI-Powered Extraction**: Automatically converts video content into structured learning guides using state-of-the-art AI models.
+*   **📄 Full Source Code**: Generates complete, downloadable project files (ZIP) from video tutorials.
+*   **📚 Comprehensive Guides**: Creates detailed "blog-post" style tutorials with key concepts and learning outcomes.
+*   **🧩 Chrome Extension**: Start extractions directly from YouTube with a single click.
+*   **🔍 Search & Filter**: Easily find previously extracted videos in your library.
+*   **⚡ Modern UI**: Built with TailwindCSS and a sleek dark mode design for comfortable reading.
+*   **💾 Database Integration**: Stores all extractions in PostgreSQL/MySQL for easy retrieval.
+
+---
+
+## 📸 Screenshots
+
+![Dashboard](https://placehold.co/1200x600/1f2937/purple?text=Dashboard+UI)
+*The main dashboard where you can manage your extracted videos.*
+
+![Extraction View](https://placehold.co/1200x600/1f2937/blue?text=Extraction+Results)
+*Detailed view of an extracted video with code, guide, and summary.*
+
+---
+
+## 🛠️ Technology Stack
+
+<div align="center">
+
+**Backend:** Laravel 11 • PHP 8.2+ • MySQL/PostgreSQL
+**Frontend:** Blade Templates • TailwindCSS • Alpine.js
+**AI Services:** Google Gemini Pro • OpenAI GPT-4
+**Tools:** Composer • Node.js • Docker
+
+</div>
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- PHP 8.2+
-- Composer
-- Node.js (optional, for frontend)
-- OpenAI API key
-- YouTube API key
+*   PHP 8.2+
+*   Composer
+*   Node.js & NPM
+*   Database (MySQL/PostgreSQL)
+*   Google Gemini API Key (or OpenAI Key)
 
-### Setup Steps
+### Installation
 
-1. **Clone the repo**
-```bash
-cd "C:\Users\omogo\Documents\Video web\youextractor"
-```
+1.  **Clone the Repository**
+    ```bash
+    git clone https://github.com/onyedika-glitch/youextractor.git
+    cd youextractor
+    ```
 
-2. **Install dependencies**
-```bash
-composer install
-```
+2.  **Install Dependencies**
+    ```bash
+    composer install
+    npm install
+    ```
 
-3. **Generate app key**
-```bash
-php artisan key:generate
-```
+3.  **Configure Environment**
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+    *Edit `.env` and add your database credentials and `GEMINI_API_KEY`.*
 
-4. **Copy environment file**
-```bash
-copy .env.example .env
-```
+4.  **Run Migrations**
+    ```bash
+    php artisan migrate
+    ```
 
-5. **Add API keys to .env**
-```env
-OPENAI_API_KEY=sk-your-openai-key
-YOUTUBE_API_KEY=your-youtube-api-key
-```
+5.  **Start the Server**
+    ```bash
+    php artisan serve
+    npm run dev
+    ```
 
-6. **Create database**
-```bash
-php artisan migrate
-```
+---
 
-7. **Start the server**
-```bash
-php artisan serve
-```
+## 🧩 Chrome Extension
 
-Server runs at `http://localhost:8000`
+1.  Go to `chrome://extensions/`
+2.  Enable **Developer Mode**.
+3.  Click **Load Unpacked**.
+4.  Select the `youextractor/chrome-extension` folder.
+5.  Go to any YouTube video and click the YouExtractor icon to extract code instantly!
 
-## API Endpoints
+---
 
-### Extract & Explain Video
-**POST** `/api/videos/extract`
-```json
-{
-  "youtube_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-}
-```
+## 👨‍💻 Founder
 
-Response:
-```json
-{
-  "success": true,
-  "data": {
-    "id": 1,
-    "youtube_id": "dQw4w9WgXcQ",
-    "title": "Video Title",
-    "explanation": "...",
-    "code_snippets": ["..."],
-    "summary": "..."
-  }
-}
-```
+**Built and maintained by me as founder.**
 
-### Get All Videos
-**GET** `/api/videos`
+YouExtractor was created to solve my own need for better learning tools. I am passionate about making technical education more accessible and efficient.
 
-### Get Single Video
-**GET** `/api/videos/{id}`
+---
 
-### Search Videos
-**GET** `/api/videos/search?q=laravel`
-
-## Database Schema
-
-```sql
-Videos Table:
-- id
-- youtube_id (unique)
-- title
-- description
-- transcript
-- explanation (AI generated)
-- code_snippets (JSON array)
-- summary
-- duration (seconds)
-- published_at
-- extracted_at
-- timestamps
-```
-
-## Getting API Keys
-
-### OpenAI API Key
-1. Go to https://platform.openai.com
-2. Sign up / Login
-3. Create API key
-4. Add to `.env`
-
-### YouTube API Key
-1. Go to https://console.cloud.google.com
-2. Create new project
-3. Enable YouTube Data API v3
-4. Create API key
-5. Add to `.env`
-
-## Usage Example
-
-```bash
-# Start Laravel server
-php artisan serve
-
-# Extract a video (from another terminal)
-curl -X POST http://localhost:8000/api/videos/extract \
-  -H "Content-Type: application/json" \
-  -d '{"youtube_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}'
-
-# Get all videos
-curl http://localhost:8000/api/videos
-
-# Search videos
-curl "http://localhost:8000/api/videos/search?q=laravel"
-```
-
-## File Structure
-
-```
-youextractor/
-├── app/
-│   ├── Models/
-│   │   └── Video.php
-│   └── Http/Controllers/Api/
-│       └── VideoController.php
-├── config/
-│   ├── database.php
-│   ├── services.php
-│   └── logging.php
-├── database/
-│   └── migrations/
-│       └── 2024_12_08_create_videos_table.php
-├── routes/
-│   └── api.php
-├── .env.example
-├── composer.json
-└── README.md
-```
-
-## Next Steps
-
-1. **Install youtube-transcript-api** (Python)
-   ```bash
-   pip install youtube-transcript-api
-   ```
-   Then create a Python service to fetch transcripts
-
-2. **Create Frontend UI** (React/Vue)
-   - Build a dashboard to submit videos
-   - Display extracted data
-   - Search interface
-
-3. **Add Authentication**
-   - User registration
-   - Save favorite videos
-   - User preferences
-
-4. **Deploy**
-   - Deploy to Render / Heroku / Railway
-   - Set up environment variables
-   - Configure PostgreSQL for production
-
-## Troubleshooting
-
-**API Key not working?**
-- Check `.env` file has correct keys
-- Run `php artisan config:clear`
-
-**Database not creating?**
-- Run `php artisan migrate:fresh`
-- Check SQLite file permissions
-
-**OpenAI errors?**
-- Verify API key is valid
-- Check account has credits
-- Review rate limits
-
-## Future Enhancements
-
-- [ ] Real-time transcript fetching
-- [ ] Multiple language support
-- [ ] Video categorization
-- [ ] User accounts & favorites
-- [ ] Export to PDF/Markdown
-- [ ] Batch video processing
-- [ ] Video recommendations
-- [ ] Mobile app
-
-## License
-
-MIT License
+> *Project maintained by @onyedika-glitch*
