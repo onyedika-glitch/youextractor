@@ -59,10 +59,11 @@ class VideoController extends Controller
             // Get transcript for code extraction
             $transcript = $this->getTranscript($videoId);
 
-            // Extract code using AI
+            // Extract code using AI with the REAL Video ID for maximum accuracy
             $codeData = $this->codeExtractor->extractCodeFromTranscript(
                 $videoData['title'],
-                $transcript
+                $transcript,
+                $videoId
             );
 
             // Generate explanation
@@ -173,8 +174,9 @@ class VideoController extends Controller
             }
 
             $codeData = $this->codeExtractor->extractCodeFromTranscript(
-                $video->title,
-                $transcript
+                $videoData['title'],
+                $transcript,
+                $video->youtube_id
             );
 
             $video->update([
@@ -298,93 +300,80 @@ class VideoController extends Controller
     }
 
     /**
-     * Get video transcript
+     * Get video transcript with improved anti-block logic
      */
     private function getTranscript(string $videoId): string
     {
         try {
-            // Method 1: Try YouTube's timedtext API
-            $response = Http::timeout(15)->get("https://www.youtube.com/api/timedtext", [
-                'v' => $videoId,
-                'lang' => 'en',
-                'kind' => 'asr',
-            ]);
+            // Step 1: Specific TimedText attempt with Browser-like headers
+            $response = Http::timeout(15)
+                ->withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+                    'Accept-Language' => 'en-US,en;q=0.9',
+                ])
+                ->get("https://www.youtube.com/api/timedtext", [
+                    'v' => $videoId,
+                    'lang' => 'en',
+                    'fmt' => 'srv3' // Try modern format
+                ]);
 
-            if ($response->successful() && $response->body()) {
-                $transcript = $this->parseTimedText($response->body());
-                if ($transcript && strlen($transcript) > 50) {
-                    return $transcript;
-                }
+            if ($response->successful() && strlen($response->body()) > 50) {
+                return $this->cleanTranscript($response->body());
             }
 
-            // Method 2: Try to get caption URL from video page
+            // Step 2: Page Scraping fallback
             $transcript = $this->getTranscriptFromPage($videoId);
             if ($transcript && strlen($transcript) > 50) {
                 return $transcript;
             }
 
         } catch (\Exception $e) {
-            Log::warning('Transcript fetch failed: ' . $e->getMessage());
+            Log::warning('Transcript fetch failed for ' . $videoId . ': ' . $e->getMessage());
         }
 
-        return 'Transcript not available. Code extraction will be based on video title and metadata.';
+        return 'Transcript not available. Extraction based on metadata.';
     }
 
-    /**
-     * Parse timedtext XML
-     */
-    private function parseTimedText(string $xml): ?string
+    private function cleanTranscript(string $text): string
     {
-        try {
-            libxml_use_internal_errors(true);
-            $doc = simplexml_load_string($xml);
-            
-            if (!$doc) return null;
-
-            $transcript = '';
-            foreach ($doc->text ?? [] as $text) {
-                $content = (string) $text;
-                $content = html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                $transcript .= $content . ' ';
-            }
-
-            return trim($transcript) ?: null;
-        } catch (\Exception $e) {
-            return null;
-        }
+        // Strip XML/HTML tags and clean up whitespace
+        $text = strip_tags($text);
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        return trim(preg_replace('/\s+/', ' ', $text));
     }
 
     /**
-     * Get transcript from YouTube page
+     * Get transcript from YouTube page source
      */
     private function getTranscriptFromPage(string $videoId): ?string
     {
         try {
             $response = Http::timeout(15)
-                ->withHeaders(['Accept-Language' => 'en-US,en;q=0.9'])
+                ->withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                    'Accept-Language' => 'en-US,en;q=0.5',
+                ])
                 ->get("https://www.youtube.com/watch?v={$videoId}");
 
             if (!$response->successful()) return null;
 
             $html = $response->body();
             
+            // Search for caption structure in the JS layer
             if (preg_match('/"captionTracks":\s*\[(.*?)\]/', $html, $matches)) {
-                $tracksJson = '[' . $matches[1] . ']';
-                $tracks = json_decode($tracksJson, true);
-                
-                if ($tracks && isset($tracks[0]['baseUrl'])) {
-                    $captionUrl = str_replace('\u0026', '&', $tracks[0]['baseUrl']);
+                $tracks = json_decode('[' . $matches[1] . ']', true);
+                if (!empty($tracks) && isset($tracks[0]['baseUrl'])) {
+                    $captionUrl = $tracks[0]['baseUrl'];
                     $captionResponse = Http::timeout(10)->get($captionUrl);
-                    
                     if ($captionResponse->successful()) {
-                        return $this->parseTimedText($captionResponse->body());
+                        return $this->cleanTranscript($captionResponse->body());
                     }
                 }
             }
         } catch (\Exception $e) {
-            Log::warning('Page transcript failed: ' . $e->getMessage());
+            Log::warning('Page scraper failed: ' . $e->getMessage());
         }
-
         return null;
     }
 

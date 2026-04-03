@@ -68,9 +68,8 @@ class CodeExtractorService
     /**
      * Extract code from video transcript using AI
      */
-    public function extractCodeFromTranscript(string $title, string $transcript): array
+    public function extractCodeFromTranscript(string $title, string $transcript, string $videoId): array
     {
-        // Try Gemini first (preferred)
         $geminiKey = env('GEMINI_API_KEY');
         $openaiKey = env('OPENAI_API_KEY');
         
@@ -82,146 +81,108 @@ class CodeExtractorService
             return $this->generateFallbackProject($title);
         }
 
-        // Use Gemini if key exists
+        // Use a 2-step pipeline for the BEST quality and no truncation
         if ($hasGemini) {
-            Log::info('Using Gemini AI for extraction');
-            $result = $this->extractWithGemini($title, $transcript, $geminiKey);
+            Log::info("Using Gemini AI for 2-step pipeline extraction for [{$videoId}]");
+            $result = $this->extractWithGeminiChained($title, $transcript, $videoId, $geminiKey);
             if ($result !== null) {
                 return $result;
             }
         }
 
-        // Fallback to OpenAI
+        // Fallback to OpenAI if Gemini fails
         if ($hasOpenAI) {
-            // Check if we have enough time left before trying OpenAI
-            if (ini_get('max_execution_time') && time() - $_SERVER['REQUEST_TIME'] > (ini_get('max_execution_time') - 60)) {
-                 Log::warning("Running out of execution time, skipping OpenAI fallback");
-                 return $this->generateFallbackProject($title);
-            }
-
-            Log::info('Using OpenAI for extraction');
+            Log::info("Using OpenAI as fallback for [{$videoId}]");
             $result = $this->extractWithOpenAI($title, $transcript, $openaiKey);
             if ($result !== null) {
                 return $result;
             }
         }
 
-        Log::info('AI extraction failed - using fallback extraction');
         return $this->generateFallbackProject($title);
     }
 
-    /**
-     * Extract using Google Gemini AI
-     */
-    private function extractWithGemini(string $title, string $transcript, string $apiKey): ?array
+    private function extractWithGeminiChained(string $title, string $transcript, string $videoId, string $apiKey): ?array
     {
         try {
-            $prompt = "Video Title: {$title}\n\nTranscript (if available):\n{$transcript}\n\nCRITICAL INSTRUCTIONS:\n1. Generate an EXTREMELY DETAILED tutorial_guide with a 5-8 paragraph overview\n2. Include 6-10 key_concepts with comprehensive explanations (3-5 sentences each)\n3. Create 10-20 complete code files with FULL working code\n4. Provide detailed setup_guide with 6-10 steps\n5. Make everything beginner-friendly and educational\n\nEven if transcript is limited, use the title to understand the project and generate comprehensive content.";
-
-            // Try multiple Gemini models - gemini-2.5-flash works with Pro for Students
-            $models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash-latest'];
-
+            $models = ['gemini-1.5-pro', 'gemini-1.5-flash'];
             foreach ($models as $model) {
-                // Check if we are running out of time (leave 30s buffer)
-                if (ini_get('max_execution_time') && time() - $_SERVER['REQUEST_TIME'] > (ini_get('max_execution_time') - 30)) {
-                    Log::warning("Running out of execution time, skipping remaining models");
-                    break;
-                }
-
-                $response = Http::timeout(120) // Reduced from 240s to prevent global timeout
-                    ->withHeaders([
-                        'Content-Type' => 'application/json',
-                    ])
-                    ->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
-                        'contents' => [
-                            [
-                                'parts' => [
-                                    ['text' => $this->getSystemPrompt() . "\n\n" . $prompt]
-                                ]
-                            ]
-                        ],
-                        'generationConfig' => [
-                            'temperature' => 0.5,
-                            'maxOutputTokens' => 16000,
-                        ],
-                    ]);
-
-                if ($response->successful()) {
-                    $data = $response->json();
-                    $content = $data['candidates'][0]['content']['parts'][0]['text'] ?? '';
-                    if (!empty($content)) {
-                        Log::info("Gemini extraction successful with model: {$model}");
-                        return $this->parseAIResponse($content);
+                Log::info("Step 1: Planning with model: {$model}");
+                
+                // STEP 1: Project Plan & Tutorial Text - High-Accuracy Coding Focus
+                $planPrompt = "ACT AS A LEAD SYSTEMS ENGINEER. EXAMINE THIS VIDEO CONTENT.\n\nVideo Title: {$title}\nYouTube Video ID: {$videoId}\n\nTranscript:\n" . substr($transcript, 0, 18000) . "\n\nCRITICAL MISSION:\nYou must extract EVERY piece of code mentioned or described in video [{$videoId}]. Reconstruct files fully even if only shown on screen.";
+                
+                $response = $this->callGemini($model, $this->getPlanPrompt() . "\n\n" . $planPrompt, $apiKey);
+                
+                if ($response) {
+                    $planData = $this->parseAIResponse($response);
+                    if (!empty($planData['tutorial_guide'])) {
+                        Log::info("Step 1 Success! Step 2: Generating Code.");
+                        
+                        $fileList = array_slice($planData['files'] ?? [], 0, 10);
+                        $codePrompt = "Based on the plan for '{$title}', generate FULL code for: " . implode(', ', array_map(fn($f) => $f['filename'], $fileList)) . ".\n\nRespond with a JSON array of objects: {filename, language, path, description, code}. NO PLACEHOLDERS.";
+                        
+                        $codeResponse = $this->callGemini($model, "JSON array ONLY. NO COMMENTS LIKE // ...code here.\n\n" . $codePrompt, $apiKey);
+                        
+                        if ($codeResponse) {
+                            $codeFiles = $this->parseAIResponse($codeResponse);
+                            $planData['files'] = is_array($codeFiles) && isset($codeFiles['files']) ? $codeFiles['files'] : (is_array($codeFiles) ? $codeFiles : []);
+                            return $planData;
+                        }
                     }
                 }
-
-                $errorBody = $response->body();
-                Log::warning("Gemini {$model} request failed: " . substr($errorBody, 0, 200));
-
-                // If it was a timeout or server error (5xx), trying another model might work
-                // But if it was a client error (4xx) other than quota, it likely won't
-                if ($response->status() >= 400 && $response->status() < 500 && !str_contains($errorBody, 'RESOURCE_EXHAUSTED')) {
-                    break; 
-                }
             }
-
         } catch (\Exception $e) {
-            Log::error('Gemini extraction error: ' . $e->getMessage());
+            Log::error('Chained Gemini error: ' . $e->getMessage());
         }
-
         return null;
     }
 
-    /**
-     * Extract using OpenAI
-     */
+    private function callGemini(string $model, string $prompt, string $apiKey): ?string
+    {
+        try {
+            $response = Http::timeout(180)
+                ->withHeaders(['Content-Type' => 'application/json'])
+                ->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
+                    'contents' => [['parts' => [['text' => $prompt]]]],
+                    'generationConfig' => ['temperature' => 0.4, 'maxOutputTokens' => 12000],
+                ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                return $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+            }
+        } catch (\Exception $e) { Log::error("Gemini call failed: " . $e->getMessage()); }
+        return null;
+    }
+
+    private function getPlanPrompt(): string
+    {
+        return "Respond with JSON ONLY:\n" . json_encode([
+            "stack" => ["primary" => "string", "languages" => [], "frameworks" => [], "description" => "string"],
+            "tutorial_guide" => ["overview" => "string", "key_concepts" => [["concept" => "string", "explanation" => "string"]]],
+            "files" => [["filename" => "string", "description" => "string"]],
+            "setup_instructions" => "string"
+        ]);
+    }
+
     private function extractWithOpenAI(string $title, string $transcript, string $apiKey): ?array
     {
         try {
-            $userPrompt = "Video Title: {$title}\n\nTranscript (if available):\n{$transcript}\n\nCRITICAL INSTRUCTIONS:\n1. Generate an EXTREMELY DETAILED tutorial_guide with a 5-8 paragraph overview\n2. Include 6-10 key_concepts with comprehensive explanations (3-5 sentences each)\n3. Create 10-20 complete code files with FULL working code\n4. Provide detailed setup_guide with 6-10 steps\n5. Make everything beginner-friendly and educational\n\nEven if transcript is limited, use the title to understand the project and generate comprehensive content.";
-            
-            $response = Http::timeout(120)
-                ->withHeaders([
-                    'Authorization' => "Bearer {$apiKey}",
-                    'Content-Type' => 'application/json',
-                ])
+            $response = Http::timeout(180)
+                ->withHeaders(['Authorization' => "Bearer {$apiKey}", 'Content-Type' => 'application/json'])
                 ->post('https://api.openai.com/v1/chat/completions', [
                     'model' => 'gpt-4o-mini',
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => $this->getSystemPrompt(),
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => $userPrompt,
-                        ],
-                    ],
+                    'messages' => [['role' => 'system', 'content' => 'JSON ONLY.'], ['role' => 'user', 'content' => "Extract code from: {$title}. Transcript: {$transcript}"]],
                     'temperature' => 0.5,
                     'max_tokens' => 16000,
                 ]);
 
             if ($response->successful()) {
                 $data = $response->json();
-                $content = $data['choices'][0]['message']['content'] ?? '';
-                if (!empty($content)) {
-                    Log::info('OpenAI extraction successful');
-                    return $this->parseAIResponse($content);
-                }
+                return $this->parseAIResponse($data['choices'][0]['message']['content'] ?? '');
             }
-
-            // Check for quota exceeded
-            $errorBody = $response->body();
-            if (str_contains($errorBody, 'insufficient_quota')) {
-                Log::warning('OpenAI quota exceeded');
-                return null;
-            }
-
-            Log::warning('OpenAI request failed: ' . $errorBody);
-        } catch (\Exception $e) {
-            Log::error('OpenAI extraction error: ' . $e->getMessage());
-        }
-
+        } catch (\Exception $e) { Log::error('OpenAI error: ' . $e->getMessage()); }
         return null;
     }
 
