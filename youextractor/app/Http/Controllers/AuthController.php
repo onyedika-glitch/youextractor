@@ -111,6 +111,9 @@ class AuthController extends Controller
 
             return redirect()->route('dashboard')->with('success', 'Welcome!');
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Google Auth Error: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
             return redirect()->route('signin')->withErrors(['error' => 'Google authentication failed. Please try again.']);
         }
     }
