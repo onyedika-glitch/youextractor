@@ -1,10 +1,10 @@
 services:
   - type: web
     name: youextractor
-    env: php
+    env: docker
     plan: free
-    buildCommand: composer install && php artisan migrate --force
-    startCommand: php -S 0.0.0.0:${PORT:-8000} -t youextractor/public
+    dockerfilePath: ./youextractor/Dockerfile
+    dockerContext: ./youextractor
     healthCheckPath: /api/health
     envVars:
       - key: APP_ENV
@@ -13,6 +13,8 @@ services:
         value: "false"
       - key: APP_KEY
         value: base64:b6fkKEA46O4acYzBOAd8g2sXaC0y7D28zSwzuhXocWw=
+      - key: APP_URL
+        value: https://youextractor.onrender.com
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
@@ -30,7 +32,7 @@ services:
       - key: DB_USERNAME
         fromDatabase:
           name: youextractor
-          property: username
+          property: user
       - key: DB_PASSWORD
         fromDatabase:
           name: youextractor
@@ -41,8 +43,26 @@ services:
         value: file
       - key: SESSION_DRIVER
         value: file
+      - key: SESSION_LIFETIME
+        value: "120"
       - key: LOG_CHANNEL
         value: stack
+      - key: LOG_LEVEL
+        value: error
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        value: https://youextractor.onrender.com/auth/google/callback
 
 databases:
   - name: youextractor
