@@ -46,5 +46,5 @@ services:
 
 databases:
   - name: youextractor
-    engine: postgres
+    plan: free
     ipAllowList: []
