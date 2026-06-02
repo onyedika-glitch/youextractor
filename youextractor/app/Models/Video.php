@@ -28,6 +28,9 @@ class Video extends Model
         'prerequisites',
         'setup_guide',
         'run_guide',
+        'extraction_status',
+        'extraction_error',
+        'github_repo_url',
     ];
 
     protected $casts = [
@@ -49,6 +52,14 @@ class Video extends Model
     public function hasCode(): bool
     {
         return !empty($this->code_snippets);
+    }
+
+    /**
+     * Whether the background job is still running.
+     */
+    public function isProcessing(): bool
+    {
+        return in_array($this->extraction_status, ['pending', 'processing']);
     }
 
     /**

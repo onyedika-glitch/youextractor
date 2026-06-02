@@ -2,747 +2,250 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
+use App\Services\AI\LLMService;
+use App\Services\AI\GeminiDriver;
+use App\Services\AI\OpenAIDriver;
+use App\Services\AI\ClaudeDriver;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use ZipArchive;
 
+/**
+ * CodeExtractorService  (refactored coordinator)
+ *
+ * This class no longer contains prompts, ZIP logic, or raw HTTP calls.
+ * It coordinates three focused collaborators:
+ *   - PromptFactory   → builds prompts
+ *   - LLMService      → calls the AI provider
+ *   - ProjectPackager → generates ZIP archives
+ *
+ * AI Provider Priority (best quality first):
+ *   1. Anthropic Claude  (best for coding tasks)
+ *   2. Google Gemini     (2-step chained pipeline)
+ *   3. OpenAI GPT-4o-mini (fallback)
+ */
 class CodeExtractorService
 {
-    /**
-     * Programming language extensions mapping
-     */
-    private array $languageExtensions = [
-        'javascript' => 'js',
-        'typescript' => 'ts',
-        'python' => 'py',
-        'php' => 'php',
-        'java' => 'java',
-        'csharp' => 'cs',
-        'c#' => 'cs',
-        'cpp' => 'cpp',
-        'c++' => 'cpp',
-        'c' => 'c',
-        'ruby' => 'rb',
-        'go' => 'go',
-        'rust' => 'rs',
-        'swift' => 'swift',
-        'kotlin' => 'kt',
-        'html' => 'html',
-        'css' => 'css',
-        'scss' => 'scss',
-        'sql' => 'sql',
-        'bash' => 'sh',
-        'shell' => 'sh',
-        'json' => 'json',
-        'xml' => 'xml',
-        'yaml' => 'yml',
-        'markdown' => 'md',
-        'jsx' => 'jsx',
-        'tsx' => 'tsx',
-        'vue' => 'vue',
-        'svelte' => 'svelte',
-    ];
+    private PromptFactory  $prompts;
+    private ProjectPackager $packager;
 
-    private string $currentTitle = '';
+    /** Ordered list of drivers to try */
+    private array $drivers;
+
+    public function __construct()
+    {
+        $this->prompts  = new PromptFactory();
+        $this->packager = new ProjectPackager();
+
+        // Priority order: Claude → Gemini → OpenAI
+        $this->drivers = [
+            new ClaudeDriver(),
+            new GeminiDriver(),
+            new OpenAIDriver(),
+        ];
+    }
+
+    // ------------------------------------------------------------------
+    // Public API
+    // ------------------------------------------------------------------
 
     /**
-     * Stack/framework detection patterns
-     */
-    private array $stackPatterns = [
-        'react' => ['react', 'useState', 'useEffect', 'jsx', 'component'],
-        'vue' => ['vue', 'v-if', 'v-for', 'v-model', 'computed'],
-        'angular' => ['angular', '@Component', 'ngOnInit', '@Injectable'],
-        'nextjs' => ['next', 'getServerSideProps', 'getStaticProps', 'next/'],
-        'express' => ['express', 'app.get', 'app.post', 'req, res', 'router'],
-        'django' => ['django', 'views.py', 'models.py', 'urls.py'],
-        'flask' => ['flask', '@app.route', 'render_template'],
-        'laravel' => ['laravel', 'artisan', 'eloquent', 'blade'],
-        'nodejs' => ['require(', 'module.exports', 'npm', 'node'],
-        'spring' => ['@SpringBootApplication', '@RestController', '@Autowired', 'spring-boot', 'pom.xml', 'build.gradle', 'mvn', 'java'],
-        'dotnet' => ['using System', 'namespace', 'public class', 'async Task'],
-        'tailwind' => ['tailwind', 'className=', 'bg-', 'text-', 'flex'],
-        'bootstrap' => ['bootstrap', 'btn-primary', 'container', 'row'],
-    ];
-
-    /**
-     * Extract code from video transcript using AI
+     * Main entry point. Returns structured extraction data.
      */
     public function extractCodeFromTranscript(string $title, string $transcript, string $videoId): array
     {
-        $geminiKey = env('GEMINI_API_KEY');
-        $openaiKey = env('OPENAI_API_KEY');
-        
-        $hasGemini = !empty($geminiKey) && strlen($geminiKey) > 20;
-        $hasOpenAI = !empty($openaiKey) && strlen($openaiKey) > 20;
+        foreach ($this->drivers as $driver) {
+            /** @var LLMService $driver */
+            if (!$driver->isAvailable()) {
+                continue;
+            }
 
-        if (!$hasGemini && !$hasOpenAI) {
-            Log::info('No AI API keys available - using fallback extraction');
-            return $this->generateFallbackProject($title);
-        }
+            Log::info("Attempting extraction with {$driver->name()} for [{$videoId}]");
 
-        // Use a 2-step pipeline for the BEST quality and no truncation
-        if ($hasGemini) {
-            Log::info("Using Gemini AI for 2-step pipeline extraction for [{$videoId}]");
-            $result = $this->extractWithGeminiChained($title, $transcript, $videoId, $geminiKey);
+            $result = $this->runChainedPipeline($driver, $title, $transcript, $videoId);
+
             if ($result !== null) {
+                Log::info("Extraction succeeded with {$driver->name()} for [{$videoId}]");
                 return $result;
             }
+
+            Log::warning("{$driver->name()} failed. Trying next driver…");
         }
 
-        // Fallback to OpenAI if Gemini fails
-        if ($hasOpenAI) {
-            Log::info("Using OpenAI as fallback for [{$videoId}]");
-            $result = $this->extractWithOpenAI($title, $transcript, $openaiKey);
-            if ($result !== null) {
-                return $result;
-            }
-        }
-
+        Log::warning("All AI drivers failed for [{$videoId}]. Using fallback.");
         return $this->generateFallbackProject($title);
     }
 
-    private function extractWithGeminiChained(string $title, string $transcript, string $videoId, string $apiKey): ?array
-    {
-        try {
-            $models = ['gemini-1.5-pro', 'gemini-1.5-flash'];
-            foreach ($models as $model) {
-                Log::info("Step 1: Planning with model: {$model}");
-                
-                // STEP 1: Project Plan & Tutorial Text - High-Accuracy Coding Focus
-                $planPrompt = "ACT AS A LEAD SYSTEMS ENGINEER. EXAMINE THIS VIDEO CONTENT.\n\nVideo Title: {$title}\nYouTube Video ID: {$videoId}\n\nTranscript:\n" . substr($transcript, 0, 18000) . "\n\nCRITICAL MISSION:\nYou must extract EVERY piece of code mentioned or described in video [{$videoId}]. Reconstruct files fully even if only shown on screen.";
-                
-                $response = $this->callGemini($model, $this->getPlanPrompt() . "\n\n" . $planPrompt, $apiKey);
-                
-                if ($response) {
-                    $planData = $this->parseAIResponse($response);
-                    if (!empty($planData['tutorial_guide'])) {
-                        Log::info("Step 1 Success! Step 2: Generating Code.");
-                        
-                        $fileList = array_slice($planData['files'] ?? [], 0, 10);
-                        $codePrompt = "Based on the plan for '{$title}', generate FULL code for: " . implode(', ', array_map(fn($f) => $f['filename'], $fileList)) . ".\n\nRespond with a JSON array of objects: {filename, language, path, description, code}. NO PLACEHOLDERS.";
-                        
-                        $codeResponse = $this->callGemini($model, "JSON array ONLY. NO COMMENTS LIKE // ...code here.\n\n" . $codePrompt, $apiKey);
-                        
-                        if ($codeResponse) {
-                            $codeFiles = $this->parseAIResponse($codeResponse);
-                            $planData['files'] = is_array($codeFiles) && isset($codeFiles['files']) ? $codeFiles['files'] : (is_array($codeFiles) ? $codeFiles : []);
-                            return $planData;
-                        }
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            Log::error('Chained Gemini error: ' . $e->getMessage());
-        }
-        return null;
-    }
-
-    private function callGemini(string $model, string $prompt, string $apiKey): ?string
-    {
-        try {
-            $response = Http::timeout(180)
-                ->withHeaders(['Content-Type' => 'application/json'])
-                ->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
-                    'contents' => [['parts' => [['text' => $prompt]]]],
-                    'generationConfig' => ['temperature' => 0.4, 'maxOutputTokens' => 12000],
-                ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-                return $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
-            }
-        } catch (\Exception $e) { Log::error("Gemini call failed: " . $e->getMessage()); }
-        return null;
-    }
-
-    private function getPlanPrompt(): string
-    {
-        return "Respond with JSON ONLY:\n" . json_encode([
-            "stack" => ["primary" => "string", "languages" => [], "frameworks" => [], "description" => "string"],
-            "tutorial_guide" => ["overview" => "string", "key_concepts" => [["concept" => "string", "explanation" => "string"]]],
-            "files" => [["filename" => "string", "description" => "string"]],
-            "setup_instructions" => "string"
-        ]);
-    }
-
-    private function extractWithOpenAI(string $title, string $transcript, string $apiKey): ?array
-    {
-        try {
-            $response = Http::timeout(180)
-                ->withHeaders(['Authorization' => "Bearer {$apiKey}", 'Content-Type' => 'application/json'])
-                ->post('https://api.openai.com/v1/chat/completions', [
-                    'model' => 'gpt-4o-mini',
-                    'messages' => [['role' => 'system', 'content' => 'JSON ONLY.'], ['role' => 'user', 'content' => "Extract code from: {$title}. Transcript: {$transcript}"]],
-                    'temperature' => 0.5,
-                    'max_tokens' => 16000,
-                ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-                return $this->parseAIResponse($data['choices'][0]['message']['content'] ?? '');
-            }
-        } catch (\Exception $e) { Log::error('OpenAI error: ' . $e->getMessage()); }
-        return null;
-    }
-
     /**
-     * Get system prompt for AI code extraction
-     */
-    private function getSystemPrompt(): string
-    {
-        return <<<PROMPT
-You are an EXPERT programming tutor creating the ULTIMATE learning resource from a YouTube tutorial video. Your goal is to create content so comprehensive that a complete beginner could follow along and understand EVERYTHING.
-
-## YOUR MISSION:
-Transform this video into a complete, self-contained learning package with:
-1. EXTREMELY DETAILED tutorial guide (like a blog post/course lesson)
-2. COMPLETE working project with 10-20 files
-3. Step-by-step explanations for EVERY concept
-4. Professional setup and deployment guides
-
-## CRITICAL REQUIREMENTS:
-
-### TUTORIAL GUIDE (MOST IMPORTANT):
-The tutorial_guide MUST be like a full blog post or course lesson:
-- overview: Write 5-8 paragraphs explaining:
-  * What problem this project solves
-  * Why someone would build this
-  * The technologies used and WHY each was chosen
-  * The architecture/design patterns being implemented
-  * What makes this approach industry-standard
-  * Real-world applications of these concepts
-
-- key_concepts: Provide 6-10 concepts, each with 3-5 sentence explanations:
-  * Explain what the concept is
-  * Why it's important
-  * How it's used in this project
-  * Common mistakes to avoid
-
-- learning_outcomes: List 8-12 specific skills the learner will gain
-
-### CODE FILES (COMPLETE PROJECT):
-Generate 10-20 files that form a COMPLETE, RUNNABLE project:
-- Every file must have FULL, WORKING code (no placeholders)
-- Include configuration files (package.json, pom.xml, requirements.txt, etc.)
-- Include environment examples (.env.example)
-- Include Docker files if relevant
-- Include database schemas/migrations
-- Include tests if appropriate
-- Each file's description should explain:
-  * What this file does
-  * Why it's needed
-  * Key parts of the code
-
-### SETUP GUIDE:
-Provide 6-10 detailed steps where each step includes:
-- Clear title
-- Multiple commands if needed
-- 3-5 sentence explanation of what's happening and why
-
-### RUN GUIDE:
-Include development, production, and docker options where applicable, each with detailed explanations.
-
-## RESPONSE FORMAT (JSON ONLY):
-{
-    "stack": {
-        "primary": "javascript",
-        "languages": ["javascript", "typescript", "html", "css", "sql"],
-        "frameworks": ["react", "nodejs", "express", "postgresql"],
-        "description": "Full-stack React application with Node.js/Express backend and PostgreSQL database"
-    },
-    "tutorial_guide": {
-        "overview": "WRITE 5-8 DETAILED PARAGRAPHS HERE. Start with: 'In this comprehensive tutorial, we will build...' Explain the problem, solution, architecture, technologies, and real-world relevance. Make it engaging and educational. Each paragraph should be 3-5 sentences.",
-        "key_concepts": [
-            {
-                "concept": "Component-Based Architecture",
-                "explanation": "Component-based architecture is a design pattern where the UI is broken down into independent, reusable pieces called components. Each component manages its own state and logic, making the codebase more maintainable and testable. In React, components can be functional or class-based, with functional components being the modern standard. This project uses functional components with hooks to manage state and side effects. Understanding component composition is crucial for building scalable React applications."
-            },
-            {
-                "concept": "RESTful API Design",
-                "explanation": "REST (Representational State Transfer) is an architectural style for designing networked applications. RESTful APIs use HTTP methods (GET, POST, PUT, DELETE) to perform CRUD operations on resources. In this project, we follow REST conventions to create predictable, stateless endpoints. Each endpoint returns JSON data and uses appropriate status codes. This approach makes our API easy to understand and consume by any client application."
-            }
-        ],
-        "learning_outcomes": [
-            "Build a complete full-stack application from scratch",
-            "Implement user authentication with JWT tokens",
-            "Design and consume RESTful APIs",
-            "Manage application state with React hooks",
-            "Connect to and query a PostgreSQL database",
-            "Handle errors gracefully on both frontend and backend",
-            "Deploy applications to production environments",
-            "Write clean, maintainable code following best practices"
-        ]
-    },
-    "ide_recommendations": {
-        "primary": {
-            "name": "Visual Studio Code",
-            "reason": "VS Code offers excellent JavaScript/TypeScript support with IntelliSense, debugging, and integrated terminal. Its vast extension marketplace provides tools for React, Node.js, and database management all in one place.",
-            "download_url": "https://code.visualstudio.com/",
-            "extensions": ["ES7+ React/Redux/React-Native snippets", "Prettier - Code formatter", "ESLint", "Thunder Client", "PostgreSQL"]
-        },
-        "alternatives": [
-            {
-                "name": "WebStorm",
-                "reason": "JetBrains WebStorm provides superior code intelligence and refactoring tools out of the box, ideal for larger projects",
-                "download_url": "https://www.jetbrains.com/webstorm/",
-                "extensions": []
-            }
-        ]
-    },
-    "prerequisites": {
-        "software": [
-            {"name": "Node.js 18+", "download_url": "https://nodejs.org/", "purpose": "JavaScript runtime for running the backend server and build tools"},
-            {"name": "PostgreSQL 14+", "download_url": "https://www.postgresql.org/download/", "purpose": "Relational database for storing application data"},
-            {"name": "Git", "download_url": "https://git-scm.com/", "purpose": "Version control for tracking code changes"}
-        ],
-        "knowledge": [
-            "Basic JavaScript/ES6+ syntax (variables, functions, async/await)",
-            "Understanding of HTML and CSS",
-            "Familiarity with command line/terminal",
-            "Basic understanding of databases and SQL"
-        ],
-        "accounts": []
-    },
-    "setup_guide": {
-        "steps": [
-            {
-                "step": 1,
-                "title": "Verify Prerequisites",
-                "commands": ["node --version", "npm --version", "psql --version"],
-                "explanation": "Before starting, ensure you have Node.js, npm, and PostgreSQL installed. Node.js should be version 18 or higher. If any command fails, download and install the missing software from the prerequisites links above."
-            },
-            {
-                "step": 2,
-                "title": "Extract and Navigate to Project",
-                "commands": ["unzip youtube-code-extractor.zip", "cd project-name"],
-                "explanation": "After downloading, extract the ZIP file to your preferred location. Open your terminal and navigate to the project directory. All subsequent commands should be run from this directory."
-            },
-            {
-                "step": 3,
-                "title": "Install Dependencies",
-                "commands": ["npm install"],
-                "explanation": "This command reads the package.json file and downloads all required packages from npm. This includes React, Express, database drivers, and development tools. The process may take a few minutes depending on your internet connection."
-            },
-            {
-                "step": 4,
-                "title": "Configure Environment Variables",
-                "commands": ["cp .env.example .env"],
-                "explanation": "Copy the example environment file to create your local configuration. Open the .env file and update the database connection string, API keys, and other settings for your local environment. Never commit this file to version control."
-            },
-            {
-                "step": 5,
-                "title": "Setup Database",
-                "commands": ["createdb myapp_db", "npm run migrate"],
-                "explanation": "Create a new PostgreSQL database and run the migrations to set up your tables. The migration files define the database schema and will create all necessary tables, indexes, and relationships."
-            }
-        ]
-    },
-    "run_guide": {
-        "development": {
-            "commands": ["npm run dev"],
-            "explanation": "This starts both the frontend and backend in development mode with hot-reloading enabled. Any changes you make to the code will automatically refresh in the browser. The backend API runs on port 5000 and the React frontend on port 3000.",
-            "access_url": "http://localhost:3000"
-        },
-        "production": {
-            "commands": ["npm run build", "npm start"],
-            "explanation": "First, build the optimized production bundle which minifies and bundles all assets. Then start the production server which serves the static files and handles API requests efficiently."
-        },
-        "docker": {
-            "commands": ["docker-compose up --build"],
-            "explanation": "Docker Compose builds the application image and starts all services (app, database) in isolated containers. This ensures consistent environments across development, testing, and production."
-        }
-    },
-    "files": [
-        {
-            "filename": "package.json",
-            "language": "json",
-            "path": "package.json",
-            "description": "The package.json file is the heart of any Node.js project. It defines the project metadata, lists all dependencies (both production and development), and contains scripts for running, building, and testing the application. This file is used by npm to manage packages.",
-            "code": "FULL JSON CONTENT HERE"
-        }
-    ],
-    "setup_instructions": "npm install && npm run dev",
-    "dependencies": {
-        "npm": ["react", "express", "pg"],
-        "pip": [],
-        "maven": []
-    }
-}
-
-Generate at least 8-15 files for a complete project. Include realistic, working code that follows best practices.
-## IMPORTANT RULES:
-1. Generate COMPLETE, WORKING code - no "// TODO" or placeholders
-2. Make the tutorial_guide.overview at least 5 full paragraphs
-3. Include at least 6 key_concepts with detailed explanations
-4. Create 10-20 files for a complete project
-5. Every explanation should be educational and beginner-friendly
-6. Include ALL configuration files needed to run the project
-7. Respond with VALID JSON ONLY - no markdown, no explanation outside JSON
-PROMPT;
-    }
-
-    /**
-     * Parse AI response into structured data
-     */
-    private function parseAIResponse(string $content): array
-    {
-        // Try to extract JSON from the response
-        $content = trim($content);
-        
-        // Remove markdown code blocks if present
-        if (preg_match('/```(?:json)?\s*([\s\S]*?)\s*```/', $content, $matches)) {
-            $content = $matches[1];
-        }
-
-        try {
-            $data = json_decode($content, true);
-            if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
-                return [
-                    'stack' => $data['stack'] ?? null,
-                    'files' => $data['files'] ?? [],
-                    'setup_instructions' => $data['setup_instructions'] ?? '',
-                    'dependencies' => $data['dependencies'] ?? [],
-                    'tutorial_guide' => $data['tutorial_guide'] ?? null,
-                    'ide_recommendations' => $data['ide_recommendations'] ?? null,
-                    'prerequisites' => $data['prerequisites'] ?? null,
-                    'setup_guide' => $data['setup_guide'] ?? null,
-                    'run_guide' => $data['run_guide'] ?? null,
-                ];
-            }
-        } catch (\Exception $e) {
-            Log::warning('Failed to parse AI response: ' . $e->getMessage());
-        }
-
-        return ['stack' => null, 'files' => [], 'setup_instructions' => '', 'dependencies' => [], 'tutorial_guide' => null, 'ide_recommendations' => null, 'prerequisites' => null, 'setup_guide' => null, 'run_guide' => null];
-    }
-
-    /**
-     * Extract code using pattern matching (fallback)
-     */
-    private function extractCodeWithPatterns(string $text, string $title = ''): array
-    {
-        $this->currentTitle = $title;
-        $files = [];
-        $detectedLanguages = [];
-        
-        // Pattern for code blocks
-        $patterns = [
-            // Markdown code blocks
-            '/```(\w+)?\s*\n([\s\S]*?)\n```/' => 'markdown',
-            // Function definitions
-            '/(?:function|def|public|private|const)\s+\w+\s*\([^)]*\)\s*\{[^}]+\}/' => 'function',
-            // Import statements
-            '/(?:import|from|require|using)\s+[\'"][^"\']+[\'"]/' => 'import',
-        ];
-
-        foreach ($patterns as $pattern => $type) {
-            if (preg_match_all($pattern, $text, $matches)) {
-                foreach ($matches[0] as $i => $match) {
-                    $language = $matches[1][$i] ?? $this->detectLanguage($match, $this->currentTitle ?? ''); // Use class level property if needed or pass title differently
-                    $code = $matches[2][$i] ?? $match;
-                    
-                    if (strlen(trim($code)) > 10) {
-                        $files[] = [
-                            'filename' => 'snippet_' . (count($files) + 1) . '.' . $this->getExtension($language),
-                            'language' => $language,
-                            'path' => 'snippets/snippet_' . (count($files) + 1) . '.' . $this->getExtension($language),
-                            'description' => 'Code snippet extracted from video',
-                            'code' => trim($code),
-                        ];
-                        $detectedLanguages[] = $language;
-                    }
-                }
-            }
-        }
-
-        $stack = null;
-        if (!empty($detectedLanguages)) {
-            $stack = [
-                'primary' => $detectedLanguages[0],
-                'languages' => array_unique($detectedLanguages),
-                'frameworks' => $this->detectFrameworks($text),
-                'description' => 'Detected from video content',
-            ];
-        }
-
-        return [
-            'stack' => $stack,
-            'files' => $files,
-            'setup_instructions' => '',
-            'dependencies' => [],
-        ];
-    }
-
-    /**
-     * Detect programming language from code
-     */
-    private function detectLanguage(string $code, ?string $titleContext = null): string
-    {
-        // If we have title context, check relevant languages first
-        if ($titleContext) {
-            $contextLower = strtolower($titleContext);
-            if (str_contains($contextLower, 'java') && !str_contains($contextLower, 'javascript')) {
-                // Check for Java specific indicators first
-                $javaIndicators = ['public class', 'public static', 'System.out', 'package ', 'import java.'];
-                foreach ($javaIndicators as $keyword) {
-                    if (stripos($code, $keyword) !== false) return 'java';
-                }
-            }
-            if (str_contains($contextLower, 'javascript') || str_contains($contextLower, 'js')) {
-                 // Check JS specific indicators
-                 $jsIndicators = ['const ', 'let ', 'var ', 'function', '=>', 'console.log', 'document.'];
-                 foreach ($jsIndicators as $keyword) {
-                    if (stripos($code, $keyword) !== false) return 'javascript';
-                }
-            }
-        }
-
-        $indicators = [
-            'javascript' => ['const ', 'let ', 'var ', 'function', '=>', 'console.log', 'document.getElementById'],
-            'typescript' => ['interface ', ': string', ': number', ': boolean', '<T>'],
-            'python' => ['def ', 'import ', 'from ', 'print(', 'if __name__'],
-            'php' => ['<?php', '<?=', '$_', 'echo ', 'function '],
-            'java' => ['public class', 'public static', 'System.out', 'public void', 'private '],
-            'csharp' => ['using System', 'namespace ', 'public class'],
-            'html' => ['<html', '<div', '<span', '<!DOCTYPE', '<head', '<body'],
-            'css' => ['{', '}', 'color:', 'background:', 'margin:', 'padding:'],
-            'sql' => ['SELECT', 'FROM', 'WHERE', 'INSERT', 'UPDATE'],
-        ];
-
-        foreach ($indicators as $lang => $keywords) {
-            foreach ($keywords as $keyword) {
-                if (stripos($code, $keyword) !== false) {
-                    // Double check to avoid false positives (e.g. 'function' in comments)
-                    if ($lang === 'java' && (stripos($code, 'function') !== false || stripos($code, 'var ') !== false)) {
-                        continue;
-                    }
-                    return $lang;
-                }
-            }
-        }
-
-        return 'text';
-    }
-
-    /**
-     * Detect frameworks from text
-     */
-    private function detectFrameworks(string $text): array
-    {
-        $detected = [];
-        $textLower = strtolower($text);
-
-        foreach ($this->stackPatterns as $framework => $keywords) {
-            foreach ($keywords as $keyword) {
-                if (stripos($textLower, $keyword) !== false) {
-                    $detected[] = $framework;
-                    break;
-                }
-            }
-        }
-
-        return array_unique($detected);
-    }
-
-    /**
-     * Get file extension for language
-     */
-    private function getExtension(string $language): string
-    {
-        return $this->languageExtensions[strtolower($language)] ?? 'txt';
-    }
-
-    /**
-     * Generate downloadable ZIP file with code
+     * Delegate ZIP generation to the packager.
      */
     public function generateZipFile(string $videoId, array $codeData): ?string
     {
-        $zipPath = storage_path("app/downloads/{$videoId}.zip");
-        $zipDir = dirname($zipPath);
+        return $this->packager->generateZip($videoId, $codeData);
+    }
 
-        if (!is_dir($zipDir)) {
-            mkdir($zipDir, 0755, true);
-        }
+    // ------------------------------------------------------------------
+    // Pipeline logic
+    // ------------------------------------------------------------------
 
-        $zip = new ZipArchive();
-        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-            Log::error("Cannot create ZIP file: {$zipPath}");
+    /**
+     * Two-step pipeline:
+     *   Step 1 → Generate project plan + tutorial guide
+     *   Step 2 → Generate full code for each planned file
+     */
+    private function runChainedPipeline(
+        LLMService $driver,
+        string $title,
+        string $transcript,
+        string $videoId
+    ): ?array {
+        try {
+            // ---- Step 1: Plan -------------------------------------------
+            $planPrompt = $this->prompts->planPrompt($title, $videoId, $transcript);
+            $planRaw    = $driver->generate($planPrompt);
+
+            if ($planRaw === null) {
+                return null;
+            }
+
+            $planData = $this->parseWithSelfCorrection($planRaw, $driver);
+
+            if (empty($planData['tutorial_guide'])) {
+                Log::warning("[{$driver->name()}] Step 1 returned no tutorial_guide.");
+                return null;
+            }
+
+            // ---- Step 2: Code generation ---------------------------------
+            $fileList  = array_slice($planData['files'] ?? [], 0, 15);
+            $codePrompt = $this->prompts->codePrompt($title, $fileList);
+            $codeRaw    = $driver->generate($codePrompt);
+
+            if ($codeRaw !== null) {
+                $codeFiles = $this->parseWithSelfCorrection($codeRaw, $driver);
+
+                // The code step may return a top-level array or {"files": [...]}
+                if (is_array($codeFiles)) {
+                    $planData['files'] = isset($codeFiles['files'])
+                        ? $codeFiles['files']
+                        : (array_is_list($codeFiles) ? $codeFiles : ($planData['files'] ?? []));
+                }
+            }
+
+            return $planData;
+        } catch (\Exception $e) {
+            Log::error("[{$driver->name()}] Pipeline exception: " . $e->getMessage());
             return null;
         }
-
-        // Add README
-        $readme = $this->generateReadme($codeData);
-        $zip->addFromString('README.md', $readme);
-
-        // Add code files
-        foreach ($codeData['files'] ?? [] as $file) {
-            $path = $file['path'] ?? $file['filename'];
-            $code = $file['code'] ?? '';
-            
-            // Add comment header
-            $header = $this->generateFileHeader($file);
-            $zip->addFromString($path, $header . $code);
-        }
-
-        // Add setup script if available
-        if (!empty($codeData['setup_instructions'])) {
-            $zip->addFromString('SETUP.md', "# Setup Instructions\n\n```bash\n{$codeData['setup_instructions']}\n```");
-        }
-
-        // Add package.json or requirements.txt if dependencies exist
-        $this->addDependencyFiles($zip, $codeData['dependencies'] ?? []);
-
-        $zip->close();
-
-        return $zipPath;
     }
 
+    // ------------------------------------------------------------------
+    // JSON parsing with self-correction (Improvement #3)
+    // ------------------------------------------------------------------
+
     /**
-     * Generate README content
+     * Parse an AI response into a PHP array.
+     * If JSON is malformed, attempt self-correction by sending it back to the model.
      */
-    private function generateReadme(array $codeData): string
+    private function parseWithSelfCorrection(string $raw, LLMService $driver): array
     {
-        $stack = $codeData['stack'] ?? null;
-        $files = $codeData['files'] ?? [];
+        // Strip markdown fences if present
+        $clean = $this->stripMarkdownFences($raw);
 
-        $readme = "# Code Extracted from YouTube Video\n\n";
-        $readme .= "Generated by YouTube Code Extractor\n\n";
+        $data = json_decode($clean, true);
 
-        if ($stack) {
-            $readme .= "## Tech Stack\n\n";
-            $readme .= "- **Primary**: {$stack['primary']}\n";
-            if (!empty($stack['languages'])) {
-                $readme .= "- **Languages**: " . implode(', ', $stack['languages']) . "\n";
-            }
-            if (!empty($stack['frameworks'])) {
-                $readme .= "- **Frameworks**: " . implode(', ', $stack['frameworks']) . "\n";
-            }
-            if (!empty($stack['description'])) {
-                $readme .= "- **Description**: {$stack['description']}\n";
-            }
-            $readme .= "\n";
+        if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
+            return $this->normaliseKeys($data);
         }
 
-        if (!empty($files)) {
-            $readme .= "## Files\n\n";
-            foreach ($files as $file) {
-                $readme .= "### `{$file['path']}`\n";
-                $readme .= "{$file['description']}\n\n";
+        // Self-correction: ask the same driver to fix the JSON
+        Log::warning("[{$driver->name()}] JSON parse error — attempting self-correction…");
+        $fixPrompt = $this->prompts->jsonFixPrompt($clean);
+        $fixed     = $driver->generate($fixPrompt);
+
+        if ($fixed !== null) {
+            $fixedClean = $this->stripMarkdownFences($fixed);
+            $data       = json_decode($fixedClean, true);
+
+            if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
+                Log::info("[{$driver->name()}] Self-correction succeeded.");
+                return $this->normaliseKeys($data);
             }
         }
 
-        if (!empty($codeData['setup_instructions'])) {
-            $readme .= "## Setup\n\n";
-            $readme .= "```bash\n{$codeData['setup_instructions']}\n```\n\n";
-        }
-
-        $readme .= "---\n";
-        $readme .= "Extracted on: " . date('Y-m-d H:i:s') . "\n";
-
-        return $readme;
+        Log::error("[{$driver->name()}] Self-correction failed. Returning empty array.");
+        return [];
     }
 
-    /**
-     * Generate file header comment
-     */
-    private function generateFileHeader(array $file): string
+    /** Strip ```json … ``` or ``` … ``` fences. */
+    private function stripMarkdownFences(string $content): string
     {
-        $lang = strtolower($file['language'] ?? 'text');
-        $desc = $file['description'] ?? '';
-        
-        $commentStyles = [
-            'javascript' => "/**\n * {$desc}\n * Extracted from YouTube tutorial\n */\n\n",
-            'typescript' => "/**\n * {$desc}\n * Extracted from YouTube tutorial\n */\n\n",
-            'python' => "\"\"\"\n{$desc}\nExtracted from YouTube tutorial\n\"\"\"\n\n",
-            'php' => "<?php\n/**\n * {$desc}\n * Extracted from YouTube tutorial\n */\n\n",
-            'html' => "<!-- {$desc} - Extracted from YouTube tutorial -->\n\n",
-            'css' => "/* {$desc} - Extracted from YouTube tutorial */\n\n",
+        $content = trim($content);
+        if (preg_match('/```(?:json)?\s*([\s\S]*?)\s*```/', $content, $m)) {
+            return $m[1];
+        }
+        return $content;
+    }
+
+    /** Normalise the keys we expect so downstream code never breaks. */
+    private function normaliseKeys(array $data): array
+    {
+        return [
+            'stack'               => $data['stack']               ?? null,
+            'files'               => $data['files']               ?? [],
+            'setup_instructions'  => $data['setup_instructions']  ?? '',
+            'dependencies'        => $data['dependencies']        ?? [],
+            'tutorial_guide'      => $data['tutorial_guide']      ?? null,
+            'ide_recommendations' => $data['ide_recommendations'] ?? null,
+            'prerequisites'       => $data['prerequisites']       ?? null,
+            'setup_guide'         => $data['setup_guide']         ?? null,
+            'run_guide'           => $data['run_guide']           ?? null,
         ];
-
-        return $commentStyles[$lang] ?? "// {$desc}\n// Extracted from YouTube tutorial\n\n";
     }
 
-    /**
-     * Add dependency files to ZIP
-     */
-    private function addDependencyFiles(ZipArchive $zip, array $dependencies): void
-    {
-        // NPM dependencies
-        if (!empty($dependencies['npm'])) {
-            $packageJson = json_encode([
-                'name' => 'youtube-extracted-code',
-                'version' => '1.0.0',
-                'dependencies' => array_fill_keys($dependencies['npm'], '*'),
-            ], JSON_PRETTY_PRINT);
-            $zip->addFromString('package.json', $packageJson);
-        }
+    // ------------------------------------------------------------------
+    // Fallback project generator (no AI available)
+    // ------------------------------------------------------------------
 
-        // Python dependencies
-        if (!empty($dependencies['pip'])) {
-            $requirements = implode("\n", $dependencies['pip']);
-            $zip->addFromString('requirements.txt', $requirements);
-        }
-
-        // Composer dependencies
-        if (!empty($dependencies['composer'])) {
-            $composerJson = json_encode([
-                'name' => 'youtube/extracted-code',
-                'require' => array_fill_keys($dependencies['composer'], '*'),
-            ], JSON_PRETTY_PRINT);
-            $zip->addFromString('composer.json', $composerJson);
-        }
-    }
-
-    /**
-     * Generate a fallback project when AI is unavailable
-     */
     private function generateFallbackProject(string $title): array
     {
         $stack = $this->detectStackFromTitle($title);
-        $files = $this->generateBasicFiles($stack, $title);
-        
+
         return [
-            'stack' => $stack,
-            'files' => $files,
-            'setup_instructions' => $this->getBasicSetupInstructions($stack),
-            'dependencies' => $this->getBasicDependencies($stack),
-            'tutorial_guide' => $this->getBasicTutorialGuide($title, $stack),
-            'ide_recommendations' => $this->getBasicIDERecommendations($stack),
-            'prerequisites' => $this->getBasicPrerequisites($stack),
-            'setup_guide' => $this->getBasicSetupGuide($stack),
-            'run_guide' => $this->getBasicRunGuide($stack),
+            'stack'               => $stack,
+            'files'               => $this->generateFallbackFiles($stack, $title),
+            'setup_instructions'  => $this->getSetupInstructions($stack),
+            'dependencies'        => $this->getDependencies($stack),
+            'tutorial_guide'      => $this->buildFallbackGuide($title, $stack),
+            'ide_recommendations' => $this->getIdeRecommendations($stack),
+            'prerequisites'       => $this->getPrerequisites($stack),
+            'setup_guide'         => $this->getSetupGuide($stack),
+            'run_guide'           => $this->getRunGuide($stack),
         ];
     }
 
-    /**
-     * Detect stack from video title
-     */
     private function detectStackFromTitle(string $title): array
     {
-        $titleLower = strtolower($title);
-        
+        $t = strtolower($title);
+
         $stacks = [
-            'react' => ['react', 'reactjs', 'next.js', 'nextjs'],
-            'vue' => ['vue', 'vuejs', 'nuxt'],
-            'angular' => ['angular', 'angularjs'],
-            'node' => ['node', 'nodejs', 'express', 'expressjs'],
-            'python' => ['python', 'django', 'flask', 'fastapi'],
-            'java' => ['java', 'spring', 'springboot', 'spring boot'],
-            'php' => ['php', 'laravel', 'symfony'],
-            'typescript' => ['typescript', 'ts'],
-            'go' => ['golang', 'go '],
-            'rust' => ['rust'],
-            'csharp' => ['c#', 'csharp', '.net', 'dotnet', 'asp.net'],
+            'react'      => ['react', 'reactjs', 'next.js', 'nextjs'],
+            'vue'        => ['vue', 'vuejs', 'nuxt'],
+            'angular'    => ['angular'],
+            'node'       => ['node', 'nodejs', 'express'],
+            'python'     => ['python', 'django', 'flask', 'fastapi'],
+            'java'       => ['java', 'spring', 'springboot', 'spring boot'],
+            'php'        => ['php', 'laravel', 'symfony'],
+            'typescript' => ['typescript', ' ts '],
+            'go'         => ['golang', 'go '],
+            'rust'       => ['rust'],
+            'csharp'     => ['c#', 'csharp', '.net', 'dotnet', 'asp.net'],
         ];
 
         foreach ($stacks as $primary => $keywords) {
-            foreach ($keywords as $keyword) {
-                if (str_contains($titleLower, $keyword)) {
+            foreach ($keywords as $kw) {
+                if (str_contains($t, $kw)) {
                     return [
-                        'primary' => $primary,
-                        'languages' => [$primary],
-                        'frameworks' => $this->detectFrameworksFromTitle($titleLower),
+                        'primary'     => $primary,
+                        'languages'   => [$primary],
+                        'frameworks'  => [],
                         'description' => "Detected from video title: {$title}",
                     ];
                 }
@@ -750,217 +253,135 @@ PROMPT;
         }
 
         return [
-            'primary' => 'javascript',
-            'languages' => ['javascript'],
-            'frameworks' => [],
-            'description' => 'Default stack - JavaScript',
+            'primary'     => 'javascript',
+            'languages'   => ['javascript'],
+            'frameworks'  => [],
+            'description' => 'Default stack — JavaScript',
         ];
     }
 
-    /**
-     * Detect frameworks from title
-     */
-    private function detectFrameworksFromTitle(string $title): array
+    private function generateFallbackFiles(array $stack, string $title): array
     {
-        $frameworks = [];
-        $mapping = [
-            'spring boot' => 'Spring Boot',
-            'spring' => 'Spring',
-            'react' => 'React',
-            'next.js' => 'Next.js',
-            'nextjs' => 'Next.js',
-            'vue' => 'Vue.js',
-            'nuxt' => 'Nuxt.js',
-            'angular' => 'Angular',
-            'express' => 'Express.js',
-            'django' => 'Django',
-            'flask' => 'Flask',
-            'fastapi' => 'FastAPI',
-            'laravel' => 'Laravel',
-            'docker' => 'Docker',
-            'kubernetes' => 'Kubernetes',
-            'aws' => 'AWS',
-            'microservices' => 'Microservices',
+        $templates = [
+            'java'       => [
+                ['filename' => 'Application.java', 'language' => 'java',     'path' => 'src/main/java/com/example/Application.java', 'description' => 'Spring Boot entry point', 'code' => "package com.example;\n\nimport org.springframework.boot.SpringApplication;\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\n\n@SpringBootApplication\npublic class Application {\n    public static void main(String[] args) {\n        SpringApplication.run(Application.class, args);\n    }\n}"],
+                ['filename' => 'pom.xml',          'language' => 'xml',      'path' => 'pom.xml',                                    'description' => 'Maven configuration',      'code' => "<?xml version=\"1.0\"?>\n<project>\n    <modelVersion>4.0.0</modelVersion>\n    <groupId>com.example</groupId>\n    <artifactId>app</artifactId>\n    <version>1.0.0</version>\n</project>"],
+                ['filename' => 'README.md',         'language' => 'markdown', 'path' => 'README.md',                                   'description' => 'Project docs',             'code' => "# {$title}\n\n```bash\nmvn spring-boot:run\n```"],
+            ],
+            'python'     => [
+                ['filename' => 'main.py',           'language' => 'python',   'path' => 'main.py',           'description' => 'Flask app',          'code' => "from flask import Flask\napp = Flask(__name__)\n\n@app.route('/')\ndef index():\n    return {'status': 'ok'}\n\nif __name__ == '__main__':\n    app.run(debug=True)"],
+                ['filename' => 'requirements.txt',  'language' => 'text',     'path' => 'requirements.txt',  'description' => 'Python deps',        'code' => "flask>=2.0.0\nrequests>=2.25.0"],
+                ['filename' => 'README.md',          'language' => 'markdown', 'path' => 'README.md',          'description' => 'Project docs',       'code' => "# {$title}\n\n```bash\npip install -r requirements.txt\npython main.py\n```"],
+            ],
+            'react'      => [
+                ['filename' => 'App.jsx',            'language' => 'jsx',      'path' => 'src/App.jsx',        'description' => 'Root component',     'code' => "import React, { useState } from 'react';\n\nexport default function App() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h1>Hello React!</h1>\n      <button onClick={() => setCount(c => c + 1)}>Count: {count}</button>\n    </div>\n  );\n}"],
+                ['filename' => 'package.json',       'language' => 'json',     'path' => 'package.json',       'description' => 'npm config',         'code' => "{\n  \"name\": \"react-app\",\n  \"version\": \"1.0.0\",\n  \"scripts\": { \"dev\": \"vite\", \"build\": \"vite build\" },\n  \"dependencies\": { \"react\": \"^18.2.0\", \"react-dom\": \"^18.2.0\" },\n  \"devDependencies\": { \"vite\": \"^5.0.0\", \"@vitejs/plugin-react\": \"^4.0.0\" }\n}"],
+                ['filename' => 'README.md',           'language' => 'markdown', 'path' => 'README.md',           'description' => 'Project docs',       'code' => "# {$title}\n\n```bash\nnpm install && npm run dev\n```"],
+            ],
+            'node'       => [
+                ['filename' => 'index.js',           'language' => 'javascript','path' => 'src/index.js',      'description' => 'Express server',     'code' => "const express = require('express');\nconst app = express();\napp.use(express.json());\napp.get('/api/health', (req, res) => res.json({ status: 'ok' }));\napp.listen(3000, () => console.log('Server on :3000'));"],
+                ['filename' => 'package.json',       'language' => 'json',     'path' => 'package.json',       'description' => 'npm config',         'code' => "{\n  \"name\": \"node-app\",\n  \"version\": \"1.0.0\",\n  \"scripts\": { \"start\": \"node src/index.js\", \"dev\": \"nodemon src/index.js\" },\n  \"dependencies\": { \"express\": \"^4.18.0\" }\n}"],
+                ['filename' => 'README.md',           'language' => 'markdown', 'path' => 'README.md',           'description' => 'Project docs',       'code' => "# {$title}\n\n```bash\nnpm install && npm run dev\n```"],
+            ],
+            'php'        => [
+                ['filename' => 'index.php',          'language' => 'php',      'path' => 'public/index.php',   'description' => 'Entry point',        'code' => "<?php\necho json_encode(['status' => 'ok']);"],
+                ['filename' => 'composer.json',      'language' => 'json',     'path' => 'composer.json',      'description' => 'Composer config',    'code' => "{\n  \"name\": \"my/app\",\n  \"autoload\": { \"psr-4\": { \"App\\\\\": \"src/\" } }\n}"],
+                ['filename' => 'README.md',           'language' => 'markdown', 'path' => 'README.md',           'description' => 'Project docs',       'code' => "# {$title}\n\n```bash\ncomposer install && php -S localhost:8000 -t public\n```"],
+            ],
         ];
 
-        foreach ($mapping as $keyword => $framework) {
-            if (str_contains($title, $keyword)) {
-                $frameworks[] = $framework;
-            }
-        }
-
-        return array_unique($frameworks);
-    }
-
-    /**
-     * Generate basic files for fallback
-     */
-    private function generateBasicFiles(array $stack, string $title): array
-    {
-        $primary = $stack['primary'];
-        
-        switch ($primary) {
-            case 'java':
-                return $this->generateJavaFiles($title);
-            case 'python':
-                return $this->generatePythonFiles($title);
-            case 'node':
-            case 'javascript':
-                return $this->generateNodeFiles($title);
-            case 'react':
-                return $this->generateReactFiles($title);
-            case 'php':
-                return $this->generatePhpFiles($title);
-            default:
-                return $this->generateGenericFiles($title, $primary);
-        }
-    }
-
-    private function generateJavaFiles(string $title): array
-    {
-        return [
-            ['filename' => 'Application.java', 'language' => 'java', 'path' => 'src/main/java/com/example/Application.java', 'description' => 'Main application entry point', 'code' => "package com.example;\n\nimport org.springframework.boot.SpringApplication;\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\n\n@SpringBootApplication\npublic class Application {\n    public static void main(String[] args) {\n        SpringApplication.run(Application.class, args);\n    }\n}"],
-            ['filename' => 'Controller.java', 'language' => 'java', 'path' => 'src/main/java/com/example/controller/MainController.java', 'description' => 'Main REST controller', 'code' => "package com.example.controller;\n\nimport org.springframework.web.bind.annotation.*;\n\n@RestController\n@RequestMapping(\"/api\")\npublic class MainController {\n    @GetMapping(\"/health\")\n    public String health() {\n        return \"OK\";\n    }\n}"],
-            ['filename' => 'application.yml', 'language' => 'yaml', 'path' => 'src/main/resources/application.yml', 'description' => 'Application configuration', 'code' => "server:\n  port: 8080\n\nspring:\n  application:\n    name: my-app"],
-            ['filename' => 'pom.xml', 'language' => 'xml', 'path' => 'pom.xml', 'description' => 'Maven configuration', 'code' => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project>\n    <modelVersion>4.0.0</modelVersion>\n    <groupId>com.example</groupId>\n    <artifactId>my-app</artifactId>\n    <version>1.0.0</version>\n    <parent>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-parent</artifactId>\n        <version>3.2.0</version>\n    </parent>\n    <dependencies>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-web</artifactId>\n        </dependency>\n    </dependencies>\n</project>"],
-            ['filename' => 'README.md', 'language' => 'markdown', 'path' => 'README.md', 'description' => 'Project documentation', 'code' => "# {$title}\n\n## Getting Started\n\n1. Make sure you have Java 17+ installed\n2. Run `mvn clean install`\n3. Run `mvn spring-boot:run`\n4. Access at http://localhost:8080"],
+        return $templates[$stack['primary']] ?? [
+            ['filename' => 'main.js', 'language' => 'javascript', 'path' => 'src/main.js', 'description' => 'Main file', 'code' => "// {$title}\nconsole.log('Hello World');"],
+            ['filename' => 'README.md', 'language' => 'markdown', 'path' => 'README.md', 'description' => 'Project docs', 'code' => "# {$title}"],
         ];
     }
 
-    private function generatePythonFiles(string $title): array
+    private function getSetupInstructions(array $stack): string
     {
-        return [
-            ['filename' => 'main.py', 'language' => 'python', 'path' => 'main.py', 'description' => 'Main application entry point', 'code' => "from flask import Flask, jsonify\n\napp = Flask(__name__)\n\n@app.route('/api/health')\ndef health():\n    return jsonify({'status': 'OK'})\n\nif __name__ == '__main__':\n    app.run(debug=True, port=5000)"],
-            ['filename' => 'requirements.txt', 'language' => 'text', 'path' => 'requirements.txt', 'description' => 'Python dependencies', 'code' => "flask>=2.0.0\nrequests>=2.25.0"],
-            ['filename' => 'README.md', 'language' => 'markdown', 'path' => 'README.md', 'description' => 'Project documentation', 'code' => "# {$title}\n\n## Getting Started\n\n1. Create virtual environment: `python -m venv venv`\n2. Activate: `source venv/bin/activate` (or `venv\\Scripts\\activate` on Windows)\n3. Install: `pip install -r requirements.txt`\n4. Run: `python main.py`"],
-        ];
-    }
-
-    private function generateNodeFiles(string $title): array
-    {
-        return [
-            ['filename' => 'index.js', 'language' => 'javascript', 'path' => 'src/index.js', 'description' => 'Main application entry point', 'code' => "const express = require('express');\nconst app = express();\nconst PORT = process.env.PORT || 3000;\n\napp.use(express.json());\n\napp.get('/api/health', (req, res) => {\n    res.json({ status: 'OK' });\n});\n\napp.listen(PORT, () => {\n    console.log(`Server running on port \${PORT}`);\n});"],
-            ['filename' => 'package.json', 'language' => 'json', 'path' => 'package.json', 'description' => 'Node.js dependencies', 'code' => "{\n  \"name\": \"my-app\",\n  \"version\": \"1.0.0\",\n  \"main\": \"src/index.js\",\n  \"scripts\": {\n    \"start\": \"node src/index.js\",\n    \"dev\": \"nodemon src/index.js\"\n  },\n  \"dependencies\": {\n    \"express\": \"^4.18.0\"\n  },\n  \"devDependencies\": {\n    \"nodemon\": \"^3.0.0\"\n  }\n}"],
-            ['filename' => 'README.md', 'language' => 'markdown', 'path' => 'README.md', 'description' => 'Project documentation', 'code' => "# {$title}\n\n## Getting Started\n\n1. Install Node.js 18+\n2. Run `npm install`\n3. Run `npm run dev` for development\n4. Access at http://localhost:3000"],
-        ];
-    }
-
-    private function generateReactFiles(string $title): array
-    {
-        return [
-            ['filename' => 'App.jsx', 'language' => 'jsx', 'path' => 'src/App.jsx', 'description' => 'Main React component', 'code' => "import React, { useState } from 'react';\nimport './App.css';\n\nfunction App() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div className=\"App\">\n      <h1>Hello React!</h1>\n      <p>Count: {count}</p>\n      <button onClick={() => setCount(count + 1)}>Increment</button>\n    </div>\n  );\n}\n\nexport default App;"],
-            ['filename' => 'index.jsx', 'language' => 'jsx', 'path' => 'src/index.jsx', 'description' => 'React entry point', 'code' => "import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport App from './App';\nimport './index.css';\n\nReactDOM.createRoot(document.getElementById('root')).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);"],
-            ['filename' => 'package.json', 'language' => 'json', 'path' => 'package.json', 'description' => 'Dependencies', 'code' => "{\n  \"name\": \"react-app\",\n  \"version\": \"1.0.0\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"build\": \"vite build\"\n  },\n  \"dependencies\": {\n    \"react\": \"^18.2.0\",\n    \"react-dom\": \"^18.2.0\"\n  },\n  \"devDependencies\": {\n    \"vite\": \"^5.0.0\",\n    \"@vitejs/plugin-react\": \"^4.0.0\"\n  }\n}"],
-            ['filename' => 'README.md', 'language' => 'markdown', 'path' => 'README.md', 'description' => 'Documentation', 'code' => "# {$title}\n\n## Getting Started\n\n1. Install Node.js 18+\n2. Run `npm install`\n3. Run `npm run dev`\n4. Access at http://localhost:5173"],
-        ];
-    }
-
-    private function generatePhpFiles(string $title): array
-    {
-        return [
-            ['filename' => 'index.php', 'language' => 'php', 'path' => 'public/index.php', 'description' => 'Entry point', 'code' => "<?php\n\nrequire_once __DIR__ . '/../vendor/autoload.php';\n\n\$app = new App\\Application();\n\$app->run();"],
-            ['filename' => 'Application.php', 'language' => 'php', 'path' => 'src/Application.php', 'description' => 'Main application class', 'code' => "<?php\n\nnamespace App;\n\nclass Application {\n    public function run(): void {\n        echo json_encode(['status' => 'OK']);\n    }\n}"],
-            ['filename' => 'composer.json', 'language' => 'json', 'path' => 'composer.json', 'description' => 'Dependencies', 'code' => "{\n  \"name\": \"my/app\",\n  \"autoload\": {\n    \"psr-4\": {\n      \"App\\\\\": \"src/\"\n    }\n  }\n}"],
-            ['filename' => 'README.md', 'language' => 'markdown', 'path' => 'README.md', 'description' => 'Documentation', 'code' => "# {$title}\n\n## Getting Started\n\n1. Install PHP 8.2+\n2. Run `composer install`\n3. Run `php -S localhost:8000 -t public`"],
-        ];
-    }
-
-    private function generateGenericFiles(string $title, string $language): array
-    {
-        return [
-            ['filename' => 'main.' . $this->getExtension($language), 'language' => $language, 'path' => 'src/main.' . $this->getExtension($language), 'description' => 'Main file', 'code' => "// Main application file\n// Generated from: {$title}"],
-            ['filename' => 'README.md', 'language' => 'markdown', 'path' => 'README.md', 'description' => 'Documentation', 'code' => "# {$title}\n\nProject extracted from YouTube tutorial."],
-        ];
-    }
-
-    private function getBasicSetupInstructions(array $stack): string
-    {
-        $instructions = [
-            'java' => "mvn clean install\nmvn spring-boot:run",
+        return match ($stack['primary']) {
+            'java'   => "mvn clean install\nmvn spring-boot:run",
             'python' => "pip install -r requirements.txt\npython main.py",
-            'node' => "npm install\nnpm run dev",
-            'javascript' => "npm install\nnpm start",
-            'react' => "npm install\nnpm run dev",
-            'php' => "composer install\nphp -S localhost:8000 -t public",
-        ];
-
-        return $instructions[$stack['primary']] ?? "See README.md for setup instructions";
+            'node'   => "npm install\nnpm run dev",
+            'react'  => "npm install\nnpm run dev",
+            'php'    => "composer install\nphp -S localhost:8000 -t public",
+            default  => "See README.md for setup instructions",
+        };
     }
 
-    private function getBasicDependencies(array $stack): array
+    private function getDependencies(array $stack): array
     {
         return [
-            'npm' => in_array($stack['primary'], ['node', 'javascript', 'react']) ? ['express'] : [],
-            'pip' => $stack['primary'] === 'python' ? ['flask', 'requests'] : [],
-            'maven' => $stack['primary'] === 'java' ? ['spring-boot-starter-web'] : [],
+            'npm'      => in_array($stack['primary'], ['node', 'javascript', 'react']) ? ['express'] : [],
+            'pip'      => $stack['primary'] === 'python'  ? ['flask', 'requests'] : [],
+            'maven'    => $stack['primary'] === 'java'    ? ['spring-boot-starter-web'] : [],
+            'composer' => $stack['primary'] === 'php'     ? [] : [],
         ];
     }
 
-    private function getBasicTutorialGuide(string $title, array $stack): array
+    private function buildFallbackGuide(string $title, array $stack): array
     {
         return [
-            'overview' => "This project was extracted from the YouTube tutorial: \"{$title}\".\n\nThe detected technology stack is {$stack['primary']}. This guide provides basic setup instructions and code scaffolding to help you follow along with the tutorial.\n\nNote: For a complete tutorial experience with AI-generated explanations and comprehensive code, please ensure your OpenAI API key has available quota.",
+            'overview' => "This project was extracted from the YouTube tutorial \"{$title}\".\n\nThe detected technology stack is {$stack['primary']}. This guide provides basic scaffolding so you can follow along with the tutorial.\n\nFor richer, AI-generated explanations, please configure a valid API key (ANTHROPIC_API_KEY, GEMINI_API_KEY, or OPENAI_API_KEY) in your .env file.",
             'key_concepts' => [
-                ['concept' => ucfirst($stack['primary']) . ' Fundamentals', 'explanation' => "This tutorial covers core {$stack['primary']} concepts and best practices."],
-                ['concept' => 'Project Structure', 'explanation' => 'The generated code follows standard project organization patterns for the detected tech stack.'],
+                ['concept' => ucfirst($stack['primary']) . ' Fundamentals', 'explanation' => "Core {$stack['primary']} concepts covered in this tutorial."],
+                ['concept' => 'Project Structure', 'explanation' => 'Standard project layout for the detected tech stack.'],
             ],
             'learning_outcomes' => [
-                "Understanding of {$stack['primary']} project setup",
-                'Familiarity with common development patterns',
-                'Ability to run and modify the project locally',
+                "Understand {$stack['primary']} project setup",
+                'Run and modify the project locally',
             ],
         ];
     }
 
-    private function getBasicIDERecommendations(array $stack): array
+    private function getIdeRecommendations(array $stack): array
     {
-        $recommendations = [
-            'java' => ['primary' => ['name' => 'IntelliJ IDEA', 'reason' => 'Best IDE for Java development with Spring Boot support', 'download_url' => 'https://www.jetbrains.com/idea/download/', 'extensions' => ['Spring Boot', 'Lombok']], 'alternatives' => [['name' => 'VS Code', 'reason' => 'Lightweight with Java Extension Pack', 'download_url' => 'https://code.visualstudio.com/', 'extensions' => ['Extension Pack for Java']]]],
-            'python' => ['primary' => ['name' => 'PyCharm', 'reason' => 'Best IDE for Python development', 'download_url' => 'https://www.jetbrains.com/pycharm/download/', 'extensions' => []], 'alternatives' => [['name' => 'VS Code', 'reason' => 'Lightweight with Python extension', 'download_url' => 'https://code.visualstudio.com/', 'extensions' => ['Python', 'Pylance']]]],
-            'node' => ['primary' => ['name' => 'VS Code', 'reason' => 'Best IDE for Node.js development', 'download_url' => 'https://code.visualstudio.com/', 'extensions' => ['ESLint', 'Prettier']], 'alternatives' => [['name' => 'WebStorm', 'reason' => 'Full-featured IDE for JavaScript', 'download_url' => 'https://www.jetbrains.com/webstorm/', 'extensions' => []]]],
-            'react' => ['primary' => ['name' => 'VS Code', 'reason' => 'Best IDE for React development', 'download_url' => 'https://code.visualstudio.com/', 'extensions' => ['ES7+ React snippets', 'Prettier', 'ESLint']], 'alternatives' => [['name' => 'WebStorm', 'reason' => 'Full-featured IDE with React support', 'download_url' => 'https://www.jetbrains.com/webstorm/', 'extensions' => []]]],
-            'php' => ['primary' => ['name' => 'PhpStorm', 'reason' => 'Best IDE for PHP development', 'download_url' => 'https://www.jetbrains.com/phpstorm/download/', 'extensions' => ['Laravel Plugin']], 'alternatives' => [['name' => 'VS Code', 'reason' => 'Lightweight with PHP extensions', 'download_url' => 'https://code.visualstudio.com/', 'extensions' => ['PHP Intelephense']]]],
+        $map = [
+            'java'   => ['primary' => ['name' => 'IntelliJ IDEA',  'reason' => 'Best Java IDE', 'download_url' => 'https://www.jetbrains.com/idea/',    'extensions' => ['Spring Boot']]],
+            'python' => ['primary' => ['name' => 'PyCharm',         'reason' => 'Best Python IDE','download_url' => 'https://www.jetbrains.com/pycharm/', 'extensions' => []]],
+            'php'    => ['primary' => ['name' => 'PhpStorm',        'reason' => 'Best PHP IDE',  'download_url' => 'https://www.jetbrains.com/phpstorm/','extensions' => ['Laravel Plugin']]],
         ];
 
-        return $recommendations[$stack['primary']] ?? ['primary' => ['name' => 'VS Code', 'reason' => 'Universal code editor', 'download_url' => 'https://code.visualstudio.com/', 'extensions' => []], 'alternatives' => []];
+        return $map[$stack['primary']] ?? [
+            'primary' => ['name' => 'VS Code', 'reason' => 'Universal editor', 'download_url' => 'https://code.visualstudio.com/', 'extensions' => ['ESLint', 'Prettier']],
+        ];
     }
 
-    private function getBasicPrerequisites(array $stack): array
+    private function getPrerequisites(array $stack): array
     {
-        $prerequisites = [
-            'java' => ['software' => [['name' => 'Java JDK 17+', 'download_url' => 'https://adoptium.net/', 'purpose' => 'Java runtime'], ['name' => 'Maven', 'download_url' => 'https://maven.apache.org/download.cgi', 'purpose' => 'Build tool']], 'knowledge' => ['Basic Java programming', 'Object-oriented concepts']],
-            'python' => ['software' => [['name' => 'Python 3.10+', 'download_url' => 'https://www.python.org/downloads/', 'purpose' => 'Python interpreter'], ['name' => 'pip', 'download_url' => 'https://pip.pypa.io/', 'purpose' => 'Package manager']], 'knowledge' => ['Basic Python programming']],
-            'node' => ['software' => [['name' => 'Node.js 18+', 'download_url' => 'https://nodejs.org/', 'purpose' => 'JavaScript runtime'], ['name' => 'npm', 'download_url' => 'https://www.npmjs.com/', 'purpose' => 'Package manager']], 'knowledge' => ['JavaScript fundamentals', 'Async programming']],
-            'react' => ['software' => [['name' => 'Node.js 18+', 'download_url' => 'https://nodejs.org/', 'purpose' => 'JavaScript runtime']], 'knowledge' => ['JavaScript ES6+', 'React basics', 'JSX syntax']],
-            'php' => ['software' => [['name' => 'PHP 8.2+', 'download_url' => 'https://www.php.net/downloads', 'purpose' => 'PHP runtime'], ['name' => 'Composer', 'download_url' => 'https://getcomposer.org/', 'purpose' => 'Dependency manager']], 'knowledge' => ['Basic PHP programming']],
+        $map = [
+            'java'   => ['software' => [['name' => 'Java JDK 17+', 'download_url' => 'https://adoptium.net/', 'purpose' => 'Java runtime'], ['name' => 'Maven', 'download_url' => 'https://maven.apache.org/', 'purpose' => 'Build tool']], 'knowledge' => ['Basic Java']],
+            'python' => ['software' => [['name' => 'Python 3.10+', 'download_url' => 'https://www.python.org/', 'purpose' => 'Python interpreter']], 'knowledge' => ['Basic Python']],
+            'node'   => ['software' => [['name' => 'Node.js 18+',  'download_url' => 'https://nodejs.org/', 'purpose' => 'JS runtime']], 'knowledge' => ['JavaScript ES6+']],
+            'react'  => ['software' => [['name' => 'Node.js 18+',  'download_url' => 'https://nodejs.org/', 'purpose' => 'JS runtime']], 'knowledge' => ['React basics', 'JSX']],
+            'php'    => ['software' => [['name' => 'PHP 8.2+', 'download_url' => 'https://www.php.net/', 'purpose' => 'PHP runtime'], ['name' => 'Composer', 'download_url' => 'https://getcomposer.org/', 'purpose' => 'Package manager']], 'knowledge' => ['Basic PHP']],
         ];
 
-        return $prerequisites[$stack['primary']] ?? ['software' => [], 'knowledge' => ['Basic programming concepts']];
+        return $map[$stack['primary']] ?? ['software' => [], 'knowledge' => ['Basic programming']];
     }
 
-    private function getBasicSetupGuide(array $stack): array
+    private function getSetupGuide(array $stack): array
     {
-        $guides = [
-            'java' => ['steps' => [['step' => 1, 'title' => 'Install Java', 'commands' => ['java -version'], 'explanation' => 'Verify Java JDK 17+ is installed'], ['step' => 2, 'title' => 'Install Maven', 'commands' => ['mvn -version'], 'explanation' => 'Verify Maven is installed'], ['step' => 3, 'title' => 'Build Project', 'commands' => ['mvn clean install'], 'explanation' => 'Download dependencies and build']]],
-            'python' => ['steps' => [['step' => 1, 'title' => 'Create Virtual Environment', 'commands' => ['python -m venv venv'], 'explanation' => 'Create isolated Python environment'], ['step' => 2, 'title' => 'Activate Environment', 'commands' => ['source venv/bin/activate'], 'explanation' => 'Activate the virtual environment'], ['step' => 3, 'title' => 'Install Dependencies', 'commands' => ['pip install -r requirements.txt'], 'explanation' => 'Install all required packages']]],
-            'node' => ['steps' => [['step' => 1, 'title' => 'Verify Node.js', 'commands' => ['node -v', 'npm -v'], 'explanation' => 'Check Node.js and npm are installed'], ['step' => 2, 'title' => 'Install Dependencies', 'commands' => ['npm install'], 'explanation' => 'Install all npm packages']]],
-            'react' => ['steps' => [['step' => 1, 'title' => 'Install Dependencies', 'commands' => ['npm install'], 'explanation' => 'Install React and all dependencies']]],
-            'php' => ['steps' => [['step' => 1, 'title' => 'Install Composer', 'commands' => ['composer -v'], 'explanation' => 'Verify Composer is installed'], ['step' => 2, 'title' => 'Install Dependencies', 'commands' => ['composer install'], 'explanation' => 'Install all PHP packages']]],
+        $map = [
+            'java'   => ['steps' => [['step' => 1, 'title' => 'Build',           'commands' => ['mvn clean install'],         'explanation' => 'Download deps and compile'],        ['step' => 2, 'title' => 'Run', 'commands' => ['mvn spring-boot:run'], 'explanation' => 'Start the server']]],
+            'python' => ['steps' => [['step' => 1, 'title' => 'Create venv',     'commands' => ['python -m venv venv'],        'explanation' => 'Isolated environment'],             ['step' => 2, 'title' => 'Install', 'commands' => ['pip install -r requirements.txt'], 'explanation' => 'Install packages']]],
+            'node'   => ['steps' => [['step' => 1, 'title' => 'Install',         'commands' => ['npm install'],               'explanation' => 'Install npm packages']]],
+            'react'  => ['steps' => [['step' => 1, 'title' => 'Install',         'commands' => ['npm install'],               'explanation' => 'Install React and deps']]],
+            'php'    => ['steps' => [['step' => 1, 'title' => 'Install Composer', 'commands' => ['composer install'],          'explanation' => 'Install PHP packages']]],
         ];
 
-        return $guides[$stack['primary']] ?? ['steps' => []];
+        return $map[$stack['primary']] ?? ['steps' => []];
     }
 
-    private function getBasicRunGuide(array $stack): array
+    private function getRunGuide(array $stack): array
     {
-        $guides = [
-            'java' => ['development' => ['commands' => ['mvn spring-boot:run'], 'explanation' => 'Start the development server', 'access_url' => 'http://localhost:8080'], 'production' => ['commands' => ['mvn clean package', 'java -jar target/*.jar'], 'explanation' => 'Build and run production JAR']],
-            'python' => ['development' => ['commands' => ['python main.py'], 'explanation' => 'Start the Flask development server', 'access_url' => 'http://localhost:5000'], 'production' => ['commands' => ['gunicorn main:app'], 'explanation' => 'Run with Gunicorn for production']],
-            'node' => ['development' => ['commands' => ['npm run dev'], 'explanation' => 'Start with nodemon for auto-reload', 'access_url' => 'http://localhost:3000'], 'production' => ['commands' => ['npm start'], 'explanation' => 'Start production server']],
-            'react' => ['development' => ['commands' => ['npm run dev'], 'explanation' => 'Start Vite development server', 'access_url' => 'http://localhost:5173'], 'production' => ['commands' => ['npm run build'], 'explanation' => 'Build for production']],
-            'php' => ['development' => ['commands' => ['php -S localhost:8000 -t public'], 'explanation' => 'Start PHP development server', 'access_url' => 'http://localhost:8000']],
+        $map = [
+            'java'   => ['development' => ['commands' => ['mvn spring-boot:run'],         'explanation' => 'Start Spring Boot dev server',   'access_url' => 'http://localhost:8080']],
+            'python' => ['development' => ['commands' => ['python main.py'],              'explanation' => 'Start Flask development server',  'access_url' => 'http://localhost:5000']],
+            'node'   => ['development' => ['commands' => ['npm run dev'],                'explanation' => 'Start with nodemon auto-reload',   'access_url' => 'http://localhost:3000']],
+            'react'  => ['development' => ['commands' => ['npm run dev'],                'explanation' => 'Start Vite development server',    'access_url' => 'http://localhost:5173']],
+            'php'    => ['development' => ['commands' => ['php -S localhost:8000 -t public'], 'explanation' => 'PHP built-in web server',     'access_url' => 'http://localhost:8000']],
         ];
 
-        return $guides[$stack['primary']] ?? ['development' => ['commands' => ['See README.md'], 'explanation' => 'Check documentation for run instructions']];
+        return $map[$stack['primary']] ?? ['development' => ['commands' => ['See README.md'], 'explanation' => 'Check the README for instructions']];
     }
 }
