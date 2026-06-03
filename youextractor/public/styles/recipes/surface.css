@@ -1,0 +1,73 @@
+/* styles/recipes/surface.css */
+/* Card — standard elevated container */
+.ds-surface-card {
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: var(--theme-radius-2xl);
+  box-shadow: var(--theme-shadow-sm);
+}
+
+/* Card raised — higher prominence */
+.ds-surface-card-raised {
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--theme-radius-2xl);
+  box-shadow: var(--theme-shadow-md);
+}
+
+/* Glass — frosted glass effect */
+.ds-surface-glass {
+  background: var(--ds-surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: var(--theme-radius-2xl);
+}
+
+/* Glass accent — glass with purple border glow */
+.ds-surface-glass-accent {
+  background: var(--ds-surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--ds-border-accent);
+  border-radius: var(--theme-radius-2xl);
+  box-shadow: var(--theme-shadow-sm);
+}
+
+/* Inset — recessed input/well area */
+.ds-surface-inset {
+  background: var(--ds-surface-input);
+  border: 1px solid var(--ds-border-input);
+  border-radius: var(--theme-radius-xl);
+}
+
+/* Overlay — modal/dropdown backdrop */
+.ds-surface-overlay {
+  background: var(--ds-surface-overlay);
+  border: 1px solid var(--ds-border-default);
+  border-radius: var(--theme-radius-2xl);
+  box-shadow: var(--theme-shadow-xl);
+}
+
+/* Gradient — brand gradient background */
+.ds-surface-gradient {
+  background: var(--ds-gradient-surface);
+  border: 1px solid var(--ds-border-subtle);
+  border-radius: var(--theme-radius-2xl);
+}
+
+/* Glow — card with colored light emission */
+.ds-surface-glow {
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-border-accent);
+  border-radius: var(--theme-radius-2xl);
+  box-shadow: var(--ds-layer-glow);
+}
+
+/* Glow electric — cyan-tinted glow */
+.ds-surface-glow-electric {
+  background: var(--ds-surface-card);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: var(--theme-radius-2xl);
+  box-shadow: var(--ds-layer-glow-cyan);
+}

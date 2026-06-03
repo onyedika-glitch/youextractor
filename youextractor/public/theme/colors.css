@@ -1,0 +1,96 @@
+/* theme/colors.css */
+:root {
+  /* Neutral / Surface ramp — deep blue-gray foundation */
+  --theme-neutral-0: #ffffff;
+  --theme-neutral-50: #f8fafc;
+  --theme-neutral-100: #f1f5f9;
+  --theme-neutral-200: #e2e8f0;
+  --theme-neutral-300: #cbd5e1;
+  --theme-neutral-400: #94a3b8;
+  --theme-neutral-500: #64748b;
+  --theme-neutral-600: #475569;
+  --theme-neutral-700: #334155;
+  --theme-neutral-800: #1e293b;
+  --theme-neutral-850: #172033;
+  --theme-neutral-900: #0f172a;
+  --theme-neutral-950: #0a1022;
+  --theme-neutral-1000: #060b18;
+
+  /* Purple ramp — primary brand energy */
+  --theme-purple-50: #faf5ff;
+  --theme-purple-100: #f3e8ff;
+  --theme-purple-200: #e9d5ff;
+  --theme-purple-300: #d8b4fe;
+  --theme-purple-400: #c084fc;
+  --theme-purple-500: #a855f7;
+  --theme-purple-600: #9333ea;
+  --theme-purple-700: #7e22ce;
+  --theme-purple-800: #6b21a8;
+  --theme-purple-900: #581c87;
+  --theme-purple-1000: #3b0764;
+
+  /* Pink ramp — dynamic secondary accent */
+  --theme-pink-50: #fdf2f8;
+  --theme-pink-100: #fce7f3;
+  --theme-pink-200: #fbcfe8;
+  --theme-pink-300: #f9a8d4;
+  --theme-pink-400: #f472b6;
+  --theme-pink-500: #ec4899;
+  --theme-pink-600: #db2777;
+  --theme-pink-700: #be185d;
+  --theme-pink-800: #9d174d;
+  --theme-pink-900: #831843;
+  --theme-pink-1000: #500724;
+
+  /* Cyan ramp — electric tertiary accent */
+  --theme-cyan-50: #ecfeff;
+  --theme-cyan-100: #cffafe;
+  --theme-cyan-200: #a5f3fc;
+  --theme-cyan-300: #67e8f9;
+  --theme-cyan-400: #22d3ee;
+  --theme-cyan-500: #06b6d4;
+  --theme-cyan-600: #0891b2;
+  --theme-cyan-700: #0e7490;
+  --theme-cyan-800: #155e75;
+  --theme-cyan-900: #164e63;
+  --theme-cyan-1000: #083344;
+
+  /* Green ramp — success states */
+  --theme-green-50: #f0fdf4;
+  --theme-green-100: #dcfce7;
+  --theme-green-200: #bbf7d0;
+  --theme-green-300: #86efac;
+  --theme-green-400: #4ade80;
+  --theme-green-500: #22c55e;
+  --theme-green-600: #16a34a;
+  --theme-green-700: #15803d;
+  --theme-green-800: #166534;
+  --theme-green-900: #14532d;
+  --theme-green-1000: #052e16;
+
+  /* Red ramp — error/danger states */
+  --theme-red-50: #fef2f2;
+  --theme-red-100: #fee2e2;
+  --theme-red-200: #fecaca;
+  --theme-red-300: #fca5a5;
+  --theme-red-400: #f87171;
+  --theme-red-500: #ef4444;
+  --theme-red-600: #dc2626;
+  --theme-red-700: #b91c1c;
+  --theme-red-800: #991b1b;
+  --theme-red-900: #7f1d1d;
+  --theme-red-1000: #450a0a;
+
+  /* Yellow ramp — warning states */
+  --theme-yellow-50: #fefce8;
+  --theme-yellow-100: #fef9c3;
+  --theme-yellow-200: #fef08a;
+  --theme-yellow-300: #fde047;
+  --theme-yellow-400: #facc15;
+  --theme-yellow-500: #eab308;
+  --theme-yellow-600: #ca8a04;
+  --theme-yellow-700: #a16207;
+  --theme-yellow-800: #854d0e;
+  --theme-yellow-900: #713f12;
+  --theme-yellow-1000: #422006;
+}

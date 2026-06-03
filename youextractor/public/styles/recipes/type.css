@@ -1,0 +1,111 @@
+/* styles/recipes/type.css */
+/* Display — hero headlines with impact */
+.ds-type-display-lg {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-6xl);
+  font-weight: var(--theme-font-weight-extrabold);
+  line-height: var(--theme-line-height-tight);
+  letter-spacing: var(--theme-letter-spacing-tight);
+}
+
+.ds-type-display-md {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-5xl);
+  font-weight: var(--theme-font-weight-bold);
+  line-height: var(--theme-line-height-tight);
+  letter-spacing: var(--theme-letter-spacing-tight);
+}
+
+.ds-type-display-sm {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-4xl);
+  font-weight: var(--theme-font-weight-bold);
+  line-height: var(--theme-line-height-tight);
+  letter-spacing: var(--theme-letter-spacing-tight);
+}
+
+/* Headings — section titles */
+.ds-type-heading-lg {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-3xl);
+  font-weight: var(--theme-font-weight-bold);
+  line-height: var(--theme-line-height-snug);
+  letter-spacing: var(--theme-letter-spacing-tight);
+}
+
+.ds-type-heading-md {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-2xl);
+  font-weight: var(--theme-font-weight-bold);
+  line-height: var(--theme-line-height-snug);
+}
+
+.ds-type-heading-sm {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-xl);
+  font-weight: var(--theme-font-weight-semibold);
+  line-height: var(--theme-line-height-snug);
+}
+
+/* Body — readable content */
+.ds-type-body-lg {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-regular);
+  line-height: var(--theme-line-height-relaxed);
+}
+
+.ds-type-body-md {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-md);
+  font-weight: var(--theme-font-weight-regular);
+  line-height: var(--theme-line-height-normal);
+}
+
+.ds-type-body-sm {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-regular);
+  line-height: var(--theme-line-height-normal);
+}
+
+/* Labels — UI chrome, caps for scannability */
+.ds-type-label-lg {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-semibold);
+  line-height: var(--theme-line-height-normal);
+  letter-spacing: var(--theme-letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.ds-type-label-md {
+  font-family: var(--theme-font-sans);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-semibold);
+  line-height: var(--theme-line-height-normal);
+  letter-spacing: var(--theme-letter-spacing-wider);
+  text-transform: uppercase;
+}
+
+/* Code — monospace for snippets */
+.ds-type-code-lg {
+  font-family: var(--theme-font-mono);
+  font-size: var(--theme-font-size-md);
+  font-weight: var(--theme-font-weight-regular);
+  line-height: var(--theme-line-height-relaxed);
+}
+
+.ds-type-code-md {
+  font-family: var(--theme-font-mono);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-regular);
+  line-height: var(--theme-line-height-relaxed);
+}
+
+.ds-type-code-sm {
+  font-family: var(--theme-font-mono);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-regular);
+  line-height: var(--theme-line-height-normal);
+}

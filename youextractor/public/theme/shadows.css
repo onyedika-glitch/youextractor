@@ -1,0 +1,26 @@
+/* theme/shadows.css */
+:root {
+  /* Base shadows — subtle depth on dark surfaces */
+  --theme-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --theme-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --theme-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --theme-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+  --theme-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.3);
+
+  /* Glow shadows — colored light emission for dynamic feel */
+  --theme-glow-purple: 0 0 20px rgba(168, 85, 247, 0.3), 0 0 60px rgba(168, 85, 247, 0.1);
+  --theme-glow-pink: 0 0 20px rgba(236, 72, 153, 0.3), 0 0 60px rgba(236, 72, 153, 0.1);
+  --theme-glow-cyan: 0 0 20px rgba(6, 182, 212, 0.3), 0 0 60px rgba(6, 182, 212, 0.1);
+  --theme-glow-brand: 0 0 24px rgba(168, 85, 247, 0.25), 0 0 48px rgba(236, 72, 153, 0.1);
+
+  /* Overlay values */
+  --theme-overlay-dark: rgba(10, 16, 34, 0.75);
+  --theme-overlay-medium: rgba(10, 16, 34, 0.5);
+  --theme-overlay-light: rgba(10, 16, 34, 0.3);
+
+  /* Glass surface backgrounds */
+  --theme-glass-surface: rgba(30, 41, 59, 0.5);
+  --theme-glass-surface-hover: rgba(30, 41, 59, 0.7);
+  --theme-glass-border: rgba(148, 163, 184, 0.1);
+  --theme-glass-border-accent: rgba(168, 85, 247, 0.2);
+}

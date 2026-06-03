@@ -1,0 +1,153 @@
+/* components/button/button.css */
+/* Base button */
+.ds-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--theme-spacing-2);
+  border: none;
+  border-radius: var(--theme-radius-xl);
+  font-family: var(--theme-font-sans);
+  font-weight: var(--theme-font-weight-semibold);
+  cursor: pointer;
+  transition:
+    background var(--theme-motion-fast) var(--theme-ease-default),
+    box-shadow var(--theme-motion-fast) var(--theme-ease-default),
+    transform var(--theme-motion-fast) var(--theme-ease-bounce),
+    opacity var(--theme-motion-fast) var(--theme-ease-default);
+  white-space: nowrap;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.ds-button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.ds-button:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-focus-ring);
+}
+
+/* Sizes */
+.ds-button--sm {
+  padding: var(--theme-spacing-2) var(--theme-spacing-4);
+  font-size: var(--theme-font-size-sm);
+  border-radius: var(--theme-radius-lg);
+}
+
+.ds-button--md {
+  padding: var(--theme-spacing-3) var(--theme-spacing-6);
+  font-size: var(--theme-font-size-md);
+}
+
+.ds-button--lg {
+  padding: var(--theme-spacing-4) var(--theme-spacing-8);
+  font-size: var(--theme-font-size-lg);
+}
+
+/* Primary variant */
+.ds-button--primary {
+  background: var(--ds-color-brand);
+  color: var(--theme-neutral-0);
+}
+
+.ds-button--primary:hover:not(:disabled) {
+  background: var(--ds-color-brand-hover);
+  box-shadow: var(--ds-layer-glow-purple);
+}
+
+/* Secondary variant */
+.ds-button--secondary {
+  background: var(--ds-surface-glass);
+  color: var(--ds-text-primary);
+  border: 1px solid var(--ds-border-default);
+}
+
+.ds-button--secondary:hover:not(:disabled) {
+  background: var(--ds-surface-glass-hover);
+  border-color: var(--ds-border-strong);
+}
+
+/* Ghost variant */
+.ds-button--ghost {
+  background: transparent;
+  color: var(--ds-text-secondary);
+}
+
+.ds-button--ghost:hover:not(:disabled) {
+  background: var(--ds-surface-glass);
+  color: var(--ds-text-primary);
+}
+
+/* Gradient variant */
+.ds-button--gradient {
+  background: var(--ds-gradient-brand);
+  color: var(--theme-neutral-0);
+}
+
+.ds-button--gradient:hover:not(:disabled) {
+  background: var(--ds-gradient-brand-hover);
+  box-shadow: var(--ds-layer-glow);
+  transform: translateY(-1px);
+}
+
+.ds-button--gradient:active:not(:disabled) {
+  transform: scale(0.97) translateY(0);
+}
+
+/* Glow variant */
+.ds-button--glow {
+  background: var(--ds-color-brand);
+  color: var(--theme-neutral-0);
+  box-shadow: var(--ds-layer-glow-purple);
+}
+
+.ds-button--glow:hover:not(:disabled) {
+  background: var(--ds-color-brand-hover);
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.5), 0 0 80px rgba(168, 85, 247, 0.2);
+  transform: translateY(-1px);
+}
+
+.ds-button--glow:active:not(:disabled) {
+  transform: scale(0.97) translateY(0);
+}
+
+/* Full width */
+.ds-button--full {
+  width: 100%;
+}
+
+/* Disabled state */
+.ds-button--disabled,
+.ds-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Loading state */
+.ds-button--loading {
+  cursor: wait;
+  pointer-events: none;
+}
+
+.ds-button__spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: var(--theme-radius-full);
+  animation: ds-button-spin 0.6s linear infinite;
+}
+
+@keyframes ds-button-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Icon sizing */
+.ds-button__icon {
+  font-size: 1.2em;
+  line-height: 1;
+}

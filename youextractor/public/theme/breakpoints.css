@@ -1,0 +1,15 @@
+/* theme/breakpoints.css */
+:root {
+  /* Breakpoints (reference only — must be hardcoded in media queries) */
+  --theme-breakpoint-sm: 640px;
+  --theme-breakpoint-md: 768px;
+  --theme-breakpoint-lg: 1024px;
+  --theme-breakpoint-xl: 1280px;
+  --theme-breakpoint-2xl: 1536px;
+
+  /* Container max-widths */
+  --theme-container-sm: 640px;
+  --theme-container-md: 768px;
+  --theme-container-lg: 1024px;
+  --theme-container-xl: 1200px;
+}

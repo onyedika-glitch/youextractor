@@ -1,0 +1,12 @@
+/* theme/radii.css */
+:root {
+  /* Border radii — generous rounding for modern feel */
+  --theme-radius-none: 0;
+  --theme-radius-sm: 0.25rem;
+  --theme-radius-md: 0.5rem;
+  --theme-radius-lg: 0.75rem;
+  --theme-radius-xl: 1rem;
+  --theme-radius-2xl: 1.25rem;
+  --theme-radius-3xl: 1.5rem;
+  --theme-radius-full: 9999px;
+}

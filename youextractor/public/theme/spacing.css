@@ -1,0 +1,29 @@
+/* theme/spacing.css */
+:root {
+  /* Spacing scale — 4px base unit */
+  --theme-spacing-px: 1px;
+  --theme-spacing-0: 0;
+  --theme-spacing-1: 0.25rem;
+  --theme-spacing-2: 0.5rem;
+  --theme-spacing-3: 0.75rem;
+  --theme-spacing-4: 1rem;
+  --theme-spacing-5: 1.25rem;
+  --theme-spacing-6: 1.5rem;
+  --theme-spacing-8: 2rem;
+  --theme-spacing-10: 2.5rem;
+  --theme-spacing-12: 3rem;
+  --theme-spacing-16: 4rem;
+  --theme-spacing-20: 5rem;
+  --theme-spacing-24: 6rem;
+  --theme-spacing-32: 8rem;
+
+  /* Semantic spacing aliases */
+  --theme-spacing-xs: var(--theme-spacing-1);
+  --theme-spacing-sm: var(--theme-spacing-2);
+  --theme-spacing-md: var(--theme-spacing-4);
+  --theme-spacing-lg: var(--theme-spacing-6);
+  --theme-spacing-xl: var(--theme-spacing-8);
+  --theme-spacing-2xl: var(--theme-spacing-12);
+  --theme-spacing-3xl: var(--theme-spacing-16);
+  --theme-spacing-4xl: var(--theme-spacing-24);
+}
