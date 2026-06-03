@@ -4,152 +4,184 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>YouExtractor - Learn Programming Faster</title>
+    
+    <!-- Design System CSS -->
+    <link rel="stylesheet" href="/css/youextractor-design-system.css">
+    
+    <!-- Tailwind for utilities (paired with Design System) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/style.css">
+
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
+        body { 
+            font-family: var(--theme-font-sans); 
+            background: var(--ds-surface-base);
+            color: var(--ds-text-primary);
+        }
+        @keyframes float { 
+            0% { transform: translateY(0px); } 
+            50% { transform: translateY(-10px); } 
+            100% { transform: translateY(0px); } 
+        }
         .animate-float { animation: float 6s ease-in-out infinite; }
+        
+        /* Blur blobs */
+        .blob-purple {
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(10, 16, 34, 0) 70%);
+        }
+        .blob-pink {
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, rgba(10, 16, 34, 0) 70%);
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-white overflow-x-hidden">
+<body class="overflow-x-hidden min-h-screen flex flex-col">
     <!-- Navbar -->
     <nav class="absolute w-full z-50 top-0">
         <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
-            <a href="{{ route('landing') }}" class="flex items-center gap-2">
-                <span class="text-3xl">🎬</span>
-                <span class="text-xl font-bold tracking-tight">YouExtractor</span>
+            <a href="{{ route('landing') }}" class="flex items-center gap-3 hover:opacity-90 transition">
+                <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
+                <span class="text-xl font-bold tracking-tight text-white">YouExtractor</span>
             </a>
             <div class="hidden md:flex items-center gap-8">
                 <a href="#features" class="text-gray-400 hover:text-white transition">Features</a>
-                <a href="#how-it-works" class="text-gray-400 hover:text-white transition">How it Works</a>
+                <a href="https://buymeacoffee.com/omogo" target="_blank" class="text-gray-400 hover:text-white transition">Donate</a>
             </div>
             <div class="flex items-center gap-4">
-                <a href="{{ route('signin') }}" class="text-gray-300 hover:text-white font-medium transition">Sign In</a>
-                <a href="{{ route('signup') }}" class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 rounded-full font-bold transition shadow-lg shadow-purple-500/20">
-                    Get Started
+                <a href="{{ route('signin') }}">
+                    <ds-button label="Sign In" variant="ghost" size="sm"></ds-button>
+                </a>
+                <a href="{{ route('signup') }}">
+                    <ds-button label="Get Started" variant="primary" size="sm"></ds-button>
                 </a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="min-h-screen flex items-center pt-20 relative overflow-hidden">
-        <!-- Background Elements -->
-        <div class="absolute top-0 -left-40 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div class="absolute top-0 -right-40 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+    <section class="min-h-screen flex items-center pt-24 relative overflow-hidden">
+        <!-- Background Ambient Glow Blobs -->
+        <div class="absolute top-0 -left-40 w-[600px] h-[600px] blob-purple rounded-full filter blur-3xl opacity-60"></div>
+        <div class="absolute top-20 -right-40 w-[600px] h-[600px] blob-pink rounded-full filter blur-3xl opacity-60"></div>
         
-        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10">
-            <div>
-                <div class="inline-block px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 font-medium text-sm mb-6">
-                    ✨ AI-Powered Visual Learning
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center relative z-10 w-full">
+            <div class="space-y-6">
+                <div>
+                    <span class="ds-badge-brand">✨ AI-Powered Visual Learning</span>
                 </div>
-                <h1 class="text-5xl lg:text-7xl font-bold leading-tight mb-8">
-                    Turn YouTube Videos into <span class="text-purple-400">Real Code</span>
+                <h1 class="ds-type-display-md text-white tracking-tight">
+                    Turn YouTube Videos into <span style="background: var(--ds-gradient-brand); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Real Code</span>
                 </h1>
-                <p class="text-xl text-gray-400 mb-10 leading-relaxed max-w-lg">
+                <p class="ds-type-body-lg text-gray-400 max-w-lg">
                     Stop pausing and typing. Instantly extract working code projects, tutorials, and setup guides from any programming video with one click.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="{{ route('signup') }}" class="px-8 py-4 bg-white text-gray-900 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-xl flex items-center justify-center gap-2">
-                        Try It Free
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a href="{{ route('signup') }}" class="inline-block">
+                        <ds-button label="Try It Free" variant="gradient" size="lg" icon="arrow-right" icon-position="right"></ds-button>
                     </a>
-                    <a href="#demo" class="px-8 py-4 bg-gray-800 text-white border border-gray-700 rounded-full font-bold text-lg hover:border-gray-500 transition flex items-center justify-center gap-2">
-                        View Demo
+                    <a href="#features" class="inline-block">
+                        <ds-button label="Explore Features" variant="secondary" size="lg" icon="compass"></ds-button>
                     </a>
                 </div>
             </div>
             
-            <div class="relative lg:h-[600px] flex items-center justify-center animate-float">
-                <div class="absolute inset-0 bg-purple-500/10 rounded-3xl blur-2xl transform rotate-6"></div>
-                <div class="relative w-full glass rounded-2xl p-6 shadow-2xl border border-gray-700/50">
+            <div class="relative lg:h-[500px] flex items-center justify-center animate-float">
+                <div class="absolute inset-0 bg-purple-500/5 rounded-3xl blur-3xl transform rotate-6"></div>
+                <ds-card variant="glow-electric" padding="sm" class="w-full max-w-lg shadow-2xl">
                     <!-- Code Editor Mockup -->
-                    <div class="flex items-center gap-2 mb-4 border-b border-gray-700/50 pb-4">
-                        <div class="flex gap-2">
-                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <div class="flex items-center justify-between border-b border-gray-700/50 pb-3 mb-4">
+                        <div class="flex gap-1.5">
+                            <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
                         </div>
-                        <div class="ml-4 text-xs text-gray-500 font-mono">App.tsx — Generated by YouExtractor</div>
+                        <div class="ds-type-code-sm text-gray-500">App.tsx — Generated by YouExtractor</div>
                     </div>
-                    <div class="space-y-3 font-mono text-sm">
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">1</span> <span class="text-purple-400">import</span> React <span class="text-purple-400">from</span> <span class="text-green-400">'react'</span>;</div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">2</span> <span class="text-purple-400">import</span> { useState } <span class="text-purple-400">from</span> <span class="text-green-400">'react'</span>;</div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">3</span> </div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">4</span> <span class="text-blue-400">export default</span> <span class="text-purple-400">function</span> <span class="text-yellow-400">App</span>() {</div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">5</span>     <span class="text-purple-400">const</span> [count, setCount] = <span class="text-blue-400">useState</span>(0);</div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">6</span>     <span class="text-gray-500">// Extracted from 12:45 of tutorial</span></div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">7</span>     <span class="text-purple-400">return</span> (</div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">8</span>         &lt;<span class="text-red-400">div</span> <span class="text-blue-400">className</span>=<span class="text-green-400">"app"</span>&gt;</div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">9</span>             &lt;<span class="text-red-400">h1</span>&gt;Hello World&lt;/<span class="text-red-400">h1</span>&gt;</div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">10</span>        &lt;/<span class="text-red-400">div</span>&gt;</div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">11</span>    );</div>
-                        <div class="flex gap-4"><span class="text-gray-600 select-none">12</span> }</div>
+                    <div class="space-y-2.5 font-mono text-sm">
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">1</span> <span><span style="color: var(--ds-text-brand)">import</span> React <span style="color: var(--ds-text-brand)">from</span> <span style="color: var(--ds-color-success-subtle)">'react'</span>;</span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">2</span> <span><span style="color: var(--ds-text-brand)">import</span> { useState } <span style="color: var(--ds-text-brand)">from</span> <span style="color: var(--ds-color-success-subtle)">'react'</span>;</span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">3</span> <span></span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">4</span> <span><span style="color: var(--ds-text-electric)">export default</span> <span style="color: var(--ds-text-brand)">function</span> <span style="color: var(--ds-color-warning-subtle)">App</span>() {</span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">5</span> <span>    <span style="color: var(--ds-text-brand)">const</span> [count, setCount] = useState(0);</span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">6</span> <span>    <span style="color: var(--ds-text-muted)">// Extracted from 12:45 of tutorial</span></span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">7</span> <span>    <span style="color: var(--ds-text-brand)">return</span> (</span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">8</span> <span>        &lt;<span style="color: var(--ds-color-error-subtle)">div</span> className=<span style="color: var(--ds-color-success-subtle)">"app"</span>&gt;</span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">9</span> <span>            &lt;<span style="color: var(--ds-color-error-subtle)">h1</span>&gt;Hello World&lt;/<span style="color: var(--ds-color-error-subtle)">h1</span>&gt;</span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">10</span> <span>        &lt;/<span style="color: var(--ds-color-error-subtle)">div</span>&gt;</span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">11</span> <span>    );</span></div>
+                        <div class="flex gap-4"><span class="text-gray-600 select-none w-4 text-right">12</span> <span>}</span></div>
                     </div>
-                </div>
+                </ds-card>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-24 bg-gray-900 absolute w-full">
+    <section id="features" class="py-24 relative z-10">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl lg:text-5xl font-bold mb-6">Why YouExtractor?</h2>
-                <p class="text-xl text-gray-400 max-w-2xl mx-auto">Everything you need to learn from video tutorials efficiently.</p>
+            <div class="text-center mb-16 space-y-4">
+                <h2 class="ds-type-heading-lg text-white">Why YouExtractor?</h2>
+                <p class="ds-type-body-lg text-gray-400 max-w-2xl mx-auto">Everything you need to learn from video tutorials efficiently.</p>
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Feature 1 -->
-                <div class="glass p-8 rounded-3xl hover:bg-gray-800/50 transition duration-300">
-                    <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center text-3xl mb-6">
-                        ⚡
+                <ds-card variant="glass" interactive padding="lg" class="h-full">
+                    <div class="w-12 h-12 bg-purple-500/10 border border-purple-500/20 rounded-xl flex items-center justify-center mb-6">
+                        <i class="ph ph-lightning" style="color: var(--ds-text-brand); font-size: 1.5rem;"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4">Instant Code Extraction</h3>
-                    <p class="text-gray-400 leading-relaxed">
+                    <h3 class="ds-type-heading-sm text-white mb-3">Instant Code Extraction</h3>
+                    <p class="ds-type-body-md text-gray-400">
                         Don't manually copy code from paused videos. We generate working file structures instantly.
                     </p>
-                </div>
+                </ds-card>
 
                 <!-- Feature 2 -->
-                <div class="glass p-8 rounded-3xl hover:bg-gray-800/50 transition duration-300">
-                    <div class="w-14 h-14 bg-pink-500/20 rounded-2xl flex items-center justify-center text-3xl mb-6">
-                        📚
+                <ds-card variant="glass" interactive padding="lg" class="h-full">
+                    <div class="w-12 h-12 bg-pink-500/10 border border-pink-500/20 rounded-xl flex items-center justify-center mb-6">
+                        <i class="ph ph-book-open" style="color: var(--ds-text-accent); font-size: 1.5rem;"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4">Detailed Guides</h3>
-                    <p class="text-gray-400 leading-relaxed">
+                    <h3 class="ds-type-heading-sm text-white mb-3">Detailed Guides</h3>
+                    <p class="ds-type-body-md text-gray-400">
                         Get comprehensive written tutorials, setup instructions, and key concept explanations automatically.
                     </p>
-                </div>
+                </ds-card>
 
                 <!-- Feature 3 -->
-                <div class="glass p-8 rounded-3xl hover:bg-gray-800/50 transition duration-300">
-                    <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center text-3xl mb-6">
-                        💾
+                <ds-card variant="glass" interactive padding="lg" class="h-full">
+                    <div class="w-12 h-12 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center mb-6">
+                        <i class="ph ph-download-simple" style="color: var(--ds-text-electric); font-size: 1.5rem;"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4">Download & Run</h3>
-                    <p class="text-gray-400 leading-relaxed">
+                    <h3 class="ds-type-heading-sm text-white mb-3">Download & Run</h3>
+                    <p class="ds-type-body-md text-gray-400">
                         Download the entire project as a ZIP file, complete with dependencies and environment configuration.
                     </p>
-                </div>
+                </ds-card>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-black py-12 pt-full mt-auto relative top-[800px] md:top-[600px]">
-        <div class="max-w-7xl mx-auto px-6 text-center text-gray-500">
+    <footer class="bg-black/40 border-t border-purple-500/10 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center text-gray-500 text-sm">
             <p>&copy; {{ date('Y') }} YouExtractor. All rights reserved.</p>
+            <p class="flex items-center gap-1">
+                Built for developers who learn by watching <i class="ph ph-heart" style="color: var(--ds-text-accent)"></i>
+            </p>
         </div>
     </footer>
+
     <!-- Floating Donate Button -->
     <a href="https://buymeacoffee.com/omogo" target="_blank" 
-       class="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-yellow-500 hover:bg-yellow-400 text-gray-900 rounded-full shadow-lg font-semibold transition-all hover:scale-105">
+       class="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-[#FFDD00] hover:bg-[#ffea47] text-gray-900 rounded-full shadow-lg font-semibold transition-all hover:scale-105">
         ☕ Buy me a coffee
     </a>
+
+    <!-- Design System Scripts -->
+    <script src="/js/youextractor-design-system.js"></script>
 </body>
 </html>
