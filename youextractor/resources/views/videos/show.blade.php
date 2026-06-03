@@ -8,9 +8,6 @@
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css">
     
-    <!-- Tailwind CSS (paired with Design System) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,51 +23,205 @@
             font-family: var(--theme-font-sans); 
             background: var(--ds-surface-base);
             color: var(--ds-text-primary);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .container {
+            max-width: var(--theme-container-xl);
+            margin: 0 auto;
+            padding: 0 var(--theme-spacing-6);
+            width: 100%;
+            box-sizing: border-box;
         }
-        .animate-fadeIn { animation: fadeIn 0.4s var(--theme-ease-out); }
+
+        /* Header */
+        header {
+            background: rgba(10, 16, 34, 0.3);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--ds-border-subtle);
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--theme-spacing-3);
+            text-decoration: none;
+            color: var(--ds-text-primary);
+            transition: opacity var(--theme-motion-fast) var(--theme-ease-default);
+        }
+
+        .logo:hover {
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: var(--theme-spacing-3);
+        }
+
+        /* Main Section */
+        main {
+            flex: 1;
+            padding: var(--theme-spacing-12) 0;
+        }
+
+        .space-y-8 > * + * {
+            margin-top: var(--theme-spacing-8);
+        }
+
+        .space-y-4 > * + * {
+            margin-top: var(--theme-spacing-4);
+        }
+
+        /* Result details card */
+        .result-info-header {
+            display: flex;
+            flex-direction: column;
+            gap: var(--theme-spacing-4);
+        }
+
+        @media (min-width: 768px) {
+            .result-info-header {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+        }
+
+        .result-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--theme-spacing-2);
+            margin-top: var(--theme-spacing-3);
+            margin-bottom: var(--theme-spacing-4);
+        }
+
+        /* Code view cards */
+        .code-snippet-card {
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            border-radius: var(--theme-radius-2xl);
+            background: var(--ds-surface-card);
+            box-shadow: var(--theme-shadow-lg);
+            overflow: hidden;
+            margin-bottom: var(--theme-spacing-5);
+        }
+
+        .code-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--theme-spacing-3) var(--theme-spacing-5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .code-meta-left {
+            display: flex;
+            align-items: center;
+            gap: var(--theme-spacing-3);
+        }
+
+        .code-path {
+            font-family: var(--theme-font-mono);
+            font-size: var(--theme-font-size-sm);
+            color: var(--theme-neutral-0);
+        }
+
+        .code-pre {
+            margin: 0;
+            padding: var(--theme-spacing-5);
+            overflow-x: auto;
+            font-size: var(--theme-font-size-sm);
+            background: transparent;
+        }
+
+        .code-description-footer {
+            padding: var(--theme-spacing-3) var(--theme-spacing-5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.1);
+            font-size: var(--theme-font-size-xs);
+            color: var(--ds-text-muted);
+        }
+
+        /* Loading / states */
+        .loading-state {
+            text-align: center;
+            color: var(--ds-text-secondary);
+            padding: var(--theme-spacing-12) 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--theme-spacing-4);
+        }
+
+        .spin-icon {
+            animation: spin 1s linear infinite;
+            font-size: 2rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(6, 11, 24, 0.8);
+            border-top: 1px solid var(--ds-border-subtle);
+            padding: var(--theme-spacing-8) 0;
+            margin-top: var(--theme-spacing-12);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
-    <div class="min-h-screen flex flex-col">
-        <!-- Header -->
-        <header class="bg-black/30 backdrop-blur-md border-b border-purple-500/10 sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                <a href="{{ route('landing') }}" class="flex items-center gap-3 hover:opacity-90 transition">
-                    <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
-                    <span class="text-xl font-bold tracking-tight text-white">YouExtractor</span>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <a href="{{ route('landing') }}" class="logo">
+                <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
+                <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
+            </a>
+            <div class="header-actions">
+                <a href="/" style="text-decoration: none;">
+                    <ds-button label="Extract New" variant="primary" size="sm" icon="plus"></ds-button>
                 </a>
-                <div class="flex gap-3">
-                    <a href="/">
-                        <ds-button label="Extract New" variant="primary" size="sm" icon="plus"></ds-button>
-                    </a>
-                    <a href="/videos">
-                        <ds-button label="All Videos" variant="secondary" size="sm" icon="books"></ds-button>
-                    </a>
-                </div>
+                <a href="/videos" style="text-decoration: none;">
+                    <ds-button label="All Videos" variant="secondary" size="sm" icon="books"></ds-button>
+                </a>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- Main Content -->
-        <main class="flex-1 max-w-5xl mx-auto w-full px-6 py-12">
-            <div id="videoContent" class="space-y-8">
-                <div class="text-center text-gray-400 py-12">
-                    <div class="animate-spin text-3xl mb-4"><i class="ph ph-spinner"></i></div>
-                    <p>Loading video details...</p>
-                </div>
+    <!-- Main Content -->
+    <main class="container">
+        <div id="videoContent" class="space-y-8">
+            <div class="loading-state">
+                <i class="ph ph-spinner spin-icon"></i>
+                <p>Loading video details...</p>
             </div>
-        </main>
+        </div>
+    </main>
 
-        <!-- Footer -->
-        <footer class="bg-black/30 border-t border-purple-500/10 py-8 mt-12">
-            <div class="max-w-7xl mx-auto px-6 text-center text-gray-500 text-sm">
-                <p>YouTube Video Extractor & Explainer &bull; Powered by AI & Laravel</p>
-            </div>
-        </footer>
-    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container" style="text-align: center; color: var(--ds-text-muted); font-size: var(--theme-font-size-sm);">
+            <p>YouTube Video Extractor &bull; Powered by AI & Laravel</p>
+        </div>
+    </footer>
 
     <!-- Design System Scripts -->
     <script src="/js/youextractor-design-system.js"></script>
@@ -91,12 +242,14 @@
                 displayVideo(data.data);
             } catch (error) {
                 videoContent.innerHTML = `
-                    <div class="text-center text-red-400 py-12 max-w-md mx-auto space-y-6">
-                        <i class="ph ph-warning-circle text-4xl mb-2"></i>
+                    <div style="text-align: center; color: var(--ds-color-error); padding: var(--theme-spacing-12) 0; max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--theme-spacing-6);">
+                        <i class="ph ph-warning-circle text-4xl" style="font-size: 2.5rem;"></i>
                         <p>Error: ${error.message}</p>
-                        <a href="/videos" class="inline-block">
-                            <ds-button label="Back to Videos" variant="primary" icon="arrow-left"></ds-button>
-                        </a>
+                        <div>
+                            <a href="/videos" style="text-decoration: none;">
+                                <ds-button label="Back to Videos" variant="primary" icon="arrow-left"></ds-button>
+                            </a>
+                        </div>
                     </div>
                 `;
             }
@@ -110,7 +263,7 @@
             if (video.code_snippets && video.code_snippets.length > 0) {
                 codeSnippetsHtml = `
                     <div class="space-y-4">
-                        <h4 class="ds-type-heading-sm text-cyan-450 flex items-center gap-2">
+                        <h4 class="ds-type-heading-sm flex items-center gap-2" style="color: var(--ds-text-electric); margin: 0;">
                             <i class="ph ph-file-code"></i> Code Snippets
                         </h4>
                         <div class="space-y-4">
@@ -122,22 +275,22 @@
                                 const desc = isObj ? (snippet.description || '') : '';
                                 
                                 return `
-                                    <ds-card variant="glow-electric" padding="none" class="shadow-lg border border-cyan-500/10 overflow-hidden">
-                                        <div class="flex items-center justify-between px-5 py-3 border-b border-gray-800/80" style="background: rgba(0,0,0,0.15)">
-                                            <div class="flex items-center gap-2.5">
-                                                <i class="ph ph-code text-yellow-500 text-base"></i>
-                                                <span class="font-mono text-sm text-white">${escapeHtml(filename)}</span>
+                                    <div class="code-snippet-card">
+                                        <div class="code-card-header">
+                                            <div class="code-meta-left">
+                                                <i class="ph ph-code" style="color: var(--theme-yellow-500); font-size: 1.25rem;"></i>
+                                                <span class="code-path">${escapeHtml(filename)}</span>
                                                 <span class="ds-badge-electric">${escapeHtml(language)}</span>
                                             </div>
                                             <ds-button onclick="copyCode(${idx})" label="Copy Code" variant="ghost" size="sm" icon="copy"></ds-button>
                                         </div>
-                                        <pre class="p-5 overflow-x-auto text-sm max-h-96" style="background: transparent;"><code id="code-${idx}" class="language-${escapeHtml(language)}">${escapeHtml(code}</code></pre>
+                                        <pre class="code-pre"><code id="code-${idx}" class="language-${escapeHtml(language)}">${escapeHtml(code)}</code></pre>
                                         ${desc ? `
-                                            <div class="px-5 py-3 border-t border-gray-800 text-xs text-gray-400" style="background: rgba(0,0,0,0.1)">
-                                                <i class="ph ph-info mr-1"></i> ${escapeHtml(desc)}
+                                            <div class="code-description-footer">
+                                                <i class="ph ph-info" style="margin-right: 4px;"></i> ${escapeHtml(desc)}
                                             </div>
                                         ` : ''}
-                                    </ds-card>
+                                    </div>
                                 `;
                             }).join('')}
                         </div>
@@ -146,19 +299,19 @@
             }
 
             videoContent.innerHTML = `
-                <div class="space-y-8 animate-fadeIn">
+                <div class="space-y-8" style="animation: fadeIn 0.4s var(--theme-ease-out);">
                     <!-- Video Info Card -->
-                    <ds-card variant="glass-accent" padding="lg" class="shadow-lg">
-                        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-                            <div class="space-y-4">
-                                <h2 class="ds-type-heading-md text-white">${escapeHtml(video.title)}</h2>
-                                <div class="flex flex-wrap gap-3.5 text-sm font-medium pt-1">
-                                    <span class="ds-badge-brand flex items-center gap-1.5"><i class="ph ph-clock"></i> Duration: ${duration}</span>
-                                    <span class="ds-badge-electric flex items-center gap-1.5"><i class="ph ph-calendar"></i> Published: ${publishDate}</span>
+                    <ds-card variant="glass-accent" padding="lg">
+                        <div class="result-info-header">
+                            <div style="flex: 1;">
+                                <h2 class="ds-type-heading-md text-white" style="margin: 0;">${escapeHtml(video.title)}</h2>
+                                <div class="result-meta">
+                                    <span class="ds-badge-brand" style="display: inline-flex; align-items: center; gap: 6px;"><i class="ph ph-clock"></i> Duration: ${duration}</span>
+                                    <span class="ds-badge-electric" style="display: inline-flex; align-items: center; gap: 6px;"><i class="ph ph-calendar"></i> Published: ${publishDate}</span>
                                 </div>
                             </div>
                             <div>
-                                <a href="https://youtube.com/watch?v=${video.youtube_id}" target="_blank">
+                                <a href="https://youtube.com/watch?v=${video.youtube_id}" target="_blank" style="text-decoration: none;">
                                     <ds-button label="Watch on YouTube" variant="secondary" size="md" icon="youtube-logo"></ds-button>
                                 </a>
                             </div>
@@ -167,23 +320,23 @@
 
                     <!-- Summary Alert/Callout -->
                     ${video.summary ? `
-                        <ds-card variant="glass" padding="md" class="border border-purple-500/10">
+                        <ds-card variant="glass" padding="md">
                             <div class="space-y-2">
-                                <h4 class="font-semibold text-purple-300 flex items-center gap-1.5">
-                                    <i class="ph ph-sparkle text-lg"></i> AI Summary
+                                <h4 class="font-semibold flex items-center gap-2" style="color: var(--ds-text-brand); margin: 0;">
+                                    <i class="ph ph-sparkle" style="font-size: 1.25rem;"></i> AI Summary
                                 </h4>
-                                <p class="ds-type-body-sm text-gray-300 leading-relaxed">${escapeHtml(video.summary)}</p>
+                                <p class="ds-type-body-sm text-gray-300" style="line-height: var(--theme-line-height-relaxed); margin: 0;">${escapeHtml(video.summary)}</p>
                             </div>
                         </ds-card>
                     ` : ''}
 
                     <!-- AI Explanation -->
                     <div class="space-y-4">
-                        <h4 class="ds-type-heading-sm text-purple-400 flex items-center gap-2">
+                        <h4 class="ds-type-heading-sm flex items-center gap-2" style="color: var(--ds-text-brand); margin: 0;">
                             <i class="ph ph-robot"></i> AI Explanation & Concepts
                         </h4>
-                        <ds-card variant="glass" padding="lg" class="border border-gray-700/40">
-                            <div class="ds-type-body-md text-gray-200 whitespace-pre-wrap leading-relaxed">
+                        <ds-card variant="glass" padding="lg">
+                            <div class="ds-type-body-md text-gray-200" style="white-space: pre-wrap; line-height: var(--theme-line-height-relaxed);">
                                 ${escapeHtml(video.explanation)}
                             </div>
                         </ds-card>
@@ -195,11 +348,11 @@
                     <!-- Description -->
                     ${video.description ? `
                         <div class="space-y-4">
-                            <h4 class="ds-type-heading-sm text-gray-400 flex items-center gap-2">
+                            <h4 class="ds-type-heading-sm flex items-center gap-2" style="color: var(--ds-text-muted); margin: 0;">
                                 <i class="ph ph-info"></i> Video Description
                             </h4>
-                            <ds-card variant="default" padding="md" class="border border-gray-800">
-                                <p class="ds-type-body-sm text-gray-400 whitespace-pre-wrap">${escapeHtml(video.description)}</p>
+                            <ds-card variant="default" padding="md">
+                                <p class="ds-type-body-sm text-gray-400" style="white-space: pre-wrap; margin: 0;">${escapeHtml(video.description)}</p>
                             </ds-card>
                         </div>
                     ` : ''}
@@ -207,11 +360,11 @@
                     <!-- Transcript -->
                     ${video.transcript && !video.transcript.includes('not available') ? `
                         <div class="space-y-4">
-                            <h4 class="ds-type-heading-sm text-gray-400 flex items-center gap-2">
+                            <h4 class="ds-type-heading-sm flex items-center gap-2" style="color: var(--ds-text-muted); margin: 0;">
                                 <i class="ph ph-file-text"></i> Video Transcript
                             </h4>
-                            <ds-card variant="default" padding="none" class="border border-gray-800 overflow-hidden">
-                                <div class="p-5 ds-type-body-sm text-gray-400 max-h-96 overflow-y-auto whitespace-pre-wrap leading-relaxed bg-black/10">
+                            <ds-card variant="default" padding="none">
+                                <div class="ds-type-body-sm text-gray-400" style="padding: var(--theme-spacing-5); max-height: 384px; overflow-y: auto; white-space: pre-wrap; line-height: var(--theme-line-height-relaxed); background: rgba(0,0,0,0.1);">
                                     ${escapeHtml(video.transcript)}
                                 </div>
                             </ds-card>
@@ -246,11 +399,16 @@
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
                 const toast = document.createElement('div');
-                toast.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2.5 rounded-xl shadow-2xl z-50 flex items-center gap-2 border border-green-500 animate-fadeIn';
+                toast.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2.5 rounded-xl shadow-2xl z-50 flex items-center gap-2 border border-green-500';
+                toast.style.animation = 'fadeIn 0.4s var(--theme-ease-out)';
+                toast.style.position = 'fixed';
+                toast.style.bottom = '24px';
+                toast.style.right = '24px';
                 toast.innerHTML = '<i class="ph ph-check-circle text-lg"></i> Copied to clipboard!';
                 document.body.appendChild(toast);
                 setTimeout(() => {
-                    toast.classList.add('opacity-0');
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.4s ease';
                     setTimeout(() => toast.remove(), 400);
                 }, 2000);
             });

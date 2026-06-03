@@ -8,9 +8,6 @@
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css">
     
-    <!-- Tailwind CSS (paired with Design System) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,83 +19,253 @@
             font-family: var(--theme-font-sans); 
             background: var(--ds-surface-base);
             color: var(--ds-text-primary);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .container {
+            max-width: var(--theme-container-xl);
+            margin: 0 auto;
+            padding: 0 var(--theme-spacing-6);
+            width: 100%;
+            box-sizing: border-box;
         }
-        .animate-fadeIn { animation: fadeIn 0.4s var(--theme-ease-out); }
+
+        /* Header */
+        header {
+            background: rgba(10, 16, 34, 0.3);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--ds-border-subtle);
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--theme-spacing-3);
+            text-decoration: none;
+            color: var(--ds-text-primary);
+            transition: opacity var(--theme-motion-fast) var(--theme-ease-default);
+        }
+
+        .logo:hover {
+            opacity: 0.9;
+        }
+
+        /* Main Section */
+        main {
+            flex: 1;
+            padding: var(--theme-spacing-12) 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--theme-spacing-8);
+        }
+
+        .page-header {
+            display: flex;
+            flex-direction: column;
+            gap: var(--theme-spacing-2);
+        }
+
+        .page-title {
+            margin: 0;
+            color: var(--ds-text-primary);
+        }
+
+        .page-subtitle {
+            color: var(--ds-text-secondary);
+            margin: 0;
+        }
+
+        /* Grid */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--theme-spacing-6);
+        }
+
+        .video-card-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+            gap: var(--theme-spacing-4);
+        }
+
+        .video-card-top {
+            display: flex;
+            flex-direction: column;
+            gap: var(--theme-spacing-3);
+        }
+
+        .video-card-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: var(--theme-spacing-4);
+        }
+
+        .video-card-title {
+            margin: 0;
+            font-size: var(--theme-font-size-md);
+            font-weight: var(--theme-font-weight-bold);
+            color: var(--ds-text-primary);
+            line-clamp: 2;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-card-desc {
+            margin: 0;
+            color: var(--ds-text-secondary);
+            font-size: var(--theme-font-size-sm);
+            line-clamp: 2;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--theme-font-size-xs);
+            color: var(--ds-text-muted);
+            padding-top: var(--theme-spacing-3);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-action {
+            color: var(--ds-text-brand);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--theme-spacing-1);
+            cursor: pointer;
+        }
+
+        .footer-action:hover {
+            color: var(--ds-color-brand-subtle);
+        }
+
+        /* Loading / states */
+        .loading-state {
+            text-align: center;
+            color: var(--ds-text-secondary);
+            padding: var(--theme-spacing-12) 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--theme-spacing-4);
+        }
+
+        .spin-icon {
+            animation: spin 1s linear infinite;
+            font-size: 2rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(6, 11, 24, 0.8);
+            border-top: 1px solid var(--ds-border-subtle);
+            padding: var(--theme-spacing-8) 0;
+            margin-top: var(--theme-spacing-12);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
-    <div class="min-h-screen flex flex-col">
-        <!-- Header -->
-        <header class="bg-black/30 backdrop-blur-md border-b border-purple-500/10 sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                <a href="{{ route('landing') }}" class="flex items-center gap-3 hover:opacity-90 transition">
-                    <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
-                    <span class="text-xl font-bold tracking-tight text-white">YouExtractor</span>
-                </a>
-                <div class="flex items-center gap-4">
-                    <a href="/">
-                        <ds-button label="Extract New" variant="primary" size="sm" icon="plus"></ds-button>
-                    </a>
-                </div>
-            </div>
-        </header>
+<body>
 
-        <!-- Main Content -->
-        <main class="flex-1 max-w-5xl mx-auto w-full px-6 py-12 space-y-8">
-            <div class="space-y-2">
-                <h1 class="ds-type-heading-lg text-white">📚 Extracted Videos</h1>
-                <p class="ds-type-body-sm text-gray-400">All your extracted and explained video tutorials</p>
-            </div>
-
-            <!-- Search Bar -->
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <a href="{{ route('landing') }}" class="logo">
+                <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
+                <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
+            </a>
             <div>
-                <ds-input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="Search videos by title or content..."
-                    icon="magnifying-glass"
-                    size="md">
-                </ds-input>
+                <a href="/" style="text-decoration: none;">
+                    <ds-button label="Extract New" variant="primary" size="sm" icon="plus"></ds-button>
+                </a>
             </div>
+        </div>
+    </header>
 
-            <!-- Videos Grid -->
-            <div id="videosContainer" class="grid md:grid-cols-2 gap-6">
-                <div class="col-span-2 text-center text-gray-400 py-12">
-                    <div class="animate-spin text-3xl mb-4"><i class="ph ph-spinner"></i></div>
-                    <p>Loading library...</p>
-                </div>
+    <!-- Main Content -->
+    <main class="container">
+        <div class="page-header">
+            <h1 class="ds-type-heading-lg page-title">📚 Extracted Videos</h1>
+            <p class="ds-type-body-sm page-subtitle">All your extracted and explained video tutorials</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div>
+            <ds-input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search videos by title or content..."
+                icon="magnifying-glass"
+                size="md">
+            </ds-input>
+        </div>
+
+        <!-- Videos Grid -->
+        <div id="videosContainer" class="videos-grid">
+            <div class="loading-state" style="grid-column: 1 / -1;">
+                <i class="ph ph-spinner spin-icon"></i>
+                <p>Loading library...</p>
             </div>
+        </div>
 
-            <!-- Empty / No Results State -->
-            <div id="noResults" class="hidden text-center py-16 max-w-md mx-auto">
-                <ds-card variant="glass" padding="lg" class="space-y-6">
-                    <div class="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto">
-                        <i class="ph ph-folder-open text-3xl" style="color: var(--ds-text-brand);"></i>
+        <!-- Empty State -->
+        <div id="noResults" class="hidden" style="max-width: 440px; margin: 0 auto; width: 100%;">
+            <ds-card variant="glass" padding="lg">
+                <div style="text-align: center; display: flex; flex-direction: column; gap: var(--theme-spacing-4);">
+                    <div style="width: 64px; height: 64px; background: rgba(168, 85, 247, 0.1); border-radius: var(--theme-radius-full); display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                        <i class="ph ph-folder-open text-3xl" style="color: var(--ds-text-brand); font-size: 2rem;"></i>
                     </div>
-                    <div class="space-y-2">
-                        <h3 class="ds-type-heading-sm text-white">No videos found</h3>
-                        <p class="ds-type-body-sm text-gray-400">Try searching for another keyword or extract a new programming tutorial to start building your library.</p>
+                    <div>
+                        <h3 class="ds-type-heading-sm text-white" style="margin: 0 0 var(--theme-spacing-2);">No videos found</h3>
+                        <p class="ds-type-body-sm text-gray-400" style="margin: 0;">Try searching for another keyword or extract a new programming tutorial to start building your library.</p>
                     </div>
-                    <div class="pt-2">
-                        <a href="/">
+                    <div style="margin-top: var(--theme-spacing-2);">
+                        <a href="/" style="text-decoration: none;">
                             <ds-button label="Extract a Video" variant="gradient" size="md" icon="rocket-launch"></ds-button>
                         </a>
                     </div>
-                </ds-card>
-            </div>
-        </main>
+                </div>
+            </ds-card>
+        </div>
+    </main>
 
-        <!-- Footer -->
-        <footer class="bg-black/30 border-t border-purple-500/10 py-8 mt-12">
-            <div class="max-w-7xl mx-auto px-6 text-center text-gray-500 text-sm">
-                <p>YouTube Video Extractor & Explainer &bull; Powered by AI & Laravel</p>
-            </div>
-        </footer>
-    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container" style="text-align: center; color: var(--ds-text-muted); font-size: var(--theme-font-size-sm);">
+            <p>YouTube Video Extractor &bull; Powered by AI & Laravel</p>
+        </div>
+    </footer>
 
     <!-- Design System Scripts -->
     <script src="/js/youextractor-design-system.js"></script>
@@ -120,8 +287,8 @@
                 displayVideos(allVideos);
             } catch (error) {
                 videosContainer.innerHTML = `
-                    <div class="col-span-2 text-center text-red-400 py-12">
-                        <i class="ph ph-warning-circle text-3xl mb-3"></i>
+                    <div style="grid-column: 1 / -1; text-align: center; color: var(--ds-color-error); padding: var(--theme-spacing-12) 0;">
+                        <i class="ph ph-warning-circle text-3xl" style="font-size: 2rem; margin-bottom: var(--theme-spacing-3);"></i>
                         <p>Failed to load videos: ${error.message}</p>
                     </div>
                 `;
@@ -139,26 +306,26 @@
             noResults.classList.add('hidden');
 
             videosContainer.innerHTML = videos.map(video => `
-                <ds-card variant="glass" interactive padding="md" class="animate-fadeIn h-full" onclick="viewVideo(${video.id})">
-                    <div class="flex flex-col h-full justify-between gap-4">
-                        <div class="space-y-2.5">
-                            <div class="flex justify-between items-start gap-4">
-                                <h3 class="ds-type-heading-sm text-white font-bold line-clamp-2" style="font-family: var(--theme-font-sans);">${escapeHtml(video.title)}</h3>
-                                <span class="ds-badge-electric shrink-0">
+                <ds-card variant="glass" interactive padding="md" style="cursor: pointer;" onclick="viewVideo(${video.id})">
+                    <div class="video-card-content">
+                        <div class="video-card-top">
+                            <div class="video-card-title-row">
+                                <h3 class="video-card-title">${escapeHtml(video.title)}</h3>
+                                <span class="ds-badge-electric shrink-0" style="white-space: nowrap;">
                                     ${formatDuration(video.duration)}
                                 </span>
                             </div>
         
                             ${video.summary ? `
-                                <p class="ds-type-body-sm text-gray-400 line-clamp-2">${escapeHtml(video.summary)}</p>
+                                <p class="video-card-desc">${escapeHtml(video.summary)}</p>
                             ` : ''}
                         </div>
     
-                        <div class="flex justify-between items-center text-xs text-gray-500 pt-3 border-t border-gray-700/30">
-                            <span class="flex items-center gap-1">
+                        <div class="video-card-footer">
+                            <span style="display: flex; align-items: center; gap: 4px;">
                                 <i class="ph ph-calendar"></i> ${new Date(video.extracted_at || video.created_at).toLocaleDateString()}
                             </span>
-                            <span class="text-purple-400 font-semibold flex items-center gap-1 hover:text-purple-300">
+                            <span class="footer-action">
                                 View Details <i class="ph ph-arrow-right"></i>
                             </span>
                         </div>

@@ -8,9 +8,6 @@
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css">
     
-    <!-- Tailwind CSS (paired with Design System) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,32 +19,171 @@
             font-family: var(--theme-font-sans); 
             background: var(--ds-surface-base);
             color: var(--ds-text-primary);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
         }
-        .logo-glow:hover {
+
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+            padding: var(--theme-spacing-6);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: var(--theme-spacing-6);
+        }
+
+        .logo-section {
+            text-align: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--theme-spacing-3);
+            text-decoration: none;
+            color: var(--ds-text-primary);
+            transition: all var(--theme-motion-fast) var(--theme-ease-default);
+        }
+
+        .logo:hover {
             filter: drop-shadow(0 0 8px var(--ds-color-brand-subtle));
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--theme-spacing-6);
+        }
+
+        .auth-title {
+            margin: 0 0 var(--theme-spacing-2);
+            color: var(--ds-text-primary);
+        }
+
+        .auth-subtitle {
+            color: var(--ds-text-secondary);
+            margin: 0;
+        }
+
+        /* Google Sign-in button */
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--theme-spacing-3);
+            width: 100%;
+            padding: var(--theme-spacing-3.5) 0;
+            background: var(--theme-neutral-0);
+            color: var(--theme-neutral-1000);
+            border-radius: var(--theme-radius-xl);
+            font-weight: var(--theme-font-weight-semibold);
+            text-decoration: none;
+            border: 1px solid transparent;
+            cursor: pointer;
+            box-sizing: border-box;
+            font-family: var(--theme-font-sans);
+            font-size: var(--theme-font-size-sm);
+            transition: background var(--theme-motion-fast) var(--theme-ease-default);
+            margin-bottom: var(--theme-spacing-6);
+        }
+
+        .google-btn:hover {
+            background: var(--theme-neutral-100);
+        }
+
+        /* Divider */
+        .divider-container {
+            position: relative;
+            margin-bottom: var(--theme-spacing-6);
+            text-align: center;
+        }
+
+        .divider-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            border-top: 1px solid var(--ds-border-subtle);
+            z-index: 1;
+        }
+
+        .divider-text {
+            position: relative;
+            display: inline-block;
+            padding: 0 var(--theme-spacing-4);
+            background: var(--ds-surface-card);
+            color: var(--ds-text-muted);
+            font-size: var(--theme-font-size-xs);
+            z-index: 2;
+        }
+
+        /* Form layout */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--theme-spacing-4);
+        }
+
+        .footer-link {
+            text-align: center;
+            font-size: var(--theme-font-size-sm);
+            color: var(--ds-text-secondary);
+            margin-top: var(--theme-spacing-6);
+        }
+
+        .footer-link a {
+            color: var(--ds-text-brand);
+            text-decoration: none;
+            font-weight: var(--theme-font-weight-semibold);
+        }
+
+        .footer-link a:hover {
+            color: var(--ds-color-brand-subtle);
+        }
+
+        .terms-text {
+            text-align: center;
+            font-size: var(--theme-font-size-xs);
+            color: var(--ds-text-muted);
+            margin: 0;
+        }
+
+        .terms-text a {
+            color: var(--ds-text-secondary);
+            text-decoration: none;
+        }
+
+        .terms-text a:hover {
+            color: var(--ds-text-primary);
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
-    <div class="w-full max-w-md space-y-8">
+<body>
+
+    <div class="auth-container">
         <!-- Logo -->
-        <div class="text-center">
-            <a href="{{ route('landing') }}" class="inline-flex items-center gap-3 logo-glow transition-all duration-300">
+        <div class="logo-section">
+            <a href="{{ route('landing') }}" class="logo">
                 <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 2.25rem;"></i>
-                <span class="text-2xl font-bold tracking-tight text-white">YouExtractor</span>
+                <span class="ds-type-heading-md" style="margin: 0; font-size: 1.5rem;">YouExtractor</span>
             </a>
         </div>
 
         <!-- Sign Up Card -->
-        <ds-card variant="glass-accent" padding="lg" class="shadow-2xl">
-            <div class="text-center mb-8">
-                <h1 class="ds-type-heading-md text-white mb-2">Create your account</h1>
-                <p class="ds-type-body-sm text-gray-400">Start extracting code from videos today</p>
+        <ds-card variant="glass-accent" padding="lg">
+            <div class="auth-header">
+                <h1 class="ds-type-heading-md auth-title">Create your account</h1>
+                <p class="ds-type-body-sm auth-subtitle">Start extracting code from videos today</p>
             </div>
 
             <!-- Google Sign Up -->
-            <a href="{{ route('auth.google') }}" class="flex items-center justify-center gap-3 w-full py-3 bg-white text-gray-900 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-200 mb-6">
-                <svg class="w-5 h-5" viewBox="0 0 24 24">
+            <a href="{{ route('auth.google') }}" class="google-btn">
+                <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -57,17 +193,13 @@
             </a>
 
             <!-- Divider -->
-            <div class="relative mb-6">
-                <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-gray-700/50"></div>
-                </div>
-                <div class="relative flex justify-center text-xs">
-                    <span class="px-4 text-gray-500" style="background: var(--ds-surface-card);">or continue with email</span>
-                </div>
+            <div class="divider-container">
+                <div class="divider-line"></div>
+                <span class="divider-text">or continue with email</span>
             </div>
 
             <!-- Sign Up Form -->
-            <form method="POST" action="{{ route('signup.submit') }}" class="space-y-5">
+            <form method="POST" action="{{ route('signup.submit') }}" id="signupForm">
                 @csrf
 
                 <!-- Name -->
@@ -128,41 +260,36 @@
                 </div>
 
                 <!-- Submit Button -->
-                <div class="pt-2">
+                <div style="margin-top: var(--theme-spacing-2);">
                     <ds-button type="submit" label="Create Account" variant="primary" size="lg" full-width></ds-button>
                 </div>
             </form>
 
             <!-- Sign In Link -->
-            <div class="mt-6 text-center text-sm text-gray-400">
+            <div class="footer-link">
                 Already have an account? 
-                <a href="{{ route('signin') }}" class="text-purple-400 hover:text-purple-300 font-semibold">Sign in</a>
+                <a href="{{ route('signin') }}">Sign in</a>
             </div>
         </ds-card>
 
         <!-- Terms -->
-        <p class="text-center text-xs text-gray-500">
+        <p class="terms-text">
             By signing up, you agree to our 
-            <a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a> and 
-            <a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a>
+            <a href="#">Terms of Service</a> and 
+            <a href="#">Privacy Policy</a>
         </p>
     </div>
 
-    <!-- Buy Me a Coffee Widget -->
-    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="youextractor" data-description="Support me on Buy me a coffee!" data-message="Thanks for using CodeExtractor! Buy me a coffee to support development." data-color="#a855f7" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
-    
     <!-- Design System Scripts -->
     <script src="/js/youextractor-design-system.js"></script>
     <script>
-        // Proxy form submission
-        document.querySelectorAll('ds-button[type="submit"]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const form = btn.closest('form');
-                if (form) {
-                    form.submit();
-                }
-            });
+        // Form submission wiring
+        document.querySelector('ds-button[type="submit"]').addEventListener('click', (e) => {
+            e.preventDefault();
+            const form = document.getElementById('signupForm');
+            if (form) {
+                form.submit();
+            }
         });
     </script>
 </body>
