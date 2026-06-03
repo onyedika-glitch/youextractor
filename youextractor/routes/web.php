@@ -14,6 +14,11 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
+// Design System Gallery
+Route::get('/gallery', function () {
+    return redirect('/gallery/index.html');
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Routes (only for non-authenticated users)

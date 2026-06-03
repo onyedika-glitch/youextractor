@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card Variants - YouExtractor Design System</title>
+  
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="/css/youextractor-design-system.css">
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+</head>
+<body style="margin: 0; background: var(--ds-surface-base);">
+
+<div style="padding: var(--theme-spacing-8); display: flex; flex-direction: column; gap: var(--theme-spacing-8); background: var(--ds-surface-base); min-height: 100%;">
+
+  <!-- Glass Accent Card -->
+  <div>
+    <div style="font-size: var(--theme-font-size-xs); color: var(--ds-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: var(--theme-spacing-sm); font-family: var(--theme-font-sans); font-weight: 600;">Glass Accent (Extraction Result)</div>
+    <ds-card variant="glass-accent">
+      <div slot="header">
+        <h3 class="ds-type-heading-sm" style="color: var(--ds-text-primary); margin: 0;">Building a Full-Stack App with Next.js 14</h3>
+        <p class="ds-type-body-sm" style="color: var(--ds-text-secondary); margin-top: var(--theme-spacing-2);">Traversy Media • 45:23 • 12 files extracted</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: var(--theme-spacing-2);">
+        <span class="ds-badge-brand">Next.js</span>
+        <span class="ds-badge-electric">TypeScript</span>
+        <span class="ds-badge-accent">Tailwind</span>
+        <span class="ds-badge-success">Complete</span>
+      </div>
+      <div slot="footer" style="display: flex; gap: var(--theme-spacing-3);">
+        <ds-button label="Download ZIP" variant="gradient" size="sm" icon="download-simple"></ds-button>
+        <ds-button label="Watch on YouTube" variant="ghost" size="sm" icon="youtube-logo"></ds-button>
+      </div>
+    </ds-card>
+  </div>
+
+  <!-- Glow Card -->
+  <div>
+    <div style="font-size: var(--theme-font-size-xs); color: var(--ds-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: var(--theme-spacing-sm); font-family: var(--theme-font-sans); font-weight: 600;">Glow (Featured)</div>
+    <ds-card variant="glow">
+      <div style="text-align: center; padding: var(--theme-spacing-4) 0;">
+        <p class="ds-type-label-md" style="color: var(--ds-text-brand); margin: 0 0 var(--theme-spacing-3);">AI-Powered</p>
+        <h3 class="ds-type-heading-lg" style="color: var(--ds-text-primary); margin: 0 0 var(--theme-spacing-3);">Instant Code Extraction</h3>
+        <p class="ds-type-body-md" style="color: var(--ds-text-secondary); margin: 0;">Don't manually copy code from paused videos. We generate working file structures instantly.</p>
+      </div>
+    </ds-card>
+  </div>
+
+  <!-- Interactive Cards Row -->
+  <div>
+    <div style="font-size: var(--theme-font-size-xs); color: var(--ds-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: var(--theme-spacing-sm); font-family: var(--theme-font-sans); font-weight: 600;">Interactive (Feature Grid)</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--theme-spacing-4);">
+      <ds-card variant="glass" interactive padding="sm">
+        <div style="text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: var(--theme-spacing-3);"><i class="ph ph-book-open" style="color: var(--ds-text-brand); font-size: 2rem;"></i></div>
+          <h4 class="ds-type-heading-sm" style="color: var(--ds-text-primary); margin: 0 0 var(--theme-spacing-2);">Tutorial Guide</h4>
+          <p class="ds-type-body-sm" style="color: var(--ds-text-secondary); margin: 0;">Complete written explanations</p>
+        </div>
+      </ds-card>
+      <ds-card variant="glass" interactive padding="sm">
+        <div style="text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: var(--theme-spacing-3);"><i class="ph ph-terminal" style="color: var(--ds-text-electric); font-size: 2rem;"></i></div>
+          <h4 class="ds-type-heading-sm" style="color: var(--ds-text-primary); margin: 0 0 var(--theme-spacing-2);">Setup & Run</h4>
+          <p class="ds-type-body-sm" style="color: var(--ds-text-secondary); margin: 0;">Step-by-step instructions</p>
+        </div>
+      </ds-card>
+      <ds-card variant="glass" interactive padding="sm">
+        <div style="text-align: center;">
+          <div style="font-size: 2rem; margin-bottom: var(--theme-spacing-3);"><i class="ph ph-file-zip" style="color: var(--ds-text-accent); font-size: 2rem;"></i></div>
+          <h4 class="ds-type-heading-sm" style="color: var(--ds-text-primary); margin: 0 0 var(--theme-spacing-2);">Download ZIP</h4>
+          <p class="ds-type-body-sm" style="color: var(--ds-text-secondary); margin: 0;">Full project ready to run</p>
+        </div>
+      </ds-card>
+    </div>
+  </div>
+
+  <!-- Glow Electric -->
+  <div>
+    <div style="font-size: var(--theme-font-size-xs); color: var(--ds-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: var(--theme-spacing-sm); font-family: var(--theme-font-sans); font-weight: 600;">Glow Electric (Code Preview)</div>
+    <ds-card variant="glow-electric" padding="sm">
+      <p class="ds-type-label-md" style="color: var(--ds-text-electric); margin: 0 0 var(--theme-spacing-3);">App.tsx</p>
+      <pre class="ds-type-code-md" style="color: var(--ds-text-primary); margin: 0; white-space: pre-wrap;">import React from 'react';
+import { useState } from 'react';
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  return &lt;div&gt;Hello World&lt;/div&gt;;
+}</pre>
+    </ds-card>
+  </div>
+
+</div>
+
+  <!-- Design System JS -->
+  <script src="/js/youextractor-design-system.js"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery Index - YouExtractor Design System</title>
+  
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="/css/youextractor-design-system.css">
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  
+  <style>
+    body {
+      margin: 0;
+      background: var(--ds-surface-base);
+      color: var(--ds-text-primary);
+      font-family: var(--theme-font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .nav-tabs {
+      display: flex;
+      gap: var(--theme-spacing-2);
+      border-bottom: 1px solid var(--ds-border-subtle);
+      padding: var(--theme-spacing-4) var(--theme-spacing-6);
+      background: rgba(10, 16, 34, 0.5);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .tab-btn {
+      padding: var(--theme-spacing-2) var(--theme-spacing-4);
+      border-radius: var(--theme-radius-lg);
+      border: 1px solid transparent;
+      color: var(--ds-text-secondary);
+      font-weight: 500;
+      cursor: pointer;
+      background: transparent;
+      font-family: var(--theme-font-sans);
+      transition: all var(--theme-motion-fast) var(--theme-ease-default);
+    }
+
+    .tab-btn:hover {
+      color: var(--ds-text-primary);
+      background: var(--ds-surface-glass);
+    }
+
+    .tab-btn.active {
+      color: var(--theme-neutral-0);
+      background: var(--ds-color-brand-muted);
+      border-color: var(--ds-border-accent);
+    }
+
+    .iframe-container {
+      flex: 1;
+      width: 100%;
+      height: calc(100vh - 70px);
+      border: none;
+      background: var(--ds-surface-base);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav-tabs">
+    <div style="display: flex; align-items: center; gap: var(--theme-spacing-3); margin-right: var(--theme-spacing-6);">
+      <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.5rem;"></i>
+      <span class="ds-type-heading-sm" style="color: var(--ds-text-primary); font-size: 1.1rem; font-weight: 700;">YouExtractor Design Gallery</span>
+    </div>
+    <button class="tab-btn active" onclick="switchTab(this, 'button-variants.html')">Buttons</button>
+    <button class="tab-btn" onclick="switchTab(this, 'card-variants.html')">Cards</button>
+    <button class="tab-btn" onclick="switchTab(this, 'input-states.html')">Inputs</button>
+    <button class="tab-btn" onclick="switchTab(this, 'extraction-flow.html')">Extraction Flow</button>
+  </div>
+
+  <iframe class="iframe-container" id="gallery-frame" src="button-variants.html"></iframe>
+
+  <script>
+    function switchTab(btn, url) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('gallery-frame').src = url;
+    }
+  </script>
+
+  <!-- Design System JS -->
+  <script src="/js/youextractor-design-system.js"></script>
+</body>
+</html>

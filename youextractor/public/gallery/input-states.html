@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input States - YouExtractor Design System</title>
+  
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="/css/youextractor-design-system.css">
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+</head>
+<body style="margin: 0; background: var(--ds-surface-base);">
+
+<div style="padding: var(--theme-spacing-8); display: flex; flex-direction: column; gap: var(--theme-spacing-10); background: var(--ds-surface-base); min-height: 100%; max-width: 560px;">
+
+  <!-- Hero Input -->
+  <div>
+    <div style="font-size: var(--theme-font-size-xs); color: var(--ds-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: var(--theme-spacing-sm); font-family: var(--theme-font-sans); font-weight: 600;">Hero Input (Large)</div>
+    <ds-input label="YouTube Video URL" placeholder="https://www.youtube.com/watch?v=..." icon="link" size="lg"></ds-input>
+  </div>
+
+  <!-- Standard Inputs -->
+  <div>
+    <div style="font-size: var(--theme-font-size-xs); color: var(--ds-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: var(--theme-spacing-sm); font-family: var(--theme-font-sans); font-weight: 600;">Standard Fields</div>
+    <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-5);">
+      <ds-input label="Email Address" placeholder="you@example.com" icon="envelope" type="email"></ds-input>
+      <ds-input label="Password" placeholder="••••••••" icon="lock" type="password"></ds-input>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div>
+    <div style="font-size: var(--theme-font-size-xs); color: var(--ds-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: var(--theme-spacing-sm); font-family: var(--theme-font-sans); font-weight: 600;">Search</div>
+    <ds-input placeholder="Search videos by title or content..." icon="magnifying-glass" size="md"></ds-input>
+  </div>
+
+  <!-- Error State -->
+  <div>
+    <div style="font-size: var(--theme-font-size-xs); color: var(--ds-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: var(--theme-spacing-sm); font-family: var(--theme-font-sans); font-weight: 600;">Error State</div>
+    <ds-input label="YouTube URL" placeholder="https://www.youtube.com/watch?v=..." icon="link" error="Please enter a valid YouTube URL" value="not-a-valid-url"></ds-input>
+  </div>
+
+  <!-- With Hint -->
+  <div>
+    <div style="font-size: var(--theme-font-size-xs); color: var(--ds-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: var(--theme-spacing-sm); font-family: var(--theme-font-sans); font-weight: 600;">With Hint</div>
+    <ds-input label="API Key" placeholder="sk-..." icon="key" hint="Your Gemini or OpenAI API key for extraction" type="password"></ds-input>
+  </div>
+
+</div>
+
+  <!-- Design System JS -->
+  <script src="/js/youextractor-design-system.js"></script>
+</body>
+</html>
