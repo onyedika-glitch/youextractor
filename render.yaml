@@ -10,9 +10,9 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: "true"
+        value: "false"
       - key: APP_KEY
-        value: base64:b6fkKEA46O4acYzBOAd8g2sXaC0y7D28zSwzuhXocWw=
+        sync: false
       - key: APP_URL
         value: https://youextractor.onrender.com
       - key: DB_CONNECTION
