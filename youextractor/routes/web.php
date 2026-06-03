@@ -20,6 +20,26 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 
+Route::get('/debug-oauth', function () {
+    try {
+        $targetUrl = Laravel\Socialite\Facades\Socialite::driver('google')->redirect()->getTargetUrl();
+        $parsed = parse_url($targetUrl);
+        parse_str($parsed['query'] ?? '', $query);
+        return [
+            'app_env' => config('app.env'),
+            'app_url' => config('app.url'),
+            'google_redirect_config' => config('services.google.redirect'),
+            'resolved_redirect_uri' => $query['redirect_uri'] ?? null,
+            'target_url' => $targetUrl,
+        ];
+    } catch (\Exception $e) {
+        return [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ];
+    }
+});
+
 Route::middleware('guest')->group(function () {
     // Sign Up
     Route::get('/signup', [AuthController::class, 'showSignup'])->name('signup');
