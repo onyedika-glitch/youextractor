@@ -25,6 +25,17 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
+        // Force HTTPS on Google OAuth redirect URI
+        $redirectUri = config('services.google.redirect');
+        if ($redirectUri) {
+            if (str_starts_with($redirectUri, 'http://')) {
+                $redirectUri = 'https://' . substr($redirectUri, 7);
+                config(['services.google.redirect' => $redirectUri]);
+            } elseif (!str_starts_with($redirectUri, 'http')) {
+                config(['services.google.redirect' => secure_url($redirectUri)]);
+            }
+        }
+
         // Ensure storage directories exist for production
         $directories = [
             storage_path('framework/cache/data'),
