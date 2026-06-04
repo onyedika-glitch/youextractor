@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 class ClaudeDriver implements LLMService
 {
     private string $apiKey;
-    private string $model = 'claude-sonnet-4-5';
+    private string $model = 'claude-3-5-sonnet-20241022';
     private string $apiVersion = '2023-06-01';
 
     public function __construct()

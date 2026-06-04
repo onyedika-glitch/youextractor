@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 class GeminiDriver implements LLMService
 {
     /** Models tried in order of preference */
-    private array $models = ['gemini-1.5-pro', 'gemini-1.5-flash'];
+    private array $models = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-1.5-pro', 'gemini-1.5-flash'];
 
     private string $apiKey;
 
