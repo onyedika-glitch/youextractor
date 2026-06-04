@@ -770,8 +770,40 @@
                                     <ds-button label="Download ZIP" variant="glow" size="lg" icon="file-zip" style="width: 100%;"></ds-button>
                                 </a>
                             </div>` : ''}
+                    </ds-card>
+
+                    <!-- GitHub Push Card -->
+                    ${hasCode ? `
+                    <ds-card variant="glass" padding="lg" style="margin-top: var(--theme-spacing-4);">
+                        <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-4);">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: var(--theme-spacing-4); flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 250px;">
+                                    <h4 class="ds-type-heading-sm text-white" style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                                        <i class="ph ph-github-logo" style="font-size: 1.5rem; color: var(--ds-text-accent);"></i> Create & Push to GitHub Repo
+                                    </h4>
+                                    <p class="ds-type-body-sm text-gray-400" style="margin: 4px 0 0 0;">
+                                        Pushes all extracted files into a new GitHub repository in your account.
+                                    </p>
+                                </div>
+                                ${video.github_repo_url ? `
+                                <div style="display: flex; align-items: center; gap: var(--theme-spacing-3);">
+                                    <a href="${escapeHtml(video.github_repo_url)}" target="_blank" style="text-decoration: none;">
+                                        <ds-button label="View Repo on GitHub" variant="glow" size="md" icon="arrow-square-out"></ds-button>
+                                    </a>
+                                </div>
+                                ` : `
+                                <div id="github-push-form" style="display: flex; align-items: center; gap: var(--theme-spacing-3); flex: 1; max-width: 600px; flex-wrap: wrap; width: 100%;">
+                                    <ds-input id="github-token-input" placeholder="ghp_xxxxxxxxxxxx" label="GitHub Personal Access Token" style="flex: 1; min-width: 200px;"></ds-input>
+                                    <div style="margin-top: 1.5rem;">
+                                        <ds-button id="github-push-btn" onclick="pushToGitHub('${video.id}')" label="Push Code" variant="gradient" size="md" icon="git-pull-request"></ds-button>
+                                    </div>
+                                </div>
+                                `}
+                            </div>
+                            <div id="github-status-msg" class="hidden text-sm font-mono" style="margin-top: 4px;"></div>
                         </div>
                     </ds-card>
+                    ` : ''}
 
                     <!-- Tabs Container -->
                     <div class="tabs-container">
@@ -1195,6 +1227,66 @@
                     toast.style.transition = 'opacity 0.4s ease';
                     setTimeout(() => toast.remove(), 400);
                 }, 2000);
+            });
+        }
+
+        function pushToGitHub(videoId) {
+            const tokenInput = document.getElementById('github-token-input');
+            const pushBtn = document.getElementById('github-push-btn');
+            const statusMsg = document.getElementById('github-status-msg');
+            
+            const token = tokenInput ? tokenInput.value.trim() : '';
+            
+            if (!token) {
+                tokenInput.error = 'GitHub Personal Access Token is required';
+                return;
+            }
+            
+            tokenInput.error = '';
+            pushBtn.loading = true;
+            statusMsg.classList.remove('hidden');
+            statusMsg.className = 'text-sm text-blue-400 font-mono';
+            statusMsg.textContent = 'Creating repository and pushing code...';
+            
+            fetch(`/api/videos/${videoId}/push-to-github`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ github_token: token })
+            })
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to push to GitHub');
+                }
+                return data;
+            })
+            .then(data => {
+                pushBtn.loading = false;
+                if (data.success) {
+                    statusMsg.className = 'text-sm text-green-400 font-mono';
+                    statusMsg.innerHTML = `<i class="ph ph-check-circle"></i> Repository created and pushed successfully! <a href="${escapeHtml(data.github_url)}" target="_blank" class="underline text-green-300 font-semibold" style="margin-left: 8px;">View Repo on GitHub <i class="ph ph-arrow-square-out"></i></a>`;
+                    
+                    const formContainer = document.getElementById('github-push-form');
+                    if (formContainer) {
+                        formContainer.innerHTML = `
+                            <a href="${escapeHtml(data.github_url)}" target="_blank" style="text-decoration: none;">
+                                <ds-button label="View Repo on GitHub" variant="glow" size="md" icon="arrow-square-out"></ds-button>
+                            </a>
+                        `;
+                    }
+                } else {
+                    statusMsg.className = 'text-sm text-red-400 font-mono';
+                    statusMsg.textContent = data.error || 'Failed to push to GitHub.';
+                }
+            })
+            .catch(err => {
+                pushBtn.loading = false;
+                statusMsg.className = 'text-sm text-red-400 font-mono';
+                statusMsg.textContent = err.message || 'An error occurred while pushing to GitHub.';
+                console.error(err);
             });
         }
 
