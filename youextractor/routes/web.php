@@ -14,7 +14,7 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-Route::get('/run-migrations', function () {
+Route::get('/run-migrations-v2', function () {
     try {
         $columns = \Illuminate\Support\Facades\Schema::getColumnListing('videos');
         $output = "Columns in 'videos' table:\n" . implode("\n", $columns) . "\n\n";
