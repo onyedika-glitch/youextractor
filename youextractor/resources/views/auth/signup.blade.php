@@ -305,8 +305,8 @@
         <!-- Terms -->
         <p class="terms-text">
             By signing up, you agree to our 
-            <a href="#">Terms of Service</a> and 
-            <a href="#">Privacy Policy</a>
+            <a href="{{ route('terms') }}">Terms of Service</a> and 
+            <a href="{{ route('privacy') }}">Privacy Policy</a>
         </p>
     </div>
 

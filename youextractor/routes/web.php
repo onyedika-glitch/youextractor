@@ -14,6 +14,16 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
+// Privacy Policy
+Route::get('/privacy', function () {
+    return view('privacy');
+})->name('privacy');
+
+// Terms of Service
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');
+
 /*
 |--------------------------------------------------------------------------
 | Guest Routes (only for non-authenticated users)

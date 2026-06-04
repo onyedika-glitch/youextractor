@@ -364,6 +364,11 @@
     <footer>
         <div class="container footer-content">
             <p class="footer-text">&copy; {{ date('Y') }} YouExtractor. All rights reserved.</p>
+            <div style="display: flex; gap: var(--theme-spacing-4); align-items: center; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ route('privacy') }}" class="footer-text" style="text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--ds-text-primary)'" onmouseout="this.style.color='var(--ds-text-muted)'">Privacy Policy</a>
+                <span class="footer-text" style="opacity: 0.5;">•</span>
+                <a href="{{ route('terms') }}" class="footer-text" style="text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--ds-text-primary)'" onmouseout="this.style.color='var(--ds-text-muted)'">Terms of Service</a>
+            </div>
             <p class="footer-text">
                 Built for developers who learn by watching <i class="ph ph-heart footer-heart"></i>
             </p>

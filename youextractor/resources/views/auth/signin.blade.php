@@ -344,6 +344,13 @@
                 <a href="{{ route('signup') }}">Sign up free</a>
             </div>
         </ds-card>
+
+        <!-- Terms / Privacy Links -->
+        <p class="terms-text" style="text-align: center; font-size: var(--theme-font-size-xs); color: var(--ds-text-muted); margin: 0;">
+            <a href="{{ route('terms') }}" style="color: var(--ds-text-secondary); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--ds-text-primary)'" onmouseout="this.style.color='var(--ds-text-secondary)'">Terms of Service</a>
+            <span style="margin: 0 8px; opacity: 0.5;">•</span>
+            <a href="{{ route('privacy') }}" style="color: var(--ds-text-secondary); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--ds-text-primary)'" onmouseout="this.style.color='var(--ds-text-secondary)'">Privacy Policy</a>
+        </p>
     </div>
 
     <!-- Design System Scripts -->
