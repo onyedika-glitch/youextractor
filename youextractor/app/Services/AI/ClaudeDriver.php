@@ -36,6 +36,7 @@ class ClaudeDriver implements LLMService
     {
         try {
             $response = Http::timeout(180)
+                ->withoutVerifying()
                 ->retry(2, 3000, fn ($exception) => true, throw: false)
                 ->withHeaders([
                     'x-api-key'         => $this->apiKey,

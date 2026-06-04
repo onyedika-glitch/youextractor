@@ -274,7 +274,7 @@ class VideoController extends Controller
     private function getVideoMetadata(string $videoId): ?array
     {
         try {
-            $response = Http::timeout(10)->get('https://www.youtube.com/oembed', [
+            $response = Http::timeout(10)->withoutVerifying()->get('https://www.youtube.com/oembed', [
                 'url'    => "https://www.youtube.com/watch?v={$videoId}",
                 'format' => 'json',
             ]);
@@ -299,6 +299,7 @@ class VideoController extends Controller
     {
         try {
             $response = Http::timeout(15)
+                ->withoutVerifying()
                 ->withHeaders([
                     'User-Agent'      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/121',
                     'Accept-Language' => 'en-US,en;q=0.9',
@@ -335,6 +336,7 @@ class VideoController extends Controller
     {
         try {
             $response = Http::timeout(15)
+                ->withoutVerifying()
                 ->withHeaders([
                     'User-Agent'      => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120',
                     'Accept'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -349,7 +351,7 @@ class VideoController extends Controller
             if (preg_match('/"captionTracks":\s*\[(.*?)\]/', $response->body(), $matches)) {
                 $tracks = json_decode('[' . $matches[1] . ']', true);
                 if (!empty($tracks[0]['baseUrl'])) {
-                    $cap = Http::timeout(10)->get($tracks[0]['baseUrl']);
+                    $cap = Http::timeout(10)->withoutVerifying()->get($tracks[0]['baseUrl']);
                     if ($cap->successful()) {
                         return $this->cleanTranscript($cap->body());
                     }

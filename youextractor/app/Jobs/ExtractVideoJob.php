@@ -154,6 +154,7 @@ class ExtractVideoJob implements ShouldQueue
     {
         try {
             $response = Http::timeout(15)
+                ->withoutVerifying()
                 ->withHeaders([
                     'User-Agent'      => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120',
                     'Accept-Language' => 'en-US,en;q=0.9',

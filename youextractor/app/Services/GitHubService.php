@@ -177,7 +177,7 @@ class GitHubService
     /** Pre-configured HTTP client for GitHub API calls. */
     private function github()
     {
-        return Http::withHeaders([
+        return Http::withoutVerifying()->withHeaders([
             'Authorization' => "Bearer {$this->token}",
             'Accept'        => 'application/vnd.github+json',
             'X-GitHub-Api-Version' => '2022-11-28',

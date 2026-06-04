@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 class GeminiDriver implements LLMService
 {
     /** Models tried in order of preference */
-    private array $models = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-1.5-pro', 'gemini-1.5-flash'];
+    private array $models = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash', 'gemini-pro-latest'];
 
     private string $apiKey;
 
@@ -50,6 +50,7 @@ class GeminiDriver implements LLMService
         while ($attempt < $maxAttempts) {
             try {
                 $response = Http::timeout(180)
+                    ->withoutVerifying()
                     ->retry(2, 2000, fn ($exception) => true, throw: false)
                     ->withHeaders(['Content-Type' => 'application/json'])
                     ->post(
