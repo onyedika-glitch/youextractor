@@ -281,7 +281,7 @@
     </div>
 
     <!-- Design System Scripts -->
-    <script src="/js/youextractor-design-system.js"></script>
+    <script src="/js/youextractor-design-system.js?v=3"></script>
     <script>
         // Form submission wiring
         document.querySelector('ds-button[type="submit"]').addEventListener('click', (e) => {

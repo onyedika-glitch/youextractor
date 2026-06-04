@@ -252,7 +252,6 @@ class DsInput extends HTMLElement {
     name: { type: 'string', default: '' },
   };
 
-  _skipRender = false;
   _rendered = false;
 
   connectedCallback() {
@@ -264,8 +263,6 @@ class DsInput extends HTMLElement {
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
-    if (this._skipRender) return;
-
     if (attrName === 'value' && this._rendered) {
       const input = this.querySelector('input');
       if (input && input.value !== newVal) {
@@ -373,17 +370,6 @@ class DsInput extends HTMLElement {
     const newInput = this.querySelector('input');
     if (newInput) {
       newInput.value = currentValue;
-
-      newInput.addEventListener('input', () => {
-        this._skipRender = true;
-        this.setAttribute('value', newInput.value);
-        this._skipRender = false;
-      });
-      newInput.addEventListener('change', () => {
-        this._skipRender = true;
-        this.setAttribute('value', newInput.value);
-        this._skipRender = false;
-      });
     }
 
     this._rendered = true;

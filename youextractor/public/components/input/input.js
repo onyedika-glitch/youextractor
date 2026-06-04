@@ -1,4 +1,5 @@
 /* components/input/input.js */
+// Input Custom Element
 class DsInput extends HTMLElement {
   static props = {
     label: { type: 'string', default: '' },
@@ -14,6 +15,8 @@ class DsInput extends HTMLElement {
     name: { type: 'string', default: '' },
   };
 
+  _rendered = false;
+
   connectedCallback() {
     this.render();
   }
@@ -22,8 +25,18 @@ class DsInput extends HTMLElement {
     return ['label', 'placeholder', 'value', 'type', 'size', 'icon', 'hint', 'error', 'disabled', 'required', 'name'];
   }
 
-  attributeChangedCallback() {
-    this.render();
+  attributeChangedCallback(attrName, oldVal, newVal) {
+    if (attrName === 'value' && this._rendered) {
+      const input = this.querySelector('input');
+      if (input && input.value !== newVal) {
+        input.value = newVal || '';
+      }
+      return;
+    }
+
+    if (this._rendered) {
+      this.render();
+    }
   }
 
   get value() {
@@ -120,13 +133,9 @@ class DsInput extends HTMLElement {
     const newInput = this.querySelector('input');
     if (newInput) {
       newInput.value = currentValue;
-      newInput.addEventListener('input', (e) => {
-        this.setAttribute('value', newInput.value);
-      });
-      newInput.addEventListener('change', (e) => {
-        this.setAttribute('value', newInput.value);
-      });
     }
+
+    this._rendered = true;
   }
 }
 

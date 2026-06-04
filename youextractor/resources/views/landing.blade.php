@@ -371,6 +371,6 @@
     </footer>
 
     <!-- Design System Scripts -->
-    <script src="/js/youextractor-design-system.js"></script>
+    <script src="/js/youextractor-design-system.js?v=3"></script>
 </body>
 </html>
