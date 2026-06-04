@@ -252,6 +252,9 @@ class DsInput extends HTMLElement {
     name: { type: 'string', default: '' },
   };
 
+  _skipRender = false;
+  _rendered = false;
+
   connectedCallback() {
     this.render();
   }
@@ -260,8 +263,20 @@ class DsInput extends HTMLElement {
     return ['label', 'placeholder', 'value', 'type', 'size', 'icon', 'hint', 'error', 'disabled', 'required', 'name'];
   }
 
-  attributeChangedCallback() {
-    this.render();
+  attributeChangedCallback(attrName, oldVal, newVal) {
+    if (this._skipRender) return;
+
+    if (attrName === 'value' && this._rendered) {
+      const input = this.querySelector('input');
+      if (input && input.value !== newVal) {
+        input.value = newVal || '';
+      }
+      return;
+    }
+
+    if (this._rendered) {
+      this.render();
+    }
   }
 
   get value() {
@@ -358,14 +373,20 @@ class DsInput extends HTMLElement {
     const newInput = this.querySelector('input');
     if (newInput) {
       newInput.value = currentValue;
-      // Propagate keyup, change, input events from nested input element to host element
-      newInput.addEventListener('input', (e) => {
+
+      newInput.addEventListener('input', () => {
+        this._skipRender = true;
         this.setAttribute('value', newInput.value);
+        this._skipRender = false;
       });
-      newInput.addEventListener('change', (e) => {
+      newInput.addEventListener('change', () => {
+        this._skipRender = true;
         this.setAttribute('value', newInput.value);
+        this._skipRender = false;
       });
     }
+
+    this._rendered = true;
   }
 }
 
