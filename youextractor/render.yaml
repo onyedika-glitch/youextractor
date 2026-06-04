@@ -14,7 +14,7 @@ services:
       - key: APP_KEY
         sync: false
       - key: APP_URL
-        value: https://youextractor.onrender.com
+        value: https://youextractor-1qxc.onrender.com
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
@@ -62,13 +62,13 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_REDIRECT_URI
-        value: https://youextractor.onrender.com/auth/google/callback
+        value: https://youextractor-1qxc.onrender.com/auth/google/callback
       - key: GITHUB_CLIENT_ID
         sync: false
       - key: GITHUB_CLIENT_SECRET
         sync: false
       - key: GITHUB_REDIRECT_URI
-        value: https://youextractor.onrender.com/auth/github/callback
+        value: https://youextractor-1qxc.onrender.com/auth/github/callback
 
 databases:
   - name: youextractor
