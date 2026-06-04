@@ -115,7 +115,7 @@ class CodeExtractorService
 
             // ---- Step 2: Code generation ---------------------------------
             $fileList  = array_slice($planData['files'] ?? [], 0, 15);
-            $codePrompt = $this->prompts->codePrompt($title, $fileList);
+            $codePrompt = $this->prompts->codePrompt($title, $fileList, $transcript, $planData['stack'] ?? null);
             $codeRaw    = $driver->generate($codePrompt);
 
             if ($codeRaw !== null) {
