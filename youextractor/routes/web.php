@@ -14,19 +14,6 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-Route::get('/run-migrations-v2', function () {
-    try {
-        $columns = \Illuminate\Support\Facades\Schema::getColumnListing('videos');
-        $output = "Columns in 'videos' table:\n" . implode("\n", $columns) . "\n\n";
-        
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        $output .= "Migrations run output:\n" . \Illuminate\Support\Facades\Artisan::output() . "\n";
-        return response($output, 200, ['Content-Type' => 'text/plain']);
-    } catch (\Exception $e) {
-        return response("Database check failed:\n" . $e->getMessage(), 500, ['Content-Type' => 'text/plain']);
-    }
-});
-
 /*
 |--------------------------------------------------------------------------
 | Guest Routes (only for non-authenticated users)
