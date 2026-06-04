@@ -675,7 +675,12 @@
                     throw new Error(data.error || 'Failed to extract video');
                 }
 
-                displayResults(data.data);
+                if (data.data && (data.data.extraction_status === 'pending' || data.data.extraction_status === 'processing')) {
+                    const completedVideo = await pollExtractionStatus(data.data.id);
+                    displayResults(completedVideo);
+                } else {
+                    displayResults(data.data);
+                }
                 youtubeUrl.value = '';
             } catch (error) {
                 showError(error.message);
@@ -687,6 +692,34 @@
                 youtubeUrl.disabled = false;
             }
         });
+
+        async function pollExtractionStatus(videoId) {
+            return new Promise((resolve, reject) => {
+                const pollInterval = setInterval(async () => {
+                    try {
+                        const response = await fetch(`/api/videos/${videoId}/status`);
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch extraction status');
+                        }
+                        const resData = await response.json();
+                        if (!resData.success) {
+                            throw new Error(resData.error || 'Status check failed');
+                        }
+                        
+                        if (resData.status === 'completed') {
+                            clearInterval(pollInterval);
+                            resolve(resData.data);
+                        } else if (resData.status === 'failed') {
+                            clearInterval(pollInterval);
+                            reject(new Error(resData.error || 'Extraction failed'));
+                        }
+                    } catch (error) {
+                        clearInterval(pollInterval);
+                        reject(error);
+                    }
+                }, 3000);
+            });
+        }
 
         function displayResults(video) {
             const hasCode = video.code_snippets && video.code_snippets.length > 0;

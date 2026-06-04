@@ -94,6 +94,9 @@ class VideoController extends Controller
         // -------- Dispatch background job --------------------------------
         ExtractVideoJob::dispatch($video);
 
+        // If the queue runs synchronously, reload the completed attributes from the DB
+        $video->refresh();
+
         return response()->json([
             'success'    => true,
             'queued'     => true,
