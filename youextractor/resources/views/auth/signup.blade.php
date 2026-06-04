@@ -70,54 +70,48 @@
             margin: 0;
         }
 
-        /* Google Sign-in button */
-        .google-btn {
+        /* Social login buttons */
+        .google-btn, .github-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: var(--theme-spacing-3);
             width: 100%;
-            padding: var(--theme-spacing-3.5) 0;
-            background: var(--theme-neutral-0);
-            color: var(--theme-neutral-1000);
+            height: 46px;
             border-radius: var(--theme-radius-xl);
             font-weight: var(--theme-font-weight-semibold);
             text-decoration: none;
-            border: 1px solid transparent;
             cursor: pointer;
             box-sizing: border-box;
             font-family: var(--theme-font-sans);
             font-size: var(--theme-font-size-sm);
-            transition: background var(--theme-motion-fast) var(--theme-ease-default);
-            margin-bottom: var(--theme-spacing-6);
+            transition: all var(--theme-motion-fast) var(--theme-ease-default);
+        }
+
+        .google-btn {
+            background: #ffffff;
+            color: #1a1f2c;
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .google-btn:hover {
-            background: var(--theme-neutral-100);
+            background: #f8fafc;
+            border-color: rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .github-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--theme-spacing-3);
-            width: 100%;
-            padding: var(--theme-spacing-3.5) 0;
             background: #24292e;
             color: #ffffff;
-            border-radius: var(--theme-radius-xl);
-            font-weight: var(--theme-font-weight-semibold);
-            text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            box-sizing: border-box;
-            font-family: var(--theme-font-sans);
-            font-size: var(--theme-font-size-sm);
-            transition: background var(--theme-motion-fast) var(--theme-ease-default);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .github-btn:hover {
             background: #1b1f23;
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
         }
 
         /* Divider */
