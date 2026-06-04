@@ -83,8 +83,11 @@ class VideoController extends Controller
             'title'              => $videoData['title'],
             'description'        => $videoData['description'],
             'transcript'         => $transcript,
+            'explanation'        => 'Extraction in progress...',
+            'summary'            => 'Pending extraction...',
             'duration'           => $videoData['duration'],
             'published_at'       => now(),
+            'extracted_at'       => now(),
             'extraction_status'  => 'pending',
         ]);
 

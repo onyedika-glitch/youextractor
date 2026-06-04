@@ -62,6 +62,58 @@ class ExtractVideoJob implements ShouldQueue
                 $this->video->youtube_id
             );
 
+            // Generate summary and explanation
+            $summary = $this->video->title;
+            $primaryStack = $codeData['stack']['primary'] ?? null;
+            if ($primaryStack) {
+                $summary .= " | " . ucfirst($primaryStack);
+            }
+            $fileCount = count($codeData['files'] ?? []);
+            if ($fileCount > 0) {
+                $summary .= " | {$fileCount} code files";
+            }
+            $summary = substr($summary, 0, 300);
+
+            $explanation = '';
+            if (!empty($codeData['tutorial_guide']['overview'])) {
+                $explanation .= "### Overview\n" . $codeData['tutorial_guide']['overview'] . "\n\n";
+            }
+
+            if (!empty($codeData['tutorial_guide']['key_concepts'])) {
+                $explanation .= "### Key Concepts\n";
+                foreach ($codeData['tutorial_guide']['key_concepts'] as $c) {
+                    $explanation .= "- **" . ($c['concept'] ?? '') . "**: " . ($c['explanation'] ?? '') . "\n";
+                }
+                $explanation .= "\n";
+            }
+
+            if (!empty($codeData['stack'])) {
+                $explanation .= "### Tech Stack\n";
+                $explanation .= "- **Primary Language**: " . ($codeData['stack']['primary'] ?? 'Unknown') . "\n";
+                if (!empty($codeData['stack']['languages'])) {
+                    $explanation .= "- **Languages**: " . implode(', ', $codeData['stack']['languages']) . "\n";
+                }
+                if (!empty($codeData['stack']['frameworks'])) {
+                    $explanation .= "- **Frameworks**: " . implode(', ', $codeData['stack']['frameworks']) . "\n";
+                }
+                if (!empty($codeData['stack']['description'])) {
+                    $explanation .= "- **Description**: " . $codeData['stack']['description'] . "\n";
+                }
+                $explanation .= "\n";
+            }
+
+            if (!empty($codeData['files'])) {
+                $explanation .= "### Extracted Files\n";
+                foreach ($codeData['files'] as $f) {
+                    $explanation .= "- **" . ($f['filename'] ?? '') . "** - " . ($f['description'] ?? '') . "\n";
+                }
+                $explanation .= "\n";
+            }
+
+            if (empty($explanation)) {
+                $explanation = "AI Code Extraction for " . $this->video->title;
+            }
+
             // Persist results
             $this->video->update([
                 'code_snippets'       => $codeData['files']               ?? [],
@@ -73,6 +125,8 @@ class ExtractVideoJob implements ShouldQueue
                 'prerequisites'       => $codeData['prerequisites']       ?? null,
                 'setup_guide'         => $codeData['setup_guide']         ?? null,
                 'run_guide'           => $codeData['run_guide']           ?? null,
+                'explanation'         => $explanation,
+                'summary'             => $summary,
                 'extraction_status'   => 'completed',
                 'extracted_at'        => now(),
             ]);
