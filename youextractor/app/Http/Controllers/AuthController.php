@@ -74,7 +74,11 @@ class AuthController extends Controller
      */
     public function redirectToGoogle()
     {
-        return Socialite::driver('google')->redirect();
+        $driver = Socialite::driver('google');
+        if (config('app.env') !== 'production') {
+            $driver->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
+        }
+        return $driver->redirect();
     }
 
     /**
@@ -83,7 +87,11 @@ class AuthController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $driver = Socialite::driver('google');
+            if (config('app.env') !== 'production') {
+                $driver->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
+            }
+            $googleUser = $driver->user();
 
             $user = User::where('google_id', $googleUser->id)
                         ->orWhere('email', $googleUser->email)
@@ -116,6 +124,64 @@ class AuthController extends Controller
                 'exception' => $e
             ]);
             return redirect()->route('signin')->withErrors(['error' => 'Google authentication failed. Please try again.']);
+        }
+    }
+
+    /**
+     * Redirect to GitHub for authentication.
+     */
+    public function redirectToGitHub()
+    {
+        $driver = Socialite::driver('github');
+        if (config('app.env') !== 'production') {
+            $driver->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
+        }
+        return $driver->redirect();
+    }
+
+    /**
+     * Handle GitHub callback.
+     */
+    public function handleGitHubCallback()
+    {
+        try {
+            $driver = Socialite::driver('github');
+            if (config('app.env') !== 'production') {
+                $driver->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
+            }
+            $githubUser = $driver->user();
+
+            $user = User::where('github_id', $githubUser->id)
+                        ->orWhere('email', $githubUser->email)
+                        ->first();
+
+            if ($user) {
+                // Update GitHub ID if user exists but signed up with email/Google
+                if (!$user->github_id) {
+                    $user->update([
+                        'github_id' => $githubUser->id,
+                        'avatar' => $githubUser->avatar ?? $user->avatar,
+                    ]);
+                }
+            } else {
+                // Create new user
+                $user = User::create([
+                    'name' => $githubUser->name ?? $githubUser->nickname ?? 'GitHub User',
+                    'email' => $githubUser->email,
+                    'github_id' => $githubUser->id,
+                    'avatar' => $githubUser->avatar,
+                ]);
+            }
+
+            Auth::login($user, true);
+
+            return redirect()->route('dashboard')->with('success', 'Welcome!');
+        } catch (\Exception $e) {
+            error_log('GitHub Auth Error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+            \Illuminate\Support\Facades\Log::error('GitHub Auth Error: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
+            return redirect()->route('signin')->withErrors(['error' => 'GitHub authentication failed. Please try again.']);
         }
     }
 

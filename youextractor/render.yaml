@@ -63,6 +63,12 @@ services:
         sync: false
       - key: GOOGLE_REDIRECT_URI
         value: https://youextractor.onrender.com/auth/google/callback
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false
+      - key: GITHUB_REDIRECT_URI
+        value: https://youextractor.onrender.com/auth/github/callback
 
 databases:
   - name: youextractor
