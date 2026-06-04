@@ -17,6 +17,8 @@ Route::get('/', function () {
 Route::get('/run-migrations', function () {
     try {
         $output = '';
+        \Illuminate\Support\Facades\Artisan::call('migrate:status');
+        $output .= "Migration Status:\n" . \Illuminate\Support\Facades\Artisan::output() . "\n";
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $output .= "Migrations run output:\n" . \Illuminate\Support\Facades\Artisan::output() . "\n";
         return response($output, 200, ['Content-Type' => 'text/plain']);
