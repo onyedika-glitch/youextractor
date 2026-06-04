@@ -14,6 +14,17 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
+Route::get('/run-migrations', function () {
+    try {
+        $output = '';
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        $output .= "Migrations run output:\n" . \Illuminate\Support\Facades\Artisan::output() . "\n";
+        return response($output, 200, ['Content-Type' => 'text/plain']);
+    } catch (\Exception $e) {
+        return response("Migration failed:\n" . $e->getMessage(), 500, ['Content-Type' => 'text/plain']);
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Routes (only for non-authenticated users)
