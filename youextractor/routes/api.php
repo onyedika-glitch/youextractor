@@ -19,18 +19,26 @@ Route::get('/health', function () {
     ]);
 });
 
-// Video extraction
-Route::post('/videos/extract',  [VideoController::class, 'extract']);
+Route::middleware([
+    \Illuminate\Cookie\Middleware\EncryptCookies::class,
+    \Illuminate\Session\Middleware\StartSession::class,
+    \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+    'auth'
+])->group(function () {
+    // Video extraction
+    Route::post('/videos/extract',  [VideoController::class, 'extract']);
 
-// List & search
-Route::get('/videos',           [VideoController::class, 'index']);
-Route::get('/videos/search',    [VideoController::class, 'search']);
+    // List & search
+    Route::get('/videos',           [VideoController::class, 'index']);
+    Route::get('/videos/search',    [VideoController::class, 'search']);
 
-// Single video + status polling
-Route::get('/videos/{video}',           [VideoController::class, 'show']);
-Route::get('/videos/{video}/status',    [VideoController::class, 'status']);
+    // Single video + status polling
+    Route::get('/videos/{video}',           [VideoController::class, 'show']);
+    Route::get('/videos/{video}/status',    [VideoController::class, 'status']);
 
-// Actions
-Route::get( '/videos/{video}/download',       [VideoController::class, 'downloadCode']);
-Route::post('/videos/{video}/re-extract',     [VideoController::class, 'reExtractCode']);
-Route::post('/videos/{video}/push-to-github', [VideoController::class, 'pushToGitHub']);
+    // Actions
+    Route::get( '/videos/{video}/download',       [VideoController::class, 'downloadCode']);
+    Route::post('/videos/{video}/re-extract',     [VideoController::class, 'reExtractCode']);
+    Route::post('/videos/{video}/push-to-github', [VideoController::class, 'pushToGitHub']);
+    Route::post('/videos/{video}/chat',           [VideoController::class, 'chat']);
+});

@@ -49,6 +49,7 @@ class GeminiDriver implements LLMService
         $attempt = 0;
         while ($attempt < $maxAttempts) {
             try {
+                Log::info("[Gemini:{$model}] Requesting attempt " . ($attempt + 1) . "...");
                 $response = Http::timeout(180)
                     ->withoutVerifying()
                     ->retry(2, 2000, fn ($exception) => true, throw: false)
@@ -57,17 +58,29 @@ class GeminiDriver implements LLMService
                         "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$this->apiKey}",
                         [
                             'contents'        => [['parts' => [['text' => $prompt]]]],
+                            'systemInstruction' => [
+                                'parts' => [['text' => 'You are an expert developer. Respond with VALID JSON ONLY. No markdown wrapping, no markdown fences, no conversational text.']]
+                            ],
                             'generationConfig' => [
                                 'temperature'     => 0.4,
                                 'maxOutputTokens' => 12000,
+                                'responseMimeType' => 'application/json',
                             ],
                         ]
                     );
 
+                Log::info("[Gemini:{$model}] Response status: " . $response->status());
+
                 if ($response->successful()) {
                     $data = $response->json();
-                    return $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                    $text = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                    if ($text === null) {
+                        Log::warning("[Gemini:{$model}] Successful response but text content is empty. Response JSON: " . json_encode($data));
+                    }
+                    return $text;
                 }
+
+                Log::warning("[Gemini:{$model}] Unsuccessful response: HTTP " . $response->status() . " Body: " . $response->body());
 
                 // 429 = quota exceeded – wait and retry
                 if ($response->status() === 429) {
@@ -77,10 +90,9 @@ class GeminiDriver implements LLMService
                     continue;
                 }
 
-                Log::warning("[Gemini:{$model}] HTTP {$response->status()}: {$response->body()}");
                 break; // non-retryable HTTP error, try next model
             } catch (\Exception $e) {
-                Log::error("[Gemini:{$model}] Exception: " . $e->getMessage());
+                Log::error("[Gemini:{$model}] Exception: " . $e->getMessage() . " File: " . $e->getFile() . " Line: " . $e->getLine());
                 $attempt++;
             }
         }

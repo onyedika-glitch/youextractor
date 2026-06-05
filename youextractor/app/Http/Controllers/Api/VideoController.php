@@ -50,6 +50,7 @@ class VideoController extends Controller
         // -------- Cache check (skip if force_refresh requested) ----------
         if (!($validated['force_refresh'] ?? false)) {
             $cached = Video::where('youtube_id', $videoId)
+                ->where('user_id', auth()->id())
                 ->where('extraction_status', 'completed')
                 ->first();
 
@@ -59,6 +60,25 @@ class VideoController extends Controller
                     'cached'  => true,
                     'message' => 'Retrieved from cache',
                     'data'    => $cached,
+                ]);
+            }
+
+            // Clone from another user if exists!
+            $otherCached = Video::where('youtube_id', $videoId)
+                ->whereNotNull('extracted_at')
+                ->where('extraction_status', 'completed')
+                ->first();
+
+            if ($otherCached) {
+                $video = $otherCached->replicate();
+                $video->user_id = auth()->id();
+                $video->save();
+
+                return response()->json([
+                    'success' => true,
+                    'cached'  => true,
+                    'message' => 'Retrieved from public cache',
+                    'data'    => $video,
                 ]);
             }
         }
@@ -74,11 +94,12 @@ class VideoController extends Controller
         }
 
         // -------- Delete any stale record and create a fresh stub --------
-        Video::where('youtube_id', $videoId)->delete();
+        Video::where('youtube_id', $videoId)->where('user_id', auth()->id())->delete();
 
         $transcript = $this->getTranscript($videoId);
 
         $video = Video::create([
+            'user_id'            => auth()->id(),
             'youtube_id'         => $videoId,
             'title'              => $videoData['title'],
             'description'        => $videoData['description'],
@@ -116,6 +137,10 @@ class VideoController extends Controller
      */
     public function status(Video $video): JsonResponse
     {
+        if ($video->user_id !== auth()->id()) {
+            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        }
+
         return response()->json([
             'success'    => true,
             'status'     => $video->extraction_status,
@@ -136,6 +161,10 @@ class VideoController extends Controller
      */
     public function pushToGitHub(Request $request, Video $video): JsonResponse
     {
+        if ($video->user_id !== auth()->id()) {
+            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        }
+
         $validated = $request->validate([
             'github_token' => 'required|string|min:10',
         ]);
@@ -176,6 +205,10 @@ class VideoController extends Controller
 
     public function downloadCode(Video $video): BinaryFileResponse|JsonResponse
     {
+        if ($video->user_id !== auth()->id()) {
+            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        }
+
         $zipPath = storage_path("app/downloads/{$video->youtube_id}.zip");
 
         if (!file_exists($zipPath)) {
@@ -209,6 +242,10 @@ class VideoController extends Controller
 
     public function reExtractCode(Video $video): JsonResponse
     {
+        if ($video->user_id !== auth()->id()) {
+            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        }
+
         $video->update(['extraction_status' => 'pending', 'extraction_error' => null]);
         ExtractVideoJob::dispatch($video);
 
@@ -220,18 +257,62 @@ class VideoController extends Controller
     }
 
     // ------------------------------------------------------------------
+    // Chat Copilot
+    // ------------------------------------------------------------------
+
+    /**
+     * POST /api/videos/{video}/chat
+     *
+     * Asks a question to the AI about the video code or overview.
+     */
+    public function chat(Request $request, Video $video): JsonResponse
+    {
+        if ($video->user_id !== auth()->id()) {
+            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        }
+
+        $validated = $request->validate([
+            'question' => 'required|string|max:1000',
+        ]);
+
+        $answer = $this->codeExtractor->chatAboutVideo($video, $validated['question']);
+
+        return response()->json([
+            'success' => true,
+            'answer'  => $answer,
+        ]);
+    }
+
+    // ------------------------------------------------------------------
     // CRUD
     // ------------------------------------------------------------------
 
     public function index(): JsonResponse
     {
-        return response()->json(
-            Video::latest('extracted_at')->paginate(15)
-        );
+        // Automatically run migrations if needed using the host's DB connection
+        try {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            if (\Illuminate\Support\Facades\Schema::hasColumn('videos', 'user_id')) {
+                Video::whereNull('user_id')->update(['user_id' => auth()->id()]);
+            }
+        } catch (\Exception $e) {
+            Log::error("Failed to run auto-migration or assign videos: " . $e->getMessage());
+        }
+
+        $videos = Video::where('user_id', auth()->id())->latest('extracted_at')->paginate(15);
+        foreach ($videos as $v) {
+            \Illuminate\Support\Facades\Log::info('Video index item: ' . $v->id . ' title: ' . $v->title . ' code_snippets type: ' . gettype($v->code_snippets) . ' count: ' . count($v->code_snippets ?? []) . ' content: ' . json_encode($v->code_snippets));
+        }
+        return response()->json($videos);
     }
 
     public function show(Video $video): JsonResponse
     {
+        if ($video->user_id !== auth()->id()) {
+            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        }
+
+        \Illuminate\Support\Facades\Log::info('Video show: ' . $video->id . ' code_snippets type: ' . gettype($video->code_snippets) . ' count: ' . count($video->code_snippets ?? []) . ' content: ' . json_encode($video->code_snippets));
         return response()->json(['success' => true, 'data' => $video]);
     }
 
@@ -239,12 +320,15 @@ class VideoController extends Controller
     {
         $q = $request->get('q', '');
 
-        return response()->json(
-            Video::where('title', 'like', "%{$q}%")
-                ->orWhere('description', 'like', "%{$q}%")
-                ->latest('extracted_at')
-                ->paginate(15)
-        );
+        $videos = Video::where('user_id', auth()->id())
+            ->where(function ($query) use ($q) {
+                $query->where('title', 'like', "%{$q}%")
+                      ->orWhere('description', 'like', "%{$q}%");
+            })
+            ->latest('extracted_at')
+            ->paginate(15);
+
+        return response()->json($videos);
     }
 
     // ------------------------------------------------------------------

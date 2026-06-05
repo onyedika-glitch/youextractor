@@ -191,13 +191,13 @@
     <!-- Header -->
     <header>
         <div class="container header-content">
-            <a href="{{ route('landing') }}" class="logo">
+            <a href="{{ Auth::check() ? route('dashboard') : route('landing') }}" class="logo">
                 <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
                 <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
             </a>
             <div class="header-actions">
-                <a href="/" style="text-decoration: none;">
-                    <ds-button label="Extract New" variant="primary" size="sm" icon="plus"></ds-button>
+                <a href="{{ route('dashboard') }}" style="text-decoration: none;">
+                    <ds-button label="Back to Dashboard" variant="primary" size="sm" icon="arrow-left"></ds-button>
                 </a>
                 <a href="/videos" style="text-decoration: none;">
                     <ds-button label="All Videos" variant="secondary" size="sm" icon="books"></ds-button>
@@ -300,6 +300,9 @@
 
             videoContent.innerHTML = `
                 <div class="space-y-8" style="animation: fadeIn 0.4s var(--theme-ease-out);">
+                    <a href="/videos" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; color: var(--ds-text-secondary); font-size: var(--theme-font-size-sm); margin-bottom: var(--theme-spacing-1); transition: color 0.2s;" onmouseover="this.style.color='var(--ds-text-brand)'" onmouseout="this.style.color='var(--ds-text-secondary)'">
+                        <i class="ph ph-arrow-left"></i> Back to Videos
+                    </a>
                     <!-- Video Info Card -->
                     <ds-card variant="glass-accent" padding="lg">
                         <div class="result-info-header">

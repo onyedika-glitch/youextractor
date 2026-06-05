@@ -6,6 +6,7 @@ use App\Services\AI\LLMService;
 use App\Services\AI\GeminiDriver;
 use App\Services\AI\OpenAIDriver;
 use App\Services\AI\ClaudeDriver;
+use App\Models\Video;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -62,15 +63,15 @@ class CodeExtractorService
 
             $result = $this->runChainedPipeline($driver, $title, $transcript, $videoId);
 
-            if ($result !== null) {
+            if ($result !== null && !empty($result['files'])) {
                 Log::info("Extraction succeeded with {$driver->name()} for [{$videoId}]");
                 return $result;
             }
 
-            Log::warning("{$driver->name()} failed. Trying next driver…");
+            Log::warning("{$driver->name()} failed or returned no files. Trying next driver…");
         }
 
-        Log::warning("All AI drivers failed for [{$videoId}]. Using fallback.");
+        Log::warning("All AI drivers failed or returned no files for [{$videoId}]. Using fallback.");
         return $this->generateFallbackProject($title);
     }
 
@@ -80,6 +81,50 @@ class CodeExtractorService
     public function generateZipFile(string $videoId, array $codeData): ?string
     {
         return $this->packager->generateZip($videoId, $codeData);
+    }
+
+    /**
+     * Ask questions to the AI about the video context, explanation, and code.
+     */
+    public function chatAboutVideo(Video $video, string $question): string
+    {
+        foreach ($this->drivers as $driver) {
+            /** @var LLMService $driver */
+            if (!$driver->isAvailable()) {
+                continue;
+            }
+
+            $contextSnippet = "";
+            if (!empty($video->code_snippets)) {
+                foreach ($video->code_snippets as $snip) {
+                    $contextSnippet .= "File: " . ($snip['path'] ?? $snip['filename'] ?? 'unknown') . "\n";
+                    $contextSnippet .= "Language: " . ($snip['language'] ?? 'text') . "\n";
+                    $contextSnippet .= "Code:\n" . ($snip['code'] ?? '') . "\n\n";
+                }
+            }
+
+            $prompt = "You are YouExtractor Copilot, an AI programming assistant.
+The user is studying a YouTube programming tutorial video.
+Video Title: \"{$video->title}\"
+Overview/Summary: {$video->summary}
+Detailed Tutorial Concepts: {$video->explanation}
+
+Here is the source code extracted from the video:
+{$contextSnippet}
+
+User is asking a question about this tutorial and code.
+User Question: \"{$question}\"
+
+Provide a professional, concise, and educational response. Use markdown formatting for code snippets if you need to provide code. Explain clearly how the concepts relate to the tutorial code.";
+
+            $response = $driver->generate($prompt);
+            if ($response !== null) {
+                return $response;
+            }
+        }
+
+        // Return a mock/fallback explanation if no driver is configured, using local rules or general knowledge.
+        return "AI chat is currently unavailable (no active API key was found in .env, or the AI service failed). Please verify your ANTHROPIC_API_KEY, GEMINI_API_KEY, or OPENAI_API_KEY.";
     }
 
     // ------------------------------------------------------------------
@@ -106,7 +151,9 @@ class CodeExtractorService
                 return null;
             }
 
-            $planData = $this->parseWithSelfCorrection($planRaw, $driver);
+            $planData = $this->parseWithSelfCorrection($planRaw, $driver, true);
+            Log::info("Step 1 planData keys: " . implode(', ', array_keys($planData)) . " files count: " . count($planData['files'] ?? []));
+            Log::debug("Step 1 planData raw files: " . json_encode($planData['files'] ?? []));
 
             if (empty($planData['tutorial_guide'])) {
                 Log::warning("[{$driver->name()}] Step 1 returned no tutorial_guide.");
@@ -119,7 +166,9 @@ class CodeExtractorService
             $codeRaw    = $driver->generate($codePrompt);
 
             if ($codeRaw !== null) {
-                $codeFiles = $this->parseWithSelfCorrection($codeRaw, $driver);
+                $codeFiles = $this->parseWithSelfCorrection($codeRaw, $driver, false);
+                Log::info("Step 2 codeFiles type: " . gettype($codeFiles) . " count: " . count($codeFiles));
+                Log::debug("Step 2 codeFiles content: " . json_encode($codeFiles));
 
                 // The code step may return a top-level array or {"files": [...]}
                 if (is_array($codeFiles)) {
@@ -127,6 +176,7 @@ class CodeExtractorService
                         ? $codeFiles['files']
                         : (array_is_list($codeFiles) ? $codeFiles : ($planData['files'] ?? []));
                 }
+                Log::info("After step 2, planData files count: " . count($planData['files'] ?? []));
             }
 
             return $planData;
@@ -144,15 +194,16 @@ class CodeExtractorService
      * Parse an AI response into a PHP array.
      * If JSON is malformed, attempt self-correction by sending it back to the model.
      */
-    private function parseWithSelfCorrection(string $raw, LLMService $driver): array
+    private function parseWithSelfCorrection(string $raw, LLMService $driver, bool $isPlanStep = false): array
     {
-        // Strip markdown fences if present
+        // Strip markdown fences and extract JSON substring
         $clean = $this->stripMarkdownFences($raw);
+        $clean = $this->extractJsonSubString($clean);
 
         $data = json_decode($clean, true);
 
         if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
-            return $this->normaliseKeys($data);
+            return $isPlanStep ? $this->normaliseKeys($data) : $data;
         }
 
         // Self-correction: ask the same driver to fix the JSON
@@ -162,16 +213,52 @@ class CodeExtractorService
 
         if ($fixed !== null) {
             $fixedClean = $this->stripMarkdownFences($fixed);
+            $fixedClean = $this->extractJsonSubString($fixedClean);
             $data       = json_decode($fixedClean, true);
 
             if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
                 Log::info("[{$driver->name()}] Self-correction succeeded.");
-                return $this->normaliseKeys($data);
+                return $isPlanStep ? $this->normaliseKeys($data) : $data;
             }
         }
 
         Log::error("[{$driver->name()}] Self-correction failed. Returning empty array.");
         return [];
+    }
+
+    /** Extract the substring between the first '[' or '{' and the last ']' or '}'. */
+    private function extractJsonSubString(string $content): string
+    {
+        $firstBracket = strpos($content, '[');
+        $firstBrace = strpos($content, '{');
+        
+        $startPos = false;
+        $endChar = '';
+        
+        if ($firstBracket !== false && $firstBrace !== false) {
+            if ($firstBracket < $firstBrace) {
+                $startPos = $firstBracket;
+                $endChar = ']';
+            } else {
+                $startPos = $firstBrace;
+                $endChar = '}';
+            }
+        } elseif ($firstBracket !== false) {
+            $startPos = $firstBracket;
+            $endChar = ']';
+        } elseif ($firstBrace !== false) {
+            $startPos = $firstBrace;
+            $endChar = '}';
+        }
+        
+        if ($startPos !== false) {
+            $endPos = strrpos($content, $endChar);
+            if ($endPos !== false && $endPos > $startPos) {
+                return substr($content, $startPos, $endPos - $startPos + 1);
+            }
+        }
+        
+        return $content;
     }
 
     /** Strip ```json … ``` or ``` … ``` fences. */

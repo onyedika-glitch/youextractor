@@ -89,6 +89,13 @@
             margin: 0;
         }
 
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--theme-spacing-4);
+            margin-bottom: var(--theme-spacing-4);
+        }
+
         /* Grid */
         .videos-grid {
             display: grid;
@@ -201,13 +208,13 @@
     <!-- Header -->
     <header>
         <div class="container header-content">
-            <a href="{{ route('landing') }}" class="logo">
+            <a href="{{ Auth::check() ? route('dashboard') : route('landing') }}" class="logo">
                 <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
                 <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
             </a>
             <div>
-                <a href="/" style="text-decoration: none;">
-                    <ds-button label="Extract New" variant="primary" size="sm" icon="plus"></ds-button>
+                <a href="{{ route('dashboard') }}" style="text-decoration: none;">
+                    <ds-button label="Back to Dashboard" variant="primary" size="sm" icon="arrow-left"></ds-button>
                 </a>
             </div>
         </div>
@@ -216,8 +223,64 @@
     <!-- Main Content -->
     <main class="container">
         <div class="page-header">
+            <a href="{{ route('dashboard') }}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; color: var(--ds-text-secondary); font-size: var(--theme-font-size-sm); margin-bottom: var(--theme-spacing-2); transition: color 0.2s;" onmouseover="this.style.color='var(--ds-text-brand)'" onmouseout="this.style.color='var(--ds-text-secondary)'">
+                <i class="ph ph-arrow-left"></i> Back to Dashboard
+            </a>
             <h1 class="ds-type-heading-lg page-title">📚 Extracted Videos</h1>
             <p class="ds-type-body-sm page-subtitle">All your extracted and explained video tutorials</p>
+        </div>
+
+        <!-- Library Stats Grid -->
+        <div class="stats-grid" id="statsGrid">
+            <ds-card variant="glass" padding="md">
+                <div style="display: flex; align-items: center; gap: var(--theme-spacing-4);">
+                    <div style="width: 48px; height: 48px; background: rgba(168, 85, 247, 0.1); border-radius: var(--theme-radius-xl); display: flex; align-items: center; justify-content: center; color: var(--ds-text-brand); font-size: 1.5rem;">
+                        <i class="ph ph-books"></i>
+                    </div>
+                    <div>
+                        <div class="ds-type-label-sm" style="color: var(--ds-text-muted);">Library Size</div>
+                        <div class="ds-type-heading-md" id="stat-total-videos" style="margin: 0; color: #fff;">0 Videos</div>
+                    </div>
+                </div>
+            </ds-card>
+
+            <ds-card variant="glass" padding="md">
+                <div style="display: flex; align-items: center; gap: var(--theme-spacing-4);">
+                    <div style="width: 48px; height: 48px; background: rgba(6, 182, 212, 0.1); border-radius: var(--theme-radius-xl); display: flex; align-items: center; justify-content: center; color: var(--ds-text-electric); font-size: 1.5rem;">
+                        <i class="ph ph-code"></i>
+                    </div>
+                    <div>
+                        <div class="ds-type-label-sm" style="color: var(--ds-text-muted);">Total Code Files</div>
+                        <div class="ds-type-heading-md" id="stat-total-files" style="margin: 0; color: #fff;">0 Files</div>
+                    </div>
+                </div>
+            </ds-card>
+
+            <ds-card variant="glass" padding="md">
+                <div style="display: flex; align-items: center; gap: var(--theme-spacing-4);">
+                    <div style="width: 48px; height: 48px; background: rgba(234, 179, 8, 0.1); border-radius: var(--theme-radius-xl); display: flex; align-items: center; justify-content: center; color: var(--theme-yellow-500); font-size: 1.5rem;">
+                        <i class="ph ph-cpu"></i>
+                    </div>
+                    <div>
+                        <div class="ds-type-label-sm" style="color: var(--ds-text-muted);">Primary Tech Stacks</div>
+                        <div id="stat-tech-stacks" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;">
+                            <span class="ds-badge-brand">None</span>
+                        </div>
+                    </div>
+                </div>
+            </ds-card>
+
+            <ds-card variant="glass" padding="md">
+                <div style="display: flex; align-items: center; gap: var(--theme-spacing-4);">
+                    <div style="width: 48px; height: 48px; background: rgba(34, 197, 94, 0.1); border-radius: var(--theme-radius-xl); display: flex; align-items: center; justify-content: center; color: #22c55e; font-size: 1.5rem;">
+                        <i class="ph ph-trend-up"></i>
+                    </div>
+                    <div>
+                        <div class="ds-type-label-sm" style="color: var(--ds-text-muted);">Roadmap Progress</div>
+                        <div class="ds-type-heading-md" id="stat-roadmap-progress" style="margin: 0; color: #fff;">0%</div>
+                    </div>
+                </div>
+            </ds-card>
         </div>
 
         <!-- Search Bar -->
@@ -285,6 +348,7 @@
                 // Handle paginated response
                 allVideos = data.data || data || [];
                 displayVideos(allVideos);
+                updateLibraryStats(allVideos);
             } catch (error) {
                 videosContainer.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; color: var(--ds-color-error); padding: var(--theme-spacing-12) 0;">
@@ -293,6 +357,62 @@
                     </div>
                 `;
             }
+        }
+
+        function updateLibraryStats(videos) {
+            // 1. Library Size
+            document.getElementById('stat-total-videos').textContent = `${videos.length} Video${videos.length === 1 ? '' : 's'}`;
+
+            // 2. Total Code Files & Stacks
+            let totalFiles = 0;
+            const stacks = new Set();
+            videos.forEach(v => {
+                const snippets = v.code_snippets || [];
+                totalFiles += snippets.length;
+                
+                // Extract possible tech stacks from tags or description or title
+                const titleLower = v.title.toLowerCase();
+                if (titleLower.includes('react')) stacks.add('React');
+                if (titleLower.includes('vue')) stacks.add('Vue');
+                if (titleLower.includes('node')) stacks.add('Node.js');
+                if (titleLower.includes('laravel')) stacks.add('Laravel');
+                if (titleLower.includes('python')) stacks.add('Python');
+                if (titleLower.includes('javascript') || titleLower.includes('js ')) stacks.add('JavaScript');
+                if (titleLower.includes('typescript') || titleLower.includes('ts ')) stacks.add('TypeScript');
+                if (titleLower.includes('css')) stacks.add('CSS');
+                if (titleLower.includes('html')) stacks.add('HTML');
+            });
+            document.getElementById('stat-total-files').textContent = `${totalFiles} File${totalFiles === 1 ? '' : 's'}`;
+
+            // 3. Render Tech Stack Badges
+            const techStacksContainer = document.getElementById('stat-tech-stacks');
+            if (stacks.size > 0) {
+                techStacksContainer.innerHTML = Array.from(stacks).slice(0, 3).map(stack => `
+                    <span class="ds-badge-electric">${escapeHtml(stack)}</span>
+                `).join('');
+            } else {
+                techStacksContainer.innerHTML = `<span class="ds-badge-brand">General</span>`;
+            }
+
+            // 4. Roadmap Progress
+            let completedItems = 0;
+            let totalChecked = 0;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('roadmap-')) {
+                    try {
+                        const val = JSON.parse(localStorage.getItem(key));
+                        if (typeof val === 'object' && val !== null) {
+                            Object.values(val).forEach(isComp => {
+                                totalChecked++;
+                                if (isComp) completedItems++;
+                            });
+                        }
+                    } catch (e) {}
+                }
+            }
+            const percent = totalChecked > 0 ? Math.round((completedItems / totalChecked) * 100) : 0;
+            document.getElementById('stat-roadmap-progress').textContent = `${percent}%`;
         }
 
         function displayVideos(videos) {
