@@ -6,6 +6,9 @@ services:
     dockerfilePath: ./youextractor/Dockerfile
     dockerContext: ./youextractor
     healthCheckPath: /api/health
+    domains:
+      - youextractor.me
+      - www.youextractor.me
     envVars:
       - key: APP_ENV
         value: production
@@ -14,29 +17,19 @@ services:
       - key: APP_KEY
         sync: false
       - key: APP_URL
-        value: https://youextractor-1qxc.onrender.com
+        value: https://youextractor.me
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        fromDatabase:
-          name: youextractor
-          property: host
+        sync: false
       - key: DB_PORT
-        fromDatabase:
-          name: youextractor
-          property: port
+        value: "6543"
       - key: DB_DATABASE
-        fromDatabase:
-          name: youextractor
-          property: database
+        sync: false
       - key: DB_USERNAME
-        fromDatabase:
-          name: youextractor
-          property: user
+        sync: false
       - key: DB_PASSWORD
-        fromDatabase:
-          name: youextractor
-          property: password
+        sync: false
       - key: DB_SSLMODE
         value: require
       - key: CACHE_DRIVER
@@ -62,15 +55,10 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_REDIRECT_URI
-        value: https://youextractor-1qxc.onrender.com/auth/google/callback
+        value: https://youextractor.me/auth/google/callback
       - key: GITHUB_CLIENT_ID
         sync: false
       - key: GITHUB_CLIENT_SECRET
         sync: false
       - key: GITHUB_REDIRECT_URI
-        value: https://youextractor-1qxc.onrender.com/auth/github/callback
-
-databases:
-  - name: youextractor
-    plan: free
-    ipAllowList: []
+        value: https://youextractor.me/auth/github/callback
