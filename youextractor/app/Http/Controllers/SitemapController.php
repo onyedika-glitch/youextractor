@@ -42,24 +42,7 @@ class SitemapController extends Controller
             'priority' => '0.7',
         ];
 
-        // Dynamic videos (showcase / recent completed extractions)
-        $videos = Video::where('extraction_status', 'completed')
-            ->orderByDesc('extracted_at')
-            ->limit(100)
-            ->get(['id', 'extracted_at', 'updated_at']);
-
-        foreach ($videos as $video) {
-            $lastmod = $video->extracted_at?->toAtomString() ?? $video->updated_at->toAtomString();
-
-            $urls[] = [
-                'loc' => $baseUrl . '/videos/' . $video->id,
-                'lastmod' => $lastmod,
-                'changefreq' => 'monthly',
-                'priority' => '0.6',
-            ];
-        }
-
-        // Dynamic blog posts from Markdown files
+        // Blog posts (dynamically discovered from Markdown files)
         $blogPostsPath = base_path('resources/content/blog');
         if (is_dir($blogPostsPath)) {
             foreach (glob($blogPostsPath . '/*.md') as $mdFile) {
