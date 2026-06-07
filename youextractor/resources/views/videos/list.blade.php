@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
     <title>All Videos - YouTube Extractor</title>
     
@@ -210,7 +211,7 @@
     <header>
         <div class="container header-content">
             <a href="{{ Auth::check() ? route('dashboard') : route('landing') }}" class="logo">
-                <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
                 <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
             </a>
             <div>

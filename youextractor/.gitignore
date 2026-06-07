@@ -28,3 +28,4 @@ storage/framework/views/*
 !storage/framework/views/.gitkeep
 bootstrap/cache/*
 !bootstrap/cache/.gitkeep
+scratch-count.php

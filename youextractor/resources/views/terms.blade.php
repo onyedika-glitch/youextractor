@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
-    <title>Terms of Service - YouTube Code Extractor</title>
+    <title>Terms of Service • YouExtractor - AI YouTube Code Extractor</title>
+    <meta name="description" content="Terms of Service for YouExtractor. Rules for using our AI tool that converts YouTube coding tutorials into complete projects and guides.">
     
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css">

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
     <title>Sign In - YouTube Code Extractor</title>
     
@@ -228,13 +229,20 @@
         <!-- Logo -->
         <div class="logo-section">
             <a href="{{ route('landing') }}" class="logo">
-                <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 2.25rem;"></i>
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:32px;height:32px;border-radius:6px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
                 <span class="ds-type-heading-md" style="margin: 0; font-size: 1.5rem;">YouExtractor</span>
             </a>
         </div>
 
         <!-- Sign In Card -->
         <ds-card variant="glass-accent" padding="lg">
+            @if(!empty($prefillUrl))
+                <div class="ds-badge-brand" style="margin-bottom: var(--theme-spacing-4); justify-content:center; font-size:11px; padding:4px 10px;">
+                    <i class="ph ph-link" style="margin-right:6px;"></i> Continuing demo extraction
+                    <span style="opacity:.7; margin-left:6px; font-family:monospace; font-size:10px;">{{ Str::limit($prefillUrl, 42) }}</span>
+                </div>
+            @endif
+
             <div class="auth-header">
                 <h1 class="ds-type-heading-md auth-title">Welcome back</h1>
                 <p class="ds-type-body-sm auth-subtitle">Sign in to your account to continue</p>
@@ -284,6 +292,9 @@
             <!-- Sign In Form -->
             <form method="POST" action="{{ route('signin.submit') }}" id="signinForm">
                 @csrf
+                @if(!empty($prefillUrl))
+                    <input type="hidden" name="youtube_url" value="{{ $prefillUrl }}">
+                @endif
 
                 <!-- Email -->
                 <div>

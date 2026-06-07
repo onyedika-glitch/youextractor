@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Block private/authenticated areas
+Disallow: /dashboard
+Disallow: /videos
+Disallow: /signin
+Disallow: /signup
+Disallow: /auth/
+
+Sitemap: https://youextractor.me/sitemap.xml

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
     <title>YouTube Code Extractor - Learn Programming Faster</title>
     
@@ -319,6 +320,41 @@
             gap: var(--theme-spacing-4);
         }
 
+        /* Library polish + micro animations */
+        .grid-half ds-card[interactive] {
+            transition: transform var(--theme-motion-fast), box-shadow var(--theme-motion-fast), border-color var(--theme-motion-fast);
+            cursor: pointer;
+        }
+        .grid-half ds-card[interactive]:hover {
+            transform: translateY(-3px);
+            border-color: rgba(168, 85, 247, 0.25);
+            box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.35);
+        }
+        .grid-half ds-card[interactive] .ds-type-heading-sm {
+            transition: color var(--theme-motion-fast);
+        }
+        .grid-half ds-card[interactive]:hover .ds-type-heading-sm {
+            color: var(--ds-text-brand);
+        }
+
+        .library-card-enter {
+            opacity: 0;
+            transform: translateY(8px);
+            animation: libraryCardIn 280ms var(--theme-ease-out) forwards;
+        }
+
+        @keyframes libraryCardIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card {
+            transition: transform var(--theme-motion-fast), border-color var(--theme-motion-fast);
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(168, 85, 247, 0.18);
+        }
+
         /* Workspace Layout - split view */
         .workspace-layout {
             display: grid;
@@ -536,15 +572,52 @@
             border-radius: var(--theme-radius-xl);
             padding: var(--theme-spacing-4);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            max-height: 480px;
+            max-height: 520px;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .explorer-sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--theme-spacing-2);
+        }
+
+        .explorer-file-count {
+            font-size: 10px;
+            padding: 1px 7px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 999px;
+            color: var(--ds-text-muted);
+        }
+
+        .explorer-search {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--ds-text-primary);
+            font-size: 11px;
+            padding: 5px 8px;
+            border-radius: var(--theme-radius-md);
+            margin-bottom: var(--theme-spacing-2);
+            font-family: var(--theme-font-sans);
+        }
+
+        .explorer-search:focus {
+            outline: none;
+            border-color: var(--ds-border-accent);
+            background: rgba(0,0,0,0.4);
         }
 
         .explorer-file-list {
             display: flex;
             flex-direction: column;
-            gap: var(--theme-spacing-1);
-            margin-top: var(--theme-spacing-2);
+            gap: 2px;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 2px;
         }
 
         .explorer-file-btn {
@@ -552,8 +625,8 @@
             border: none;
             color: var(--ds-text-secondary);
             font-family: var(--theme-font-mono);
-            font-size: var(--theme-font-size-xs);
-            padding: var(--theme-spacing-2) var(--theme-spacing-3);
+            font-size: 11.5px;
+            padding: 5px 8px;
             cursor: pointer;
             border-radius: var(--theme-radius-md);
             text-align: left;
@@ -562,19 +635,69 @@
             text-overflow: ellipsis;
             display: flex;
             align-items: center;
-            gap: var(--theme-spacing-2);
+            gap: 7px;
             transition: all var(--theme-motion-fast);
             width: 100%;
+            position: relative;
+        }
+
+        .explorer-file-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 4px;
+            bottom: 4px;
+            width: 0;
+            background: var(--ds-color-brand);
+            border-radius: 2px;
+            transition: width var(--theme-motion-fast);
         }
 
         .explorer-file-btn:hover {
             color: var(--ds-text-primary);
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.035);
+        }
+
+        .explorer-file-btn:hover::before {
+            width: 2.5px;
         }
 
         .explorer-file-btn.file-active {
-            background: rgba(6, 182, 212, 0.15);
-            color: var(--ds-text-electric);
+            background: rgba(168, 85, 247, 0.12);
+            color: var(--ds-text-brand);
+            font-weight: 500;
+        }
+
+        .explorer-file-btn.file-active::before {
+            width: 3px;
+            background: var(--ds-color-brand);
+        }
+
+        .explorer-file-btn .file-icon {
+            opacity: 0.75;
+            flex-shrink: 0;
+            font-size: 13px;
+        }
+
+        .explorer-file-btn.file-active .file-icon {
+            opacity: 1;
+        }
+
+        .explorer-file-btn .file-name {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .explorer-file-btn .file-ext {
+            font-size: 9px;
+            opacity: 0.5;
+            font-family: var(--theme-font-sans);
+            background: rgba(255,255,255,0.06);
+            padding: 0 4px;
+            border-radius: 3px;
+            flex-shrink: 0;
         }
 
         .explorer-viewer {
@@ -725,6 +848,11 @@
             40% { transform: scale(1.0); }
         }
 
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Result details card */
         .result-info-header {
             display: flex;
@@ -837,7 +965,8 @@
         <!-- Main Content -->
         <main class="container">
             <!-- Hero Title -->
-            <div id="hero-title-section" class="hero-title-section">
+            <div id="hero-title-section" class="hero-title-section" style="animation: fadeSlideUp 420ms var(--theme-ease-out);">
+                <div class="ds-badge-brand" style="margin-bottom:10px; display:inline-flex;">🚀 AI that turns videos into projects</div>
                 <h1 class="ds-type-display-sm hero-title">Learn Faster, Code Smarter</h1>
                 <p class="ds-type-body-lg hero-desc">
                     Paste any programming tutorial URL and get all the code snippets, 
@@ -845,6 +974,7 @@
                     <span style="color: var(--ds-text-accent)">IDE recommendations</span>, and 
                     <span style="color: var(--ds-text-electric)">step-by-step instructions</span>.
                 </p>
+                <p style="margin-top:4px; font-size:var(--theme-font-size-xs); color:var(--ds-text-muted);">New: AI tutor chat, GitHub one-click export, and interactive roadmaps in every workspace.</p>
             </div>
 
             <!-- Input Section -->
@@ -1041,6 +1171,37 @@
         const loadingText = document.getElementById('loadingText');
         const submitBtn = document.getElementById('submitBtn');
 
+        // Support prefill from demo CTA / Chrome extension / auth redirect
+        (function handlePrefillFromDemo() {
+            const params = new URLSearchParams(window.location.search);
+            const prefill = params.get('youtube_url') || params.get('url');
+            if (prefill && youtubeUrl) {
+                youtubeUrl.value = prefill;
+                
+                // Show a friendly banner above the form
+                const banner = document.createElement('div');
+                banner.className = 'ds-badge-brand';
+                banner.style.cssText = 'margin-bottom:12px; width:100%; justify-content:center; font-size:12px;';
+                banner.innerHTML = `<i class="ph ph-magic-wand" style="margin-right:6px;"></i> Demo extraction ready — hit Extract to continue`;
+                
+                const formWrapper = document.querySelector('#videoForm')?.parentElement || document.querySelector('.extraction-form-wrapper')?.parentElement;
+                if (formWrapper && formWrapper.parentElement) {
+                    formWrapper.parentElement.insertBefore(banner, formWrapper);
+                }
+                
+                // Focus the button for one-click action
+                setTimeout(() => {
+                    if (submitBtn) submitBtn.focus();
+                }, 650);
+                
+                // Clean the URL (optional, keep history clean)
+                if (window.history && window.history.replaceState) {
+                    const cleanUrl = window.location.pathname;
+                    window.history.replaceState({}, document.title, cleanUrl);
+                }
+            }
+        })();
+
         const libraryContainer = document.getElementById('libraryContainer');
         const librarySearchInput = document.getElementById('librarySearchInput');
 
@@ -1135,12 +1296,16 @@
                         <i class="ph ph-books" style="font-size: 2.5rem; opacity: 0.3;"></i>
                         <p style="margin-top: 12px; font-weight: 500;">No extractions yet</p>
                         <p style="margin-top: 4px; font-size: var(--theme-font-size-sm); color: var(--ds-text-muted);">Paste a YouTube tutorial link above to extract your first project!</p>
+                        <button onclick="document.getElementById('youtubeUrl')?.focus(); document.getElementById('youtubeUrl')?.scrollIntoView({behavior:'smooth', block:'center'});" 
+                                style="margin-top:10px; background:transparent; border:1px solid var(--ds-border-subtle); color:var(--ds-text-secondary); font-size:11px; padding:4px 10px; border-radius:6px; cursor:pointer;">
+                            Go to input →
+                        </button>
                     </div>
                 `;
                 return;
             }
 
-            libraryContainer.innerHTML = videos.map(video => {
+            libraryContainer.innerHTML = videos.map((video, idx) => {
                 const stack = video.tech_stack;
                 let stackBadge = '';
                 if (stack && stack.primary) {
@@ -1150,7 +1315,7 @@
                 const date = new Date(video.extracted_at || video.created_at).toLocaleDateString();
 
                 return `
-                    <ds-card variant="glass" interactive padding="md" onclick="openWorkspace(${video.id})">
+                    <ds-card variant="glass" interactive padding="md" onclick="openWorkspace(${video.id})" class="library-card-enter" style="animation-delay: ${Math.min(idx * 35, 220)}ms">
                         <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; gap: var(--theme-spacing-4);">
                             <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-2);">
                                 <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: var(--theme-spacing-2);">
@@ -1477,17 +1642,42 @@
                                 <div class="explorer-layout">
                                     <!-- Sidebar listing files -->
                                     <div class="explorer-sidebar">
-                                        <div class="ds-type-label-md" style="margin-bottom: var(--theme-spacing-2); color: var(--ds-text-brand); display: flex; align-items: center; gap: 4px;">
-                                            <i class="ph ph-folder"></i> workspace
+                                        <div class="explorer-sidebar-header">
+                                            <div style="display:flex; align-items:center; gap:6px; color: var(--ds-text-brand); font-weight:600; font-size:12px;">
+                                                <i class="ph ph-folder-open"></i> 
+                                                <span>Workspace</span>
+                                                <span class="explorer-file-count">${video.code_snippets.length}</span>
+                                            </div>
                                         </div>
-                                        <div class="explorer-file-list">
-                                            ${video.code_snippets.map((file, idx) => `
-                                                <button onclick="selectExplorerFile(${idx})" id="exp-file-btn-${idx}" class="explorer-file-btn ${idx === 0 ? 'file-active' : ''}">
-                                                    <i class="ph ph-file-code"></i> ${escapeHtml(file.path || file.filename)}
-                                                </button>
-                                            `).join('')}
+
+                                        <input 
+                                            type="text" 
+                                            class="explorer-search" 
+                                            placeholder="Filter files..." 
+                                            oninput="filterExplorerFiles(this.value)"
+                                            id="explorer-search-input"
+                                        >
+
+                                        <div class="explorer-file-list" id="explorer-file-list">
+                                            ${video.code_snippets.map((file, idx) => {
+                                                const fname = file.path || file.filename;
+                                                const icon = getFileIcon(fname);
+                                                const ext = getFileExt(fname);
+                                                return `
+                                                <button 
+                                                    onclick="selectExplorerFile(${idx})" 
+                                                    id="exp-file-btn-${idx}" 
+                                                    class="explorer-file-btn ${idx === 0 ? 'file-active' : ''}"
+                                                    data-filename="${escapeHtml(fname.toLowerCase())}"
+                                                >
+                                                    <i class="ph ${icon} file-icon"></i>
+                                                    <span class="file-name">${escapeHtml(fname)}</span>
+                                                    ${ext ? `<span class="file-ext">${ext}</span>` : ''}
+                                                </button>`;
+                                            }).join('')}
                                         </div>
                                     </div>
+
                                     <!-- Code Viewer -->
                                     <div class="explorer-viewer">
                                         <div class="viewer-header">
@@ -1497,7 +1687,7 @@
                                             </div>
                                             <ds-button id="copy-active-file-btn" label="Copy Code" variant="ghost" size="sm" icon="copy"></ds-button>
                                         </div>
-                                        <pre class="code-pre"><code id="active-file-code"></code></pre>
+                                        <pre class="code-pre" style="line-height: 1.45;"><code id="active-file-code"></code></pre>
                                         <div id="active-file-desc" class="code-description-footer"></div>
                                     </div>
                                 </div>
@@ -1620,11 +1810,21 @@
             document.getElementById(`ws-tab-${tabName}`).classList.add('ws-nav-active');
 
             if (tabName === 'explorer') {
+                // Reset filter and show all files
                 setTimeout(() => {
+                    const search = document.getElementById('explorer-search-input');
+                    if (search) search.value = '';
+
+                    const list = document.getElementById('explorer-file-list');
+                    if (list) {
+                        list.querySelectorAll('.explorer-file-btn').forEach(b => b.style.display = '');
+                    }
+
+                    // Re-highlight code
                     document.querySelectorAll('pre code').forEach((block) => {
-                        hljs.highlightElement(block);
+                        try { hljs.highlightElement(block); } catch(e){}
                     });
-                }, 100);
+                }, 80);
             }
         }
 
@@ -1718,8 +1918,25 @@
         // File Explorer Selection handlers
         function selectExplorerFile(idx) {
             document.querySelectorAll('.explorer-file-btn').forEach(btn => btn.classList.remove('file-active'));
-            document.getElementById(`exp-file-btn-${idx}`).classList.add('file-active');
+            const btn = document.getElementById(`exp-file-btn-${idx}`);
+            if (btn) btn.classList.add('file-active');
             updateExplorerFile(idx);
+        }
+
+        function filterExplorerFiles(query) {
+            const q = (query || '').toLowerCase().trim();
+            const list = document.getElementById('explorer-file-list');
+            if (!list) return;
+
+            const buttons = list.querySelectorAll('.explorer-file-btn');
+            let visibleCount = 0;
+
+            buttons.forEach(btn => {
+                const name = btn.getAttribute('data-filename') || '';
+                const match = !q || name.includes(q);
+                btn.style.display = match ? '' : 'none';
+                if (match) visibleCount++;
+            });
         }
 
         function updateExplorerFile(idx) {
@@ -1727,29 +1944,52 @@
             selectedExplorerFileIndex = idx;
             const file = activeVideo.code_snippets[idx];
 
-            document.getElementById('active-file-path').textContent = file.path || file.filename;
-            document.getElementById('active-file-lang').textContent = file.language;
+            const pathEl = document.getElementById('active-file-path');
+            if (pathEl) pathEl.textContent = file.path || file.filename;
+
+            const langEl = document.getElementById('active-file-lang');
+            if (langEl) langEl.textContent = file.language || '';
             
             const codeEl = document.getElementById('active-file-code');
-            codeEl.className = `language-${file.language}`;
-            codeEl.textContent = file.code;
+            if (codeEl) {
+                codeEl.className = `language-${file.language || 'plaintext'}`;
+                codeEl.textContent = file.code || '';
+            }
 
             const descEl = document.getElementById('active-file-desc');
-            if (file.description) {
-                descEl.innerHTML = `<i class="ph ph-info" style="margin-right: 4px;"></i> ${escapeHtml(file.description)}`;
-                descEl.classList.remove('hidden');
-            } else {
-                descEl.classList.add('hidden');
+            if (descEl) {
+                if (file.description) {
+                    descEl.innerHTML = `<i class="ph ph-info" style="margin-right: 4px;"></i> ${escapeHtml(file.description)}`;
+                    descEl.classList.remove('hidden');
+                } else {
+                    descEl.classList.add('hidden');
+                }
             }
 
             // Apply syntax highlight
-            hljs.highlightElement(codeEl);
+            if (codeEl && window.hljs) {
+                try { hljs.highlightElement(codeEl); } catch(e){}
+            }
 
-            // Re-bind copy button
+            // Re-bind copy button with nice feedback
             const copyBtn = document.getElementById('copy-active-file-btn');
-            copyBtn.onclick = () => {
-                copyToClipboard(file.code);
-            };
+            if (copyBtn) {
+                const originalLabel = copyBtn.getAttribute('label') || 'Copy Code';
+                copyBtn.onclick = () => {
+                    navigator.clipboard.writeText(file.code || '').then(() => {
+                        const origText = copyBtn.textContent;
+                        copyBtn.innerHTML = `<i class="ph ph-check"></i> Copied!`;
+                        setTimeout(() => {
+                            if (copyBtn) {
+                                copyBtn.innerHTML = origText || originalLabel;
+                            }
+                        }, 1600);
+                    }).catch(() => {
+                        // fallback
+                        copyToClipboard(file.code || '');
+                    });
+                };
+            }
         }
 
         // Render IDE recommendation block
@@ -2219,6 +2459,29 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        function getFileIcon(filename) {
+            const ext = (filename.split('.').pop() || '').toLowerCase();
+            const name = filename.toLowerCase();
+
+            if (['js', 'jsx', 'ts', 'tsx'].includes(ext)) return 'ph-file-js';
+            if (['json'].includes(ext)) return 'ph-file-json';
+            if (['css', 'scss', 'less', 'sass'].includes(ext)) return 'ph-file-css';
+            if (['html', 'htm'].includes(ext)) return 'ph-file-html';
+            if (['md', 'markdown'].includes(ext)) return 'ph-file-text';
+            if (['py'].includes(ext)) return 'ph-file-py';
+            if (['yml', 'yaml'].includes(ext)) return 'ph-gear';
+            if (['sh', 'bash', 'zsh'].includes(ext)) return 'ph-terminal';
+            if (['sql'].includes(ext)) return 'ph-database';
+            if (['env', 'gitignore', 'dockerfile', 'lock'].some(s => name.includes(s))) return 'ph-file-code';
+            if (['png','jpg','jpeg','svg','gif','webp'].includes(ext)) return 'ph-image';
+            return 'ph-file-code';
+        }
+
+        function getFileExt(filename) {
+            const parts = filename.split('.');
+            return parts.length > 1 ? parts.pop().toLowerCase() : '';
         }
     </script>
 </body>

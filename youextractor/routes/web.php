@@ -24,6 +24,17 @@ Route::get('/terms', function () {
     return view('terms');
 })->name('terms');
 
+// Blog (Markdown-powered)
+Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
+
+// SEO: robots.txt and dynamic sitemap
+Route::get('/robots.txt', function () {
+    return response(file_get_contents(public_path('robots.txt')), 200, ['Content-Type' => 'text/plain']);
+});
+
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index']);
+
 /*
 |--------------------------------------------------------------------------
 | Guest Routes (only for non-authenticated users)

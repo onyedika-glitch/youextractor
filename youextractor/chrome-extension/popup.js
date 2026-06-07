@@ -4,27 +4,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     const videoInfo = document.getElementById('video-info');
     const videoTitle = document.getElementById('video-title');
 
-    // Helper to get active tab
     async function getActiveTab() {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
         return tab;
     }
 
     const tab = await getActiveTab();
+    const APP_BASE = 'https://youextractor.me'; // Update if self-hosted
 
     if (tab.url && (tab.url.includes('youtube.com/watch') || tab.url.includes('youtu.be/'))) {
-        extractBtn.textContent = '🚀 Extract Code';
+        extractBtn.innerHTML = `<span>🚀 Extract Code &amp; Guide</span>`;
         videoInfo.style.display = 'block';
         videoTitle.textContent = tab.title.replace(' - YouTube', '');
 
+        // Subtle pulse animation on the button
+        extractBtn.style.transition = 'transform 180ms ease, box-shadow 180ms ease';
+        setTimeout(() => {
+            if (extractBtn) extractBtn.style.boxShadow = '0 0 0 3px rgba(168,85,247,0.25)';
+        }, 420);
+
         extractBtn.onclick = () => {
-            const appUrl = 'https://youextractor.onrender.com';
-            const targetUrl = `${appUrl}/?url=${encodeURIComponent(tab.url)}`;
+            extractBtn.disabled = true;
+            extractBtn.style.opacity = '0.85';
+            statusEl.textContent = 'Opening YouExtractor...';
+            
+            const targetUrl = `${APP_BASE}/?url=${encodeURIComponent(tab.url)}`;
             chrome.tabs.create({ url: targetUrl });
+            
+            // Close popup shortly after
+            setTimeout(() => window.close(), 650);
         };
+
+        statusEl.textContent = 'One click → full project + AI guide';
     } else {
-        extractBtn.textContent = 'Not a YouTube Video';
+        extractBtn.textContent = 'Go to a YouTube video';
         extractBtn.disabled = true;
-        statusEl.textContent = 'Please open a YouTube video to extract code.';
+        statusEl.innerHTML = 'Open any coding tutorial on YouTube<br>to extract code instantly.';
     }
 });

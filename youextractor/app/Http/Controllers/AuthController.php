@@ -13,10 +13,12 @@ class AuthController extends Controller
 {
     /**
      * Show the signup form.
+     * Supports prefill youtube_url from demo / Chrome extension.
      */
-    public function showSignup()
+    public function showSignup(Request $request)
     {
-        return view('auth.signup');
+        $prefillUrl = $request->query('youtube_url') ?: $request->query('url');
+        return view('auth.signup', ['prefillUrl' => $prefillUrl]);
     }
 
     /**
@@ -38,15 +40,22 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard')->with('success', 'Welcome to YouTube Code Extractor!');
+        $redirect = redirect()->route('dashboard');
+        $prefill = $request->input('youtube_url') ?: $request->input('url') ?: $request->session()->get('prefill_youtube_url');
+        if ($prefill) {
+            $redirect = redirect()->route('dashboard', ['youtube_url' => $prefill]);
+        }
+        return $redirect->with('success', 'Welcome to YouTube Code Extractor!');
     }
 
     /**
      * Show the signin form.
+     * Supports prefill youtube_url from demo / Chrome extension.
      */
-    public function showSignin()
+    public function showSignin(Request $request)
     {
-        return view('auth.signin');
+        $prefillUrl = $request->query('youtube_url') ?: $request->query('url');
+        return view('auth.signin', ['prefillUrl' => $prefillUrl]);
     }
 
     /**
@@ -61,7 +70,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard'))->with('success', 'Welcome back!');
+
+            $redirect = redirect()->intended(route('dashboard'));
+            $prefill = $request->input('youtube_url') ?: $request->input('url');
+            if ($prefill) {
+                $redirect = redirect()->route('dashboard', ['youtube_url' => $prefill]);
+            }
+            return $redirect->with('success', 'Welcome back!');
         }
 
         return back()->withErrors([

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
     <title>Video Details - YouTube Extractor</title>
     
@@ -18,6 +19,41 @@
     <!-- Highlight.js for Code Highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    {{-- SEO: Structured data for individual extraction (only relevant when /videos/{id} is made public) --}}
+    @if(isset($video) && $video->extraction_status === 'completed')
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "{{ addslashes($video->title) }} - YouExtractor Tutorial",
+        "description": "{{ addslashes(Str::limit($video->summary ?? $video->description ?? '', 300)) }}",
+        "step": [
+            @if($video->tutorial_guide && is_array($video->tutorial_guide))
+                @foreach(array_slice($video->tutorial_guide, 0, 6) as $step)
+                {
+                    "@type": "HowToStep",
+                    "name": "{{ addslashes($step['title'] ?? 'Step') }}",
+                    "text": "{{ addslashes(Str::limit($step['content'] ?? '', 200)) }}"
+                }{{ $loop->last ? '' : ',' }}
+                @endforeach
+            @endif
+        ],
+        "supply": [
+            @if($video->prerequisites && isset($video->prerequisites['software']))
+                @foreach($video->prerequisites['software'] as $prereq)
+                {"@type": "HowToSupply", "name": "{{ addslashes($prereq['name'] ?? $prereq) }}"} {{ $loop->last ? '' : ',' }}
+                @endforeach
+            @endif
+        ],
+        "tool": [
+            @if($video->ide_recommendations && isset($video->ide_recommendations['primary']))
+                {"@type": "HowToTool", "name": "{{ addslashes($video->ide_recommendations['primary']['name'] ?? 'Code Editor') }}"}
+            @endif
+        ]
+    }
+    </script>
+    @endif
 
     <style>
         body { 
@@ -193,7 +229,7 @@
     <header>
         <div class="container header-content">
             <a href="{{ Auth::check() ? route('dashboard') : route('landing') }}" class="logo">
-                <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
                 <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
             </a>
             <div class="header-actions">
