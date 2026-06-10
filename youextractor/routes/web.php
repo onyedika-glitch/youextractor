@@ -24,6 +24,11 @@ Route::get('/terms', function () {
     return view('terms');
 })->name('terms');
 
+// Support / Help Page
+Route::get('/support', function () {
+    return view('support');
+})->name('support');
+
 // Blog (Markdown-powered)
 Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');

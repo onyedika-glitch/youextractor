@@ -1032,7 +1032,8 @@
                 <a href="#demo" class="nav-link">Live demo</a>
                 <a href="#features" class="nav-link">Features</a>
                 <a href="{{ route('blog.index') }}" class="nav-link">Blog</a>
-                <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link">Support</a>
+                <a href="{{ route('support') }}" class="nav-link">Support</a>
+                <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link" style="color: #fbbf24;">☕ Buy Me a Coffee</a>
             </div>
             
             <div class="nav-actions">
@@ -1052,7 +1053,8 @@
                 <a href="#how" class="nav-link">How it works</a>
                 <a href="#demo" class="nav-link">Live demo</a>
                 <a href="#features" class="nav-link">Features</a>
-                <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link">Support</a>
+                <a href="{{ route('support') }}" class="nav-link">Support</a>
+                <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link" style="color: #fbbf24;">☕ Buy Me a Coffee</a>
                 <div style="display:flex; gap:8px; margin-top:4px;">
                     <a href="{{ route('signin') }}" style="flex:1; text-decoration:none;">
                         <ds-button label="Sign In" variant="ghost" size="sm" full-width></ds-button>
@@ -1540,7 +1542,8 @@
                 <a href="{{ route('blog.index') }}">Blog</a>
                 <a href="{{ route('privacy') }}">Privacy</a>
                 <a href="{{ route('terms') }}">Terms</a>
-                <a href="https://buymeacoffee.com/omogo" target="_blank">Support the project</a>
+                <a href="{{ route('support') }}">Support</a>
+                <a href="https://buymeacoffee.com/omogo" target="_blank" style="color: #fbbf24;">☕ Buy Me a Coffee</a>
             </div>
             
             <p class="footer-text">
