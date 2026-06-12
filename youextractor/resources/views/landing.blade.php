@@ -1530,7 +1530,7 @@
         <div class="container footer-content">
             <div>
                 <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:4px;">
-                    <i class="ph ph-film-strip" style="color:var(--ds-text-brand); font-size:1.25rem;"></i>
+                    <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:22px;height:22px;border-radius:4px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
                     <span style="font-weight:600;">YouExtractor</span>
                 </div>
                 <p class="footer-text" style="margin:0;">Turn watching into building.</p>

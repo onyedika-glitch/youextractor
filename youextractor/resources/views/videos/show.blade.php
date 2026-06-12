@@ -256,6 +256,10 @@
     <!-- Footer -->
     <footer>
         <div class="container" style="text-align: center; color: var(--ds-text-muted); font-size: var(--theme-font-size-sm);">
+            <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:4px;">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:22px;height:22px;border-radius:4px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
+                <span style="font-weight:600;">YouExtractor</span>
+            </div>
             <p>YouTube Video Extractor &bull; Powered by AI & Laravel</p>
         </div>
     </footer>
