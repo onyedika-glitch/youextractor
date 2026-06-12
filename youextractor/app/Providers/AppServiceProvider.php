@@ -50,11 +50,5 @@ class AppServiceProvider extends ServiceProvider
                 mkdir($directory, 0755, true);
             }
         }
-
-        // Auto-copy logo if missing
-        $pngPath = public_path('img/youextractor-logo.png');
-        if (!file_exists($pngPath)) {
-            @copy(base_path('youextractor_logo_1780582176614.png'), $pngPath);
-        }
     }
 }

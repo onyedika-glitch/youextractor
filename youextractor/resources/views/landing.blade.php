@@ -1022,7 +1022,7 @@
     <header id="header">
         <div class="container header-content">
             <a href="{{ route('landing') }}" class="logo">
-                <img src="/img/youextractor-logo.png" alt="YouExtractor logo" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor logo" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
                 <span class="ds-type-heading-sm" style="margin: 0; letter-spacing: -.3px;">YouExtractor</span>
             </a>
             
@@ -1530,7 +1530,7 @@
         <div class="container footer-content">
             <div>
                 <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:4px;">
-                    <img src="/img/youextractor-logo.png" alt="YouExtractor logo" width="24" height="24" style="width:24px;height:24px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
+                    <i class="ph ph-film-strip" style="color:var(--ds-text-brand); font-size:1.25rem;"></i>
                     <span style="font-weight:600;">YouExtractor</span>
                 </div>
                 <p class="footer-text" style="margin:0;">Turn watching into building.</p>

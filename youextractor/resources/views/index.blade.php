@@ -923,7 +923,7 @@
         <header>
             <div class="container header-content">
                 <a href="{{ route('landing') }}" class="logo">
-                    <img src="/img/youextractor-logo.png" alt="YouExtractor logo" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
+                    <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
                     <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
                 </a>
                 
@@ -1150,12 +1150,8 @@
 
         <!-- Footer -->
         <footer>
-            <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 8px; justify-content: center; color: var(--ds-text-muted); font-size: var(--theme-font-size-sm);">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <img src="/img/youextractor-logo.png" alt="YouExtractor logo" width="24" height="24" style="width:24px;height:24px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
-                    <span style="font-weight: 600; color: var(--ds-text-primary);">YouExtractor</span>
-                </div>
-                <p style="margin: 0;">YouTube Code Extractor &bull; Built for developers who learn by watching</p>
+            <div class="container" style="text-align: center; color: var(--ds-text-muted); font-size: var(--theme-font-size-sm);">
+                <p>YouTube Code Extractor &bull; Built for developers who learn by watching</p>
             </div>
         </footer>
     </div>

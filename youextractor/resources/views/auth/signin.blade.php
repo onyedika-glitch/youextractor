@@ -229,7 +229,7 @@
         <!-- Logo -->
         <div class="logo-section">
             <a href="{{ route('landing') }}" class="logo">
-                <img src="/img/youextractor-logo.png" alt="YouExtractor" style="width:32px;height:32px;border-radius:6px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:32px;height:32px;border-radius:6px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
                 <span class="ds-type-heading-md" style="margin: 0; font-size: 1.5rem;">YouExtractor</span>
             </a>
         </div>
