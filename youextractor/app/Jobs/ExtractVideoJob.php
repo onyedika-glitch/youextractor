@@ -153,11 +153,27 @@ class ExtractVideoJob implements ShouldQueue
     private function fetchTranscript(string $videoId): string
     {
         try {
+            Log::info("[ExtractVideoJob] Attempting transcript fetch from youtube-transcript.ai for {$videoId}");
+            $response = Http::timeout(25)
+                ->withoutVerifying()
+                ->get("https://youtube-transcript.ai/transcript/{$videoId}.txt");
+
+            if ($response->successful() && strlen($response->body()) > 200) {
+                Log::info("[ExtractVideoJob] Successfully fetched transcript from youtube-transcript.ai for {$videoId} (length: " . strlen($response->body()) . ")");
+                return $response->body();
+            }
+        } catch (\Exception $e) {
+            Log::warning("[ExtractVideoJob] youtube-transcript.ai fetch failed for {$videoId}: " . $e->getMessage());
+        }
+
+        try {
+            Log::info("[ExtractVideoJob] Falling back to direct timedtext for {$videoId}");
             $response = Http::timeout(15)
                 ->withoutVerifying()
                 ->withHeaders([
-                    'User-Agent'      => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120',
+                    'User-Agent'      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/121',
                     'Accept-Language' => 'en-US,en;q=0.9',
+                    'Cookie'          => 'CONSENT=YES+cb.20210328-17-p0.en+FX+917; SOCS=CAESEwgDEgk0ODE3Nzk3MjQaAmVuIAEaBgiA_LyaBg',
                 ])
                 ->get("https://www.youtube.com/api/timedtext", [
                     'v'   => $videoId,
@@ -166,16 +182,77 @@ class ExtractVideoJob implements ShouldQueue
                 ]);
 
             if ($response->successful() && strlen($response->body()) > 50) {
-                return strip_tags(html_entity_decode(
-                    trim(preg_replace('/\s+/', ' ', $response->body())),
-                    ENT_QUOTES | ENT_HTML5,
-                    'UTF-8'
-                ));
+                return $this->cleanTranscript($response->body());
+            }
+
+            Log::info("[ExtractVideoJob] Falling back to page caption scraper for {$videoId}");
+            $transcript = $this->getTranscriptFromPage($videoId);
+            if ($transcript && strlen($transcript) > 50) {
+                return $transcript;
             }
         } catch (\Exception $e) {
-            Log::warning("[ExtractVideoJob] Transcript fetch failed: " . $e->getMessage());
+            Log::warning("[ExtractVideoJob] Fallback transcript fetch failed for {$videoId}: " . $e->getMessage());
         }
 
         return 'Transcript not available. Extraction based on video title and metadata.';
+    }
+
+    private function cleanTranscript(string $text): string
+    {
+        $text = strip_tags($text);
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        return trim(preg_replace('/\s+/', ' ', $text));
+    }
+
+    private function getTranscriptFromPage(string $videoId): ?string
+    {
+        try {
+            $response = Http::timeout(15)
+                ->withoutVerifying()
+                ->withHeaders([
+                    'User-Agent'      => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120',
+                    'Accept'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language' => 'en-US,en;q=0.9,en;q=0.5',
+                    'Cookie'          => 'CONSENT=YES+cb.20210328-17-p0.en+FX+917; SOCS=CAESEwgDEgk0ODE3Nzk3MjQaAmVuIAEaBgiA_LyaBg',
+                ])
+                ->get("https://www.youtube.com/watch?v={$videoId}");
+
+            if (!$response->successful()) {
+                return null;
+            }
+
+            if (preg_match('/"captionTracks":\s*\[(.*?)\]/', $response->body(), $matches)) {
+                $tracks = json_decode('[' . $matches[1] . ']', true);
+                if (is_array($tracks) && count($tracks) > 0) {
+                    // Find English track first, otherwise fallback to first track
+                    $selectedTrack = null;
+                    foreach ($tracks as $track) {
+                        if (isset($track['languageCode']) && str_starts_with(strtolower($track['languageCode']), 'en')) {
+                            $selectedTrack = $track;
+                            break;
+                        }
+                    }
+                    if (!$selectedTrack) {
+                        $selectedTrack = $tracks[0];
+                    }
+
+                    if (!empty($selectedTrack['baseUrl'])) {
+                        $cap = Http::timeout(10)
+                            ->withoutVerifying()
+                            ->withHeaders([
+                                'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120',
+                                'Cookie'     => 'CONSENT=YES+cb.20210328-17-p0.en+FX+917; SOCS=CAESEwgDEgk0ODE3Nzk3MjQaAmVuIAEaBgiA_LyaBg',
+                            ])
+                            ->get($selectedTrack['baseUrl']);
+                        if ($cap->successful()) {
+                            return $this->cleanTranscript($cap->body());
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Log::warning('[ExtractVideoJob] Page transcript scraper failed: ' . $e->getMessage());
+        }
+        return null;
     }
 }

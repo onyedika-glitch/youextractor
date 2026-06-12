@@ -246,7 +246,12 @@ class VideoController extends Controller
             return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
         }
 
-        $video->update(['extraction_status' => 'pending', 'extraction_error' => null]);
+        $video->update([
+            'extraction_status' => 'pending',
+            'extraction_error' => null,
+            'transcript' => null,
+            'code_snippets' => null,
+        ]);
         ExtractVideoJob::dispatch($video);
 
         return response()->json([
@@ -382,11 +387,27 @@ class VideoController extends Controller
     private function getTranscript(string $videoId): string
     {
         try {
+            Log::info("[VideoController] Attempting transcript fetch from youtube-transcript.ai for {$videoId}");
+            $response = Http::timeout(25)
+                ->withoutVerifying()
+                ->get("https://youtube-transcript.ai/transcript/{$videoId}.txt");
+
+            if ($response->successful() && strlen($response->body()) > 200) {
+                Log::info("[VideoController] Successfully fetched transcript from youtube-transcript.ai for {$videoId} (length: " . strlen($response->body()) . ")");
+                return $response->body();
+            }
+        } catch (\Exception $e) {
+            Log::warning("[VideoController] youtube-transcript.ai fetch failed for {$videoId}: " . $e->getMessage());
+        }
+
+        try {
+            Log::info("[VideoController] Falling back to direct timedtext for {$videoId}");
             $response = Http::timeout(15)
                 ->withoutVerifying()
                 ->withHeaders([
                     'User-Agent'      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/121',
                     'Accept-Language' => 'en-US,en;q=0.9',
+                    'Cookie'          => 'CONSENT=YES+cb.20210328-17-p0.en+FX+917; SOCS=CAESEwgDEgk0ODE3Nzk3MjQaAmVuIAEaBgiA_LyaBg',
                 ])
                 ->get("https://www.youtube.com/api/timedtext", [
                     'v'   => $videoId,
@@ -398,12 +419,13 @@ class VideoController extends Controller
                 return $this->cleanTranscript($response->body());
             }
 
+            Log::info("[VideoController] Falling back to page caption scraper for {$videoId}");
             $transcript = $this->getTranscriptFromPage($videoId);
             if ($transcript && strlen($transcript) > 50) {
                 return $transcript;
             }
         } catch (\Exception $e) {
-            Log::warning("Transcript fetch failed for {$videoId}: " . $e->getMessage());
+            Log::warning("[VideoController] Fallback transcript fetch failed for {$videoId}: " . $e->getMessage());
         }
 
         return 'Transcript not available. Extraction based on video title and metadata.';
@@ -424,7 +446,8 @@ class VideoController extends Controller
                 ->withHeaders([
                     'User-Agent'      => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120',
                     'Accept'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'Accept-Language' => 'en-US,en;q=0.5',
+                    'Accept-Language' => 'en-US,en;q=0.9,en;q=0.5',
+                    'Cookie'          => 'CONSENT=YES+cb.20210328-17-p0.en+FX+917; SOCS=CAESEwgDEgk0ODE3Nzk3MjQaAmVuIAEaBgiA_LyaBg',
                 ])
                 ->get("https://www.youtube.com/watch?v={$videoId}");
 
@@ -434,10 +457,30 @@ class VideoController extends Controller
 
             if (preg_match('/"captionTracks":\s*\[(.*?)\]/', $response->body(), $matches)) {
                 $tracks = json_decode('[' . $matches[1] . ']', true);
-                if (!empty($tracks[0]['baseUrl'])) {
-                    $cap = Http::timeout(10)->withoutVerifying()->get($tracks[0]['baseUrl']);
-                    if ($cap->successful()) {
-                        return $this->cleanTranscript($cap->body());
+                if (is_array($tracks) && count($tracks) > 0) {
+                    // Find English track first, otherwise fallback to first track
+                    $selectedTrack = null;
+                    foreach ($tracks as $track) {
+                        if (isset($track['languageCode']) && str_starts_with(strtolower($track['languageCode']), 'en')) {
+                            $selectedTrack = $track;
+                            break;
+                        }
+                    }
+                    if (!$selectedTrack) {
+                        $selectedTrack = $tracks[0];
+                    }
+
+                    if (!empty($selectedTrack['baseUrl'])) {
+                        $cap = Http::timeout(10)
+                            ->withoutVerifying()
+                            ->withHeaders([
+                                'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120',
+                                'Cookie'     => 'CONSENT=YES+cb.20210328-17-p0.en+FX+917; SOCS=CAESEwgDEgk0ODE3Nzk3MjQaAmVuIAEaBgiA_LyaBg',
+                            ])
+                            ->get($selectedTrack['baseUrl']);
+                        if ($cap->successful()) {
+                            return $this->cleanTranscript($cap->body());
+                        }
                     }
                 }
             }

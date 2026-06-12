@@ -354,7 +354,8 @@
                                     <span class="ds-badge-electric" style="display: inline-flex; align-items: center; gap: 6px;"><i class="ph ph-calendar"></i> Published: ${publishDate}</span>
                                 </div>
                             </div>
-                            <div>
+                            <div style="display: inline-flex; gap: var(--theme-spacing-3); align-items: center;">
+                                <ds-button id="btnReExtract" label="Re-extract Code" variant="brand" size="md" icon="arrows-clockwise"></ds-button>
                                 <a href="https://youtube.com/watch?v=${video.youtube_id}" target="_blank" style="text-decoration: none;">
                                     <ds-button label="Watch on YouTube" variant="secondary" size="md" icon="youtube-logo"></ds-button>
                                 </a>
@@ -421,6 +422,65 @@
             document.querySelectorAll('pre code').forEach((block) => {
                 hljs.highlightElement(block);
             });
+
+            // Bind re-extract button event
+            const btnReExtract = document.getElementById('btnReExtract');
+            if (btnReExtract) {
+                btnReExtract.addEventListener('click', async () => {
+                    btnReExtract.setAttribute('label', 'Extracting...');
+                    btnReExtract.setAttribute('disabled', 'true');
+                    try {
+                        const res = await fetch(`/api/videos/${videoId}/re-extract`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        });
+                        const d = await res.json();
+                        if (d.success) {
+                            const toast = document.createElement('div');
+                            toast.style.position = 'fixed';
+                            toast.style.bottom = '24px';
+                            toast.style.right = '24px';
+                            toast.style.zIndex = '9999';
+                            toast.style.background = 'var(--ds-color-brand, #8b5cf6)';
+                            toast.style.color = '#white';
+                            toast.style.padding = 'var(--theme-spacing-3) var(--theme-spacing-5)';
+                            toast.style.borderRadius = 'var(--theme-border-radius-xl)';
+                            toast.style.border = '1px solid var(--ds-border-subtle)';
+                            toast.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.3)';
+                            toast.innerHTML = '<i class="ph ph-arrows-clockwise spin-icon" style="margin-right: 8px;"></i> Re-extraction started. Please wait...';
+                            document.body.appendChild(toast);
+                            
+                            // Poll status every 2 seconds
+                            const interval = setInterval(async () => {
+                                try {
+                                    const statusRes = await fetch(`/api/videos/${videoId}/status`);
+                                    const statusData = await statusRes.json();
+                                    if (statusData.success && statusData.status !== 'pending' && statusData.status !== 'processing') {
+                                        clearInterval(interval);
+                                        toast.innerHTML = '<i class="ph ph-check-circle" style="color: #10b981; margin-right: 8px;"></i> Completed! Reloading...';
+                                        setTimeout(() => {
+                                            window.location.reload();
+                                        }, 1500);
+                                    }
+                                } catch (e) {
+                                    console.error('Status poll error:', e);
+                                }
+                            }, 2000);
+                        } else {
+                            alert(d.error || 'Failed to start re-extraction');
+                            btnReExtract.removeAttribute('disabled');
+                            btnReExtract.setAttribute('label', 'Re-extract Code');
+                        }
+                    } catch (e) {
+                        alert('Error: ' + e.message);
+                        btnReExtract.removeAttribute('disabled');
+                        btnReExtract.setAttribute('label', 'Re-extract Code');
+                    }
+                });
+            }
         }
 
         function formatDuration(seconds) {
