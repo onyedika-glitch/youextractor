@@ -113,7 +113,7 @@
         /* Main Section */
         main {
             flex: 1;
-            padding: var(--theme-spacing-12) 0;
+            padding: 8vh 0 var(--theme-spacing-12);
         }
 
         .space-y-8 > * + * {
@@ -234,7 +234,7 @@
             </a>
             <div class="header-actions">
                 <a href="{{ route('dashboard') }}" style="text-decoration: none;">
-                    <ds-button label="Back to Dashboard" variant="primary" size="sm" icon="arrow-left"></ds-button>
+                    <ds-button label="Back to Dashboard" variant="primary" size="sm" ></ds-button>
                 </a>
                 <a href="/videos" style="text-decoration: none;">
                     <ds-button label="All Videos" variant="secondary" size="sm" icon="books"></ds-button>
@@ -280,7 +280,7 @@
                         <p>Error: ${error.message}</p>
                         <div>
                             <a href="/videos" style="text-decoration: none;">
-                                <ds-button label="Back to Videos" variant="primary" icon="arrow-left"></ds-button>
+                                <ds-button label="Back to Videos" variant="primary" ></ds-button>
                             </a>
                         </div>
                     </div>

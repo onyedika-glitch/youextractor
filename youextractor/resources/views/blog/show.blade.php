@@ -23,7 +23,7 @@
             padding: 0 var(--theme-spacing-6);
         }
         .article-header {
-            padding: 40px 0 32px;
+            padding: 8vh 0 32px;
             border-bottom: 1px solid var(--ds-border-subtle);
             margin-bottom: 40px;
         }
@@ -77,12 +77,12 @@
     <div class="article-container">
         <!-- Top bar -->
         <div style="padding: 24px 0 8px; display: flex; align-items: center; justify-content: space-between;">
-            <a href="{{ route('blog.index') }}" style="display: inline-flex; align-items: center; gap: 6px; color: var(--ds-text-muted); font-size: 14px; text-decoration: none;">
-                <i class="ph ph-arrow-left"></i>
-                <span>Back to Blog</span>
+            <a href="{{ route('blog.index') }}" style="text-decoration: none;">
+                <ds-button label="Back to Blog" variant="glow" size="sm"></ds-button>
             </a>
-            <a href="{{ route('landing') }}" style="font-size: 13px; color: var(--ds-text-muted); text-decoration: none;">
-                youextractor.me
+            <a href="{{ route('landing') }}" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: var(--ds-text-muted);">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:20px;height:20px;border-radius:4px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
+                <span style="font-size: 13px; font-weight: 600;">YouExtractor</span>
             </a>
         </div>
 
@@ -122,5 +122,8 @@
     </div>
 
     @include('partials.footer')
+
+    <!-- Design System Scripts -->
+    <script src="/js/youextractor-design-system.js?v=3"></script>
 </body>
 </html>

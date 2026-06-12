@@ -1079,10 +1079,7 @@
                 $isB = $variant === 'b';
             @endphp
 
-            <div class="hero-badge-container">
-                <span class="ds-badge-brand">{{ $isB ? 'Instant code from video tutorials' : 'Now with AI Tutor Chat + GitHub Export' }}</span>
-            </div>
-            
+
             <h1 class="ds-type-display-md hero-title">
                 @if($isB)
                     Stop pausing videos.<br> Get <span class="hero-highlight">complete, runnable projects</span> instantly.
@@ -1102,7 +1099,7 @@
             
             <div class="hero-actions">
                 <a href="{{ route('signup') }}" style="text-decoration: none;">
-                    <ds-button label="Start for free — no card needed" variant="gradient" size="lg" icon="rocket-launch" icon-position="right"></ds-button>
+                    <ds-button label="Start for free" variant="gradient" size="lg" ></ds-button>
                 </a>
                 <a href="#demo" style="text-decoration: none;">
                     <ds-button label="See 15-second demo" variant="secondary" size="lg" icon="play-circle"></ds-button>

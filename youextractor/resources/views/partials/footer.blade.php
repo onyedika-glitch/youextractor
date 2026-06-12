@@ -16,7 +16,7 @@
             <!-- Links Columns Wrapper -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--theme-spacing-8); flex: 1;">
                 <!-- Product Links -->
-                <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3.5);">
+                <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3);">
                     <span style="font-weight: 600; font-size: var(--theme-font-size-xs); text-transform: uppercase; letter-spacing: var(--theme-letter-spacing-wider); color: var(--ds-text-primary);">Product</span>
                     <a href="{{ route('landing') }}#how" class="footer-link-item">How it works</a>
                     <a href="{{ route('landing') }}#features" class="footer-link-item">Features</a>
@@ -24,7 +24,7 @@
                 </div>
 
                 <!-- Support & Legal Links -->
-                <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3.5);">
+                <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3);">
                     <span style="font-weight: 600; font-size: var(--theme-font-size-xs); text-transform: uppercase; letter-spacing: var(--theme-letter-spacing-wider); color: var(--ds-text-primary);">Resources</span>
                     <a href="{{ route('support') }}" class="footer-link-item">Support</a>
                     <a href="{{ route('privacy') }}" class="footer-link-item">Privacy Policy</a>
@@ -32,7 +32,7 @@
                 </div>
 
                 <!-- Community / Social -->
-                <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3.5);">
+                <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3);">
                     <span style="font-weight: 600; font-size: var(--theme-font-size-xs); text-transform: uppercase; letter-spacing: var(--theme-letter-spacing-wider); color: var(--ds-text-primary);">Community</span>
                     <a href="https://buymeacoffee.com/omogo" target="_blank" class="footer-link-item" style="color: #fbbf24; font-weight: 500;">
                         <i class="ph ph-coffee" style="margin-right: 4px;"></i> Buy Me a Coffee

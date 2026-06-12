@@ -127,12 +127,12 @@
                 <span class="ds-type-heading-sm" style="margin: 0; font-size: 1.25rem;">YouExtractor</span>
             </a>
             <a href="{{ url()->previous() ?: route('landing') }}" style="text-decoration: none;">
-                <ds-button label="Back" variant="glow" size="sm" icon="arrow-left"></ds-button>
+                <ds-button label="Back" variant="glow" size="sm" ></ds-button>
             </a>
         </div>
 
         <!-- Hero Intro -->
-        <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+        <div style="text-align: center; max-width: 600px; margin: 0 auto; margin-top: 6vh;">
             <h1 class="ds-type-heading-md" style="margin-top: 0; margin-bottom: var(--theme-spacing-2);">Support & Help Center</h1>
             <p style="color: var(--ds-text-secondary); margin: 0;">Have questions, feedback, or run into an issue? Choose a channel below to get help with YouExtractor.</p>
         </div>

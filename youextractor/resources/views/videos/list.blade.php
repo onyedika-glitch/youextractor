@@ -69,7 +69,7 @@
         /* Main Section */
         main {
             flex: 1;
-            padding: var(--theme-spacing-12) 0;
+            padding: 8vh 0 var(--theme-spacing-12);
             display: flex;
             flex-direction: column;
             gap: var(--theme-spacing-8);
@@ -216,7 +216,7 @@
             </a>
             <div>
                 <a href="{{ route('dashboard') }}" style="text-decoration: none;">
-                    <ds-button label="Back to Dashboard" variant="primary" size="sm" icon="arrow-left"></ds-button>
+                    <ds-button label="Back to Dashboard" variant="primary" size="sm" ></ds-button>
                 </a>
             </div>
         </div>

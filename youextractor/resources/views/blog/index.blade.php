@@ -28,7 +28,7 @@
         }
         .blog-header {
             text-align: center;
-            padding: 40px 0 60px;
+            padding: 8vh 0 60px;
         }
         .blog-card {
             transition: transform 0.2s var(--theme-ease-out), box-shadow 0.2s var(--theme-ease-out);
@@ -55,11 +55,9 @@
                     <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
                     <span style="font-weight: 700; font-size: 1.05rem;">YouExtractor</span>
                 </a>
-                <div style="display: flex; gap: 16px; font-size: 14px;">
-                    <a href="{{ route('landing') }}#how" style="color: var(--ds-text-secondary); text-decoration: none;">How it works</a>
-                    <a href="{{ route('landing') }}#demo" style="color: var(--ds-text-secondary); text-decoration: none;">Demo</a>
-                    <a href="{{ route('landing') }}" style="color: var(--ds-text-secondary); text-decoration: none;">Home</a>
-                </div>
+                <a href="{{ url()->previous() ?: route('landing') }}" style="text-decoration: none;">
+                <ds-button label="Back" variant="glow" size="sm" ></ds-button>
+            </a>
             </div>
         </div>
 
@@ -107,5 +105,8 @@
     </div>
 
     @include('partials.footer')
+
+    <!-- Design System Scripts -->
+    <script src="/js/youextractor-design-system.js?v=3"></script>
 </body>
 </html>

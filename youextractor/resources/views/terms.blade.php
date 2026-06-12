@@ -83,11 +83,11 @@
                 <span class="ds-type-heading-sm" style="margin: 0; font-size: 1.25rem;">YouExtractor</span>
             </a>
             <a href="{{ url()->previous() ?: route('landing') }}" style="text-decoration: none;">
-                <ds-button label="Back" variant="glow" size="sm" icon="arrow-left"></ds-button>
+                <ds-button label="Back" variant="glow" size="sm" ></ds-button>
             </a>
         </div>
 
-        <ds-card variant="glass" padding="xl">
+        <ds-card variant="glass" padding="xl" style="margin-top: 6vh;">
             <div class="doc-content">
                 <h1 class="ds-type-heading-md" style="margin-top: 0;">Terms of Service</h1>
                 <p><strong>Last updated: June 4, 2026</strong></p>

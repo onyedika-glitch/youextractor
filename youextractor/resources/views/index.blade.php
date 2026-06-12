@@ -136,7 +136,7 @@
             text-align: center;
             max-width: 768px;
             margin: 0 auto;
-            padding-top: var(--theme-spacing-8);
+            padding-top: 10vh;
         }
 
         .hero-title {
@@ -1526,7 +1526,7 @@
                         <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-4);">
                             <!-- Top action bar -->
                             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: var(--theme-spacing-3); flex-wrap: wrap; gap: var(--theme-spacing-2);">
-                                <ds-button onclick="closeWorkspace()" label="Back to Dashboard" variant="secondary" size="sm" icon="arrow-left"></ds-button>
+                                <ds-button onclick="closeWorkspace()" label="Back to Dashboard" variant="secondary" size="sm" ></ds-button>
                                 
                                 <div style="display: flex; gap: var(--theme-spacing-2);">
                                     <a href="https://youtube.com/watch?v=${video.youtube_id}" target="_blank" style="text-decoration: none;">
