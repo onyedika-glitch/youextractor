@@ -1033,7 +1033,7 @@
                 <a href="#features" class="nav-link">Features</a>
                 <a href="{{ route('blog.index') }}" class="nav-link">Blog</a>
                 <a href="{{ route('support') }}" class="nav-link">Support</a>
-                <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link" style="color: #fbbf24;">☕ Buy Me a Coffee</a>
+                <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link" style="color: #fbbf24;">Buy Me a Coffee</a>
             </div>
             
             <div class="nav-actions">
@@ -1054,7 +1054,7 @@
                 <a href="#demo" class="nav-link">Live demo</a>
                 <a href="#features" class="nav-link">Features</a>
                 <a href="{{ route('support') }}" class="nav-link">Support</a>
-                <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link" style="color: #fbbf24;">☕ Buy Me a Coffee</a>
+                <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link" style="color: #fbbf24;">Buy Me a Coffee</a>
                 <div style="display:flex; gap:8px; margin-top:4px;">
                     <a href="{{ route('signin') }}" style="flex:1; text-decoration:none;">
                         <ds-button label="Sign In" variant="ghost" size="sm" full-width></ds-button>
@@ -1080,7 +1080,7 @@
             @endphp
 
             <div class="hero-badge-container">
-                <span class="ds-badge-brand">{{ $isB ? '⚡ Instant code from video tutorials' : '✨ Now with AI Tutor Chat + GitHub Export' }}</span>
+                <span class="ds-badge-brand">{{ $isB ? 'Instant code from video tutorials' : 'Now with AI Tutor Chat + GitHub Export' }}</span>
             </div>
             
             <h1 class="ds-type-display-md hero-title">
@@ -1291,7 +1291,7 @@
                             <div style="background:rgba(0,0,0,0.25); border-radius:var(--theme-radius-xl); padding:10px 14px; font-size:12px; font-family:var(--theme-font-mono); color:var(--ds-text-muted);">
                                 <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
                                     <span>Generated 48 files • 7 folders</span>
-                                    <span style="color:var(--ds-color-success);">✓ Ready to run</span>
+                                    <span style="color:var(--ds-color-success);"><i class="ph ph-check" style="margin-right:2px;"></i> Ready to run</span>
                                 </div>
                                 <div>npm install → npm run dev → localhost:3000</div>
                             </div>
@@ -1526,31 +1526,7 @@
     </section>
 
     <!-- Footer -->
-    <footer>
-        <div class="container footer-content">
-            <div>
-                <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:4px;">
-                    <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:22px;height:22px;border-radius:4px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
-                    <span style="font-weight:600;">YouExtractor</span>
-                </div>
-                <p class="footer-text" style="margin:0;">Turn watching into building.</p>
-            </div>
-            
-            <div class="footer-links">
-                <a href="#how">How it works</a>
-                <a href="#features">Features</a>
-                <a href="{{ route('blog.index') }}">Blog</a>
-                <a href="{{ route('privacy') }}">Privacy</a>
-                <a href="{{ route('terms') }}">Terms</a>
-                <a href="{{ route('support') }}">Support</a>
-                <a href="https://buymeacoffee.com/omogo" target="_blank" style="color: #fbbf24;">☕ Buy Me a Coffee</a>
-            </div>
-            
-            <p class="footer-text">
-                &copy; {{ date('Y') }} • Built with ❤️ for devs who learn visually
-            </p>
-        </div>
-    </footer>
+    @include('partials.footer')
 
     <!-- Design System + Page Scripts -->
     <script src="/js/youextractor-design-system.js?v=3"></script>

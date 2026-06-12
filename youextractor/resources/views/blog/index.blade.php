@@ -105,5 +105,7 @@
             <a href="https://buymeacoffee.com/omogo" target="_blank" style="color: var(--ds-text-brand);">Tell us</a>.
         </div>
     </div>
+
+    @include('partials.footer')
 </body>
 </html>

@@ -122,6 +122,8 @@
             </div>
         </ds-card>
     </div>
+    
+    @include('partials.footer')
 
     <!-- Design System Scripts -->
     <script src="/js/youextractor-design-system.js?v=3"></script>

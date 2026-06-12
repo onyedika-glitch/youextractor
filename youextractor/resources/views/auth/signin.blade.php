@@ -25,15 +25,17 @@
             padding: 0;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             box-sizing: border-box;
         }
 
         .auth-container {
             width: 100%;
             max-width: 440px;
-            padding: var(--theme-spacing-6);
+            padding: var(--theme-spacing-6) 0;
+            margin: auto 0;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -358,6 +360,8 @@
             <a href="{{ route('privacy') }}" style="color: var(--ds-text-secondary); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--ds-text-primary)'" onmouseout="this.style.color='var(--ds-text-secondary)'">Privacy Policy</a>
         </p>
     </div>
+
+    @include('partials.footer')
 
     <!-- Design System Scripts -->
     <script src="/js/youextractor-design-system.js?v=3"></script>

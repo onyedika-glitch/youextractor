@@ -126,7 +126,7 @@
         /* Main layout */
         main {
             flex: 1;
-            padding: var(--theme-spacing-12) 0;
+            padding: var(--theme-spacing-16) 0 var(--theme-spacing-12);
             display: flex;
             flex-direction: column;
             gap: var(--theme-spacing-8);
@@ -136,6 +136,7 @@
             text-align: center;
             max-width: 768px;
             margin: 0 auto;
+            padding-top: var(--theme-spacing-8);
         }
 
         .hero-title {
@@ -966,7 +967,6 @@
         <main class="container">
             <!-- Hero Title -->
             <div id="hero-title-section" class="hero-title-section" style="animation: fadeSlideUp 420ms var(--theme-ease-out);">
-                <div class="ds-badge-brand" style="margin-bottom:10px; display:inline-flex;">🚀 AI that turns videos into projects</div>
                 <h1 class="ds-type-display-sm hero-title">Learn Faster, Code Smarter</h1>
                 <p class="ds-type-body-lg hero-desc">
                     Paste any programming tutorial URL and get all the code snippets, 
@@ -1148,15 +1148,7 @@
             <div id="results" class="hidden"></div>
         </main>
 
-        <footer>
-            <div class="container" style="text-align: center; color: var(--ds-text-muted); font-size: var(--theme-font-size-sm);">
-                <div style="display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:4px;">
-                    <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:22px;height:22px;border-radius:4px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
-                    <span style="font-weight:600;">YouExtractor</span>
-                </div>
-                <p>YouTube Code Extractor &bull; Built for developers who learn by watching</p>
-            </div>
-        </footer>
+        @include('partials.footer')
     </div>
 
     <!-- Design System Scripts -->
@@ -1770,9 +1762,9 @@
                                         </div>
                                     </div>
                                     <div class="chat-suggested-questions" id="chatSuggestedQuestions" style="display: flex; gap: 8px; flex-wrap: wrap; padding: 10px var(--theme-spacing-4); border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.1);">
-                                        <button onclick="askSuggested('Explain the project structure')" style="background: rgba(168, 85, 247, 0.05); border: 1px dashed rgba(168, 85, 247, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.borderColor='rgba(168, 85, 247, 0.6)'" onmouseout="this.style.background='rgba(168, 85, 247, 0.05)'; this.style.borderColor='rgba(168, 85, 247, 0.3)'">💡 Explain project structure</button>
-                                        <button onclick="askSuggested('What are the prerequisites?')" style="background: rgba(168, 85, 247, 0.05); border: 1px dashed rgba(168, 85, 247, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.borderColor='rgba(168, 85, 247, 0.6)'" onmouseout="this.style.background='rgba(168, 85, 247, 0.05)'; this.style.borderColor='rgba(168, 85, 247, 0.3)'">🛠️ What are the prerequisites?</button>
-                                        <button onclick="askSuggested('How do I run the code?')" style="background: rgba(168, 85, 247, 0.05); border: 1px dashed rgba(168, 85, 247, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.borderColor='rgba(168, 85, 247, 0.6)'" onmouseout="this.style.background='rgba(168, 85, 247, 0.05)'; this.style.borderColor='rgba(168, 85, 247, 0.3)'">🚀 How do I run the code?</button>
+                                        <button onclick="askSuggested('Explain the project structure')" style="background: rgba(168, 85, 247, 0.05); border: 1px dashed rgba(168, 85, 247, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.borderColor='rgba(168, 85, 247, 0.6)'" onmouseout="this.style.background='rgba(168, 85, 247, 0.05)'; this.style.borderColor='rgba(168, 85, 247, 0.3)'">Explain project structure</button>
+                                        <button onclick="askSuggested('What are the prerequisites?')" style="background: rgba(168, 85, 247, 0.05); border: 1px dashed rgba(168, 85, 247, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.borderColor='rgba(168, 85, 247, 0.6)'" onmouseout="this.style.background='rgba(168, 85, 247, 0.05)'; this.style.borderColor='rgba(168, 85, 247, 0.3)'">What are the prerequisites?</button>
+                                        <button onclick="askSuggested('How do I run the code?')" style="background: rgba(168, 85, 247, 0.05); border: 1px dashed rgba(168, 85, 247, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(168, 85, 247, 0.15)'; this.style.borderColor='rgba(168, 85, 247, 0.6)'" onmouseout="this.style.background='rgba(168, 85, 247, 0.05)'; this.style.borderColor='rgba(168, 85, 247, 0.3)'">How do I run the code?</button>
                                     </div>
                                     <div class="chat-input-area">
                                         <div class="chat-input-wrapper">
