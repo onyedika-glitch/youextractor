@@ -101,7 +101,7 @@ Route::middleware('auth')->group(function () {
         return view('videos.list');
     })->name('videos.list');
 
-    Route::get('/videos/{video}', function ($video) {
+    Route::get('/videos/{video}', function (\App\Models\Video $video) {
         return view('videos.show', ['video' => $video]);
     })->name('videos.show');
 

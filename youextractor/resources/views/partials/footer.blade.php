@@ -1,4 +1,4 @@
-<footer style="background: rgba(6, 11, 24, 0.9); border-top: 1px solid var(--ds-border-subtle); padding: var(--theme-spacing-12) 0 var(--theme-spacing-8); margin-top: var(--theme-spacing-16); color: var(--ds-text-secondary); font-family: var(--theme-font-sans); width: 100%; box-sizing: border-box;">
+<footer style="background: rgba(6, 11, 24, 0.9); border-top: 1px solid var(--ds-border-subtle); padding: var(--theme-spacing-12) 0 var(--theme-spacing-8); margin-top: var(--theme-spacing-24); color: var(--ds-text-secondary); font-family: var(--theme-font-sans); width: 100%; box-sizing: border-box;">
     <div class="container">
         <!-- Main Footer Content -->
         <div style="display: grid; grid-template-columns: 1fr; gap: var(--theme-spacing-8); margin-bottom: var(--theme-spacing-12);" class="footer-grid-responsive">

@@ -67,18 +67,18 @@
         }
 
         /* Main Section */
-        main {
+        main.container {
             flex: 1;
-            padding: 8vh 0 var(--theme-spacing-12);
+            padding: 10vh var(--theme-spacing-6) var(--theme-spacing-24);
             display: flex;
             flex-direction: column;
-            gap: var(--theme-spacing-8);
+            gap: var(--theme-spacing-12);
         }
 
         .page-header {
             display: flex;
             flex-direction: column;
-            gap: var(--theme-spacing-2);
+            gap: var(--theme-spacing-4);
         }
 
         .page-title {
@@ -94,15 +94,15 @@
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: var(--theme-spacing-4);
-            margin-bottom: var(--theme-spacing-4);
+            gap: var(--theme-spacing-6);
+            margin-bottom: var(--theme-spacing-8);
         }
 
         /* Grid */
         .videos-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: var(--theme-spacing-6);
+            gap: var(--theme-spacing-8);
         }
 
         .video-card-content {
@@ -234,7 +234,7 @@
 
         <!-- Library Stats Grid -->
         <div class="stats-grid" id="statsGrid">
-            <ds-card variant="glass" padding="md">
+            <ds-card variant="glass" padding="lg">
                 <div style="display: flex; align-items: center; gap: var(--theme-spacing-4);">
                     <div style="width: 48px; height: 48px; background: rgba(168, 85, 247, 0.1); border-radius: var(--theme-radius-xl); display: flex; align-items: center; justify-content: center; color: var(--ds-text-brand); font-size: 1.5rem;">
                         <i class="ph ph-books"></i>
@@ -246,7 +246,7 @@
                 </div>
             </ds-card>
 
-            <ds-card variant="glass" padding="md">
+            <ds-card variant="glass" padding="lg">
                 <div style="display: flex; align-items: center; gap: var(--theme-spacing-4);">
                     <div style="width: 48px; height: 48px; background: rgba(6, 182, 212, 0.1); border-radius: var(--theme-radius-xl); display: flex; align-items: center; justify-content: center; color: var(--ds-text-electric); font-size: 1.5rem;">
                         <i class="ph ph-code"></i>
@@ -258,7 +258,7 @@
                 </div>
             </ds-card>
 
-            <ds-card variant="glass" padding="md">
+            <ds-card variant="glass" padding="lg">
                 <div style="display: flex; align-items: center; gap: var(--theme-spacing-4);">
                     <div style="width: 48px; height: 48px; background: rgba(234, 179, 8, 0.1); border-radius: var(--theme-radius-xl); display: flex; align-items: center; justify-content: center; color: var(--theme-yellow-500); font-size: 1.5rem;">
                         <i class="ph ph-cpu"></i>
@@ -272,7 +272,7 @@
                 </div>
             </ds-card>
 
-            <ds-card variant="glass" padding="md">
+            <ds-card variant="glass" padding="lg">
                 <div style="display: flex; align-items: center; gap: var(--theme-spacing-4);">
                     <div style="width: 48px; height: 48px; background: rgba(34, 197, 94, 0.1); border-radius: var(--theme-radius-xl); display: flex; align-items: center; justify-content: center; color: #22c55e; font-size: 1.5rem;">
                         <i class="ph ph-trend-up"></i>
@@ -424,7 +424,7 @@
             noResults.classList.add('hidden');
 
             videosContainer.innerHTML = videos.map(video => `
-                <ds-card variant="glass" interactive padding="md" style="cursor: pointer;" onclick="viewVideo(${video.id})">
+                <ds-card variant="glass" interactive padding="lg" style="cursor: pointer;" onclick="viewVideo(${video.id})">
                     <div class="video-card-content">
                         <div class="video-card-top">
                             <div class="video-card-title-row">

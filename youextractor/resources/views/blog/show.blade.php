@@ -20,12 +20,12 @@
         .article-container {
             max-width: 720px;
             margin: 0 auto;
-            padding: 0 var(--theme-spacing-6);
+            padding: var(--theme-spacing-10) var(--theme-spacing-6) var(--theme-spacing-20);
         }
         .article-header {
             padding: 8vh 0 32px;
             border-bottom: 1px solid var(--ds-border-subtle);
-            margin-bottom: 40px;
+            margin-bottom: 60px;
         }
         .article-content {
             font-size: 16.2px;
@@ -111,7 +111,7 @@
         </article>
 
         <!-- Footer CTA -->
-        <div style="margin-top: 70px; padding: 32px 0; border-top: 1px solid var(--ds-border-subtle); text-align: center;">
+        <div style="margin-top: 100px; padding: 48px 0; border-top: 1px solid var(--ds-border-subtle); text-align: center;">
             <p style="color: var(--ds-text-secondary); margin-bottom: 16px; font-size: 14px;">
                 Enjoyed this? Try turning your next YouTube tutorial into a real project.
             </p>

@@ -19,7 +19,7 @@
         .blog-container {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 0 var(--theme-spacing-6);
+            padding: var(--theme-spacing-10) var(--theme-spacing-6) var(--theme-spacing-20);
         }
         .blog-nav {
             padding: 20px 0;
@@ -71,7 +71,7 @@
         </div>
 
         <!-- Posts Grid -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 28px; margin-bottom: 80px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 36px; margin-bottom: 100px;">
             @foreach($posts as $post)
                 <a href="{{ route('blog.show', $post['slug']) }}" style="text-decoration: none; color: inherit;">
                     <ds-card variant="glass" padding="lg" class="blog-card" style="height: 100%; display: flex; flex-direction: column;">

@@ -111,13 +111,21 @@
         }
 
         /* Main Section */
-        main {
+        main.container {
             flex: 1;
-            padding: 8vh 0 var(--theme-spacing-12);
+            padding: 10vh var(--theme-spacing-6) var(--theme-spacing-24);
+        }
+
+        .space-y-12 > * + * {
+            margin-top: var(--theme-spacing-12);
         }
 
         .space-y-8 > * + * {
             margin-top: var(--theme-spacing-8);
+        }
+
+        .space-y-6 > * + * {
+            margin-top: var(--theme-spacing-6);
         }
 
         .space-y-4 > * + * {
@@ -245,7 +253,7 @@
 
     <!-- Main Content -->
     <main class="container">
-        <div id="videoContent" class="space-y-8">
+        <div id="videoContent" class="space-y-12">
             <div class="loading-state">
                 <i class="ph ph-spinner spin-icon"></i>
                 <p>Loading video details...</p>
@@ -260,7 +268,7 @@
     <script src="/js/youextractor-design-system.js?v=3"></script>
 
     <script>
-        const videoId = '{{ $video }}';
+        const videoId = '{{ $video->id }}';
         const videoContent = document.getElementById('videoContent');
 
         async function loadVideo() {
@@ -295,11 +303,11 @@
             let codeSnippetsHtml = '';
             if (video.code_snippets && video.code_snippets.length > 0) {
                 codeSnippetsHtml = `
-                    <div class="space-y-4">
+                    <div class="space-y-6">
                         <h4 class="ds-type-heading-sm flex items-center gap-2" style="color: var(--ds-text-electric); margin: 0;">
                             <i class="ph ph-file-code"></i> Code Snippets
                         </h4>
-                        <div class="space-y-4">
+                        <div class="space-y-6">
                             ${video.code_snippets.map((snippet, idx) => {
                                 const isObj = typeof snippet === 'object' && snippet !== null;
                                 const filename = isObj ? (snippet.path || snippet.filename || `file_${idx + 1}`) : `snippet_${idx + 1}`;
@@ -332,7 +340,7 @@
             }
 
             videoContent.innerHTML = `
-                <div class="space-y-8" style="animation: fadeIn 0.4s var(--theme-ease-out);">
+                <div class="space-y-12" style="animation: fadeIn 0.4s var(--theme-ease-out);">
                     <a href="/videos" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; color: var(--ds-text-secondary); font-size: var(--theme-font-size-sm); margin-bottom: var(--theme-spacing-1); transition: color 0.2s;" onmouseover="this.style.color='var(--ds-text-brand)'" onmouseout="this.style.color='var(--ds-text-secondary)'">
                         <i class="ph ph-arrow-left"></i> Back to Videos
                     </a>
@@ -356,8 +364,8 @@
 
                     <!-- Summary Alert/Callout -->
                     ${video.summary ? `
-                        <ds-card variant="glass" padding="md">
-                            <div class="space-y-2">
+                        <ds-card variant="glass" padding="lg">
+                            <div class="space-y-3">
                                 <h4 class="font-semibold flex items-center gap-2" style="color: var(--ds-text-brand); margin: 0;">
                                     <i class="ph ph-sparkle" style="font-size: 1.25rem;"></i> AI Summary
                                 </h4>
@@ -387,7 +395,7 @@
                             <h4 class="ds-type-heading-sm flex items-center gap-2" style="color: var(--ds-text-muted); margin: 0;">
                                 <i class="ph ph-info"></i> Video Description
                             </h4>
-                            <ds-card variant="default" padding="md">
+                            <ds-card variant="default" padding="lg">
                                 <p class="ds-type-body-sm text-gray-400" style="white-space: pre-wrap; margin: 0;">${escapeHtml(video.description)}</p>
                             </ds-card>
                         </div>

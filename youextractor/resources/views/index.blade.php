@@ -54,7 +54,7 @@
             display: flex;
             flex-direction: column;
             gap: var(--theme-spacing-4);
-            padding: var(--theme-spacing-4) 0;
+            padding: var(--theme-spacing-4) var(--theme-spacing-6);
         }
 
         @media (min-width: 640px) {
@@ -63,7 +63,7 @@
                 align-items: center;
                 justify-content: space-between;
                 height: 80px;
-                padding: 0;
+                padding: 0 var(--theme-spacing-6);
             }
         }
 
@@ -124,12 +124,12 @@
         }
 
         /* Main layout */
-        main {
+        main.container {
             flex: 1;
-            padding: var(--theme-spacing-16) 0 var(--theme-spacing-12);
+            padding: var(--theme-spacing-20) var(--theme-spacing-6) var(--theme-spacing-24);
             display: flex;
             flex-direction: column;
-            gap: var(--theme-spacing-8);
+            gap: var(--theme-spacing-12);
         }
 
         .hero-title-section {
@@ -234,7 +234,7 @@
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: var(--theme-spacing-6);
+            gap: var(--theme-spacing-8);
         }
 
         .feature-icon-box {
@@ -254,28 +254,29 @@
 
         .feature-item-title {
             color: var(--ds-text-primary);
-            margin: 0 0 var(--theme-spacing-2);
+            margin: 0 0 var(--theme-spacing-3);
         }
 
         .feature-item-desc {
             color: var(--ds-text-secondary);
             margin: 0;
+            line-height: var(--theme-line-height-relaxed);
         }
 
         /* Dashboard Stats additions */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--theme-spacing-4);
+            gap: var(--theme-spacing-6);
         }
 
         .stat-card {
             display: flex;
             align-items: center;
-            gap: var(--theme-spacing-4);
+            gap: var(--theme-spacing-5);
             background: var(--ds-surface-glass);
             border: 1px solid var(--ds-border-subtle);
-            padding: var(--theme-spacing-4) var(--theme-spacing-5);
+            padding: var(--theme-spacing-5) var(--theme-spacing-6);
             border-radius: var(--theme-radius-2xl);
             transition: all var(--theme-motion-fast);
         }
@@ -884,6 +885,9 @@
         }
 
         /* General spacing helpers */
+        .space-y-12 > * + * { margin-top: var(--theme-spacing-12); }
+        .space-y-10 > * + * { margin-top: var(--theme-spacing-10); }
+        .space-y-8 > * + * { margin-top: var(--theme-spacing-8); }
         .space-y-6 > * + * { margin-top: var(--theme-spacing-6); }
         .space-y-4 > * + * { margin-top: var(--theme-spacing-4); }
         .space-y-3 > * + * { margin-top: var(--theme-spacing-3); }
@@ -1030,7 +1034,7 @@
             </ds-card>
 
             <!-- Dashboard Stats & Library (Visible when not actively inside workspace) -->
-            <div id="dashboardStats" class="space-y-8">
+            <div id="dashboardStats" class="space-y-12">
                 <!-- Stats Row -->
                 <div class="stats-grid" id="statsGrid">
                     <!-- Stat 1 -->
@@ -1106,10 +1110,10 @@
                 </div>
 
                 <!-- Features Info Walkthrough (Long Page Feature) -->
-                <div class="space-y-4" style="padding-top: var(--theme-spacing-8); border-top: 1px solid var(--ds-border-subtle);">
-                    <h3 class="ds-type-heading-sm text-white" style="text-align: center; margin-bottom: var(--theme-spacing-6);">Features Walkthrough</h3>
+                <div class="space-y-6" style="padding-top: var(--theme-spacing-12); border-top: 1px solid var(--ds-border-subtle);">
+                    <h3 class="ds-type-heading-sm text-white" style="text-align: center; margin-bottom: var(--theme-spacing-8);">Features Walkthrough</h3>
                     <div class="features-grid">
-                        <ds-card variant="glass" padding="md">
+                        <ds-card variant="glass" padding="lg">
                             <div class="feature-icon-box icon-brand">
                                 <i class="ph ph-target" style="color: var(--ds-text-brand); font-size: 1.25rem;"></i>
                             </div>
@@ -1117,7 +1121,7 @@
                             <p class="ds-type-body-sm feature-item-desc">Follow a tailored learning path step-by-step and track your progress locally.</p>
                         </ds-card>
                         
-                        <ds-card variant="glass" padding="md">
+                        <ds-card variant="glass" padding="lg">
                             <div class="feature-icon-box icon-accent">
                                 <i class="ph ph-laptop" style="color: var(--ds-text-accent); font-size: 1.25rem;"></i>
                             </div>
@@ -1125,7 +1129,7 @@
                             <p class="ds-type-body-sm feature-item-desc">Install prerequisites and configure recommended IDEs and plugins easily.</p>
                         </ds-card>
 
-                        <ds-card variant="glass" padding="md">
+                        <ds-card variant="glass" padding="lg">
                             <div class="feature-icon-box icon-electric">
                                 <i class="ph ph-chat-circle-dots" style="color: var(--ds-text-electric); font-size: 1.25rem;"></i>
                             </div>
@@ -1133,7 +1137,7 @@
                             <p class="ds-type-body-sm feature-item-desc">Ask specific questions about the code, setup, or concepts in real-time.</p>
                         </ds-card>
 
-                        <ds-card variant="glass" padding="md">
+                        <ds-card variant="glass" padding="lg">
                             <div class="feature-icon-box icon-success">
                                 <i class="ph ph-download-simple" style="color: var(--ds-color-success-subtle); font-size: 1.25rem;"></i>
                             </div>
@@ -1310,7 +1314,7 @@
                 const date = new Date(video.extracted_at || video.created_at).toLocaleDateString();
 
                 return `
-                    <ds-card variant="glass" interactive padding="md" onclick="openWorkspace(${video.id})" class="library-card-enter" style="animation-delay: ${Math.min(idx * 35, 220)}ms">
+                    <ds-card variant="glass" interactive padding="lg" onclick="openWorkspace(${video.id})" class="library-card-enter" style="animation-delay: ${Math.min(idx * 35, 220)}ms">
                         <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; gap: var(--theme-spacing-4);">
                             <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-2);">
                                 <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: var(--theme-spacing-2);">
