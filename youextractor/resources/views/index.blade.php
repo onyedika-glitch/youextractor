@@ -923,7 +923,7 @@
         <header>
             <div class="container header-content">
                 <a href="{{ route('landing') }}" class="logo">
-                    <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.75rem;"></i>
+                    <img src="/img/youextractor-logo.png" alt="YouExtractor logo" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
                     <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
                 </a>
                 
@@ -974,7 +974,7 @@
                     <span style="color: var(--ds-text-accent)">IDE recommendations</span>, and 
                     <span style="color: var(--ds-text-electric)">step-by-step instructions</span>.
                 </p>
-                <p style="margin-top:4px; font-size:var(--theme-font-size-xs); color:var(--ds-text-muted);">New: AI tutor chat, GitHub one-click export, and interactive roadmaps in every workspace.</p>
+                <p style="margin-top:4px; font-size:var(--theme-font-size-xs); color:var(--ds-text-muted);">New: AI tutor chat, <strong>one-click GitHub repo creation</strong>, and interactive roadmaps in every workspace.</p>
             </div>
 
             <!-- Input Section -->
@@ -1137,8 +1137,8 @@
                             <div class="feature-icon-box icon-success">
                                 <i class="ph ph-download-simple" style="color: var(--ds-color-success-subtle); font-size: 1.25rem;"></i>
                             </div>
-                            <h3 class="ds-type-heading-sm feature-item-title">ZIP & GitHub</h3>
-                            <p class="ds-type-body-sm feature-item-desc">Download code files in a ZIP, or push directly to a new GitHub repository.</p>
+                            <h3 class="ds-type-heading-sm feature-item-title">ZIP & GitHub Export</h3>
+                            <p class="ds-type-body-sm feature-item-desc">Download the full project as ZIP, or <strong>one-click push to a new GitHub repo</strong> with README, .gitignore, and structure intact.</p>
                         </ds-card>
                     </div>
                 </div>
@@ -1150,8 +1150,12 @@
 
         <!-- Footer -->
         <footer>
-            <div class="container" style="text-align: center; color: var(--ds-text-muted); font-size: var(--theme-font-size-sm);">
-                <p>YouTube Code Extractor &bull; Built for developers who learn by watching</p>
+            <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 8px; justify-content: center; color: var(--ds-text-muted); font-size: var(--theme-font-size-sm);">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <img src="/img/youextractor-logo.png" alt="YouExtractor logo" width="24" height="24" style="width:24px;height:24px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
+                    <span style="font-weight: 600; color: var(--ds-text-primary);">YouExtractor</span>
+                </div>
+                <p style="margin: 0;">YouTube Code Extractor &bull; Built for developers who learn by watching</p>
             </div>
         </footer>
     </div>
@@ -1333,6 +1337,10 @@
                                 </span>
                                 <div style="display: flex; align-items: center; gap: 6px;">
                                     ${stackBadge}
+                                    ${video.github_repo_url ? `
+                                    <a href="${escapeHtml(video.github_repo_url)}" target="_blank" onclick="event.stopImmediatePropagation(); event.stopPropagation();" title="View on GitHub" style="text-decoration:none; display:flex; align-items:center; gap:3px; background:rgba(168,85,247,0.15); color:var(--ds-text-brand); padding:1px 5px; border-radius:999px; font-size:9px; font-weight:600;">
+                                        <i class="ph ph-github-logo"></i> <span style="margin-left:1px;">Repo</span>
+                                    </a>` : ''}
                                     <span class="ds-badge-brand" style="white-space: nowrap;"><i class="ph ph-arrow-right" style="margin-right: 0;"></i></span>
                                 </div>
                             </div>
@@ -1554,33 +1562,46 @@
 
                     <!-- GitHub Push Card -->
                     ${hasCode ? `
-                    <ds-card variant="glass" padding="lg">
+                    <ds-card variant="glass" padding="lg" style="border: 1px solid rgba(168, 85, 247, 0.15);">
                         <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-4);">
-                            <div style="display: flex; align-items: center; justify-content: space-between; gap: var(--theme-spacing-4); flex-wrap: wrap;">
-                                <div style="flex: 1; min-width: 250px;">
-                                    <h4 class="ds-type-heading-sm text-white" style="margin: 0; display: flex; align-items: center; gap: 8px;">
-                                        <i class="ph ph-github-logo" style="font-size: 1.5rem; color: var(--ds-text-accent);"></i> Create & Push to GitHub
-                                    </h4>
-                                    <p class="ds-type-body-sm text-gray-400" style="margin: 4px 0 0 0;">
-                                        Pushes all extracted files into a new GitHub repository in your account.
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: var(--theme-spacing-4); flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 280px;">
+                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                        <i class="ph ph-github-logo" style="font-size: 1.6rem; color: var(--ds-text-accent);"></i>
+                                        <h4 class="ds-type-heading-sm text-white" style="margin: 0;">One-Click GitHub Export</h4>
+                                        <span class="ds-badge-brand" style="font-size: 9px; padding: 1px 6px;">RECOMMENDED</span>
+                                    </div>
+                                    <p class="ds-type-body-sm text-gray-400" style="margin: 0 0 8px;">
+                                        Automatically create a new repository and push your complete project with full structure, README, and .gitignore.
                                     </p>
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 4px 12px; font-size: 11px; color: var(--ds-text-secondary);">
+                                        <div style="display:flex; align-items:center; gap:4px;"><i class="ph ph-check" style="color:var(--ds-color-success);"></i> Full folder tree</div>
+                                        <div style="display:flex; align-items:center; gap:4px;"><i class="ph ph-check" style="color:var(--ds-color-success);"></i> Shareable link</div>
+                                        <div style="display:flex; align-items:center; gap:4px;"><i class="ph ph-check" style="color:var(--ds-color-success);"></i> Version history</div>
+                                        <div style="display:flex; align-items:center; gap:4px;"><i class="ph ph-check" style="color:var(--ds-color-success);"></i> Easy collaboration</div>
+                                    </div>
+                                    <div style="margin-top: 8px; font-size: 11px; color: var(--ds-text-muted);">
+                                        Needs a <strong>classic Personal Access Token</strong> with <code>repo</code> scope.
+                                        <a href="https://github.com/settings/tokens/new?scopes=repo&description=YouExtractor" target="_blank" style="color: var(--ds-text-brand); text-decoration: underline;">Create one here →</a>
+                                    </div>
                                 </div>
                                 ${video.github_repo_url ? `
-                                <div style="display: flex; align-items: center; gap: var(--theme-spacing-3);">
+                                <div style="display: flex; align-items: center; gap: var(--theme-spacing-3); margin-top: 4px;">
                                     <a href="${escapeHtml(video.github_repo_url)}" target="_blank" style="text-decoration: none;">
                                         <ds-button label="View Repo on GitHub" variant="glow" size="md" icon="arrow-square-out"></ds-button>
                                     </a>
                                 </div>
                                 ` : `
-                                <div id="github-push-form" style="display: flex; align-items: center; gap: var(--theme-spacing-3); flex: 1; max-width: 600px; flex-wrap: wrap; width: 100%;">
-                                    <ds-input id="github-token-input" placeholder="ghp_xxxxxxxxxxxx" label="GitHub Personal Access Token" style="flex: 1; min-width: 200px;"></ds-input>
-                                    <div style="margin-top: 1.5rem;">
-                                        <ds-button id="github-push-btn" onclick="pushToGitHub('${video.id}')" label="Push Code" variant="gradient" size="md" icon="git-pull-request"></ds-button>
+                                <div id="github-push-form" style="display: flex; flex-direction: column; gap: var(--theme-spacing-2); flex: 1; max-width: 520px; min-width: 260px;">
+                                    <ds-input id="github-token-input" placeholder="ghp_xxxxxxxxxxxxxxxx" label="GitHub Personal Access Token" size="sm" style="width:100%;"></ds-input>
+                                    <div>
+                                        <ds-button id="github-push-btn" onclick="pushToGitHub('${video.id}')" label="Create Repo & Push Code" variant="gradient" size="md" icon="git-pull-request" style="width:100%;"></ds-button>
                                     </div>
+                                    <div style="font-size:10px; color:var(--ds-text-muted); text-align:center;">A new private repo will be created automatically</div>
                                 </div>
                                 `}
                             </div>
-                            <div id="github-status-msg" class="hidden text-sm font-mono" style="margin-top: 4px;"></div>
+                            <div id="github-status-msg" class="hidden text-sm font-mono" style="margin-top: 2px; padding: 6px 10px; background: rgba(0,0,0,0.2); border-radius: var(--theme-radius-md);"></div>
                         </div>
                     </ds-card>
                     ` : ''}
@@ -2337,7 +2358,7 @@
             pushBtn.loading = true;
             statusMsg.classList.remove('hidden');
             statusMsg.className = 'text-sm text-blue-400 font-mono';
-            statusMsg.textContent = 'Creating repository and pushing code...';
+            statusMsg.innerHTML = `<i class="ph ph-spinner"></i> Creating new GitHub repo and pushing files... <span style="opacity:0.7">(this may take a few seconds)</span>`;
             
             fetch(`/api/videos/${videoId}/push-to-github`, {
                 method: 'POST',
@@ -2358,7 +2379,7 @@
                 pushBtn.loading = false;
                 if (data.success) {
                     statusMsg.className = 'text-sm text-green-400 font-mono';
-                    statusMsg.innerHTML = `<i class="ph ph-check-circle"></i> Repository created and pushed successfully! <a href="${escapeHtml(data.github_url)}" target="_blank" class="underline text-green-300 font-semibold" style="margin-left: 8px;">View Repo on GitHub <i class="ph ph-arrow-square-out"></i></a>`;
+                    statusMsg.innerHTML = `<i class="ph ph-check-circle"></i> Success! New repo created with your full project. <a href="${escapeHtml(data.github_url)}" target="_blank" class="underline text-green-300 font-semibold" style="margin-left: 6px;">Open on GitHub →</a>`;
                     
                     const formContainer = document.getElementById('github-push-form');
                     if (formContainer) {

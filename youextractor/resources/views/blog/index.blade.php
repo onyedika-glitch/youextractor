@@ -52,7 +52,7 @@
         <div class="blog-nav">
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <a href="{{ route('landing') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ds-text-primary);">
-                    <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 1.6rem;"></i>
+                    <img src="/img/youextractor-logo.png" alt="YouExtractor logo" width="24" height="24" style="width:24px;height:24px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
                     <span style="font-weight: 700; font-size: 1.05rem;">YouExtractor</span>
                 </a>
                 <div style="display: flex; gap: 16px; font-size: 14px;">

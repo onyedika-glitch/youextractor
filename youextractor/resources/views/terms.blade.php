@@ -79,7 +79,7 @@
     <div class="container">
         <div class="header-section">
             <a href="{{ route('landing') }}" class="logo">
-                <i class="ph ph-film-strip" style="color: var(--ds-text-brand); font-size: 2rem;"></i>
+                <img src="/img/youextractor-logo.png" alt="YouExtractor logo" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
                 <span class="ds-type-heading-sm" style="margin: 0; font-size: 1.25rem;">YouExtractor</span>
             </a>
             <a href="{{ url()->previous() ?: route('landing') }}" style="text-decoration: none;">

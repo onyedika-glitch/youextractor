@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Services\AI\LLMService;
+use App\Services\AI\DeepSeekDriver;
 use App\Services\AI\GeminiDriver;
 use App\Services\AI\OpenAIDriver;
 use App\Services\AI\ClaudeDriver;
@@ -18,10 +19,11 @@ use Illuminate\Support\Facades\Log;
  *   - LLMService      → calls the AI provider
  *   - ProjectPackager → generates ZIP archives
  *
- * AI Provider Priority (best quality first):
- *   1. Anthropic Claude  (best for coding tasks)
- *   2. Google Gemini     (2-step chained pipeline)
- *   3. OpenAI GPT-4o-mini (fallback)
+ * AI Provider Priority (DeepSeek is now the default):
+ *   1. DeepSeek V4 / V3 (deepseek-chat + deepseek-reasoner) - new primary, cost-effective & strong at code
+ *   2. Anthropic Claude  (excellent fallback)
+ *   3. Google Gemini     (2-step chained pipeline)
+ *   4. OpenAI            (final fallback)
  */
 class CodeExtractorService
 {
@@ -36,8 +38,9 @@ class CodeExtractorService
         $this->prompts  = new PromptFactory();
         $this->packager = new ProjectPackager();
 
-        // Priority order: Claude → Gemini → OpenAI
+        // Priority order (DeepSeek V4 first as default, with automatic fallback)
         $this->drivers = [
+            new DeepSeekDriver(),   // DeepSeek V3/V4 models (deepseek-chat + reasoner) - new default
             new ClaudeDriver(),
             new GeminiDriver(),
             new OpenAIDriver(),

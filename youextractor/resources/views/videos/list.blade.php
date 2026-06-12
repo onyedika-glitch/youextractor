@@ -211,7 +211,7 @@
     <header>
         <div class="container header-content">
             <a href="{{ Auth::check() ? route('dashboard') : route('landing') }}" class="logo">
-                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
+                <img src="/img/youextractor-logo.png" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
                 <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
             </a>
             <div>
@@ -327,8 +327,12 @@
 
     <!-- Footer -->
     <footer>
-        <div class="container" style="text-align: center; color: var(--ds-text-muted); font-size: var(--theme-font-size-sm);">
-            <p>YouTube Video Extractor &bull; Powered by AI & Laravel</p>
+        <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 8px; justify-content: center; color: var(--ds-text-muted); font-size: var(--theme-font-size-sm);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <img src="/img/youextractor-logo.png" alt="YouExtractor logo" width="24" height="24" style="width:24px;height:24px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
+                <span style="font-weight: 600; color: var(--ds-text-primary);">YouExtractor</span>
+            </div>
+            <p style="margin: 0;">YouTube Video Extractor &bull; Powered by AI & Laravel</p>
         </div>
     </footer>
 

@@ -37,8 +37,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         statusEl.textContent = 'One click → full project + AI guide';
     } else {
-        extractBtn.textContent = 'Go to a YouTube video';
-        extractBtn.disabled = true;
+        extractBtn.textContent = 'Go to YouTube ↗';
+        extractBtn.disabled = false;
+        extractBtn.onclick = () => {
+            chrome.tabs.create({ url: 'https://youtube.com' });
+            window.close();
+        };
         statusEl.innerHTML = 'Open any coding tutorial on YouTube<br>to extract code instantly.';
     }
 });

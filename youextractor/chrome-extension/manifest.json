@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "YouExtractor",
-    "version": "1.1",
+    "version": "1.2",
     "description": "Extract code and tutorials from YouTube videos directly to YouExtractor.",
     "permissions": [
         "activeTab"
@@ -10,14 +10,9 @@
         "default_popup": "popup.html",
         "default_title": "Extract with YouExtractor"
     },
-    "content_scripts": [
-        {
-            "matches": [
-                "*://*.youtube.com/*"
-            ],
-            "js": [
-                "content.js"
-            ]
-        }
-    ]
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+    }
 }

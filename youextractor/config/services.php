@@ -13,6 +13,9 @@ return [
     'anthropic' => [
         'key' => env('ANTHROPIC_API_KEY'),
     ],
+    'deepseek' => [
+        'key' => env('DEEPSEEK_API_KEY'),
+    ],
     'google' => [
         'client_id'     => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
