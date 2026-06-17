@@ -1130,7 +1130,7 @@
         <div class="container">
             <div class="trust-content">
                 <div class="trust-item"><i class="ph ph-youtube-logo"></i> Works on any YouTube video</div>
-                <div class="trust-item"><i class="ph ph-brain"></i> Powered by Gemini + GPT-4</div>
+                <div class="trust-item"><i class="ph ph-brain"></i> Powered by DeepSeek + Claude 4.5 Sonnet</div>
                 <div class="trust-item"><i class="ph ph-github-logo"></i> One-click GitHub push</div>
                 <div class="trust-item"><i class="ph ph-chrome-logo"></i> Chrome Extension available</div>
             </div>
