@@ -27,14 +27,15 @@ class GitHubService
     }
 
     /**
-     * Create a new public repo and commit all extracted files.
+     * Create a new repo and commit all extracted files.
      *
      * @param  string  $repoName    Sanitised repo name (no spaces).
      * @param  string  $description Short repo description.
      * @param  array   $files       Extracted code files from codeData['files'].
+     * @param  bool    $isPrivate   Whether the repo should be private.
      * @return string|null          HTML URL of the created repo, or null on failure.
      */
-    public function pushProject(string $repoName, string $description, array $files): ?string
+    public function pushProject(string $repoName, string $description, array $files, bool $isPrivate = false): ?string
     {
         $username = $this->getAuthenticatedUsername();
         if (!$username) {
@@ -42,7 +43,7 @@ class GitHubService
         }
 
         // 1. Create the repository
-        $repoUrl = $this->createRepository($repoName, $description);
+        $repoUrl = $this->createRepository($repoName, $description, $isPrivate);
         if (!$repoUrl) {
             return null;
         }
@@ -74,13 +75,13 @@ class GitHubService
     /**
      * Create a repo and return its HTML URL.
      */
-    private function createRepository(string $name, string $description): ?string
+    private function createRepository(string $name, string $description, bool $isPrivate = false): ?string
     {
         try {
             $response = $this->github()->post("{$this->baseUrl}/user/repos", [
                 'name'        => $name,
                 'description' => $description,
-                'private'     => false,
+                'private'     => $isPrivate,
                 'auto_init'   => false, // we push our own README
             ]);
 
@@ -91,7 +92,7 @@ class GitHubService
             // Handle name collision — append timestamp
             if ($response->status() === 422) {
                 $newName  = $name . '-' . time();
-                return $this->createRepository($newName, $description);
+                return $this->createRepository($newName, $description, $isPrivate);
             }
 
             Log::warning('[GitHub] createRepository failed: ' . $response->body());

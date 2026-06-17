@@ -1587,12 +1587,36 @@
                                     </a>
                                 </div>
                                 ` : `
-                                <div id="github-push-form" style="display: flex; flex-direction: column; gap: var(--theme-spacing-2); flex: 1; max-width: 520px; min-width: 260px;">
-                                    <ds-input id="github-token-input" placeholder="ghp_xxxxxxxxxxxxxxxx" label="GitHub Personal Access Token" size="sm" style="width:100%;"></ds-input>
-                                    <div>
+                                <div id="github-push-form" style="display: flex; flex-direction: column; gap: var(--theme-spacing-3); flex: 1.2; max-width: 540px; min-width: 280px; background: rgba(255,255,255,0.02); padding: var(--theme-spacing-4); border-radius: var(--theme-radius-xl); border: 1px solid rgba(255,255,255,0.04);">
+                                    <ds-input id="github-token-input" value="${localStorage.getItem('github_personal_token') || ''}" placeholder="ghp_xxxxxxxxxxxxxxxx" label="GitHub Personal Access Token" size="sm" style="width:100%;"></ds-input>
+                                    
+                                    <div style="display: flex; align-items: center; gap: 8px; margin-top: -2px; margin-bottom: 2px;">
+                                        <input type="checkbox" id="github-remember-token" ${localStorage.getItem('github_personal_token') ? 'checked' : ''} style="accent-color: var(--ds-color-brand); cursor: pointer;">
+                                        <label for="github-remember-token" style="font-size: 11px; color: var(--ds-text-secondary); cursor: pointer; user-select: none;">Save token in this browser</label>
+                                    </div>
+
+                                    <!-- Expandable repository configuration -->
+                                    <details style="margin-top: var(--theme-spacing-1);">
+                                        <summary style="font-size: 11px; color: var(--ds-text-brand); cursor: pointer; font-weight: 500; outline: none; user-select: none; margin-bottom: var(--theme-spacing-2);">
+                                            Advanced Repository Settings
+                                        </summary>
+                                        <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3); padding-top: var(--theme-spacing-2); border-top: 1px dashed rgba(255,255,255,0.08);">
+                                            <ds-input id="github-repo-name" value="${escapeHtml(sanitiseRepoName(video.title))}" placeholder="repository-name" label="Repository Name" size="sm" style="width:100%;"></ds-input>
+                                            <ds-input id="github-repo-desc" value="Extracted from YouTube: https://youtu.be/${video.youtube_id} — by YouExtractor" placeholder="Short description" label="Repository Description" size="sm" style="width:100%;"></ds-input>
+                                            
+                                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                                <label style="font-size: var(--theme-font-size-sm); font-weight: var(--theme-font-weight-medium); color: var(--ds-text-secondary);">Repository Visibility</label>
+                                                <select id="github-repo-privacy" style="background: var(--ds-surface-input); border: 1px solid var(--ds-border-input); border-radius: var(--theme-radius-lg); color: var(--ds-text-primary); padding: 8px 10px; font-size: 12px; outline: none; width: 100%; transition: border-color 0.2s; cursor: pointer;">
+                                                    <option value="public" selected>Public (Standard)</option>
+                                                    <option value="private">Private (Requires repo scope)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </details>
+
+                                    <div style="margin-top: var(--theme-spacing-2);">
                                         <ds-button id="github-push-btn" onclick="pushToGitHub('${video.id}')" label="Create Repo & Push Code" variant="gradient" size="md" icon="git-pull-request" style="width:100%;"></ds-button>
                                     </div>
-                                    <div style="font-size:10px; color:var(--ds-text-muted); text-align:center;">A new private repo will be created automatically</div>
                                 </div>
                                 `}
                             </div>
@@ -2336,13 +2360,27 @@
             return escaped;
         }
 
+        function sanitiseRepoName(title) {
+            let name = title.replace(/[^a-zA-Z0-9_.-]/g, '-');
+            name = name.replace(/-+/g, '-');
+            name = name.trim('-');
+            return name.toLowerCase().substring(0, 100) || 'youextractor-project';
+        }
+
         // Action: Push to GitHub handler
         function pushToGitHub(videoId) {
             const tokenInput = document.getElementById('github-token-input');
+            const repoNameInput = document.getElementById('github-repo-name');
+            const repoDescInput = document.getElementById('github-repo-desc');
+            const repoPrivacySelect = document.getElementById('github-repo-privacy');
+            const rememberTokenCheckbox = document.getElementById('github-remember-token');
             const pushBtn = document.getElementById('github-push-btn');
             const statusMsg = document.getElementById('github-status-msg');
             
             const token = tokenInput ? tokenInput.value.trim() : '';
+            const repoName = repoNameInput ? repoNameInput.value.trim() : '';
+            const repoDesc = repoDescInput ? repoDescInput.value.trim() : '';
+            const isPrivate = repoPrivacySelect ? repoPrivacySelect.value === 'private' : false;
             
             if (!token) {
                 tokenInput.error = 'GitHub Personal Access Token is required';
@@ -2350,6 +2388,13 @@
             }
             
             tokenInput.error = '';
+            
+            if (rememberTokenCheckbox && rememberTokenCheckbox.checked) {
+                localStorage.setItem('github_personal_token', token);
+            } else {
+                localStorage.removeItem('github_personal_token');
+            }
+            
             pushBtn.loading = true;
             statusMsg.classList.remove('hidden');
             statusMsg.className = 'text-sm text-blue-400 font-mono';
@@ -2361,7 +2406,12 @@
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({ github_token: token })
+                body: JSON.stringify({ 
+                    github_token: token,
+                    repo_name: repoName,
+                    description: repoDesc,
+                    private: isPrivate
+                })
             })
             .then(async response => {
                 const data = await response.json();

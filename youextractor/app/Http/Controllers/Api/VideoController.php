@@ -156,7 +156,7 @@ class VideoController extends Controller
     /**
      * POST /api/videos/{video}/push-to-github
      *
-     * Expects:  { "github_token": "ghp_xxxx" }
+     * Expects:  { "github_token": "ghp_xxxx", "repo_name": "...", "description": "...", "private": false }
      * Creates a new GitHub repo and pushes all extracted files.
      */
     public function pushToGitHub(Request $request, Video $video): JsonResponse
@@ -167,6 +167,9 @@ class VideoController extends Controller
 
         $validated = $request->validate([
             'github_token' => 'required|string|min:10',
+            'repo_name'    => 'nullable|string|max:100',
+            'description'  => 'nullable|string|max:255',
+            'private'      => 'nullable|boolean',
         ]);
 
         if (empty($video->code_snippets)) {
@@ -177,10 +180,11 @@ class VideoController extends Controller
         }
 
         $github   = new GitHubService($validated['github_token']);
-        $repoName = $this->sanitiseRepoName($video->title);
-        $desc     = "Extracted from YouTube: https://youtu.be/{$video->youtube_id} — by YouExtractor";
+        $repoName = !empty($validated['repo_name']) ? $this->sanitiseRepoName($validated['repo_name']) : $this->sanitiseRepoName($video->title);
+        $desc     = !empty($validated['description']) ? $validated['description'] : "Extracted from YouTube: https://youtu.be/{$video->youtube_id} — by YouExtractor";
+        $isPrivate = filter_var($validated['private'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
-        $repoUrl = $github->pushProject($repoName, $desc, $video->code_snippets);
+        $repoUrl = $github->pushProject($repoName, $desc, $video->code_snippets, $isPrivate);
 
         if (!$repoUrl) {
             return response()->json([
