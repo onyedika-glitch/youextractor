@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Subtle pulse animation on the button
         extractBtn.style.transition = 'transform 180ms ease, box-shadow 180ms ease';
         setTimeout(() => {
-            if (extractBtn) extractBtn.style.boxShadow = '0 0 0 3px rgba(168,85,247,0.25)';
+            if (extractBtn) extractBtn.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.25)';
         }, 420);
 
         extractBtn.onclick = () => {

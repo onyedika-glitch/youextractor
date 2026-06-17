@@ -123,7 +123,7 @@
         <!-- Top Navigation Header -->
         <div class="header-section">
             <a href="{{ route('landing') }}" class="logo">
-                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(99, 102, 241, 0.25);">
                 <span class="ds-type-heading-sm" style="margin: 0; font-size: 1.25rem;">YouExtractor</span>
             </a>
             <a href="{{ url()->previous() ?: route('landing') }}" style="text-decoration: none;">

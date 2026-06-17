@@ -14,11 +14,11 @@ class SitemapController extends Controller
 
             $baseUrl = rtrim(config('app.url', 'https://youextractor.me'), '/');
 
-            // Static public pages (always include these)
             $staticPages = [
                 ['path' => '/', 'changefreq' => 'weekly', 'priority' => '1.0'],
                 ['path' => '/privacy', 'changefreq' => 'yearly', 'priority' => '0.3'],
                 ['path' => '/terms', 'changefreq' => 'yearly', 'priority' => '0.3'],
+                ['path' => '/support', 'changefreq' => 'monthly', 'priority' => '0.5'],
                 ['path' => '/blog', 'changefreq' => 'weekly', 'priority' => '0.7'],
             ];
 

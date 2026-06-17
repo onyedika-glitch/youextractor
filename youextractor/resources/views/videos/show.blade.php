@@ -77,7 +77,7 @@
 
         /* Header */
         header {
-            background: rgba(10, 16, 34, 0.3);
+            background: rgba(24, 24, 27, 0.3);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--ds-border-subtle);
             height: 80px;
@@ -157,7 +157,7 @@
 
         /* Code view cards */
         .code-snippet-card {
-            border: 1px solid rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: var(--theme-radius-2xl);
             background: var(--ds-surface-card);
             box-shadow: var(--theme-shadow-lg);
@@ -224,7 +224,7 @@
 
         /* Footer */
         footer {
-            background: rgba(6, 11, 24, 0.8);
+            background: rgba(24, 24, 27, 0.8);
             border-top: 1px solid var(--ds-border-subtle);
             padding: var(--theme-spacing-8) 0;
             margin-top: var(--theme-spacing-12);
@@ -237,7 +237,7 @@
     <header>
         <div class="container header-content">
             <a href="{{ Auth::check() ? route('dashboard') : route('landing') }}" class="logo">
-                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(99,102,241,0.25);">
                 <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
             </a>
             <div class="header-actions">

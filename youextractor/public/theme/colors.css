@@ -1,59 +1,59 @@
 /* theme/colors.css */
 :root {
-  /* Neutral / Surface ramp — deep blue-gray foundation */
+  /* Neutral / Surface ramp — deep zinc foundation */
   --theme-neutral-0: #ffffff;
-  --theme-neutral-50: #f8fafc;
-  --theme-neutral-100: #f1f5f9;
-  --theme-neutral-200: #e2e8f0;
-  --theme-neutral-300: #cbd5e1;
-  --theme-neutral-400: #94a3b8;
-  --theme-neutral-500: #64748b;
-  --theme-neutral-600: #475569;
-  --theme-neutral-700: #334155;
-  --theme-neutral-800: #1e293b;
-  --theme-neutral-850: #172033;
-  --theme-neutral-900: #0f172a;
-  --theme-neutral-950: #0a1022;
-  --theme-neutral-1000: #060b18;
+  --theme-neutral-50: #fafafa;
+  --theme-neutral-100: #f4f4f5;
+  --theme-neutral-200: #e4e4e7;
+  --theme-neutral-300: #d4d4d8;
+  --theme-neutral-400: #a1a1aa;
+  --theme-neutral-500: #71717a;
+  --theme-neutral-600: #52525b;
+  --theme-neutral-700: #3f3f46;
+  --theme-neutral-800: #27272a;
+  --theme-neutral-850: #1f1f23;
+  --theme-neutral-900: #18181b;
+  --theme-neutral-950: #09090b;
+  --theme-neutral-1000: #040405;
 
-  /* Purple ramp — primary brand energy */
-  --theme-purple-50: #faf5ff;
-  --theme-purple-100: #f3e8ff;
-  --theme-purple-200: #e9d5ff;
-  --theme-purple-300: #d8b4fe;
-  --theme-purple-400: #c084fc;
-  --theme-purple-500: #a855f7;
-  --theme-purple-600: #9333ea;
-  --theme-purple-700: #7e22ce;
-  --theme-purple-800: #6b21a8;
-  --theme-purple-900: #581c87;
-  --theme-purple-1000: #3b0764;
+  /* Purple ramp — primary brand Indigo energy */
+  --theme-purple-50: #eef2ff;
+  --theme-purple-100: #e0e7ff;
+  --theme-purple-200: #c7d2fe;
+  --theme-purple-300: #a5b4fc;
+  --theme-purple-400: #818cf8;
+  --theme-purple-500: #6366f1;
+  --theme-purple-600: #4f46e5;
+  --theme-purple-700: #4338ca;
+  --theme-purple-800: #3730a3;
+  --theme-purple-900: #312e81;
+  --theme-purple-1000: #1e1b4b;
 
-  /* Pink ramp — dynamic secondary accent */
-  --theme-pink-50: #fdf2f8;
-  --theme-pink-100: #fce7f3;
-  --theme-pink-200: #fbcfe8;
-  --theme-pink-300: #f9a8d4;
-  --theme-pink-400: #f472b6;
-  --theme-pink-500: #ec4899;
-  --theme-pink-600: #db2777;
-  --theme-pink-700: #be185d;
-  --theme-pink-800: #9d174d;
-  --theme-pink-900: #831843;
-  --theme-pink-1000: #500724;
+  /* Pink ramp — dynamic secondary Violet accent */
+  --theme-pink-50: #fdf4ff;
+  --theme-pink-100: #fae8ff;
+  --theme-pink-200: #f5d0fe;
+  --theme-pink-300: #f0abfc;
+  --theme-pink-400: #e879f9;
+  --theme-pink-500: #d946ef;
+  --theme-pink-600: #c084fc;
+  --theme-pink-700: #a855f7;
+  --theme-pink-800: #9333ea;
+  --theme-pink-900: #7e22ce;
+  --theme-pink-1000: #581c87;
 
-  /* Cyan ramp — electric tertiary accent */
-  --theme-cyan-50: #ecfeff;
-  --theme-cyan-100: #cffafe;
-  --theme-cyan-200: #a5f3fc;
-  --theme-cyan-300: #67e8f9;
-  --theme-cyan-400: #22d3ee;
-  --theme-cyan-500: #06b6d4;
-  --theme-cyan-600: #0891b2;
-  --theme-cyan-700: #0e7490;
-  --theme-cyan-800: #155e75;
-  --theme-cyan-900: #164e63;
-  --theme-cyan-1000: #083344;
+  /* Cyan ramp — electric tertiary Sky accent */
+  --theme-cyan-50: #f0f9ff;
+  --theme-cyan-100: #e0f2fe;
+  --theme-cyan-200: #bae6fd;
+  --theme-cyan-300: #7dd3fc;
+  --theme-cyan-400: #38bdf8;
+  --theme-cyan-500: #0ea5e9;
+  --theme-cyan-600: #0284c7;
+  --theme-cyan-700: #0369a1;
+  --theme-cyan-800: #075985;
+  --theme-cyan-900: #0c4a6e;
+  --theme-cyan-1000: #082f49;
 
   /* Green ramp — success states */
   --theme-green-50: #f0fdf4;

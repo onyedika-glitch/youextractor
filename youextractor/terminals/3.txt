@@ -1,0 +1,33 @@
+---
+pid: 17908
+cwd: "C:\Users\HP\Documents\youextractor\youextractor\youextractor"
+command: "cd \"C:\\Users\\HP\\Documents\\universal-scraper\\sadarproperties\"; npm start"
+started_at: 2026-06-10T09:23:03.641Z
+running_for_ms: 2605006  
+---
+
+> universal-scraper@1.0.0 start
+> concurrently -k -n API,WEB -c blue,green "npm run server" "npm run dashboard"
+
+[API] 
+[API] > universal-scraper@1.0.0 server
+[API] > node server/index.js
+[API] 
+[WEB] 
+[WEB] > universal-scraper@1.0.0 dashboard
+[WEB] > npm run dev --prefix dashboard
+[WEB] 
+[API] [Sadar API] Running at http://localhost:3001
+[API] [Sadar API] SQLite database: server/data/sadar.db
+[WEB] 
+[WEB] > dashboard@0.0.0 dev
+[WEB] > vite
+[WEB] 
+[WEB] 
+[WEB]   VITE v8.0.16  ready in 465 ms
+[WEB] 
+[WEB]   ➜  Local:   http://localhost:5173/
+[WEB]   ➜  Network: use --host to expose
+[API] npm run server exited with code 4294967295
+--> Sending SIGTERM to other processes..
+[WEB] npm run dashboard exited with code 4294967295

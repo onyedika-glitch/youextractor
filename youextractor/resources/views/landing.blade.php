@@ -153,7 +153,7 @@
         /* Header */
         header {
             border-bottom: 1px solid var(--ds-border-subtle);
-            background: rgba(10, 16, 34, 0.65);
+            background: rgba(24, 24, 27, 0.65);
             backdrop-filter: blur(16px);
             position: fixed;
             top: 0;
@@ -322,7 +322,7 @@
             overflow: hidden;
             border: 1px solid var(--ds-border-subtle);
             box-shadow: 0 30px 90px -15px rgba(0, 0, 0, 0.5), 
-                        0 0 0 1px rgba(168, 85, 247, 0.1);
+                        0 0 0 1px rgba(99, 102, 241, 0.1);
             background: var(--ds-surface-card);
             transform: perspective(1200px) rotateX(6deg);
             transition: transform var(--theme-motion-slower) var(--theme-ease-out);
@@ -340,7 +340,7 @@
 
         .frame-topbar {
             height: 32px;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(24, 24, 27, 0.9);
             border-bottom: 1px solid var(--ds-border-subtle);
             display: flex;
             align-items: center;
@@ -360,25 +360,25 @@
 
         .ambient-glow {
             position: absolute;
-            width: 620px;
-            height: 620px;
+            width: 700px;
+            height: 700px;
             border-radius: var(--theme-radius-full);
-            filter: blur(110px);
-            opacity: 0.38;
+            filter: blur(130px);
+            opacity: 0.15;
             pointer-events: none;
             z-index: 0;
         }
 
-        .glow-purple { top: -140px; left: -220px; background: radial-gradient(circle, rgba(168,85,247,0.38) 0%, rgba(10,16,34,0) 68%); }
-        .glow-pink { top: 80px; right: -180px; background: radial-gradient(circle, rgba(236,72,153,0.32) 0%, rgba(10,16,34,0) 68%); }
-        .glow-cyan { bottom: -120px; left: 30%; background: radial-gradient(circle, rgba(6,182,212,0.24) 0%, rgba(10,16,34,0) 70%); }
+        .glow-purple { top: -200px; left: -150px; background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, rgba(9,9,11,0) 70%); }
+        .glow-pink { top: 100px; right: -150px; background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, rgba(9,9,11,0) 70%); }
+        .glow-cyan { bottom: -150px; left: 25%; background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, rgba(9,9,11,0) 70%); }
 
         /* Trust Bar */
         .trust-bar {
             padding: var(--theme-spacing-6) 0;
             border-top: 1px solid var(--ds-border-subtle);
             border-bottom: 1px solid var(--ds-border-subtle);
-            background: rgba(15, 23, 42, 0.25);
+            background: rgba(24, 24, 27, 0.25);
         }
 
         .trust-content {
@@ -458,7 +458,7 @@
 
         .step:hover .step-number {
             transform: scale(1.05) rotate(8deg);
-            box-shadow: 0 0 0 8px rgba(168, 85, 247, 0.1);
+            box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.1);
         }
 
         .step-icon {
@@ -505,7 +505,7 @@
         /* Interactive Demo */
         .demo-section {
             padding: var(--theme-spacing-16) 0;
-            background: linear-gradient(180deg, rgba(15,23,42,0.0) 0%, rgba(15,23,42,0.35) 100%);
+            background: linear-gradient(180deg, rgba(24,24,27,0.0) 0%, rgba(24,24,27,0.35) 100%);
         }
 
         .demo-card {
@@ -555,7 +555,7 @@
         .mini-video-thumb {
             width: 92px;
             height: 52px;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
+            background: linear-gradient(135deg, #27272a, #18181b);
             border-radius: var(--theme-radius-lg);
             display: flex;
             align-items: center;
@@ -629,9 +629,9 @@
             font-size: var(--theme-font-size-xs);
             padding: 4px 12px;
             border-radius: 999px;
-            background: rgba(168,85,247,0.1);
+            background: rgba(99,102,241,0.1);
             color: var(--ds-text-brand);
-            border: 1px solid rgba(168,85,247,0.2);
+            border: 1px solid rgba(99,102,241,0.2);
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -652,7 +652,7 @@
         /* Features */
         .features {
             padding: var(--theme-spacing-20) 0 var(--theme-spacing-12);
-            background: rgba(15, 23, 42, 0.3);
+            background: rgba(24, 24, 27, 0.3);
             border-top: 1px solid var(--ds-border-subtle);
             border-bottom: 1px solid var(--ds-border-subtle);
         }
@@ -684,8 +684,8 @@
         }
 
         .feature-icon-brand { background: var(--ds-color-brand-muted); border: 1px solid var(--ds-border-accent); }
-        .feature-icon-accent { background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.2); }
-        .feature-icon-electric { background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.2); }
+        .feature-icon-accent { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); }
+        .feature-icon-electric { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); }
         .feature-icon-success { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); }
 
         .feature-title {
@@ -735,7 +735,7 @@
         /* Stats */
         .stats {
             padding: var(--theme-spacing-14) 0;
-            background: rgba(10, 16, 34, 0.6);
+            background: rgba(24, 24, 27, 0.6);
         }
 
         .stats-grid {
@@ -791,7 +791,7 @@
 
         .testimonial:hover {
             transform: translateY(-3px);
-            border-color: rgba(168, 85, 247, 0.2);
+            border-color: rgba(99, 102, 241, 0.2);
         }
 
         .testimonial-quote {
@@ -835,7 +835,7 @@
         /* FAQ */
         .faq {
             padding: var(--theme-spacing-16) 0 var(--theme-spacing-20);
-            background: rgba(15, 23, 42, 0.25);
+            background: rgba(24, 24, 27, 0.25);
             border-top: 1px solid var(--ds-border-subtle);
         }
 
@@ -904,13 +904,13 @@
             margin: 0 auto;
             padding: var(--theme-spacing-10) var(--theme-spacing-8);
             background: var(--ds-surface-glass);
-            border: 1px solid rgba(168, 85, 247, 0.25);
+            border: 1px solid rgba(99, 102, 241, 0.25);
             border-radius: var(--theme-radius-2xl);
         }
 
         /* Footer */
         footer {
-            background: rgba(6, 11, 24, 0.85);
+            background: rgba(24, 24, 27, 0.85);
             border-top: 1px solid var(--ds-border-subtle);
             padding: var(--theme-spacing-12) 0 var(--theme-spacing-8);
             margin-top: auto;
@@ -998,7 +998,7 @@
         .spinner-bg {
             width: 100%;
             height: 100%;
-            border: 3px solid rgba(168, 85, 247, 0.18);
+            border: 3px solid rgba(99, 102, 241, 0.18);
             border-radius: 50%;
         }
         .spinner-fg {
@@ -1022,7 +1022,7 @@
     <header id="header">
         <div class="container header-content">
             <a href="{{ route('landing') }}" class="logo">
-                <img src="/img/youextractor-logo.jpg" alt="YouExtractor logo" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(168,85,247,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor logo" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(99,102,241,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
                 <span class="ds-type-heading-sm" style="margin: 0; letter-spacing: -.3px;">YouExtractor</span>
             </a>
             
@@ -1140,7 +1140,7 @@
     <!-- Prefill banner for Chrome extension / direct links (demo CTA wiring) -->
     @php $incomingUrl = request('youtube_url') ?: request('url'); @endphp
     @if($incomingUrl)
-    <div style="background: rgba(168,85,247,0.08); border-bottom:1px solid rgba(168,85,247,0.2); padding: 8px 0;">
+    <div style="background: rgba(99,102,241,0.08); border-bottom:1px solid rgba(99,102,241,0.2); padding: 8px 0;">
         <div class="container" style="display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; font-size:13px;">
             <span style="color:var(--ds-text-secondary);">Ready to extract from this video?</span>
             <a href="{{ route('signup', ['youtube_url' => $incomingUrl]) }}" style="color:var(--ds-text-brand); font-weight:600; text-decoration:none;">
@@ -1730,7 +1730,7 @@
             
             toast = document.createElement('div');
             toast.className = 'demo-cta-toast';
-            toast.style.cssText = 'margin-top:12px;padding:10px 14px;background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.3);border-radius:var(--theme-radius-lg);font-size:12px;display:flex;align-items:center;gap:10px;';
+            toast.style.cssText = 'margin-top:12px;padding:10px 14px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.3);border-radius:var(--theme-radius-lg);font-size:12px;display:flex;align-items:center;gap:10px;';
             toast.innerHTML = `
                 <span style="flex:1;color:var(--ds-text-secondary);">${message}</span>
                 <a href="${targetUrl}" style="color:var(--ds-text-brand);font-weight:600;white-space:nowrap;text-decoration:none;">Sign up free →</a>
@@ -1743,7 +1743,7 @@
         }
         
         function createMiniConfetti(container) {
-            const colors = ['#a855f7', '#ec4899', '#06b6d4'];
+            const colors = ['#6366f1', '#8b5cf6', '#38bdf8'];
             for (let i = 0; i < 9; i++) {
                 const dot = document.createElement('div');
                 dot.style.cssText = `position:absolute;width:5px;height:5px;border-radius:50%;background:${colors[i%3]};opacity:.7;pointer-events:none;`;
@@ -1818,9 +1818,9 @@
             window.addEventListener('scroll', () => {
                 const y = window.scrollY;
                 if (y > 40 && last <= 40) {
-                    header.style.background = 'rgba(10, 16, 34, 0.82)';
+                    header.style.background = 'rgba(24, 24, 27, 0.82)';
                 } else if (y <= 40 && last > 40) {
-                    header.style.background = 'rgba(10, 16, 34, 0.65)';
+                    header.style.background = 'rgba(24, 24, 27, 0.65)';
                 }
                 last = y;
             }, { passive: true });
@@ -1840,7 +1840,7 @@
                 const btn = document.getElementById('demoExtractBtn');
                 if (btn && !btn.dataset.interacted) {
                     btn.style.transition = 'box-shadow 420ms';
-                    btn.style.boxShadow = '0 0 0 3px rgba(168,85,247,0.2)';
+                    btn.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.2)';
                     setTimeout(() => { if (btn) btn.style.boxShadow = ''; }, 1400);
                 }
             }, 5200);

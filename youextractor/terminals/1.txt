@@ -1,0 +1,9 @@
+---
+pid: 13224
+cwd: "C:\Users\HP\Documents\youextractor\youextractor\youextractor"
+command: "cd \"C:\\Users\\HP\\Documents\\universal-scraper\\sadarproperties\"; node server/index.js"
+started_at: 2026-06-10T09:19:40.280Z
+running_for_ms: 2820002  
+---
+[Sadar API] Running at http://localhost:3001
+[Sadar API] SQLite database: server/data/sadar.db
