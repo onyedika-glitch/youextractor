@@ -59,9 +59,9 @@
   /* ─── Gradient tokens ─── */
   --ds-gradient-brand: var(--theme-teal-500);
   --ds-gradient-brand-hover: var(--theme-teal-600);
-  --ds-gradient-electric: linear-gradient(135deg, var(--theme-teal-500), var(--theme-cyan-500));
-  --ds-gradient-warm: linear-gradient(135deg, var(--theme-amber-500), var(--theme-yellow-400));
-  --ds-gradient-surface: linear-gradient(180deg, var(--theme-neutral-850), var(--theme-neutral-900));
+  --ds-gradient-electric: var(--theme-teal-500);
+  --ds-gradient-warm: var(--theme-amber-500);
+  --ds-gradient-surface: var(--theme-neutral-900);
 
   /* ─── Layer / elevation tokens ─── */
   --ds-layer-glow: var(--theme-glow-brand);

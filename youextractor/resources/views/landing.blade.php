@@ -1041,7 +1041,7 @@
                     <ds-button label="Sign In" variant="ghost" size="sm"></ds-button>
                 </a>
                 <a href="{{ route('signup') }}" style="text-decoration: none;">
-                    <ds-button label="Start Free" variant="gradient" size="sm"></ds-button>
+                    <ds-button label="Start Free" variant="primary" size="sm"></ds-button>
                 </a>
                 <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
                     <i class="ph ph-list"></i>
@@ -1069,9 +1069,8 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="ambient-glow glow-teal"></div>
-        <div class="ambient-glow glow-amber"></div>
-        <div class="ambient-glow glow-cyan"></div>
+        
+        
         
         <div class="container" style="position: relative; z-index: 1;">
             @php
@@ -1099,7 +1098,7 @@
             
             <div class="hero-actions">
                 <a href="{{ route('signup') }}" style="text-decoration: none;">
-                    <ds-button label="Start for free" variant="gradient" size="lg" ></ds-button>
+                    <ds-button label="Start for free" variant="primary" size="lg" ></ds-button>
                 </a>
                 <a href="#demo" style="text-decoration: none;">
                     <ds-button label="See 15-second demo" variant="secondary" size="lg" icon="play-circle"></ds-button>
@@ -1234,7 +1233,7 @@
                                 <ds-button 
                                     id="demoExtractBtn"
                                     label="Extract project"
-                                    variant="gradient"
+                                    variant="primary"
                                     size="lg"
                                     icon="sparkle">
                                 </ds-button>
@@ -1510,7 +1509,7 @@
                 
                 <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
                     <a href="{{ route('signup') }}" style="text-decoration:none;">
-                        <ds-button label="Create free account" variant="gradient" size="lg" icon="arrow-right" icon-position="right"></ds-button>
+                        <ds-button label="Create free account" variant="primary" size="lg" icon="arrow-right" icon-position="right"></ds-button>
                     </a>
                     <a href="#demo" style="text-decoration:none;">
                         <ds-button label="Watch the demo again" variant="secondary" size="lg"></ds-button>

@@ -1001,9 +1001,9 @@
                                 type="submit" 
                                 id="submitBtn"
                                 label="Extract & Learn"
-                                variant="gradient"
+                                variant="primary"
                                 size="lg"
-                                icon="rocket-launch"
+    
                                 class="w-full">
                             </ds-button>
                         </div>
@@ -1615,7 +1615,7 @@
                                     </details>
 
                                     <div style="margin-top: var(--theme-spacing-2);">
-                                        <ds-button id="github-push-btn" onclick="pushToGitHub('${video.id}')" label="Create Repo & Push Code" variant="gradient" size="md" icon="git-pull-request" style="width:100%;"></ds-button>
+                                        <ds-button id="github-push-btn" onclick="pushToGitHub('${video.id}')" label="Create Repo & Push Code" variant="primary" size="md" icon="git-pull-request" style="width:100%;"></ds-button>
                                     </div>
                                 </div>
                                 `}

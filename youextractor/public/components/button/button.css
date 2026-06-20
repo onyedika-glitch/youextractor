@@ -83,13 +83,13 @@
 
 /* Gradient variant */
 .ds-button--gradient {
-  background: var(--ds-gradient-brand);
+  background: var(--ds-color-brand);
   color: var(--theme-neutral-0);
 }
 
 .ds-button--gradient:hover:not(:disabled) {
-  background: var(--ds-gradient-brand-hover);
-  box-shadow: var(--ds-layer-glow);
+  background: var(--ds-color-brand-hover);
+  box-shadow: var(--ds-layer-glow-teal);
   transform: translateY(-1px);
 }
 
