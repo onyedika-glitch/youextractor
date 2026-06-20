@@ -52,7 +52,7 @@
         <div class="blog-nav">
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <a href="{{ route('landing') }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ds-text-primary);">
-                    <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(99,102,241,0.25);">
+                    <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(20,184,166,0.25);">
                     <span style="font-weight: 700; font-size: 1.05rem;">YouExtractor</span>
                 </a>
                 <a href="{{ url()->previous() ?: route('landing') }}" style="text-decoration: none;">

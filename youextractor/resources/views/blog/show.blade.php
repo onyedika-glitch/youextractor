@@ -81,7 +81,7 @@
                 <ds-button label="Back to Blog" variant="glow" size="sm"></ds-button>
             </a>
             <a href="{{ route('landing') }}" style="text-decoration: none; display: flex; align-items: center; gap: 8px; color: var(--ds-text-muted);">
-                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:20px;height:20px;border-radius:4px;object-fit:cover;border:1px solid rgba(99,102,241,0.25);">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:20px;height:20px;border-radius:4px;object-fit:cover;border:1px solid rgba(20,184,166,0.25);">
                 <span style="font-size: 13px; font-weight: 600;">YouExtractor</span>
             </a>
         </div>

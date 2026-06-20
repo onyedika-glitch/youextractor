@@ -211,7 +211,7 @@
     <header>
         <div class="container header-content">
             <a href="{{ Auth::check() ? route('dashboard') : route('landing') }}" class="logo">
-                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(99,102,241,0.25);">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(20,184,166,0.25);">
                 <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
             </a>
             <div>
@@ -236,7 +236,7 @@
         <div class="stats-grid" id="statsGrid">
             <ds-card variant="glass" padding="lg">
                 <div style="display: flex; align-items: center; gap: var(--theme-spacing-4);">
-                    <div style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); border-radius: var(--theme-radius-xl); display: flex; align-items: center; justify-content: center; color: var(--ds-text-brand); font-size: 1.5rem;">
+                    <div style="width: 48px; height: 48px; background: rgba(20, 184, 166, 0.1); border-radius: var(--theme-radius-xl); display: flex; align-items: center; justify-content: center; color: var(--ds-text-brand); font-size: 1.5rem;">
                         <i class="ph ph-books"></i>
                     </div>
                     <div>
@@ -308,7 +308,7 @@
         <div id="noResults" class="hidden" style="max-width: 440px; margin: 0 auto; width: 100%;">
             <ds-card variant="glass" padding="lg">
                 <div style="text-align: center; display: flex; flex-direction: column; gap: var(--theme-spacing-4);">
-                    <div style="width: 64px; height: 64px; background: rgba(99, 102, 241, 0.1); border-radius: var(--theme-radius-full); display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                    <div style="width: 64px; height: 64px; background: rgba(20, 184, 166, 0.1); border-radius: var(--theme-radius-full); display: flex; align-items: center; justify-content: center; margin: 0 auto;">
                         <i class="ph ph-folder-open text-3xl" style="color: var(--ds-text-brand); font-size: 2rem;"></i>
                     </div>
                     <div>

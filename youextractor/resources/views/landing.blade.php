@@ -322,7 +322,7 @@
             overflow: hidden;
             border: 1px solid var(--ds-border-subtle);
             box-shadow: 0 30px 90px -15px rgba(0, 0, 0, 0.5), 
-                        0 0 0 1px rgba(99, 102, 241, 0.1);
+                        0 0 0 1px rgba(20, 184, 166, 0.1);
             background: var(--ds-surface-card);
             transform: perspective(1200px) rotateX(6deg);
             transition: transform var(--theme-motion-slower) var(--theme-ease-out);
@@ -369,8 +369,8 @@
             z-index: 0;
         }
 
-        .glow-purple { top: -200px; left: -150px; background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, rgba(9,9,11,0) 70%); }
-        .glow-pink { top: 100px; right: -150px; background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, rgba(9,9,11,0) 70%); }
+        .glow-teal { top: -200px; left: -150px; background: radial-gradient(circle, rgba(20,184,166,0.2) 0%, rgba(9,9,11,0) 70%); }
+        .glow-amber { top: 100px; right: -150px; background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, rgba(9,9,11,0) 70%); }
         .glow-cyan { bottom: -150px; left: 25%; background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, rgba(9,9,11,0) 70%); }
 
         /* Trust Bar */
@@ -458,7 +458,7 @@
 
         .step:hover .step-number {
             transform: scale(1.05) rotate(8deg);
-            box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 0 8px rgba(20, 184, 166, 0.1);
         }
 
         .step-icon {
@@ -629,9 +629,9 @@
             font-size: var(--theme-font-size-xs);
             padding: 4px 12px;
             border-radius: 999px;
-            background: rgba(99,102,241,0.1);
+            background: rgba(20,184,166,0.1);
             color: var(--ds-text-brand);
-            border: 1px solid rgba(99,102,241,0.2);
+            border: 1px solid rgba(20,184,166,0.2);
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -684,7 +684,7 @@
         }
 
         .feature-icon-brand { background: var(--ds-color-brand-muted); border: 1px solid var(--ds-border-accent); }
-        .feature-icon-accent { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); }
+        .feature-icon-accent { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); }
         .feature-icon-electric { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); }
         .feature-icon-success { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); }
 
@@ -791,7 +791,7 @@
 
         .testimonial:hover {
             transform: translateY(-3px);
-            border-color: rgba(99, 102, 241, 0.2);
+            border-color: rgba(20, 184, 166, 0.2);
         }
 
         .testimonial-quote {
@@ -904,7 +904,7 @@
             margin: 0 auto;
             padding: var(--theme-spacing-10) var(--theme-spacing-8);
             background: var(--ds-surface-glass);
-            border: 1px solid rgba(99, 102, 241, 0.25);
+            border: 1px solid rgba(20, 184, 166, 0.25);
             border-radius: var(--theme-radius-2xl);
         }
 
@@ -998,7 +998,7 @@
         .spinner-bg {
             width: 100%;
             height: 100%;
-            border: 3px solid rgba(99, 102, 241, 0.18);
+            border: 3px solid rgba(20, 184, 166, 0.18);
             border-radius: 50%;
         }
         .spinner-fg {
@@ -1022,7 +1022,7 @@
     <header id="header">
         <div class="container header-content">
             <a href="{{ route('landing') }}" class="logo">
-                <img src="/img/youextractor-logo.jpg" alt="YouExtractor logo" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(99,102,241,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor logo" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(20,184,166,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
                 <span class="ds-type-heading-sm" style="margin: 0; letter-spacing: -.3px;">YouExtractor</span>
             </a>
             
@@ -1069,8 +1069,8 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="ambient-glow glow-purple"></div>
-        <div class="ambient-glow glow-pink"></div>
+        <div class="ambient-glow glow-teal"></div>
+        <div class="ambient-glow glow-amber"></div>
         <div class="ambient-glow glow-cyan"></div>
         
         <div class="container" style="position: relative; z-index: 1;">
@@ -1140,7 +1140,7 @@
     <!-- Prefill banner for Chrome extension / direct links (demo CTA wiring) -->
     @php $incomingUrl = request('youtube_url') ?: request('url'); @endphp
     @if($incomingUrl)
-    <div style="background: rgba(99,102,241,0.08); border-bottom:1px solid rgba(99,102,241,0.2); padding: 8px 0;">
+    <div style="background: rgba(20,184,166,0.08); border-bottom:1px solid rgba(20,184,166,0.2); padding: 8px 0;">
         <div class="container" style="display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; font-size:13px;">
             <span style="color:var(--ds-text-secondary);">Ready to extract from this video?</span>
             <a href="{{ route('signup', ['youtube_url' => $incomingUrl]) }}" style="color:var(--ds-text-brand); font-weight:600; text-decoration:none;">
@@ -1730,7 +1730,7 @@
             
             toast = document.createElement('div');
             toast.className = 'demo-cta-toast';
-            toast.style.cssText = 'margin-top:12px;padding:10px 14px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.3);border-radius:var(--theme-radius-lg);font-size:12px;display:flex;align-items:center;gap:10px;';
+            toast.style.cssText = 'margin-top:12px;padding:10px 14px;background:rgba(20,184,166,0.12);border:1px solid rgba(20,184,166,0.3);border-radius:var(--theme-radius-lg);font-size:12px;display:flex;align-items:center;gap:10px;';
             toast.innerHTML = `
                 <span style="flex:1;color:var(--ds-text-secondary);">${message}</span>
                 <a href="${targetUrl}" style="color:var(--ds-text-brand);font-weight:600;white-space:nowrap;text-decoration:none;">Sign up free →</a>
@@ -1743,7 +1743,7 @@
         }
         
         function createMiniConfetti(container) {
-            const colors = ['#6366f1', '#8b5cf6', '#38bdf8'];
+            const colors = ['#14b8a6', '#f59e0b', '#38bdf8'];
             for (let i = 0; i < 9; i++) {
                 const dot = document.createElement('div');
                 dot.style.cssText = `position:absolute;width:5px;height:5px;border-radius:50%;background:${colors[i%3]};opacity:.7;pointer-events:none;`;
@@ -1840,7 +1840,7 @@
                 const btn = document.getElementById('demoExtractBtn');
                 if (btn && !btn.dataset.interacted) {
                     btn.style.transition = 'box-shadow 420ms';
-                    btn.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.2)';
+                    btn.style.boxShadow = '0 0 0 3px rgba(20,184,166,0.2)';
                     setTimeout(() => { if (btn) btn.style.boxShadow = ''; }, 1400);
                 }
             }, 5200);

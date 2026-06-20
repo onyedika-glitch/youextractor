@@ -17,30 +17,30 @@
   --theme-neutral-1000: #040405;
 
   /* Purple ramp — primary brand Indigo energy */
-  --theme-purple-50: #eef2ff;
-  --theme-purple-100: #e0e7ff;
-  --theme-purple-200: #c7d2fe;
-  --theme-purple-300: #a5b4fc;
-  --theme-purple-400: #818cf8;
-  --theme-purple-500: #6366f1;
-  --theme-purple-600: #4f46e5;
-  --theme-purple-700: #4338ca;
-  --theme-purple-800: #3730a3;
-  --theme-purple-900: #312e81;
-  --theme-purple-1000: #1e1b4b;
+  --theme-teal-50: #f0fdfa;
+  --theme-teal-100: #ccfbf1;
+  --theme-teal-200: #99f6e4;
+  --theme-teal-300: #5eead4;
+  --theme-teal-400: #2dd4bf;
+  --theme-teal-500: #14b8a6;
+  --theme-teal-600: #0d9488;
+  --theme-teal-700: #0f766e;
+  --theme-teal-800: #115e59;
+  --theme-teal-900: #134e4a;
+  --theme-teal-1000: #042f2e;
 
   /* Pink ramp — dynamic secondary Violet accent */
-  --theme-pink-50: #fdf4ff;
-  --theme-pink-100: #fae8ff;
-  --theme-pink-200: #f5d0fe;
-  --theme-pink-300: #f0abfc;
-  --theme-pink-400: #e879f9;
-  --theme-pink-500: #d946ef;
-  --theme-pink-600: #c084fc;
-  --theme-pink-700: #a855f7;
-  --theme-pink-800: #9333ea;
-  --theme-pink-900: #7e22ce;
-  --theme-pink-1000: #581c87;
+  --theme-amber-50: #fffbeb;
+  --theme-amber-100: #fef3c7;
+  --theme-amber-200: #fde68a;
+  --theme-amber-300: #fcd34d;
+  --theme-amber-400: #fbbf24;
+  --theme-amber-500: #f59e0b;
+  --theme-amber-600: #d97706;
+  --theme-amber-700: #b45309;
+  --theme-amber-800: #92400e;
+  --theme-amber-900: #78350f;
+  --theme-amber-1000: #451a03;
 
   /* Cyan ramp — electric tertiary Sky accent */
   --theme-cyan-50: #f0f9ff;

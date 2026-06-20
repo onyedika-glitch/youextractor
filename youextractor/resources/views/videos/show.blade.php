@@ -237,7 +237,7 @@
     <header>
         <div class="container header-content">
             <a href="{{ Auth::check() ? route('dashboard') : route('landing') }}" class="logo">
-                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(99,102,241,0.25);">
+                <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:26px;height:26px;border-radius:5px;object-fit:cover;border:1px solid rgba(20,184,166,0.25);">
                 <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
             </a>
             <div class="header-actions">
@@ -444,7 +444,7 @@
                             toast.style.bottom = '24px';
                             toast.style.right = '24px';
                             toast.style.zIndex = '9999';
-                            toast.style.background = 'var(--ds-color-brand, #8b5cf6)';
+                            toast.style.background = 'var(--ds-color-brand, #f59e0b)';
                             toast.style.color = '#white';
                             toast.style.padding = 'var(--theme-spacing-3) var(--theme-spacing-5)';
                             toast.style.borderRadius = 'var(--theme-border-radius-xl)';

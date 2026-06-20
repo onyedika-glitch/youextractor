@@ -62,7 +62,7 @@ const CARD_SHADOW_CSS = `
   }
 
   :host([interactive][variant="glow"]) .card:hover {
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.4), 0 0 80px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 0 30px rgba(20, 184, 166, 0.4), 0 0 80px rgba(20, 184, 166, 0.15);
   }
 
   :host([interactive][variant="glow-electric"]) .card:hover {

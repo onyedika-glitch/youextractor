@@ -5,7 +5,7 @@
             <!-- Brand Column -->
             <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-4);">
                 <a href="{{ route('landing') }}" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ds-text-primary);">
-                    <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width: 28px; height: 28px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(99, 102, 241, 0.25);">
+                    <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width: 28px; height: 28px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(20, 184, 166, 0.25);">
                     <span style="font-weight: 700; font-size: 1.15rem; letter-spacing: var(--theme-letter-spacing-tight);">YouExtractor</span>
                 </a>
                 <p style="margin: 0; font-size: var(--theme-font-size-sm); max-width: 280px; line-height: var(--theme-line-height-relaxed);">

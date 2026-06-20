@@ -24,7 +24,7 @@
   border-radius: var(--theme-radius-2xl);
 }
 
-/* Glass accent — glass with purple border glow */
+/* Glass accent — glass with teal border glow */
 .ds-surface-glass-accent {
   background: var(--ds-surface-glass);
   backdrop-filter: blur(12px);

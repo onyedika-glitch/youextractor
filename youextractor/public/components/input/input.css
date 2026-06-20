@@ -64,7 +64,7 @@
 .ds-input__field:focus {
   outline: none;
   border-color: var(--ds-border-input-focus);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), 0 0 20px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15), 0 0 20px rgba(20, 184, 166, 0.1);
   background: var(--ds-surface-input);
 }
 

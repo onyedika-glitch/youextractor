@@ -101,7 +101,7 @@
             width: 24px;
             height: 24px;
             border-radius: var(--theme-radius-full);
-            border: 1px solid rgba(99, 102, 241, 0.3);
+            border: 1px solid rgba(20, 184, 166, 0.3);
         }
 
         .avatar-initial {
@@ -200,7 +200,7 @@
         .spinner-bg {
             width: 56px;
             height: 56px;
-            border: 4px solid rgba(99, 102, 241, 0.2);
+            border: 4px solid rgba(20, 184, 166, 0.2);
             border-radius: var(--theme-radius-full);
         }
 
@@ -247,8 +247,8 @@
             margin-bottom: var(--theme-spacing-4);
         }
 
-        .icon-brand { background: rgba(99, 102, 241, 0.1); }
-        .icon-accent { background: rgba(139, 92, 246, 0.1); }
+        .icon-brand { background: rgba(20, 184, 166, 0.1); }
+        .icon-accent { background: rgba(245, 158, 11, 0.1); }
         .icon-electric { background: rgba(56, 189, 248, 0.1); }
         .icon-success { background: rgba(34, 197, 94, 0.1); }
 
@@ -282,7 +282,7 @@
         }
 
         .stat-card:hover {
-            border-color: rgba(99, 102, 241, 0.2);
+            border-color: rgba(20, 184, 166, 0.2);
             transform: translateY(-2px);
         }
 
@@ -329,7 +329,7 @@
         }
         .grid-half ds-card[interactive]:hover {
             transform: translateY(-3px);
-            border-color: rgba(99, 102, 241, 0.25);
+            border-color: rgba(20, 184, 166, 0.25);
             box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.35);
         }
         .grid-half ds-card[interactive] .ds-type-heading-sm {
@@ -354,7 +354,7 @@
         }
         .stat-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(99, 102, 241, 0.18);
+            border-color: rgba(20, 184, 166, 0.18);
         }
 
         /* Workspace Layout - split view */
@@ -665,7 +665,7 @@
         }
 
         .explorer-file-btn.file-active {
-            background: rgba(99, 102, 241, 0.12);
+            background: rgba(20, 184, 166, 0.12);
             color: var(--ds-text-brand);
             font-weight: 500;
         }
@@ -783,7 +783,7 @@
             background: var(--ds-color-brand-muted);
             color: var(--ds-text-brand);
             border-bottom-right-radius: var(--theme-radius-sm);
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(20, 184, 166, 0.2);
         }
 
         .chat-bubble-ai {
@@ -928,7 +928,7 @@
         <header>
             <div class="container header-content">
                 <a href="{{ route('landing') }}" class="logo">
-                    <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(99,102,241,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
+                    <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(20,184,166,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
                     <span class="ds-type-heading-sm" style="margin: 0;">YouExtractor</span>
                 </a>
                 
@@ -1039,7 +1039,7 @@
                 <div class="stats-grid" id="statsGrid">
                     <!-- Stat 1 -->
                     <div class="stat-card">
-                        <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--ds-text-brand);">
+                        <div class="stat-icon" style="background: rgba(20, 184, 166, 0.1); color: var(--ds-text-brand);">
                             <i class="ph ph-film-script"></i>
                         </div>
                         <div class="stat-info">
@@ -1059,7 +1059,7 @@
                     </div>
                     <!-- Stat 3 -->
                     <div class="stat-card">
-                        <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: var(--ds-text-accent);">
+                        <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--ds-text-accent);">
                             <i class="ph ph-git-branch"></i>
                         </div>
                         <div class="stat-info">
@@ -1333,7 +1333,7 @@
                                 <div style="display: flex; align-items: center; gap: 6px;">
                                     ${stackBadge}
                                     ${video.github_repo_url ? `
-                                    <a href="${escapeHtml(video.github_repo_url)}" target="_blank" onclick="event.stopImmediatePropagation(); event.stopPropagation();" title="View on GitHub" style="text-decoration:none; display:flex; align-items:center; gap:3px; background:rgba(99,102,241,0.15); color:var(--ds-text-brand); padding:1px 5px; border-radius:999px; font-size:9px; font-weight:600;">
+                                    <a href="${escapeHtml(video.github_repo_url)}" target="_blank" onclick="event.stopImmediatePropagation(); event.stopPropagation();" title="View on GitHub" style="text-decoration:none; display:flex; align-items:center; gap:3px; background:rgba(20,184,166,0.15); color:var(--ds-text-brand); padding:1px 5px; border-radius:999px; font-size:9px; font-weight:600;">
                                         <i class="ph ph-github-logo"></i> <span style="margin-left:1px;">Repo</span>
                                     </a>` : ''}
                                     <span class="ds-badge-brand" style="white-space: nowrap;"><i class="ph ph-arrow-right" style="margin-right: 0;"></i></span>
@@ -1557,7 +1557,7 @@
 
                     <!-- GitHub Push Card -->
                     ${hasCode ? `
-                    <ds-card variant="glass" padding="lg" style="border: 1px solid rgba(99, 102, 241, 0.15);">
+                    <ds-card variant="glass" padding="lg" style="border: 1px solid rgba(20, 184, 166, 0.15);">
                         <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-4);">
                             <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: var(--theme-spacing-4); flex-wrap: wrap;">
                                 <div style="flex: 1; min-width: 280px;">
@@ -1790,9 +1790,9 @@
                                         </div>
                                     </div>
                                     <div class="chat-suggested-questions" id="chatSuggestedQuestions" style="display: flex; gap: 8px; flex-wrap: wrap; padding: 10px var(--theme-spacing-4); border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.1);">
-                                        <button onclick="askSuggested('Explain the project structure')" style="background: rgba(99, 102, 241, 0.05); border: 1px dashed rgba(99, 102, 241, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(99, 102, 241, 0.15)'; this.style.borderColor='rgba(99, 102, 241, 0.6)'" onmouseout="this.style.background='rgba(99, 102, 241, 0.05)'; this.style.borderColor='rgba(99, 102, 241, 0.3)'">Explain project structure</button>
-                                        <button onclick="askSuggested('What are the prerequisites?')" style="background: rgba(99, 102, 241, 0.05); border: 1px dashed rgba(99, 102, 241, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(99, 102, 241, 0.15)'; this.style.borderColor='rgba(99, 102, 241, 0.6)'" onmouseout="this.style.background='rgba(99, 102, 241, 0.05)'; this.style.borderColor='rgba(99, 102, 241, 0.3)'">What are the prerequisites?</button>
-                                        <button onclick="askSuggested('How do I run the code?')" style="background: rgba(99, 102, 241, 0.05); border: 1px dashed rgba(99, 102, 241, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(99, 102, 241, 0.15)'; this.style.borderColor='rgba(99, 102, 241, 0.6)'" onmouseout="this.style.background='rgba(99, 102, 241, 0.05)'; this.style.borderColor='rgba(99, 102, 241, 0.3)'">How do I run the code?</button>
+                                        <button onclick="askSuggested('Explain the project structure')" style="background: rgba(20, 184, 166, 0.05); border: 1px dashed rgba(20, 184, 166, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(20, 184, 166, 0.15)'; this.style.borderColor='rgba(20, 184, 166, 0.6)'" onmouseout="this.style.background='rgba(20, 184, 166, 0.05)'; this.style.borderColor='rgba(20, 184, 166, 0.3)'">Explain project structure</button>
+                                        <button onclick="askSuggested('What are the prerequisites?')" style="background: rgba(20, 184, 166, 0.05); border: 1px dashed rgba(20, 184, 166, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(20, 184, 166, 0.15)'; this.style.borderColor='rgba(20, 184, 166, 0.6)'" onmouseout="this.style.background='rgba(20, 184, 166, 0.05)'; this.style.borderColor='rgba(20, 184, 166, 0.3)'">What are the prerequisites?</button>
+                                        <button onclick="askSuggested('How do I run the code?')" style="background: rgba(20, 184, 166, 0.05); border: 1px dashed rgba(20, 184, 166, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(20, 184, 166, 0.15)'; this.style.borderColor='rgba(20, 184, 166, 0.6)'" onmouseout="this.style.background='rgba(20, 184, 166, 0.05)'; this.style.borderColor='rgba(20, 184, 166, 0.3)'">How do I run the code?</button>
                                     </div>
                                     <div class="chat-input-area">
                                         <div class="chat-input-wrapper">
@@ -2060,7 +2060,7 @@
                             </div>
                             ${ide.primary.extensions && ide.primary.extensions.length > 0 ? `
                                 <div style="margin-top: var(--theme-spacing-5); border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: var(--theme-spacing-4);">
-                                    <p class="ds-type-label-md text-pink-300" style="margin: 0 0 var(--theme-spacing-2);">Recommended Extensions:</p>
+                                    <p class="ds-type-label-md text-amber-400" style="margin: 0 0 var(--theme-spacing-2);">Recommended Extensions:</p>
                                     <div style="display: flex; flex-wrap: wrap; gap: var(--theme-spacing-2);">
                                         ${ide.primary.extensions.map(ext => `
                                             <span class="ds-badge-brand">${escapeHtml(ext)}</span>
@@ -2222,7 +2222,7 @@
                             <div class="ds-surface-inset" style="padding: var(--theme-spacing-3); display: flex; flex-direction: column; gap: var(--theme-spacing-2);">
                                 ${runGuide.production.commands.map(cmd => `
                                     <div style="display: flex; align-items: center; justify-content: space-between; py: 1;">
-                                        <code class="text-purple-400 font-mono text-sm">${escapeHtml(cmd)}</code>
+                                        <code class="text-teal-400 font-mono text-sm">${escapeHtml(cmd)}</code>
                                         <ds-button onclick="copyToClipboard('${escapeHtml(cmd).replace(/'/g, "\\'")}')" label="Copy" variant="ghost" size="sm" icon="copy"></ds-button>
                                     </div>
                                 `).join('')}

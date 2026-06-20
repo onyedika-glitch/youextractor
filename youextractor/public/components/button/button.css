@@ -55,7 +55,7 @@
 
 .ds-button--primary:hover:not(:disabled) {
   background: var(--ds-color-brand-hover);
-  box-shadow: var(--ds-layer-glow-purple);
+  box-shadow: var(--ds-layer-glow-teal);
 }
 
 /* Secondary variant */
@@ -101,12 +101,12 @@
 .ds-button--glow {
   background: var(--ds-color-brand);
   color: var(--theme-neutral-0);
-  box-shadow: var(--ds-layer-glow-purple);
+  box-shadow: var(--ds-layer-glow-teal);
 }
 
 .ds-button--glow:hover:not(:disabled) {
   background: var(--ds-color-brand-hover);
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.5), 0 0 80px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 30px rgba(20, 184, 166, 0.5), 0 0 80px rgba(20, 184, 166, 0.2);
   transform: translateY(-1px);
 }
 

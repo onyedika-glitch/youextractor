@@ -15,8 +15,8 @@
   --ds-text-muted: var(--theme-neutral-500);
   --ds-text-disabled: var(--theme-neutral-600);
   --ds-text-inverse: var(--theme-neutral-950);
-  --ds-text-brand: var(--theme-purple-400);
-  --ds-text-accent: var(--theme-pink-400);
+  --ds-text-brand: var(--theme-teal-400);
+  --ds-text-accent: var(--theme-amber-400);
   --ds-text-electric: var(--theme-cyan-400);
 
   /* ─── Border tokens ─── */
@@ -25,18 +25,18 @@
   --ds-border-strong: var(--theme-neutral-600);
   --ds-border-accent: var(--theme-glass-border-accent);
   --ds-border-input: var(--theme-neutral-700);
-  --ds-border-input-focus: var(--theme-purple-500);
+  --ds-border-input-focus: var(--theme-teal-500);
   --ds-border-error: var(--theme-red-500);
   --ds-border-success: var(--theme-green-500);
 
   /* ─── Brand / accent color tokens ─── */
-  --ds-color-brand: var(--theme-purple-500);
-  --ds-color-brand-hover: var(--theme-purple-600);
-  --ds-color-brand-subtle: var(--theme-purple-400);
-  --ds-color-brand-muted: var(--theme-purple-900);
-  --ds-color-accent: var(--theme-pink-500);
-  --ds-color-accent-hover: var(--theme-pink-600);
-  --ds-color-accent-subtle: var(--theme-pink-400);
+  --ds-color-brand: var(--theme-teal-500);
+  --ds-color-brand-hover: var(--theme-teal-600);
+  --ds-color-brand-subtle: var(--theme-teal-400);
+  --ds-color-brand-muted: var(--theme-teal-900);
+  --ds-color-accent: var(--theme-amber-500);
+  --ds-color-accent-hover: var(--theme-amber-600);
+  --ds-color-accent-subtle: var(--theme-amber-400);
   --ds-color-electric: var(--theme-cyan-500);
   --ds-color-electric-hover: var(--theme-cyan-600);
   --ds-color-electric-subtle: var(--theme-cyan-400);
@@ -53,20 +53,20 @@
   --ds-color-warning-muted: var(--theme-yellow-900);
 
   /* ─── Focus tokens ─── */
-  --ds-focus-ring: 0 0 0 2px var(--theme-neutral-950), 0 0 0 4px var(--theme-purple-500);
+  --ds-focus-ring: 0 0 0 2px var(--theme-neutral-950), 0 0 0 4px var(--theme-teal-500);
   --ds-focus-ring-error: 0 0 0 2px var(--theme-neutral-950), 0 0 0 4px var(--theme-red-500);
 
   /* ─── Gradient tokens ─── */
-  --ds-gradient-brand: linear-gradient(135deg, var(--theme-purple-500), var(--theme-pink-500));
-  --ds-gradient-brand-hover: linear-gradient(135deg, var(--theme-purple-600), var(--theme-pink-600));
-  --ds-gradient-electric: linear-gradient(135deg, var(--theme-purple-500), var(--theme-cyan-500));
-  --ds-gradient-warm: linear-gradient(135deg, var(--theme-pink-500), var(--theme-yellow-400));
+  --ds-gradient-brand: var(--theme-teal-500);
+  --ds-gradient-brand-hover: var(--theme-teal-600);
+  --ds-gradient-electric: linear-gradient(135deg, var(--theme-teal-500), var(--theme-cyan-500));
+  --ds-gradient-warm: linear-gradient(135deg, var(--theme-amber-500), var(--theme-yellow-400));
   --ds-gradient-surface: linear-gradient(180deg, var(--theme-neutral-850), var(--theme-neutral-900));
 
   /* ─── Layer / elevation tokens ─── */
   --ds-layer-glow: var(--theme-glow-brand);
-  --ds-layer-glow-purple: var(--theme-glow-purple);
-  --ds-layer-glow-pink: var(--theme-glow-pink);
+  --ds-layer-glow-teal: var(--theme-glow-teal);
+  --ds-layer-glow-amber: var(--theme-glow-amber);
   --ds-layer-glow-cyan: var(--theme-glow-cyan);
   --ds-layer-overlay: var(--theme-overlay-dark);
   --ds-layer-scrim: var(--theme-overlay-medium);
