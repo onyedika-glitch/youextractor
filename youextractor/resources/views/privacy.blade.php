@@ -8,7 +8,7 @@
     <meta name="description" content="YouExtractor's privacy policy. Learn how we handle your data when you extract code projects from YouTube tutorials using our AI tool.">
     
     <!-- Design System CSS -->
-    <link rel="stylesheet" href="/css/youextractor-design-system.css">
+    <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

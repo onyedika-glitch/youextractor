@@ -8,7 +8,7 @@
     <meta name="description" content="Terms of Service for YouExtractor. Rules for using our AI tool that converts YouTube coding tutorials into complete projects and guides.">
     
     <!-- Design System CSS -->
-    <link rel="stylesheet" href="/css/youextractor-design-system.css">
+    <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -8,7 +8,7 @@
     <meta name="description" content="Get support for YouExtractor. Reach out via email, check open GitHub issues, or join our community for help converting YouTube tutorials into code projects.">
     
     <!-- Design System CSS -->
-    <link rel="stylesheet" href="/css/youextractor-design-system.css">
+    <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
