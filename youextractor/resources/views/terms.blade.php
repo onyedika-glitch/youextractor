@@ -28,6 +28,8 @@
             flex-direction: column;
             align-items: center;
             box-sizing: border-box;
+            /* Verified light theme baseline */
+            transition: background-color var(--theme-motion-normal) var(--theme-ease-default), color var(--theme-motion-normal) var(--theme-ease-default);
         }
 
         .container {

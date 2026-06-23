@@ -15,6 +15,8 @@
             font-family: var(--theme-font-sans);
             background: var(--ds-surface-base);
             color: var(--ds-text-primary);
+            /* Verified light theme baseline */
+            transition: background-color var(--theme-motion-normal) var(--theme-ease-default), color var(--theme-motion-normal) var(--theme-ease-default);
         }
         .blog-container {
             max-width: 1100px;

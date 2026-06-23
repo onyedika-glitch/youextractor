@@ -46,16 +46,19 @@
             padding-left: 1.3em;
         }
         .article-content pre {
-            background: rgba(0,0,0,0.35);
+            background: var(--theme-neutral-50);
+            border: 1px solid var(--ds-border-subtle);
             padding: 18px;
             border-radius: var(--theme-radius-lg);
             overflow-x: auto;
             font-size: 13.5px;
             margin: 1.6em 0;
+            color: var(--ds-text-primary);
         }
         .article-content code {
             font-family: var(--theme-font-mono);
-            background: rgba(255,255,255,0.06);
+            background: var(--theme-neutral-100);
+            color: var(--ds-text-brand);
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 0.92em;
@@ -63,6 +66,7 @@
         .article-content pre code {
             background: transparent;
             padding: 0;
+            color: inherit;
         }
         .reading-meta {
             display: flex;

@@ -44,7 +44,7 @@
             .auth-sidebar-panel {
                 display: flex;
                 width: 50%;
-                background: linear-gradient(135deg, #09090b 0%, #18181b 100%);
+                background: linear-gradient(135deg, #f0fdfa 0%, #eff6ff 100%);
                 border-right: 1px solid var(--ds-border-subtle);
                 padding: var(--theme-spacing-12);
                 align-items: center;
@@ -143,17 +143,17 @@
 
         /* Mock Preview Card */
         .mock-preview-container {
-            background: rgba(24, 24, 27, 0.6);
+            background: rgba(255, 255, 255, 0.65);
             border: 1px solid var(--ds-border-subtle);
             border-radius: var(--theme-radius-xl);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
             overflow: hidden;
             width: 100%;
         }
 
         .mock-preview-header {
             height: 36px;
-            background: rgba(24, 24, 27, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             border-bottom: 1px solid var(--ds-border-subtle);
             display: flex;
             align-items: center;
@@ -205,8 +205,8 @@
             pointer-events: none;
             z-index: 0;
         }
-        .glow-1 { top: -100px; left: -100px; background: radial-gradient(circle, rgba(20,184,166,0.3) 0%, transparent 70%); }
-        .glow-2 { bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%); }
+        .glow-1 { top: -100px; left: -100px; background: radial-gradient(circle, rgba(20,184,166,0.15) 0%, transparent 70%); }
+        .glow-2 { bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%); }
 
         /* Right Side: Form Panel */
         .auth-form-panel {
