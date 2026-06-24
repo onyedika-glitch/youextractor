@@ -268,11 +268,18 @@ Provide a professional, concise, and educational response. Use markdown formatti
     private function stripMarkdownFences(string $content): string
     {
         $content = trim($content);
-        if (preg_match('/```(?:json)?\s*([\s\S]*?)\s*```/', $content, $m)) {
-            return $m[1];
+        if (str_starts_with($content, '```')) {
+            $firstLineBreak = strpos($content, "\n");
+            if ($firstLineBreak !== false) {
+                if (str_ends_with($content, '```')) {
+                    $content = substr($content, $firstLineBreak + 1);
+                    $content = substr($content, 0, -3);
+                }
+            }
         }
-        return $content;
+        return trim($content);
     }
+
 
     /** Normalise the keys we expect so downstream code never breaks. */
     private function normaliseKeys(array $data): array
