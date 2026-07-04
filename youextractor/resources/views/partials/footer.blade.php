@@ -1,11 +1,11 @@
-<footer style="background: rgba(24, 24, 27, 0.9); border-top: 1px solid var(--ds-border-subtle); padding: var(--theme-spacing-12) 0 var(--theme-spacing-8); margin-top: var(--theme-spacing-24); color: var(--ds-text-secondary); font-family: var(--theme-font-sans); width: 100%; box-sizing: border-box;">
+<footer style="background: rgba(244, 244, 245, 0.9); border-top: 1px solid var(--ds-border-subtle); padding: var(--theme-spacing-12) 0 var(--theme-spacing-8); margin-top: var(--theme-spacing-24); color: var(--ds-text-secondary); font-family: var(--theme-font-sans); width: 100%; box-sizing: border-box;">
     <div class="container">
         <!-- Main Footer Content -->
         <div style="display: grid; grid-template-columns: 1fr; gap: var(--theme-spacing-8); margin-bottom: var(--theme-spacing-12);" class="footer-grid-responsive">
             <!-- Brand Column -->
             <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-4);">
                 <a href="{{ route('landing') }}" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ds-text-primary);">
-                    <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width: 28px; height: 28px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(20, 184, 166, 0.25);">
+                     <img src="/img/youextractor-logo.jpg" alt="YouExtractor" style="width: 28px; height: 28px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(20, 184, 166, 0.25);">
                     <span style="font-weight: 700; font-size: 1.15rem; letter-spacing: var(--theme-letter-spacing-tight);">YouExtractor</span>
                 </a>
                 <p style="margin: 0; font-size: var(--theme-font-size-sm); max-width: 280px; line-height: var(--theme-line-height-relaxed);">
@@ -42,7 +42,7 @@
         </div>
 
         <!-- Bottom Copyright Area -->
-        <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: var(--theme-spacing-6); display: flex; flex-direction: column; gap: var(--theme-spacing-4); align-items: center; justify-content: space-between;" class="footer-bottom-responsive">
+        <div style="border-top: 1px solid rgba(0, 0, 0, 0.08); padding-top: var(--theme-spacing-6); display: flex; flex-direction: column; gap: var(--theme-spacing-4); align-items: center; justify-content: space-between;" class="footer-bottom-responsive">
             <p style="margin: 0; font-size: var(--theme-font-size-xs); color: var(--ds-text-muted);">
                 &copy; {{ date('Y') }} YouExtractor. Built with love for developers who learn visually.
             </p>

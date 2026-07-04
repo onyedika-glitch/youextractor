@@ -8,7 +8,7 @@
     <title>Video Details - YouTube Extractor</title>
     
     <!-- Design System CSS -->
-    <link rel="stylesheet" href="/css/youextractor-design-system.css">
+    <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
 
     <!-- Highlight.js for Code Highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
     {{-- SEO: Structured data for individual extraction (only relevant when /videos/{id} is made public) --}}
@@ -77,7 +77,7 @@
 
         /* Header */
         header {
-            background: rgba(24, 24, 27, 0.3);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--ds-border-subtle);
             height: 80px;
@@ -157,7 +157,7 @@
 
         /* Code view cards */
         .code-snippet-card {
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--ds-border-subtle);
             border-radius: var(--theme-radius-2xl);
             background: var(--ds-surface-card);
             box-shadow: var(--theme-shadow-lg);
@@ -170,8 +170,8 @@
             align-items: center;
             justify-content: space-between;
             padding: var(--theme-spacing-3) var(--theme-spacing-5);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(0, 0, 0, 0.15);
+            border-bottom: 1px solid var(--ds-border-subtle);
+            background: var(--theme-neutral-50);
         }
 
         .code-meta-left {
@@ -183,7 +183,7 @@
         .code-path {
             font-family: var(--theme-font-mono);
             font-size: var(--theme-font-size-sm);
-            color: var(--theme-neutral-0);
+            color: var(--ds-text-primary);
         }
 
         .code-pre {
@@ -196,8 +196,8 @@
 
         .code-description-footer {
             padding: var(--theme-spacing-3) var(--theme-spacing-5);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(0, 0, 0, 0.1);
+            border-top: 1px solid var(--ds-border-subtle);
+            background: var(--theme-neutral-50);
             font-size: var(--theme-font-size-xs);
             color: var(--ds-text-muted);
         }
@@ -224,7 +224,7 @@
 
         /* Footer */
         footer {
-            background: rgba(24, 24, 27, 0.8);
+            background: rgba(244, 244, 245, 0.9);
             border-top: 1px solid var(--ds-border-subtle);
             padding: var(--theme-spacing-8) 0;
             margin-top: var(--theme-spacing-12);
@@ -348,7 +348,7 @@
                     <ds-card variant="glass-accent" padding="lg">
                         <div class="result-info-header">
                             <div style="flex: 1;">
-                                <h2 class="ds-type-heading-md text-white" style="margin: 0;">${escapeHtml(video.title)}</h2>
+                                <h2 class="ds-type-heading-md" style="margin: 0; color: var(--ds-text-primary);">${escapeHtml(video.title)}</h2>
                                 <div class="result-meta">
                                     <span class="ds-badge-brand" style="display: inline-flex; align-items: center; gap: 6px;"><i class="ph ph-clock"></i> Duration: ${duration}</span>
                                     <span class="ds-badge-electric" style="display: inline-flex; align-items: center; gap: 6px;"><i class="ph ph-calendar"></i> Published: ${publishDate}</span>
@@ -370,7 +370,7 @@
                                 <h4 class="font-semibold flex items-center gap-2" style="color: var(--ds-text-brand); margin: 0;">
                                     <i class="ph ph-sparkle" style="font-size: 1.25rem;"></i> AI Summary
                                 </h4>
-                                <p class="ds-type-body-sm text-gray-300" style="line-height: var(--theme-line-height-relaxed); margin: 0;">${escapeHtml(video.summary)}</p>
+                                <p class="ds-type-body-sm" style="line-height: var(--theme-line-height-relaxed); margin: 0; color: var(--ds-text-secondary);">${escapeHtml(video.summary)}</p>
                             </div>
                         </ds-card>
                     ` : ''}
@@ -381,7 +381,7 @@
                             <i class="ph ph-robot"></i> AI Explanation & Concepts
                         </h4>
                         <ds-card variant="glass" padding="lg">
-                            <div class="ds-type-body-md text-gray-200" style="white-space: pre-wrap; line-height: var(--theme-line-height-relaxed);">
+                            <div class="ds-type-body-md" style="white-space: pre-wrap; line-height: var(--theme-line-height-relaxed); color: var(--ds-text-primary);">
                                 ${escapeHtml(video.explanation)}
                             </div>
                         </ds-card>
@@ -397,7 +397,7 @@
                                 <i class="ph ph-info"></i> Video Description
                             </h4>
                             <ds-card variant="default" padding="lg">
-                                <p class="ds-type-body-sm text-gray-400" style="white-space: pre-wrap; margin: 0;">${escapeHtml(video.description)}</p>
+                                <p class="ds-type-body-sm" style="white-space: pre-wrap; margin: 0; color: var(--ds-text-secondary);">${escapeHtml(video.description)}</p>
                             </ds-card>
                         </div>
                     ` : ''}
@@ -409,7 +409,7 @@
                                 <i class="ph ph-file-text"></i> Video Transcript
                             </h4>
                             <ds-card variant="default" padding="none">
-                                <div class="ds-type-body-sm text-gray-400" style="padding: var(--theme-spacing-5); max-height: 384px; overflow-y: auto; white-space: pre-wrap; line-height: var(--theme-line-height-relaxed); background: rgba(0,0,0,0.1);">
+                                <div class="ds-type-body-sm" style="padding: var(--theme-spacing-5); max-height: 384px; overflow-y: auto; white-space: pre-wrap; line-height: var(--theme-line-height-relaxed); background: var(--theme-neutral-50); color: var(--ds-text-secondary);">
                                     ${escapeHtml(video.transcript)}
                                 </div>
                             </ds-card>
@@ -445,7 +445,7 @@
                             toast.style.right = '24px';
                             toast.style.zIndex = '9999';
                             toast.style.background = 'var(--ds-color-brand, #f59e0b)';
-                            toast.style.color = '#white';
+                            toast.style.color = 'white';
                             toast.style.padding = 'var(--theme-spacing-3) var(--theme-spacing-5)';
                             toast.style.borderRadius = 'var(--theme-border-radius-xl)';
                             toast.style.border = '1px solid var(--ds-border-subtle)';

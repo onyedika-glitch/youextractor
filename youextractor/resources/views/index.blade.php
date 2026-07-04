@@ -8,7 +8,7 @@
     <title>YouTube Code Extractor - Learn Programming Faster</title>
     
     <!-- Design System CSS -->
-    <link rel="stylesheet" href="/css/youextractor-design-system.css">
+    <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
 
     <!-- Highlight.js for Syntax Highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
     <style>
@@ -42,7 +42,7 @@
 
         /* Header */
         header {
-            background: rgba(24, 24, 27, 0.3);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--ds-border-subtle);
             position: sticky;
@@ -91,7 +91,7 @@
             display: flex;
             align-items: center;
             gap: var(--theme-spacing-3);
-            background: rgba(30, 41, 59, 0.4);
+            background: rgba(244, 244, 245, 0.5);
             padding: var(--theme-spacing-2) var(--theme-spacing-4);
             border-radius: var(--theme-radius-full);
             border: 1px solid var(--ds-border-subtle);
@@ -120,7 +120,7 @@
         .username {
             font-size: var(--theme-font-size-sm);
             font-weight: var(--theme-font-weight-medium);
-            color: var(--theme-neutral-300);
+            color: var(--ds-text-primary);
         }
 
         /* Main layout */
@@ -200,7 +200,7 @@
         .spinner-bg {
             width: 56px;
             height: 56px;
-            border: 4px solid rgba(20, 184, 166, 0.2);
+            border: 4px solid rgba(20, 184, 166, 0.1);
             border-radius: var(--theme-radius-full);
         }
 
@@ -376,7 +376,7 @@
         }
 
         .workspace-sidebar {
-            background: rgba(24, 24, 27, 0.5);
+            background: rgba(244, 244, 245, 0.7);
             border-bottom: 1px solid var(--ds-border-subtle);
             display: flex;
             flex-direction: column;
@@ -392,7 +392,7 @@
         }
 
         .workspace-sidebar-header {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid var(--ds-border-subtle);
             padding-bottom: var(--theme-spacing-3);
         }
 
@@ -443,7 +443,7 @@
 
         .ws-nav-btn:hover {
             color: var(--ds-text-primary);
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.03);
         }
 
         .ws-nav-btn.ws-nav-active {
@@ -462,7 +462,7 @@
         .workspace-sidebar-footer {
             margin-top: auto;
             padding-top: var(--theme-spacing-4);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid var(--ds-border-subtle);
             display: flex;
             flex-direction: column;
             gap: var(--theme-spacing-2);
@@ -495,8 +495,8 @@
             display: flex;
             align-items: flex-start;
             gap: var(--theme-spacing-3);
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(0, 0, 0, 0.01);
+            border: 1px solid var(--ds-border-subtle);
             padding: var(--theme-spacing-4);
             border-radius: var(--theme-radius-xl);
             cursor: pointer;
@@ -504,8 +504,8 @@
         }
 
         .roadmap-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.03);
+            border-color: var(--ds-border-default);
         }
 
         .roadmap-item.completed {
@@ -570,10 +570,10 @@
         }
 
         .explorer-sidebar {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.02);
             border-radius: var(--theme-radius-xl);
             padding: var(--theme-spacing-4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--ds-border-subtle);
             max-height: 520px;
             overflow-y: auto;
             display: flex;
@@ -590,15 +590,15 @@
         .explorer-file-count {
             font-size: 10px;
             padding: 1px 7px;
-            background: rgba(255,255,255,0.06);
+            background: rgba(0,0,0,0.04);
             border-radius: 999px;
             color: var(--ds-text-muted);
         }
 
         .explorer-search {
             width: 100%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.8);
+            border: 1px solid var(--ds-border-subtle);
             color: var(--ds-text-primary);
             font-size: 11px;
             padding: 5px 8px;
@@ -657,7 +657,7 @@
 
         .explorer-file-btn:hover {
             color: var(--ds-text-primary);
-            background: rgba(255, 255, 255, 0.035);
+            background: rgba(0, 0, 0, 0.025);
         }
 
         .explorer-file-btn:hover::before {
@@ -696,7 +696,7 @@
             font-size: 9px;
             opacity: 0.5;
             font-family: var(--theme-font-sans);
-            background: rgba(255,255,255,0.06);
+            background: rgba(0,0,0,0.04);
             padding: 0 4px;
             border-radius: 3px;
             flex-shrink: 0;
@@ -705,8 +705,8 @@
         .explorer-viewer {
             display: flex;
             flex-direction: column;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--ds-border-subtle);
             border-radius: var(--theme-radius-xl);
             overflow: hidden;
             height: 100%;
@@ -717,8 +717,8 @@
             align-items: center;
             justify-content: space-between;
             padding: var(--theme-spacing-3) var(--theme-spacing-4);
-            background: rgba(0,0,0,0.4);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(244, 244, 245, 0.8);
+            border-bottom: 1px solid var(--ds-border-subtle);
         }
 
         .viewer-meta {
@@ -738,13 +738,13 @@
         .code-path {
             font-family: var(--theme-font-mono);
             font-size: var(--theme-font-size-sm);
-            color: var(--theme-neutral-0);
+            color: var(--ds-text-primary);
         }
 
         .code-description-footer {
             padding: var(--theme-spacing-3) var(--theme-spacing-5);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(0, 0, 0, 0.1);
+            border-top: 1px solid var(--ds-border-subtle);
+            background: rgba(244, 244, 245, 0.4);
             font-size: var(--theme-font-size-xs);
             color: var(--ds-text-muted);
         }
@@ -754,8 +754,8 @@
             display: flex;
             flex-direction: column;
             height: 480px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--ds-border-subtle);
+            background: rgba(255, 255, 255, 0.4);
             border-radius: var(--theme-radius-xl);
             overflow: hidden;
         }
@@ -788,10 +788,10 @@
 
         .chat-bubble-ai {
             align-self: flex-start;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.7);
             color: var(--ds-text-primary);
             border-bottom-left-radius: var(--theme-radius-sm);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--ds-border-subtle);
         }
 
         .chat-bubble-ai p {
@@ -802,12 +802,12 @@
         }
 
         .chat-bubble-ai pre {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(244, 244, 245, 0.8);
             padding: var(--theme-spacing-3);
             border-radius: var(--theme-radius-lg);
             overflow-x: auto;
             margin: var(--theme-spacing-2) 0;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid var(--ds-border-subtle);
         }
 
         .chat-bubble-ai code {
@@ -819,8 +819,8 @@
             display: flex;
             gap: var(--theme-spacing-3);
             padding: var(--theme-spacing-4);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(0,0,0,0.4);
+            border-top: 1px solid var(--ds-border-subtle);
+            background: rgba(244, 244, 245, 0.8);
         }
 
         .chat-input-wrapper {
@@ -915,7 +915,7 @@
 
         /* Footer styling */
         footer {
-            background: rgba(24, 24, 27, 0.8);
+            background: rgba(244, 244, 245, 0.9);
             border-top: 1px solid var(--ds-border-subtle);
             padding: var(--theme-spacing-8) 0;
             margin-top: var(--theme-spacing-12);
@@ -1083,10 +1083,10 @@
                 <div class="space-y-4">
                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--theme-spacing-4);">
                         <div>
-                            <h2 class="ds-type-heading-md text-white" style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                            <h2 class="ds-type-heading-md" style="margin: 0; display: flex; align-items: center; gap: 8px;">
                                 <i class="ph ph-books" style="color: var(--ds-text-brand);"></i> Your Learning Library
                             </h2>
-                            <p class="ds-type-body-sm text-gray-400" style="margin: 4px 0 0 0;">Select any video extraction to open its dedicated interactive workspace.</p>
+                            <p class="ds-type-body-sm" style="margin: 4px 0 0 0; color: var(--ds-text-secondary);">Select any video extraction to open its dedicated interactive workspace.</p>
                         </div>
                         <div style="width: 100%; max-width: 340px;">
                             <ds-input 
@@ -1111,7 +1111,7 @@
 
                 <!-- Features Info Walkthrough (Long Page Feature) -->
                 <div class="space-y-6" style="padding-top: var(--theme-spacing-12); border-top: 1px solid var(--ds-border-subtle);">
-                    <h3 class="ds-type-heading-sm text-white" style="text-align: center; margin-bottom: var(--theme-spacing-8);">Features Walkthrough</h3>
+                    <h3 class="ds-type-heading-sm" style="text-align: center; margin-bottom: var(--theme-spacing-8);">Features Walkthrough</h3>
                     <div class="features-grid">
                         <ds-card variant="glass" padding="lg">
                             <div class="feature-icon-box icon-brand">
@@ -1318,15 +1318,15 @@
                         <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; gap: var(--theme-spacing-4);">
                             <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-2);">
                                 <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: var(--theme-spacing-2);">
-                                    <h3 class="ds-type-heading-sm text-white" style="font-size: var(--theme-font-size-md); margin: 0; line-clamp: 2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    <h3 class="ds-type-heading-sm" style="font-size: var(--theme-font-size-md); margin: 0; line-clamp: 2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                                         ${escapeHtml(video.title)}
                                     </h3>
                                 </div>
-                                <p class="ds-type-body-sm text-gray-400" style="margin: 0; line-clamp: 2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                <p class="ds-type-body-sm" style="margin: 0; line-clamp: 2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: var(--ds-text-secondary);">
                                     ${escapeHtml(video.summary || 'AI extracted tutorial.')}
                                 </p>
                             </div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: var(--theme-font-size-xs); color: var(--ds-text-muted); border-top: 1px solid rgba(255,255,255,0.05); padding-top: var(--theme-spacing-3);">
+                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: var(--theme-font-size-xs); color: var(--ds-text-muted); border-top: 1px solid var(--ds-border-subtle); padding-top: var(--theme-spacing-3);">
                                 <span style="display: flex; align-items: center; gap: 4px;">
                                     <i class="ph ph-calendar"></i> ${date}
                                 </span>
@@ -1529,7 +1529,7 @@
                     <ds-card variant="glass-accent" padding="md">
                         <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-4);">
                             <!-- Top action bar -->
-                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: var(--theme-spacing-3); flex-wrap: wrap; gap: var(--theme-spacing-2);">
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ds-border-subtle); padding-bottom: var(--theme-spacing-3); flex-wrap: wrap; gap: var(--theme-spacing-2);">
                                 <ds-button onclick="closeWorkspace()" label="Back to Dashboard" variant="secondary" size="sm" ></ds-button>
                                 
                                 <div style="display: flex; gap: var(--theme-spacing-2);">
@@ -1545,7 +1545,7 @@
                             <!-- Video title and stack -->
                             <div class="result-info-header">
                                 <div style="flex: 1;">
-                                    <h2 class="ds-type-heading-md text-white" style="margin: 0;">${escapeHtml(video.title)}</h2>
+                                    <h2 class="ds-type-heading-md" style="margin: 0;">${escapeHtml(video.title)}</h2>
                                     <div class="result-meta">
                                         ${stackBadges}
                                         ${hasCode ? `<span class="ds-badge-success">${video.code_snippets.length} files</span>` : ''}
@@ -1563,10 +1563,10 @@
                                 <div style="flex: 1; min-width: 280px;">
                                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                                         <i class="ph ph-github-logo" style="font-size: 1.6rem; color: var(--ds-text-accent);"></i>
-                                        <h4 class="ds-type-heading-sm text-white" style="margin: 0;">One-Click GitHub Export</h4>
+                                        <h4 class="ds-type-heading-sm" style="margin: 0;">One-Click GitHub Export</h4>
                                         <span class="ds-badge-brand" style="font-size: 9px; padding: 1px 6px;">RECOMMENDED</span>
                                     </div>
-                                    <p class="ds-type-body-sm text-gray-400" style="margin: 0 0 8px;">
+                                    <p class="ds-type-body-sm" style="margin: 0 0 8px; color: var(--ds-text-secondary);">
                                         Automatically create a new repository and push your complete project with full structure, README, and .gitignore.
                                     </p>
                                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 4px 12px; font-size: 11px; color: var(--ds-text-secondary);">
@@ -1587,7 +1587,7 @@
                                     </a>
                                 </div>
                                 ` : `
-                                <div id="github-push-form" style="display: flex; flex-direction: column; gap: var(--theme-spacing-3); flex: 1.2; max-width: 540px; min-width: 280px; background: rgba(255,255,255,0.02); padding: var(--theme-spacing-4); border-radius: var(--theme-radius-xl); border: 1px solid rgba(255,255,255,0.04);">
+                                <div id="github-push-form" style="display: flex; flex-direction: column; gap: var(--theme-spacing-3); flex: 1.2; max-width: 540px; min-width: 280px; background: rgba(0,0,0,0.02); padding: var(--theme-spacing-4); border-radius: var(--theme-radius-xl); border: 1px solid var(--ds-border-subtle);">
                                     <ds-input id="github-token-input" value="${localStorage.getItem('github_personal_token') || ''}" placeholder="ghp_xxxxxxxxxxxxxxxx" label="GitHub Personal Access Token" size="sm" style="width:100%;"></ds-input>
                                     
                                     <div style="display: flex; align-items: center; gap: 8px; margin-top: -2px; margin-bottom: 2px;">
@@ -1600,7 +1600,7 @@
                                         <summary style="font-size: 11px; color: var(--ds-text-brand); cursor: pointer; font-weight: 500; outline: none; user-select: none; margin-bottom: var(--theme-spacing-2);">
                                             Advanced Repository Settings
                                         </summary>
-                                        <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3); padding-top: var(--theme-spacing-2); border-top: 1px dashed rgba(255,255,255,0.08);">
+                                        <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3); padding-top: var(--theme-spacing-2); border-top: 1px dashed var(--ds-border-subtle);">
                                             <ds-input id="github-repo-name" value="${escapeHtml(sanitiseRepoName(video.title))}" placeholder="repository-name" label="Repository Name" size="sm" style="width:100%;"></ds-input>
                                             <ds-input id="github-repo-desc" value="Extracted from YouTube: https://youtu.be/${video.youtube_id} — by YouExtractor" placeholder="Short description" label="Repository Description" size="sm" style="width:100%;"></ds-input>
                                             
@@ -1620,7 +1620,7 @@
                                 </div>
                                 `}
                             </div>
-                            <div id="github-status-msg" class="hidden text-sm font-mono" style="margin-top: 2px; padding: 6px 10px; background: rgba(0,0,0,0.2); border-radius: var(--theme-radius-md);"></div>
+                            <div id="github-status-msg" class="hidden text-sm font-mono" style="margin-top: 2px; padding: 6px 10px; background: rgba(0,0,0,0.05); border-radius: var(--theme-radius-md); color: var(--ds-text-primary);"></div>
                         </div>
                     </ds-card>
                     ` : ''}
@@ -1631,7 +1631,7 @@
                         <div class="workspace-sidebar">
                             <div class="workspace-sidebar-header">
                                 <h4 class="ds-type-heading-sm" style="font-size: var(--theme-font-size-md);">Study Workstation</h4>
-                                <p class="ds-type-body-sm text-gray-400">Interactive learning tools</p>
+                                <p class="ds-type-body-sm" style="color: var(--ds-text-secondary); margin: 0;">Interactive learning tools</p>
                             </div>
                             
                             <div class="workspace-nav-list">
@@ -1666,10 +1666,10 @@
                             <!-- Roadmap Tab Panel -->
                             <div id="ws-content-roadmap" class="ws-panel">
                                 <div class="space-y-2">
-                                    <h3 class="ds-type-heading-md text-white" style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                                    <h3 class="ds-type-heading-md" style="margin: 0; display: flex; align-items: center; gap: 8px;">
                                         <i class="ph ph-compass" style="color: var(--ds-text-brand);"></i> Guided Learning Roadmap
                                     </h3>
-                                    <p class="ds-type-body-sm text-gray-400" style="margin: 0;">Follow this curated checklist to master this tutorial. Your progress is saved automatically.</p>
+                                    <p class="ds-type-body-sm" style="margin: 0; color: var(--ds-text-secondary);">Follow this curated checklist to master this tutorial. Your progress is saved automatically.</p>
                                 </div>
                                 <div class="roadmap-checklist-container">
                                     ${renderWorkspaceRoadmap(video)}
@@ -1734,11 +1734,11 @@
                                 ` : `
                                 <div style="text-align: center; padding: var(--theme-spacing-12) 0; color: var(--ds-text-secondary); display: flex; flex-direction: column; align-items: center; gap: var(--theme-spacing-4);">
                                     <i class="ph ph-folder-open" style="font-size: 3rem; opacity: 0.3;"></i>
-                                    <h4 class="ds-type-heading-sm text-white" style="margin: 0;">No Code Files Extracted</h4>
-                                    <p class="ds-type-body-sm text-gray-400" style="max-width: 440px; margin: 0 auto; line-height: 1.6;">
+                                    <h4 class="ds-type-heading-sm" style="margin: 0;">No Code Files Extracted</h4>
+                                    <p class="ds-type-body-sm" style="max-width: 440px; margin: 0 auto; line-height: 1.6; color: var(--ds-text-secondary);">
                                         This tutorial did not contain extractable project files (common for brief conceptual guides like this 6-minute video), or the AI key configuration encountered a limits/quota issue.
                                     </p>
-                                    <p class="ds-type-body-sm text-gray-400" style="max-width: 440px; margin: 0 auto; line-height: 1.6;">
+                                    <p class="ds-type-body-sm" style="max-width: 440px; margin: 0 auto; line-height: 1.6; color: var(--ds-text-secondary);">
                                         You can use the <strong>Ask AI Copilot</strong> tab to ask code questions about Fetch API directly, or paste a longer project-based coding tutorial URL!
                                     </p>
                                 </div>
@@ -1754,19 +1754,19 @@
                             <div id="ws-content-run" class="ws-panel hidden">
                                 <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-6);">
                                     <div>
-                                        <h3 class="ds-type-heading-md text-white" style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                                        <h3 class="ds-type-heading-md" style="margin: 0; display: flex; align-items: center; gap: 8px;">
                                             <i class="ph ph-wrench" style="color: var(--ds-text-brand);"></i> Setup Steps
                                         </h3>
-                                        <p class="ds-type-body-sm text-gray-400" style="margin: 4px 0 0 0;">Steps required to configure this application locally.</p>
+                                        <p class="ds-type-body-sm" style="margin: 4px 0 0 0; color: var(--ds-text-secondary);">Steps required to configure this application locally.</p>
                                     </div>
                                     <div class="space-y-4">
                                         ${renderSetupGuide(setupGuide, prerequisites)}
                                     </div>
-                                    <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: var(--theme-spacing-6);">
-                                        <h3 class="ds-type-heading-md text-white" style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                                    <div style="border-top: 1px solid var(--ds-border-subtle); padding-top: var(--theme-spacing-6);">
+                                        <h3 class="ds-type-heading-md" style="margin: 0; display: flex; align-items: center; gap: 8px;">
                                             <i class="ph ph-play-circle" style="color: var(--ds-text-brand);"></i> Running the Code
                                         </h3>
-                                        <p class="ds-type-body-sm text-gray-400" style="margin: 4px 0 0 0;">Commands to start the project in development, production, or Docker mode.</p>
+                                        <p class="ds-type-body-sm" style="margin: 4px 0 0 0; color: var(--ds-text-secondary);">Commands to start the project in development, production, or Docker mode.</p>
                                     </div>
                                     <div class="space-y-4">
                                         ${renderRunGuide(runGuide)}
@@ -1777,10 +1777,10 @@
                             <!-- Copilot Chat Tab Panel -->
                             <div id="ws-content-copilot" class="ws-panel hidden">
                                 <div style="display: flex; flex-direction: column; gap: 2px;">
-                                    <h3 class="ds-type-heading-md text-white" style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                                    <h3 class="ds-type-heading-md" style="margin: 0; display: flex; align-items: center; gap: 8px;">
                                         <i class="ph ph-chat-circle-dots" style="color: var(--ds-text-brand);"></i> AI Copilot Chat
                                     </h3>
-                                    <p class="ds-type-body-sm text-gray-400" style="margin: 0;">Ask questions about the tutorial code structure, prerequisites, setup instructions, or core concepts.</p>
+                                    <p class="ds-type-body-sm" style="margin: 0; color: var(--ds-text-secondary);">Ask questions about the tutorial code structure, prerequisites, setup instructions, or core concepts.</p>
                                 </div>
                                 <div class="chat-container">
                                     <div class="chat-history" id="chatHistory">
@@ -1789,7 +1789,7 @@
                                             <p>How can I help you understand or build this project today?</p>
                                         </div>
                                     </div>
-                                    <div class="chat-suggested-questions" id="chatSuggestedQuestions" style="display: flex; gap: 8px; flex-wrap: wrap; padding: 10px var(--theme-spacing-4); border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.1);">
+                                    <div class="chat-suggested-questions" id="chatSuggestedQuestions" style="display: flex; gap: 8px; flex-wrap: wrap; padding: 10px var(--theme-spacing-4); border-top: 1px solid var(--ds-border-subtle); background: rgba(0,0,0,0.02);">
                                         <button onclick="askSuggested('Explain the project structure')" style="background: rgba(20, 184, 166, 0.05); border: 1px dashed rgba(20, 184, 166, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(20, 184, 166, 0.15)'; this.style.borderColor='rgba(20, 184, 166, 0.6)'" onmouseout="this.style.background='rgba(20, 184, 166, 0.05)'; this.style.borderColor='rgba(20, 184, 166, 0.3)'">Explain project structure</button>
                                         <button onclick="askSuggested('What are the prerequisites?')" style="background: rgba(20, 184, 166, 0.05); border: 1px dashed rgba(20, 184, 166, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(20, 184, 166, 0.15)'; this.style.borderColor='rgba(20, 184, 166, 0.6)'" onmouseout="this.style.background='rgba(20, 184, 166, 0.05)'; this.style.borderColor='rgba(20, 184, 166, 0.3)'">What are the prerequisites?</button>
                                         <button onclick="askSuggested('How do I run the code?')" style="background: rgba(20, 184, 166, 0.05); border: 1px dashed rgba(20, 184, 166, 0.3); color: var(--ds-text-primary); padding: 6px 12px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(20, 184, 166, 0.15)'; this.style.borderColor='rgba(20, 184, 166, 0.6)'" onmouseout="this.style.background='rgba(20, 184, 166, 0.05)'; this.style.borderColor='rgba(20, 184, 166, 0.3)'">How do I run the code?</button>
@@ -2049,8 +2049,8 @@
                         <ds-card variant="glow" padding="lg">
                             <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-4);">
                                 <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-2);">
-                                    <h4 class="ds-type-heading-md text-white" style="margin: 0;">${escapeHtml(ide.primary.name)}</h4>
-                                    <p class="ds-type-body-sm text-gray-300" style="margin: 0;">${escapeHtml(ide.primary.reason)}</p>
+                                    <h4 class="ds-type-heading-md" style="margin: 0;">${escapeHtml(ide.primary.name)}</h4>
+                                    <p class="ds-type-body-sm" style="margin: 0; color: var(--ds-text-secondary);">${escapeHtml(ide.primary.reason)}</p>
                                 </div>
                                 <div style="width: auto; align-self: flex-start;">
                                     <a href="${escapeHtml(ide.primary.download_url)}" target="_blank" style="text-decoration: none;">
@@ -2059,7 +2059,7 @@
                                 </div>
                             </div>
                             ${ide.primary.extensions && ide.primary.extensions.length > 0 ? `
-                                <div style="margin-top: var(--theme-spacing-5); border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: var(--theme-spacing-4);">
+                                <div style="margin-top: var(--theme-spacing-5); border-top: 1px solid var(--ds-border-subtle); padding-top: var(--theme-spacing-4);">
                                     <p class="ds-type-label-md text-amber-400" style="margin: 0 0 var(--theme-spacing-2);">Recommended Extensions:</p>
                                     <div style="display: flex; flex-wrap: wrap; gap: var(--theme-spacing-2);">
                                         ${ide.primary.extensions.map(ext => `
@@ -2083,14 +2083,14 @@
                             ${ide.alternatives.map(alt => `
                                 <ds-card variant="glass" padding="md">
                                     <div style="display: flex; align-items: start; justify-content: space-between; gap: var(--theme-spacing-4);">
-                                        <h4 class="font-bold text-white" style="margin: 0;">${escapeHtml(alt.name)}</h4>
+                                        <h4 class="font-bold" style="margin: 0;">${escapeHtml(alt.name)}</h4>
                                         <a href="${escapeHtml(alt.download_url)}" target="_blank" style="color: var(--ds-text-accent); text-decoration: none; font-size: var(--theme-font-size-xs); font-weight: 600; display: flex; align-items: center; gap: 2px;">
                                             Download <i class="ph ph-arrow-square-out"></i>
                                         </a>
                                     </div>
-                                    <p class="ds-type-body-sm text-gray-400" style="margin: var(--theme-spacing-2) 0 0;">${escapeHtml(alt.reason)}</p>
+                                    <p class="ds-type-body-sm" style="margin: var(--theme-spacing-2) 0 0; color: var(--ds-text-secondary);">${escapeHtml(alt.reason)}</p>
                                     ${alt.extensions && alt.extensions.length > 0 ? `
-                                        <div style="margin-top: var(--theme-spacing-3); display: flex; flex-wrap: wrap; gap: var(--theme-spacing-2); padding-top: var(--theme-spacing-2); border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                                        <div style="margin-top: var(--theme-spacing-3); display: flex; flex-wrap: wrap; gap: var(--theme-spacing-2); padding-top: var(--theme-spacing-2); border-top: 1px solid var(--ds-border-subtle);">
                                             ${alt.extensions.map(ext => `
                                                 <span class="ds-badge-accent">${escapeHtml(ext)}</span>
                                             `).join('')}
@@ -2131,14 +2131,14 @@
             if (prerequisites && prerequisites.software && prerequisites.software.length > 0) {
                 html += `
                     <div class="space-y-4">
-                        <h4 class="font-semibold text-white" style="margin: 0; font-size: var(--theme-font-size-sm);">Software Prerequisites</h4>
+                        <h4 class="font-semibold" style="margin: 0; font-size: var(--theme-font-size-sm); color: var(--ds-text-primary);">Software Prerequisites</h4>
                         <div class="grid-half">
                             ${prerequisites.software.map(sw => `
                                 <ds-card variant="glass" padding="md">
                                     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: var(--theme-spacing-4);">
                                         <div>
-                                            <h4 class="font-bold text-white" style="margin: 0; font-size: var(--theme-font-size-sm);">${escapeHtml(sw.name)}</h4>
-                                            <p class="ds-type-body-sm text-gray-400" style="margin: var(--theme-spacing-1) 0 0;">${escapeHtml(sw.purpose)}</p>
+                                            <h4 class="font-bold" style="margin: 0; font-size: var(--theme-font-size-sm); color: var(--ds-text-primary);">${escapeHtml(sw.name)}</h4>
+                                            <p class="ds-type-body-sm" style="margin: var(--theme-spacing-1) 0 0; color: var(--ds-text-secondary);">${escapeHtml(sw.purpose)}</p>
                                         </div>
                                         <a href="${escapeHtml(sw.download_url)}" target="_blank" style="text-decoration: none;">
                                             <ds-button label="Get" variant="secondary" size="sm" icon="arrow-square-out"></ds-button>
@@ -2154,20 +2154,20 @@
             if (setupGuide && setupGuide.steps && setupGuide.steps.length > 0) {
                 html += `
                     <div class="space-y-4">
-                        <h4 class="font-semibold text-white" style="margin: 0; font-size: var(--theme-font-size-sm);">Setup Steps</h4>
+                        <h4 class="font-semibold" style="margin: 0; font-size: var(--theme-font-size-sm); color: var(--ds-text-primary);">Setup Steps</h4>
                         <div class="space-y-4">
                             ${setupGuide.steps.map(step => `
                                 <ds-card variant="glass" padding="md">
                                     <div style="display: flex; align-items: center; gap: var(--theme-spacing-3); margin-bottom: var(--theme-spacing-3);">
                                         <span style="width: 28px; height: 28px; background: var(--ds-color-electric); border-radius: var(--theme-radius-full); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--theme-neutral-1000); font-size: var(--theme-font-size-sm);">${step.step}</span>
-                                        <h4 class="font-bold text-white" style="margin: 0; font-size: var(--theme-font-size-sm);">${escapeHtml(step.title)}</h4>
+                                        <h4 class="font-bold" style="margin: 0; font-size: var(--theme-font-size-sm); color: var(--ds-text-primary);">${escapeHtml(step.title)}</h4>
                                     </div>
-                                    <p class="ds-type-body-sm text-gray-300" style="margin: 0 0 var(--theme-spacing-3);">${escapeHtml(step.explanation)}</p>
+                                    <p class="ds-type-body-sm" style="margin: 0 0 var(--theme-spacing-3); color: var(--ds-text-secondary);">${escapeHtml(step.explanation)}</p>
                                     ${step.commands && step.commands.length > 0 ? `
                                         <div class="ds-surface-inset" style="padding: var(--theme-spacing-3); display: flex; flex-direction: column; gap: var(--theme-spacing-2);">
                                             ${step.commands.map(cmd => `
                                                 <div style="display: flex; align-items: center; justify-content: space-between; py: 1;">
-                                                    <code class="text-green-400 font-mono text-sm">${escapeHtml(cmd)}</code>
+                                                    <code class="text-green-600 font-mono text-sm">${escapeHtml(cmd)}</code>
                                                     <ds-button onclick="copyToClipboard('${escapeHtml(cmd).replace(/'/g, "\\'")}')" label="Copy" variant="ghost" size="sm" icon="copy"></ds-button>
                                                 </div>
                                             `).join('')}
@@ -2194,13 +2194,13 @@
             if (runGuide.development) {
                 html += `
                     <div class="space-y-3">
-                        <h4 class="font-semibold text-white" style="margin: 0; font-size: var(--theme-font-size-sm); color: var(--ds-color-success);">Development Server</h4>
+                        <h4 class="font-semibold" style="margin: 0; font-size: var(--theme-font-size-sm); color: var(--ds-color-success);">Development Server</h4>
                         <ds-card variant="glow-electric" padding="md">
-                            <p class="ds-type-body-sm text-gray-300" style="margin: 0 0 var(--theme-spacing-3);">${escapeHtml(runGuide.development.explanation)}</p>
+                            <p class="ds-type-body-sm" style="margin: 0 0 var(--theme-spacing-3); color: var(--ds-text-secondary);">${escapeHtml(runGuide.development.explanation)}</p>
                             <div class="ds-surface-inset" style="padding: var(--theme-spacing-3); margin-bottom: var(--theme-spacing-3); display: flex; flex-direction: column; gap: var(--theme-spacing-2);">
                                 ${runGuide.development.commands.map(cmd => `
                                     <div style="display: flex; align-items: center; justify-content: space-between; py: 1;">
-                                        <code class="text-green-400 font-mono text-sm">${escapeHtml(cmd)}</code>
+                                        <code class="text-green-600 font-mono text-sm">${escapeHtml(cmd)}</code>
                                         <ds-button onclick="copyToClipboard('${escapeHtml(cmd).replace(/'/g, "\\'")}')" label="Copy" variant="ghost" size="sm" icon="copy"></ds-button>
                                     </div>
                                 `).join('')}
@@ -2216,13 +2216,13 @@
             if (runGuide.production) {
                 html += `
                     <div class="space-y-3" style="padding-top: var(--theme-spacing-4);">
-                        <h4 class="font-semibold text-white" style="margin: 0; font-size: var(--theme-font-size-sm); color: var(--ds-text-brand);">Production Build</h4>
+                        <h4 class="font-semibold" style="margin: 0; font-size: var(--theme-font-size-sm); color: var(--ds-text-brand);">Production Build</h4>
                         <ds-card variant="glass-accent" padding="md">
-                            <p class="ds-type-body-sm text-gray-300" style="margin: 0 0 var(--theme-spacing-3);">${escapeHtml(runGuide.production.explanation)}</p>
+                            <p class="ds-type-body-sm" style="margin: 0 0 var(--theme-spacing-3); color: var(--ds-text-secondary);">${escapeHtml(runGuide.production.explanation)}</p>
                             <div class="ds-surface-inset" style="padding: var(--theme-spacing-3); display: flex; flex-direction: column; gap: var(--theme-spacing-2);">
                                 ${runGuide.production.commands.map(cmd => `
                                     <div style="display: flex; align-items: center; justify-content: space-between; py: 1;">
-                                        <code class="text-teal-400 font-mono text-sm">${escapeHtml(cmd)}</code>
+                                        <code class="text-teal-600 font-mono text-sm">${escapeHtml(cmd)}</code>
                                         <ds-button onclick="copyToClipboard('${escapeHtml(cmd).replace(/'/g, "\\'")}')" label="Copy" variant="ghost" size="sm" icon="copy"></ds-button>
                                     </div>
                                 `).join('')}
@@ -2235,13 +2235,13 @@
             if (runGuide.docker) {
                 html += `
                     <div class="space-y-3" style="padding-top: var(--theme-spacing-4);">
-                        <h4 class="font-semibold text-white" style="margin: 0; font-size: var(--theme-font-size-sm); color: var(--ds-text-electric);">Docker Container</h4>
+                        <h4 class="font-semibold" style="margin: 0; font-size: var(--theme-font-size-sm); color: var(--ds-text-electric);">Docker Container</h4>
                         <ds-card variant="glass" padding="md">
-                            <p class="ds-type-body-sm text-gray-300" style="margin: 0 0 var(--theme-spacing-3);">${escapeHtml(runGuide.docker.explanation)}</p>
+                            <p class="ds-type-body-sm" style="margin: 0 0 var(--theme-spacing-3); color: var(--ds-text-secondary);">${escapeHtml(runGuide.docker.explanation)}</p>
                             <div class="ds-surface-inset" style="padding: var(--theme-spacing-3); display: flex; flex-direction: column; gap: var(--theme-spacing-2);">
                                 ${runGuide.docker.commands.map(cmd => `
                                     <div style="display: flex; align-items: center; justify-content: space-between; py: 1;">
-                                        <code class="text-cyan-450 font-mono text-sm">${escapeHtml(cmd)}</code>
+                                        <code class="text-cyan-700 font-mono text-sm">${escapeHtml(cmd)}</code>
                                         <ds-button onclick="copyToClipboard('${escapeHtml(cmd).replace(/'/g, "\\'")}')" label="Copy" variant="ghost" size="sm" icon="copy"></ds-button>
                                     </div>
                                 `).join('')}

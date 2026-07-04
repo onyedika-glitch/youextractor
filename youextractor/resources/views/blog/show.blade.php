@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $post['title'] }} • YouExtractor</title>
     <meta name="description" content="{{ $post['excerpt'] ?? Str::limit(strip_tags($post['content']), 160) }}">
-    <link rel="stylesheet" href="/css/youextractor-design-system.css">
+    <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -46,16 +46,19 @@
             padding-left: 1.3em;
         }
         .article-content pre {
-            background: rgba(0,0,0,0.35);
+            background: var(--theme-neutral-50);
+            border: 1px solid var(--ds-border-subtle);
             padding: 18px;
             border-radius: var(--theme-radius-lg);
             overflow-x: auto;
             font-size: 13.5px;
             margin: 1.6em 0;
+            color: var(--ds-text-primary);
         }
         .article-content code {
             font-family: var(--theme-font-mono);
-            background: rgba(255,255,255,0.06);
+            background: var(--theme-neutral-100);
+            color: var(--ds-text-brand);
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 0.92em;
@@ -63,6 +66,7 @@
         .article-content pre code {
             background: transparent;
             padding: 0;
+            color: inherit;
         }
         .reading-meta {
             display: flex;

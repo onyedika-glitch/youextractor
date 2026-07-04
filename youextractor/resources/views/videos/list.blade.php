@@ -8,7 +8,7 @@
     <title>All Videos - YouTube Extractor</title>
     
     <!-- Design System CSS -->
-    <link rel="stylesheet" href="/css/youextractor-design-system.css">
+    <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,7 +38,7 @@
 
         /* Header */
         header {
-            background: rgba(24, 24, 27, 0.3);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--ds-border-subtle);
             height: 80px;
@@ -156,7 +156,7 @@
             font-size: var(--theme-font-size-xs);
             color: var(--ds-text-muted);
             padding-top: var(--theme-spacing-3);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid var(--ds-border-subtle);
         }
 
         .footer-action {
@@ -198,7 +198,7 @@
 
         /* Footer */
         footer {
-            background: rgba(24, 24, 27, 0.8);
+            background: rgba(244, 244, 245, 0.9);
             border-top: 1px solid var(--ds-border-subtle);
             padding: var(--theme-spacing-8) 0;
             margin-top: var(--theme-spacing-12);
@@ -241,7 +241,7 @@
                     </div>
                     <div>
                         <div class="ds-type-label-sm" style="color: var(--ds-text-muted);">Library Size</div>
-                        <div class="ds-type-heading-md" id="stat-total-videos" style="margin: 0; color: #fff;">0 Videos</div>
+                        <div class="ds-type-heading-md" id="stat-total-videos" style="margin: 0; color: var(--ds-text-primary);">0 Videos</div>
                     </div>
                 </div>
             </ds-card>
@@ -253,7 +253,7 @@
                     </div>
                     <div>
                         <div class="ds-type-label-sm" style="color: var(--ds-text-muted);">Total Code Files</div>
-                        <div class="ds-type-heading-md" id="stat-total-files" style="margin: 0; color: #fff;">0 Files</div>
+                        <div class="ds-type-heading-md" id="stat-total-files" style="margin: 0; color: var(--ds-text-primary);">0 Files</div>
                     </div>
                 </div>
             </ds-card>
@@ -279,7 +279,7 @@
                     </div>
                     <div>
                         <div class="ds-type-label-sm" style="color: var(--ds-text-muted);">Roadmap Progress</div>
-                        <div class="ds-type-heading-md" id="stat-roadmap-progress" style="margin: 0; color: #fff;">0%</div>
+                        <div class="ds-type-heading-md" id="stat-roadmap-progress" style="margin: 0; color: var(--ds-text-primary);">0%</div>
                     </div>
                 </div>
             </ds-card>
@@ -312,8 +312,8 @@
                         <i class="ph ph-folder-open text-3xl" style="color: var(--ds-text-brand); font-size: 2rem;"></i>
                     </div>
                     <div>
-                        <h3 class="ds-type-heading-sm text-white" style="margin: 0 0 var(--theme-spacing-2);">No videos found</h3>
-                        <p class="ds-type-body-sm text-gray-400" style="margin: 0;">Try searching for another keyword or extract a new programming tutorial to start building your library.</p>
+                        <h3 class="ds-type-heading-sm" style="margin: 0 0 var(--theme-spacing-2); color: var(--ds-text-primary);">No videos found</h3>
+                        <p class="ds-type-body-sm" style="margin: 0; color: var(--ds-text-secondary);">Try searching for another keyword or extract a new programming tutorial to start building your library.</p>
                     </div>
                     <div style="margin-top: var(--theme-spacing-2);">
                         <a href="/" style="text-decoration: none;">

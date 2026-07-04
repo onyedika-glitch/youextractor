@@ -140,29 +140,29 @@
 
   /* Shadows */
   :root {
-  /* Base shadows — subtle depth on dark surfaces */
-  --theme-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --theme-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
-  --theme-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
-  --theme-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4);
-  --theme-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.7), 0 8px 16px rgba(0, 0, 0, 0.4);
+  /* Base shadows — subtle depth on light surfaces */
+  --theme-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --theme-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --theme-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --theme-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06);
+  --theme-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
 
-  /* Glow shadows — redefined to be clean dark drop shadows with high blur */
-  --theme-glow-teal: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 1px 1px rgba(255, 255, 255, 0.05) inset;
-  --theme-glow-amber: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 1px 1px rgba(255, 255, 255, 0.05) inset;
-  --theme-glow-cyan: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 1px 1px rgba(255, 255, 255, 0.05) inset;
-  --theme-glow-brand: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 1px 1px rgba(255, 255, 255, 0.05) inset;
+  /* Glow shadows — subtle light-mode elevation */
+  --theme-glow-teal: 0 10px 30px -10px rgba(20, 184, 166, 0.12), 0 1px 1px rgba(0, 0, 0, 0.03) inset;
+  --theme-glow-amber: 0 10px 30px -10px rgba(245, 158, 11, 0.12), 0 1px 1px rgba(0, 0, 0, 0.03) inset;
+  --theme-glow-cyan: 0 10px 30px -10px rgba(56, 189, 248, 0.12), 0 1px 1px rgba(0, 0, 0, 0.03) inset;
+  --theme-glow-brand: 0 10px 30px -10px rgba(20, 184, 166, 0.12), 0 1px 1px rgba(0, 0, 0, 0.03) inset;
 
   /* Overlay values */
-  --theme-overlay-dark: rgba(9, 9, 11, 0.85);
-  --theme-overlay-medium: rgba(9, 9, 11, 0.6);
-  --theme-overlay-light: rgba(9, 9, 11, 0.4);
+  --theme-overlay-dark: rgba(0, 0, 0, 0.5);
+  --theme-overlay-medium: rgba(0, 0, 0, 0.3);
+  --theme-overlay-light: rgba(0, 0, 0, 0.15);
 
   /* Glass surface backgrounds */
-  --theme-glass-surface: rgba(24, 24, 27, 0.65);
-  --theme-glass-surface-hover: rgba(24, 24, 27, 0.8);
-  --theme-glass-border: rgba(255, 255, 255, 0.07);
-  --theme-glass-border-accent: rgba(20, 184, 166, 0.25);
+  --theme-glass-surface: rgba(255, 255, 255, 0.75);
+  --theme-glass-surface-hover: rgba(255, 255, 255, 0.9);
+  --theme-glass-border: rgba(0, 0, 0, 0.08);
+  --theme-glass-border-accent: rgba(20, 184, 166, 0.3);
 }
 
 /* Spacing */
@@ -236,30 +236,30 @@
 /* Tokens */
 :root {
   /* ─── Surface tokens ─── */
-  --ds-surface-base: var(--theme-neutral-950);
-  --ds-surface-raised: var(--theme-neutral-900);
-  --ds-surface-card: var(--theme-neutral-850);
-  --ds-surface-overlay: var(--theme-neutral-800);
-  --ds-surface-input: var(--theme-neutral-900);
+  --ds-surface-base: #ffffff;
+  --ds-surface-raised: var(--theme-neutral-50);
+  --ds-surface-card: #ffffff;
+  --ds-surface-overlay: var(--theme-neutral-100);
+  --ds-surface-input: #ffffff;
   --ds-surface-glass: var(--theme-glass-surface);
   --ds-surface-glass-hover: var(--theme-glass-surface-hover);
 
   /* ─── Text tokens ─── */
-  --ds-text-primary: var(--theme-neutral-50);
-  --ds-text-secondary: var(--theme-neutral-400);
+  --ds-text-primary: var(--theme-neutral-900);
+  --ds-text-secondary: var(--theme-neutral-600);
   --ds-text-muted: var(--theme-neutral-500);
-  --ds-text-disabled: var(--theme-neutral-600);
-  --ds-text-inverse: var(--theme-neutral-950);
-  --ds-text-brand: var(--theme-teal-400);
-  --ds-text-accent: var(--theme-amber-400);
-  --ds-text-electric: var(--theme-cyan-400);
+  --ds-text-disabled: var(--theme-neutral-400);
+  --ds-text-inverse: var(--theme-neutral-0);
+  --ds-text-brand: var(--theme-teal-600);
+  --ds-text-accent: var(--theme-amber-600);
+  --ds-text-electric: var(--theme-cyan-600);
 
   /* ─── Border tokens ─── */
   --ds-border-subtle: var(--theme-glass-border);
-  --ds-border-default: var(--theme-neutral-700);
-  --ds-border-strong: var(--theme-neutral-600);
+  --ds-border-default: var(--theme-neutral-200);
+  --ds-border-strong: var(--theme-neutral-300);
   --ds-border-accent: var(--theme-glass-border-accent);
-  --ds-border-input: var(--theme-neutral-700);
+  --ds-border-input: var(--theme-neutral-300);
   --ds-border-input-focus: var(--theme-teal-500);
   --ds-border-error: var(--theme-red-500);
   --ds-border-success: var(--theme-green-500);
@@ -267,36 +267,36 @@
   /* ─── Brand / accent color tokens ─── */
   --ds-color-brand: var(--theme-teal-500);
   --ds-color-brand-hover: var(--theme-teal-600);
-  --ds-color-brand-subtle: var(--theme-teal-400);
-  --ds-color-brand-muted: var(--theme-teal-900);
+  --ds-color-brand-subtle: var(--theme-teal-500);
+  --ds-color-brand-muted: var(--theme-teal-50);
   --ds-color-accent: var(--theme-amber-500);
   --ds-color-accent-hover: var(--theme-amber-600);
-  --ds-color-accent-subtle: var(--theme-amber-400);
+  --ds-color-accent-subtle: var(--theme-amber-500);
   --ds-color-electric: var(--theme-cyan-500);
   --ds-color-electric-hover: var(--theme-cyan-600);
-  --ds-color-electric-subtle: var(--theme-cyan-400);
+  --ds-color-electric-subtle: var(--theme-cyan-500);
 
   /* ─── Status tokens ─── */
-  --ds-color-success: var(--theme-green-500);
-  --ds-color-success-subtle: var(--theme-green-400);
-  --ds-color-success-muted: var(--theme-green-900);
+  --ds-color-success: var(--theme-green-600);
+  --ds-color-success-subtle: var(--theme-green-500);
+  --ds-color-success-muted: var(--theme-green-50);
   --ds-color-error: var(--theme-red-500);
-  --ds-color-error-subtle: var(--theme-red-400);
-  --ds-color-error-muted: var(--theme-red-900);
+  --ds-color-error-subtle: var(--theme-red-500);
+  --ds-color-error-muted: var(--theme-red-50);
   --ds-color-warning: var(--theme-yellow-500);
-  --ds-color-warning-subtle: var(--theme-yellow-400);
-  --ds-color-warning-muted: var(--theme-yellow-900);
+  --ds-color-warning-subtle: var(--theme-yellow-500);
+  --ds-color-warning-muted: var(--theme-yellow-50);
 
   /* ─── Focus tokens ─── */
-  --ds-focus-ring: 0 0 0 2px var(--theme-neutral-950), 0 0 0 4px var(--theme-teal-500);
-  --ds-focus-ring-error: 0 0 0 2px var(--theme-neutral-950), 0 0 0 4px var(--theme-red-500);
+  --ds-focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px var(--theme-teal-500);
+  --ds-focus-ring-error: 0 0 0 2px #ffffff, 0 0 0 4px var(--theme-red-500);
 
   /* ─── Gradient tokens ─── */
   --ds-gradient-brand: var(--theme-teal-500);
   --ds-gradient-brand-hover: var(--theme-teal-600);
   --ds-gradient-electric: var(--theme-teal-500);
   --ds-gradient-warm: var(--theme-amber-500);
-  --ds-gradient-surface: var(--theme-neutral-900);
+  --ds-gradient-surface: var(--theme-neutral-50);
 
   /* ─── Layer / elevation tokens ─── */
   --ds-layer-glow: var(--theme-glow-brand);
@@ -439,16 +439,16 @@
 
 .ds-surface-glow {
   background: var(--ds-surface-card);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--theme-radius-2xl);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 1px 1px rgba(255, 255, 255, 0.05) inset;
+  box-shadow: 0 10px 30px -10px rgba(20, 184, 166, 0.1), 0 1px 1px rgba(0, 0, 0, 0.02) inset;
 }
 
 .ds-surface-glow-electric {
   background: var(--ds-surface-card);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--theme-radius-2xl);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 1px 1px rgba(255, 255, 255, 0.05) inset;
+  box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.1), 0 1px 1px rgba(0, 0, 0, 0.02) inset;
 }
 
 /* Recipes: Typography */
@@ -608,12 +608,12 @@
 .ds-button--primary {
   background: var(--ds-color-brand);
   color: var(--theme-neutral-0);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset, 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset, 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .ds-button--primary:hover:not(:disabled) {
   background: var(--ds-color-brand-hover);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 4px 12px rgba(20, 184, 166, 0.25);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset, 0 4px 12px rgba(20, 184, 166, 0.3);
 }
 
 .ds-button--secondary {

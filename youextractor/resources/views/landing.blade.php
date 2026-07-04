@@ -54,7 +54,7 @@
     <meta name="twitter:image" content="{{ asset('/img/app-screenshot-2.png') }}">
 
     <!-- Design System CSS -->
-    <link rel="stylesheet" href="/css/youextractor-design-system.css">
+    <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -153,7 +153,7 @@
         /* Header */
         header {
             border-bottom: 1px solid var(--ds-border-subtle);
-            background: rgba(24, 24, 27, 0.65);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(16px);
             position: fixed;
             top: 0;
@@ -321,8 +321,8 @@
             border-radius: var(--theme-radius-2xl);
             overflow: hidden;
             border: 1px solid var(--ds-border-subtle);
-            box-shadow: 0 30px 90px -15px rgba(0, 0, 0, 0.5), 
-                        0 0 0 1px rgba(20, 184, 166, 0.1);
+            box-shadow: 0 30px 90px -15px rgba(0, 0, 0, 0.15), 
+                        0 0 0 1px rgba(20, 184, 166, 0.05);
             background: var(--ds-surface-card);
             transform: perspective(1200px) rotateX(6deg);
             transition: transform var(--theme-motion-slower) var(--theme-ease-out);
@@ -340,7 +340,7 @@
 
         .frame-topbar {
             height: 32px;
-            background: rgba(24, 24, 27, 0.9);
+            background: rgba(244, 244, 245, 0.9);
             border-bottom: 1px solid var(--ds-border-subtle);
             display: flex;
             align-items: center;
@@ -369,16 +369,16 @@
             z-index: 0;
         }
 
-        .glow-teal { top: -200px; left: -150px; background: radial-gradient(circle, rgba(20,184,166,0.2) 0%, rgba(9,9,11,0) 70%); }
-        .glow-amber { top: 100px; right: -150px; background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, rgba(9,9,11,0) 70%); }
-        .glow-cyan { bottom: -150px; left: 25%; background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, rgba(9,9,11,0) 70%); }
+        .glow-teal { top: -200px; left: -150px; background: radial-gradient(circle, rgba(20,184,166,0.12) 0%, rgba(255,255,255,0) 70%); }
+        .glow-amber { top: 100px; right: -150px; background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, rgba(255,255,255,0) 70%); }
+        .glow-cyan { bottom: -150px; left: 25%; background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, rgba(255,255,255,0) 70%); }
 
         /* Trust Bar */
         .trust-bar {
             padding: var(--theme-spacing-6) 0;
             border-top: 1px solid var(--ds-border-subtle);
             border-bottom: 1px solid var(--ds-border-subtle);
-            background: rgba(24, 24, 27, 0.25);
+            background: rgba(244, 244, 245, 0.5);
         }
 
         .trust-content {
@@ -505,7 +505,7 @@
         /* Interactive Demo */
         .demo-section {
             padding: var(--theme-spacing-16) 0;
-            background: linear-gradient(180deg, rgba(24,24,27,0.0) 0%, rgba(24,24,27,0.35) 100%);
+            background: linear-gradient(180deg, rgba(244,244,245,0.0) 0%, rgba(244,244,245,0.4) 100%);
         }
 
         .demo-card {
@@ -555,7 +555,7 @@
         .mini-video-thumb {
             width: 92px;
             height: 52px;
-            background: linear-gradient(135deg, #27272a, #18181b);
+            background: linear-gradient(135deg, #e4e4e7, #f4f4f5);
             border-radius: var(--theme-radius-lg);
             display: flex;
             align-items: center;
@@ -565,7 +565,7 @@
         }
 
         .mini-video-thumb i {
-            color: #fff;
+            color: var(--ds-text-primary);
             opacity: .9;
         }
 
@@ -599,14 +599,14 @@
             font-size: 10px;
             padding: 2px 9px;
             border-radius: 999px;
-            background: rgba(255,255,255,0.06);
+            background: rgba(0,0,0,0.03);
             color: var(--ds-text-secondary);
             border: 1px solid var(--ds-border-subtle);
         }
 
         .demo-progress {
             height: 3px;
-            background: rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.05);
             border-radius: 999px;
             overflow: hidden;
             margin: var(--theme-spacing-4) 0;
@@ -652,7 +652,7 @@
         /* Features */
         .features {
             padding: var(--theme-spacing-20) 0 var(--theme-spacing-12);
-            background: rgba(24, 24, 27, 0.3);
+            background: rgba(244, 244, 245, 0.4);
             border-top: 1px solid var(--ds-border-subtle);
             border-bottom: 1px solid var(--ds-border-subtle);
         }
@@ -735,7 +735,7 @@
         /* Stats */
         .stats {
             padding: var(--theme-spacing-14) 0;
-            background: rgba(24, 24, 27, 0.6);
+            background: rgba(244, 244, 245, 0.8);
         }
 
         .stats-grid {
@@ -835,7 +835,7 @@
         /* FAQ */
         .faq {
             padding: var(--theme-spacing-16) 0 var(--theme-spacing-20);
-            background: rgba(24, 24, 27, 0.25);
+            background: rgba(244, 244, 245, 0.5);
             border-top: 1px solid var(--ds-border-subtle);
         }
 
@@ -910,7 +910,7 @@
 
         /* Footer */
         footer {
-            background: rgba(24, 24, 27, 0.85);
+            background: rgba(244, 244, 245, 0.9);
             border-top: 1px solid var(--ds-border-subtle);
             padding: var(--theme-spacing-12) 0 var(--theme-spacing-8);
             margin-top: auto;
@@ -1284,7 +1284,7 @@
                                 <ds-button id="demoWorkspaceBtn" label="Open full workspace" variant="ghost" size="sm" icon="arrow-square-out"></ds-button>
                             </div>
                             
-                            <div style="background:rgba(0,0,0,0.25); border-radius:var(--theme-radius-xl); padding:10px 14px; font-size:12px; font-family:var(--theme-font-mono); color:var(--ds-text-muted);">
+                            <div style="background:rgba(244,244,245,0.7); border-radius:var(--theme-radius-xl); padding:10px 14px; font-size:12px; font-family:var(--theme-font-mono); color:var(--ds-text-secondary);">
                                 <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
                                     <span>Generated 48 files • 7 folders</span>
                                     <span style="color:var(--ds-color-success);"><i class="ph ph-check" style="margin-right:2px;"></i> Ready to run</span>
@@ -1817,9 +1817,9 @@
             window.addEventListener('scroll', () => {
                 const y = window.scrollY;
                 if (y > 40 && last <= 40) {
-                    header.style.background = 'rgba(24, 24, 27, 0.82)';
+                    header.style.background = 'rgba(255, 255, 255, 0.9)';
                 } else if (y <= 40 && last > 40) {
-                    header.style.background = 'rgba(24, 24, 27, 0.65)';
+                    header.style.background = 'rgba(255, 255, 255, 0.7)';
                 }
                 last = y;
             }, { passive: true });

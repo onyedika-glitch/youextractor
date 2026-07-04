@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog • YouExtractor</title>
     <meta name="description" content="Articles about AI-assisted learning, building developer tools, and turning passive video watching into active building.">
-    <link rel="stylesheet" href="/css/youextractor-design-system.css">
+    <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -15,6 +15,8 @@
             font-family: var(--theme-font-sans);
             background: var(--ds-surface-base);
             color: var(--ds-text-primary);
+            /* Verified light theme baseline */
+            transition: background-color var(--theme-motion-normal) var(--theme-ease-default), color var(--theme-motion-normal) var(--theme-ease-default);
         }
         .blog-container {
             max-width: 1100px;
