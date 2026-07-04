@@ -40,6 +40,11 @@ Route::get('/robots.txt', function () {
 
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index']);
 
+// API Documentation
+Route::get('/api-docs', function () {
+    return response(file_get_contents(public_path('api-docs.html')), 200, ['Content-Type' => 'text/html']);
+})->name('api-docs');
+
 /*
 |--------------------------------------------------------------------------
 | Guest Routes (only for non-authenticated users)

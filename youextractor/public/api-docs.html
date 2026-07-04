@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouExtractor — API Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a1022;          /* Deep dark blue-gray */
+    --surface: #0f172a;     /* Raised base surface */
+    --surface-card: #172033; /* Dark card surface */
+    --surface-hover: #1e293b;
+    --accent: #a855f7;      /* Purple brand anchor */
+    --accent-hover: #9333ea;
+    --secondary: #ec4899;   /* Pink warm accent */
+    --electric: #06b6d4;    /* Cyan code energy */
+    --green: #22c55e;       /* Success state */
+    --red: #ef4444;         /* Error state */
+    --yellow: #eab308;      /* Warning state */
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --border: rgba(148, 163, 184, 0.1);
+    --border-strong: #475569;
+    --glow-purple: 0 0 20px rgba(168, 85, 247, 0.2), 0 0 40px rgba(168, 85, 247, 0.05);
+    --glow-cyan: 0 0 20px rgba(6, 182, 212, 0.2), 0 0 40px rgba(6, 182, 212, 0.05);
+    --glow-brand: 0 0 24px rgba(168, 85, 247, 0.15), 0 0 48px rgba(236, 72, 153, 0.05);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface-hover); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+  /* Sidebar Layout */
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0; width: 280px;
+    background: var(--surface); border-right: 1px solid var(--border);
+    overflow-y: auto; padding: 32px 24px; z-index: 10;
+  }
+  .sidebar h1 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    background: linear-gradient(135deg, var(--accent), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sidebar h1 small { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; -webkit-text-fill-color: var(--muted); }
+  
+  .sidebar nav a {
+    display: block; padding: 8px 12px; border-radius: 8px;
+    color: var(--muted); text-decoration: none; font-size: 13px; margin-bottom: 2px;
+    font-weight: 500; transition: all .2s ease;
+  }
+  .sidebar nav a:hover, .sidebar nav a.active {
+    background: var(--surface-hover); color: var(--text);
+  }
+  .sidebar nav a.group {
+    color: var(--electric); font-weight: 700; font-size: 11px;
+    text-transform: uppercase; letter-spacing: .08em; margin-top: 20px;
+    pointer-events: none; padding-left: 12px; margin-bottom: 4px;
+  }
+
+  /* Main Container */
+  .main { margin-left: 280px; padding: 64px 80px; max-width: 1100px; }
+  
+  .header { margin-bottom: 48px; position: relative; }
+  .header h1 {
+    font-size: 42px; font-weight: 800; letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1.15;
+  }
+  .header p { color: var(--muted); margin-top: 12px; font-size: 16px; max-width: 700px; }
+  .base-url {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 18px;
+    background: var(--surface-card); border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 10px; font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--electric);
+  }
+
+  /* Badges */
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
+  .badge.get { background: rgba(6, 182, 212, 0.15); color: var(--electric); border: 1px solid rgba(6, 182, 212, 0.2); }
+  .badge.post { background: rgba(168, 85, 247, 0.15); color: var(--accent); border: 1px solid rgba(168, 85, 247, 0.2); }
+  .badge.delete { background: rgba(239, 68, 68, 0.15); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.2); }
+  .badge.auth { background: rgba(236, 72, 153, 0.12); color: var(--secondary); border: 1px solid rgba(236, 72, 153, 0.18); font-size: 10px; }
+
+  /* Sections */
+  .section { margin-bottom: 56px; }
+  .section h2 {
+    font-size: 26px; font-weight: 800; margin-bottom: 16px;
+    letter-spacing: -0.02em; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, var(--text), var(--muted));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .section > p { color: var(--muted); margin-bottom: 24px; font-size: 14px; }
+
+  /* Endpoint Cards */
+  .endpoint {
+    background: var(--surface-card); border: 1px solid var(--border); border-radius: 12px;
+    margin-bottom: 16px; overflow: hidden; transition: all .2s ease;
+  }
+  .endpoint[open] { border-color: rgba(168, 85, 247, 0.25); box-shadow: var(--glow-purple); }
+  .endpoint summary {
+    padding: 18px 24px; cursor: pointer; display: flex; align-items: center; gap: 16px;
+    font-size: 14px; font-weight: 600; list-style: none; transition: background .2s;
+  }
+  .endpoint summary::-webkit-details-marker { display: none; }
+  .endpoint summary:hover { background: var(--surface-hover); }
+  
+  .endpoint summary .method { min-width: 64px; text-align: center; }
+  .endpoint summary .path { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); }
+  .endpoint summary .desc { color: var(--muted); font-size: 13px; margin-left: auto; font-weight: 400; }
+  .endpoint summary .auth-req { font-size: 11px; color: var(--yellow); display: flex; align-items: center; gap: 4px; }
+
+  .endpoint .body { padding: 4px 24px 24px; border-top: 1px solid var(--border); background: var(--surface); }
+  .endpoint .body h4 { color: var(--muted); font-size: 11px; text-transform: uppercase; margin-top: 20px; margin-bottom: 8px; letter-spacing: .06em; font-weight: 700; }
+  
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  th { text-align: left; padding: 8px 12px; color: var(--muted); border-bottom: 1px solid var(--border-strong); font-weight: 600; font-size: 11px; text-transform: uppercase; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: #cbd5e1; }
+  tr:last-child td { border: none; }
+  .param-name { font-family: 'JetBrains Mono', monospace; color: var(--electric); font-weight: 600; }
+  .param-type { font-family: 'JetBrains Mono', monospace; color: var(--secondary); font-size: 11px; }
+  .param-req { color: var(--red); font-size: 11px; font-weight: bold; }
+
+  /* Code blocks */
+  pre {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; font-size: 13px; overflow-x: auto; color: #cbd5e1;
+    font-family: 'JetBrains Mono', monospace; margin: 8px 0; line-height: 1.5;
+  }
+  .code-key { color: var(--accent); }
+  .code-str { color: var(--electric); }
+  .code-num { color: var(--secondary); }
+  .code-bool { color: var(--yellow); }
+  .code-null { color: var(--muted); }
+  .code-comment { color: #556075; font-style: italic; }
+
+  /* Flow Diagrams */
+  .flow-diagram {
+    background: var(--surface-card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 28px; margin: 24px 0; box-shadow: var(--glow-brand);
+  }
+  .flow-diagram .step { display: flex; align-items: flex-start; gap: 16px; padding: 12px 0; }
+  .flow-diagram .step:not(:last-child) { border-bottom: 1px solid var(--border); }
+  .flow-diagram .step .num {
+    width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--secondary));
+    display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; color: #ffffff;
+  }
+  .flow-diagram .step-body { display: flex; flex-direction: column; }
+  .flow-diagram .step-body strong { font-size: 14px; color: var(--text); margin-bottom: 4px; }
+  .flow-diagram .step-body p { font-size: 13px; color: var(--muted); }
+
+  /* Info Callout */
+  .callout {
+    background: rgba(168, 85, 247, 0.05); border-left: 4px solid var(--accent);
+    padding: 16px 20px; border-radius: 0 12px 12px 0; margin: 16px 0; font-size: 13px;
+  }
+  .callout strong { color: var(--accent); display: block; margin-bottom: 4px; }
+  .callout p { color: var(--muted); margin: 0; }
+
+  /* Responsive styling */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h1>YouExtractor <small>v1.0.0 — API reference</small></h1>
+  <nav>
+    <a class="group" href="#session-auth">1. Authentication</a>
+    <a href="#auth-signup">Sign Up</a>
+    <a href="#auth-signin">Sign In</a>
+    <a href="#auth-logout">Logout</a>
+
+    <a class="group" href="#extraction">2. Video Extraction</a>
+    <a href="#video-extract">Extract Code</a>
+    <a href="#video-status">Check Status</a>
+
+    <a class="group" href="#management">3. Video Management</a>
+    <a href="#video-index">List Extracted</a>
+    <a href="#video-search">Search Videos</a>
+    <a href="#video-show">Get Details</a>
+
+    <a class="group" href="#actions">4. Export & Actions</a>
+    <a href="#video-download">Download Code</a>
+    <a href="#video-reextract">Re-Extract</a>
+    <a href="#video-github">Push to GitHub</a>
+    <a href="#video-chat">AI Chat Copilot</a>
+
+    <a class="group" href="#general">General Reference</a>
+    <a href="#health-check">System Health</a>
+    <a href="#error-codes">Error Definitions</a>
+    <a href="#data-flow">Job Pipeline Flow</a>
+  </nav>
+</div>
+
+<div class="main">
+
+  <div class="header">
+    <h1>YouExtractor API Reference</h1>
+    <p>Build integrations, control extractions programmatically, and access AI-generated codebase conversions of YouTube tutorials directly from your developer tool stack.</p>
+    <div class="base-url">
+      <span>Base URL:</span>
+      <span>https://youextractor.me/api</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 1. AUTHENTICATION -->
+  <!-- ============================================================ -->
+  <div class="section" id="session-auth">
+    <h2>1. Authentication</h2>
+    <p>YouExtractor uses standard web cookies and session-based authentication. Authenticated routes require session cookies set during login or registration.</p>
+
+    <!-- Sign Up -->
+    <details class="endpoint" id="auth-signup">
+      <summary><span class="badge post">POST</span> <span class="path">/signup</span> <span class="desc">Register a new developer account</span> <span class="auth-req">🔓 Public</span></summary>
+      <div class="body">
+        <h4>Request Headers</h4>
+        <pre>Content-Type: application/json</pre>
+        <h4>Request Body Parameters</h4>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td class="param-name">name</td><td class="param-type">string</td><td class="param-req">required</td><td>Full name of the developer.</td></tr>
+          <tr><td class="param-name">email</td><td class="param-type">string</td><td class="param-req">required</td><td>Valid email address (must be unique).</td></tr>
+          <tr><td class="param-name">password</td><td class="param-type">string</td><td class="param-req">required</td><td>At least 8 characters.</td></tr>
+          <tr><td class="param-name">password_confirmation</td><td class="param-type">string</td><td class="param-req">required</td><td>Must match the password parameter.</td></tr>
+        </table>
+        <h4>Sample Request Body</h4>
+        <pre>{
+  <span class="code-key">"name"</span>: <span class="code-str">"Dev Alex"</span>,
+  <span class="code-key">"email"</span>: <span class="code-str">"alex@dev.com"</span>,
+  <span class="code-key">"password"</span>: <span class="code-str">"superSecure123"</span>,
+  <span class="code-key">"password_confirmation"</span>: <span class="code-str">"superSecure123"</span>
+}</pre>
+        <h4>Sample Response (302 Redirect)</h4>
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">On successful registration, sets session cookies and redirects to dashboard:</p>
+        <pre>HTTP/1.1 302 Found
+Location: https://youextractor.me/dashboard
+Set-Cookie: laravel_session=eyJpdiI...; path=/; expires=...</pre>
+      </div>
+    </details>
+
+    <!-- Sign In -->
+    <details class="endpoint" id="auth-signin">
+      <summary><span class="badge post">POST</span> <span class="path">/signin</span> <span class="desc">Authenticate credentials and start session</span> <span class="auth-req">🔓 Public</span></summary>
+      <div class="body">
+        <h4>Request Body Parameters</h4>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td class="param-name">email</td><td class="param-type">string</td><td class="param-req">required</td><td>Account email address.</td></tr>
+          <tr><td class="param-name">password</td><td class="param-type">string</td><td class="param-req">required</td><td>Account password.</td></tr>
+          <tr><td class="param-name">remember</td><td class="param-type">boolean</td><td class="param-req">optional</td><td>Remembers session for extended duration if <span class="code-bool">true</span>.</td></tr>
+        </table>
+        <h4>Sample Request Body</h4>
+        <pre>{
+  <span class="code-key">"email"</span>: <span class="code-str">"alex@dev.com"</span>,
+  <span class="code-key">"password"</span>: <span class="code-str">"superSecure123"</span>,
+  <span class="code-key">"remember"</span>: <span class="code-bool">true</span>
+}</pre>
+        <h4>Sample Response (302 Redirect)</h4>
+        <pre>HTTP/1.1 302 Found
+Location: https://youextractor.me/dashboard
+Set-Cookie: laravel_session=eyJpdiI...; path=/;</pre>
+      </div>
+    </details>
+
+    <!-- Logout -->
+    <details class="endpoint" id="auth-logout">
+      <summary><span class="badge post">POST</span> <span class="path">/logout</span> <span class="desc">Invalidate active session and cookies</span> <span class="auth-req">🔐 Auth</span></summary>
+      <div class="body">
+        <h4>Response (302 Redirect)</h4>
+        <pre>HTTP/1.1 302 Found
+Location: https://youextractor.me/
+Set-Cookie: laravel_session=deleted; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/;</pre>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 2. VIDEO EXTRACTION -->
+  <!-- ============================================================ -->
+  <div class="section" id="extraction">
+    <h2>2. Video Extraction API</h2>
+    <p>Triggers code extraction jobs. Extraction operations run asynchronously via queue jobs to avoid HTTP connection timeouts.</p>
+
+    <!-- Extract Code -->
+    <details class="endpoint" id="video-extract">
+      <summary><span class="badge post">POST</span> <span class="path">/api/videos/extract</span> <span class="desc">Queue a new code extraction job</span> <span class="auth-req">🔐 Auth</span></summary>
+      <div class="body">
+        <div class="callout">
+          <strong>Smart Caching</strong>
+          <p>This endpoint automatically checks if this video has already been successfully extracted by you, or globally by any other developer. If cached, it returns the completed object instantly (200 OK) without consuming AI credits.</p>
+        </div>
+        <h4>Request Body Parameters</h4>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td class="param-name">youtube_url</td><td class="param-type">string</td><td class="param-req">required</td><td>Full YouTube URL, short link, shorts URL, or YouTube video ID.</td></tr>
+          <tr><td class="param-name">force_refresh</td><td class="param-type">boolean</td><td class="param-req">optional</td><td>Bypass caches and force extraction from scratch. Default is <span class="code-bool">false</span>.</td></tr>
+        </table>
+        <h4>Sample Response (202 Queued)</h4>
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">Returned when the extraction is successfully queued for background processing:</p>
+        <pre>{
+  <span class="code-key">"success"</span>: <span class="code-bool">true</span>,
+  <span class="code-key">"queued"</span>: <span class="code-bool">true</span>,
+  <span class="code-key">"message"</span>: <span class="code-str">"Extraction started! Poll /api/videos/42/status to track progress."</span>,
+  <span class="code-key">"data"</span>: {
+    <span class="code-key">"id"</span>: <span class="code-num">42</span>,
+    <span class="code-key">"youtube_id"</span>: <span class="code-str">"dQw4w9WgXcQ"</span>,
+    <span class="code-key">"title"</span>: <span class="code-str">"Build a Todo App in React"</span>,
+    <span class="code-key">"description"</span>: <span class="code-str">"Video by CodeWizard"</span>,
+    <span class="code-key">"extraction_status"</span>: <span class="code-str">"pending"</span>,
+    <span class="code-key">"explanation"</span>: <span class="code-str">"Extraction in progress..."</span>,
+    <span class="code-key">"summary"</span>: <span class="code-str">"Pending extraction..."</span>
+  }
+}</pre>
+        <h4>Sample Response (200 Cache Hit)</h4>
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">Returned if the video was previously completed:</p>
+        <pre>{
+  <span class="code-key">"success"</span>: <span class="code-bool">true</span>,
+  <span class="code-key">"cached"</span>: <span class="code-bool">true</span>,
+  <span class="code-key">"message"</span>: <span class="code-str">"Retrieved from cache"</span>,
+  <span class="code-key">"data"</span>: { <span class="code-comment">/* Complete Video Payload */</span> }
+}</pre>
+      </div>
+    </details>
+
+    <!-- Check Status -->
+    <details class="endpoint" id="video-status">
+      <summary><span class="badge get">GET</span> <span class="path">/api/videos/{video}/status</span> <span class="desc">Poll background job progress</span> <span class="auth-req">🔐 Auth</span></summary>
+      <div class="body">
+        <h4>URL Parameters</h4>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td class="param-name">video</td><td class="param-type">integer</td><td class="param-req">required</td><td>The database ID of the video record.</td></tr>
+        </table>
+        <h4>Sample Response (In Progress)</h4>
+        <pre>{
+  <span class="code-key">"success"</span>: <span class="code-bool">true</span>,
+  <span class="code-key">"status"</span>: <span class="code-str">"processing"</span>,  <span class="code-comment">// "pending" | "processing"</span>
+  <span class="code-key">"error"</span>: <span class="code-null">null</span>,
+  <span class="code-key">"data"</span>: <span class="code-null">null</span>
+}</pre>
+        <h4>Sample Response (Completed)</h4>
+        <pre>{
+  <span class="code-key">"success"</span>: <span class="code-bool">true</span>,
+  <span class="code-key">"status"</span>: <span class="code-str">"completed"</span>,
+  <span class="code-key">"error"</span>: <span class="code-null">null</span>,
+  <span class="code-key">"data"</span>: {
+    <span class="code-key">"id"</span>: <span class="code-num">42</span>,
+    <span class="code-key">"youtube_id"</span>: <span class="code-str">"dQw4w9WgXcQ"</span>,
+    <span class="code-key">"title"</span>: <span class="code-str">"Build a Todo App in React"</span>,
+    <span class="code-key">"extraction_status"</span>: <span class="code-str">"completed"</span>,
+    <span class="code-key">"tech_stack"</span>: {
+      <span class="code-key">"primary"</span>: <span class="code-str">"React"</span>,
+      <span class="code-key">"all"</span>: [<span class="code-str">"React"</span>, <span class="code-str">"Vite"</span>, <span class="code-str">"JavaScript"</span>]
+    },
+    <span class="code-key">"code_snippets"</span>: [
+      {
+        <span class="code-key">"path"</span>: <span class="code-str">"src/App.jsx"</span>,
+        <span class="code-key">"code"</span>: <span class="code-str">"import React from 'react';\n..."</span>,
+        <span class="code-key">"language"</span>: <span class="code-str">"javascript"</span>
+      }
+    ]
+  }
+}</pre>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 3. VIDEO MANAGEMENT -->
+  <!-- ============================================================ -->
+  <div class="section" id="management">
+    <h2>3. Video Management</h2>
+    <p>Retrieve, search, and view extraction details owned by your authenticated account.</p>
+
+    <!-- List Extracted -->
+    <details class="endpoint" id="video-index">
+      <summary><span class="badge get">GET</span> <span class="path">/api/videos</span> <span class="desc">List all your extractions</span> <span class="auth-req">🔐 Auth</span></summary>
+      <div class="body">
+        <h4>Query Parameters</h4>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td class="param-name">page</td><td class="param-type">integer</td><td class="param-req">optional</td><td>Pagination page number. Defaults to 1 (15 items/page).</td></tr>
+        </table>
+        <h4>Sample Response</h4>
+        <pre>{
+  <span class="code-key">"current_page"</span>: <span class="code-num">1</span>,
+  <span class="code-key">"data"</span>: [
+    {
+      <span class="code-key">"id"</span>: <span class="code-num">42</span>,
+      <span class="code-key">"youtube_id"</span>: <span class="code-str">"dQw4w9WgXcQ"</span>,
+      <span class="code-key">"title"</span>: <span class="code-str">"Build a Todo App in React"</span>,
+      <span class="code-key">"extraction_status"</span>: <span class="code-str">"completed"</span>,
+      <span class="code-key">"extracted_at"</span>: <span class="code-str">"2026-07-04T12:00:00.000000Z"</span>
+    }
+  ],
+  <span class="code-key">"total"</span>: <span class="code-num">1</span>
+}</pre>
+      </div>
+    </details>
+
+    <!-- Search Videos -->
+    <details class="endpoint" id="video-search">
+      <summary><span class="badge get">GET</span> <span class="path">/api/videos/search</span> <span class="desc">Filter extractions by term</span> <span class="auth-req">🔐 Auth</span></summary>
+      <div class="body">
+        <h4>Query Parameters</h4>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td class="param-name">q</td><td class="param-type">string</td><td class="param-req">required</td><td>The text query to search in video titles and descriptions.</td></tr>
+          <tr><td class="param-name">page</td><td class="param-type">integer</td><td class="param-req">optional</td><td>Pagination page number.</td></tr>
+        </table>
+        <h4>Sample Response</h4>
+        <pre>{
+  <span class="code-key">"current_page"</span>: <span class="code-num">1</span>,
+  <span class="code-key">"data"</span>: [
+    { <span class="code-key">"id"</span>: <span class="code-num">42</span>, <span class="code-key">"title"</span>: <span class="code-str">"Build a Todo App in React"</span> }
+  ],
+  <span class="code-key">"total"</span>: <span class="code-num">1</span>
+}</pre>
+      </div>
+    </details>
+
+    <!-- Get Details -->
+    <details class="endpoint" id="video-show">
+      <summary><span class="badge get">GET</span> <span class="path">/api/videos/{video}</span> <span class="desc">Get complete details of a video</span> <span class="auth-req">🔐 Auth</span></summary>
+      <div class="body">
+        <h4>URL Parameters</h4>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td class="param-name">video</td><td class="param-type">integer</td><td class="param-req">required</td><td>The database ID of the video record.</td></tr>
+        </table>
+        <h4>Sample Response (200 OK)</h4>
+        <pre>{
+  <span class="code-key">"success"</span>: <span class="code-bool">true</span>,
+  <span class="code-key">"data"</span>: {
+    <span class="code-key">"id"</span>: <span class="code-num">42</span>,
+    <span class="code-key">"youtube_id"</span>: <span class="code-str">"dQw4w9WgXcQ"</span>,
+    <span class="code-key">"title"</span>: <span class="code-str">"Build a Todo App in React"</span>,
+    <span class="code-key">"description"</span>: <span class="code-str">"Complete setup guide..."</span>,
+    <span class="code-key">"tech_stack"</span>: { <span class="code-key">"primary"</span>: <span class="code-str">"React"</span>, <span class="code-key">"all"</span>: [<span class="code-str">"React"</span>, <span class="code-str">"Vite"</span>] },
+    <span class="code-key">"summary"</span>: <span class="code-str">"Step by step guide..."</span>,
+    <span class="code-key">"explanation"</span>: <span class="code-str">"This codebase showcases state management..."</span>,
+    <span class="code-key">"setup_instructions"</span>: <span class="code-str">"# Setup\nRun `npm install`..."</span>,
+    <span class="code-key">"dependencies"</span>: [<span class="code-str">"react"</span>, <span class="code-str">"react-dom"</span>],
+    <span class="code-key">"code_snippets"</span>: [
+      {
+        <span class="code-key">"path"</span>: <span class="code-str">"src/App.jsx"</span>,
+        <span class="code-key">"code"</span>: <span class="code-str">"..."</span>,
+        <span class="code-key">"language"</span>: <span class="code-str">"javascript"</span>
+      }
+    ],
+    <span class="code-key">"extraction_status"</span>: <span class="code-str">"completed"</span>,
+    <span class="code-key">"github_repo_url"</span>: <span class="code-null">null</span>
+  }
+}</pre>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 4. EXPORT & ACTIONS -->
+  <!-- ============================================================ -->
+  <div class="section" id="actions">
+    <h2>4. Export & Actions</h2>
+    <p>Perform exports to third-party services, download code archives, trigger re-extractions, and interact with the AI Chat Copilot.</p>
+
+    <!-- Download Code -->
+    <details class="endpoint" id="video-download">
+      <summary><span class="badge get">GET</span> <span class="path">/api/videos/{video}/download</span> <span class="desc">Download code as a ZIP archive</span> <span class="auth-req">🔐 Auth</span></summary>
+      <div class="body">
+        <h4>URL Parameters</h4>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td class="param-name">video</td><td class="param-type">integer</td><td class="param-req">required</td><td>The database ID of the video.</td></tr>
+        </table>
+        <h4>Sample Response (200 OK)</h4>
+        <pre>HTTP/1.1 200 OK
+Content-Type: application/zip
+Content-Disposition: attachment; filename="Build_a_Todo_App_in_React_code.zip"
+
+[Binary ZIP Stream]</pre>
+      </div>
+    </details>
+
+    <!-- Re-Extract -->
+    <details class="endpoint" id="video-reextract">
+      <summary><span class="badge post">POST</span> <span class="path">/api/videos/{video}/re-extract</span> <span class="desc">Force re-process code files</span> <span class="auth-req">🔐 Auth</span></summary>
+      <div class="body">
+        <h4>Sample Response (202 Queued)</h4>
+        <pre>{
+  <span class="code-key">"success"</span>: <span class="code-bool">true</span>,
+  <span class="code-key">"message"</span>: <span class="code-str">"Re-extraction started. Poll /api/videos/42/status for progress."</span>,
+  <span class="code-key">"data"</span>: {
+    <span class="code-key">"id"</span>: <span class="code-num">42</span>,
+    <span class="code-key">"extraction_status"</span>: <span class="code-str">"pending"</span>
+  }
+}</pre>
+      </div>
+    </details>
+
+    <!-- Push to GitHub -->
+    <details class="endpoint" id="video-github">
+      <summary><span class="badge post">POST</span> <span class="path">/api/videos/{video}/push-to-github</span> <span class="desc">Create repo and push code files</span> <span class="auth-req">🔐 Auth</span></summary>
+      <div class="body">
+        <h4>Request Body Parameters</h4>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td class="param-name">github_token</td><td class="param-type">string</td><td class="param-req">required</td><td>GitHub Personal Access Token (requires `repo` scope).</td></tr>
+          <tr><td class="param-name">repo_name</td><td class="param-type">string</td><td class="param-req">optional</td><td>Desired repository name. Defaults to sanitized video title.</td></tr>
+          <tr><td class="param-name">description</td><td class="param-type">string</td><td class="param-req">optional</td><td>Short description for the GitHub repository.</td></tr>
+          <tr><td class="param-name">private</td><td class="param-type">boolean</td><td class="param-req">optional</td><td>Create repository as private if <span class="code-bool">true</span>. Defaults to <span class="code-bool">false</span>.</td></tr>
+        </table>
+        <h4>Sample Request Body</h4>
+        <pre>{
+  <span class="code-key">"github_token"</span>: <span class="code-str">"ghp_1a2b3c4d5e6f7g8h9i0j"</span>,
+  <span class="code-key">"repo_name"</span>: <span class="code-str">"react-todo-tutorial"</span>,
+  <span class="code-key">"private"</span>: <span class="code-bool">true</span>
+}</pre>
+        <h4>Sample Response (200 OK)</h4>
+        <pre>{
+  <span class="code-key">"success"</span>: <span class="code-bool">true</span>,
+  <span class="code-key">"message"</span>: <span class="code-str">"Repository created and code pushed successfully!"</span>,
+  <span class="code-key">"github_url"</span>: <span class="code-str">"https://github.com/developer-username/react-todo-tutorial"</span>
+}</pre>
+      </div>
+    </details>
+
+    <!-- AI Chat Copilot -->
+    <details class="endpoint" id="video-chat">
+      <summary><span class="badge post">POST</span> <span class="path">/api/videos/{video}/chat</span> <span class="desc">Ask AI questions about the codebase</span> <span class="auth-req">🔐 Auth</span></summary>
+      <div class="body">
+        <h4>Request Body Parameters</h4>
+        <table>
+          <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+          <tr><td class="param-name">question</td><td class="param-type">string</td><td class="param-req">required</td><td>Max 1000 characters. Question about the code setup, architecture, or flow.</td></tr>
+        </table>
+        <h4>Sample Request Body</h4>
+        <pre>{
+  <span class="code-key">"question"</span>: <span class="code-str">"How is state managed in the Todo component?"</span>
+}</pre>
+        <h4>Sample Response (200 OK)</h4>
+        <pre>{
+  <span class="code-key">"success"</span>: <span class="code-bool">true</span>,
+  <span class="code-key">"answer"</span>: <span class="code-str">"In the App component (src/App.jsx), state is managed using the `useState` hook to maintain the list of todo objects. The handlers for add, toggle, and delete modify this array state and pass updater callbacks down to child components..."</span>
+}</pre>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- GENERAL REFERENCE -->
+  <!-- ============================================================ -->
+  <div class="section" id="general">
+    <h2>General Reference</h2>
+    
+    <!-- System Health -->
+    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px; margin-top: 24px;" id="health-check">System Health Check</h3>
+    <p>Provides connection and API key diagnostics. Publicly accessible status endpoint.</p>
+    <details class="endpoint">
+      <summary><span class="badge get">GET</span> <span class="path">/api/health</span> <span class="desc">Verify service configuration and queue status</span> <span class="auth-req">🔓 Public</span></summary>
+      <div class="body">
+        <h4>Sample Response</h4>
+        <pre>{
+  <span class="code-key">"status"</span>: <span class="code-str">"ok"</span>,
+  <span class="code-key">"gemini_key"</span>: <span class="code-str">"configured"</span>,
+  <span class="code-key">"openai_key"</span>: <span class="code-str">"configured"</span>,
+  <span class="code-key">"anthropic_key"</span>: <span class="code-str">"missing"</span>,
+  <span class="code-key">"queue_driver"</span>: <span class="code-str">"database"</span>
+}</pre>
+      </div>
+    </details>
+
+    <!-- Error Codes -->
+    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px; margin-top: 36px;" id="error-codes">Error Definitions</h3>
+    <p>All API errors return a standard JSON block with an HTTP status code matching the failure category:</p>
+    <pre>{
+  <span class="code-key">"success"</span>: <span class="code-bool">false</span>,
+  <span class="code-key">"error"</span>: <span class="code-str">"Invalid YouTube URL. Please use a valid YouTube video URL."</span>
+}</pre>
+    <table>
+      <thead>
+        <tr><th>Status Code</th><th>Failure Category</th><th>Common Scenarios</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>400</td><td>Bad Request</td><td>Invalid YouTube URL structure, malformed oEmbed metadata.</td></tr>
+        <tr><td>401</td><td>Unauthorized</td><td>Missing or expired session cookies.</td></tr>
+        <tr><td>403</td><td>Forbidden</td><td>Attempting to access, modify, or download extractions owned by other users.</td></tr>
+        <tr><td>404</td><td>Not Found</td><td>Extraction record ID does not exist. Code ZIP file generation failed.</td></tr>
+        <tr><td>422</td><td>Unprocessable Entity</td><td>Request validation error. Triggering GitHub push before extraction is complete.</td></tr>
+        <tr><td>500</td><td>Internal Server Error</td><td>LLM rate limits, failed GitHub OAuth API scopes, queue worker crash.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Job Pipeline Flow -->
+    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px; margin-top: 36px;" id="data-flow">Job Pipeline Flow</h3>
+    <p>Understand the lifecycle of a code extraction operation:</p>
+    <div class="flow-diagram">
+      <div class="step">
+        <div class="num">1</div>
+        <div class="step-body">
+          <strong>Validation & Cache Check</strong>
+          <p>YouTube URL matches regex pattern. Local database is queried for cached matches belonging to the current user or other developers.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div class="step-body">
+          <strong>Metadata Fetching</strong>
+          <p>The system polls YouTube oEmbed to secure title, author, and description metadata. Falls back to transcript scrapers.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div class="step-body">
+          <strong>Stub Creation & Queuing</strong>
+          <p>A new record is written to the database with status set to `pending`. A background job (`ExtractVideoJob`) is dispatched.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <div class="step-body">
+          <strong>Background LLM Processing</strong>
+          <p>Queue worker processes the transcript. LLM analyzes transcripts, determines tech stack, structures the directory layout, and extracts individual code files.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">5</div>
+        <div class="step-body">
+          <strong>Completion</strong>
+          <p>Files, instructions, and stack logs are persisted back to the database record. Status transitions to `completed` and the ZIP archive is pre-compiled.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER -->
+  <!-- ============================================================ -->
+  <div style="text-align:center;padding:48px 0;color:var(--muted);font-size:13px;border-top:1px solid var(--border);margin-top:48px">
+    YouExtractor API Reference v1.0.0 — <a href="#" style="color:var(--accent)">youextractor.me</a>
+  </div>
+
+</div>
+
+<script>
+// Sidebar active link highlighting on click
+document.querySelectorAll('.sidebar nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelectorAll('.sidebar nav a').forEach(x => x.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
