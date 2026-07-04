@@ -1031,6 +1031,7 @@
                 <a href="#how" class="nav-link">How it works</a>
                 <a href="#demo" class="nav-link">Live demo</a>
                 <a href="#features" class="nav-link">Features</a>
+                <a href="{{ route('api-docs') }}" class="nav-link">API Docs</a>
                 <a href="{{ route('blog.index') }}" class="nav-link">Blog</a>
                 <a href="{{ route('support') }}" class="nav-link">Support</a>
                 <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link" style="color: #fbbf24;">Buy Me a Coffee</a>
@@ -1053,6 +1054,7 @@
                 <a href="#how" class="nav-link">How it works</a>
                 <a href="#demo" class="nav-link">Live demo</a>
                 <a href="#features" class="nav-link">Features</a>
+                <a href="{{ route('api-docs') }}" class="nav-link">API Docs</a>
                 <a href="{{ route('support') }}" class="nav-link">Support</a>
                 <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link" style="color: #fbbf24;">Buy Me a Coffee</a>
                 <div style="display:flex; gap:8px; margin-top:4px;">
