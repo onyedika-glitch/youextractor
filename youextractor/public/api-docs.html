@@ -9,24 +9,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a1022;          /* Deep dark blue-gray */
-    --surface: #0f172a;     /* Raised base surface */
-    --surface-card: #172033; /* Dark card surface */
-    --surface-hover: #1e293b;
-    --accent: #a855f7;      /* Purple brand anchor */
-    --accent-hover: #9333ea;
-    --secondary: #ec4899;   /* Pink warm accent */
-    --electric: #06b6d4;    /* Cyan code energy */
-    --green: #22c55e;       /* Success state */
-    --red: #ef4444;         /* Error state */
-    --yellow: #eab308;      /* Warning state */
-    --text: #f8fafc;
-    --muted: #94a3b8;
-    --border: rgba(148, 163, 184, 0.1);
-    --border-strong: #475569;
-    --glow-purple: 0 0 20px rgba(168, 85, 247, 0.2), 0 0 40px rgba(168, 85, 247, 0.05);
-    --glow-cyan: 0 0 20px rgba(6, 182, 212, 0.2), 0 0 40px rgba(6, 182, 212, 0.05);
-    --glow-brand: 0 0 24px rgba(168, 85, 247, 0.15), 0 0 48px rgba(236, 72, 153, 0.05);
+    --bg: #ffffff;          /* Clean white background */
+    --surface: #f8fafc;     /* Slate-50 raised surface */
+    --surface-card: #ffffff; /* White card surface */
+    --surface-hover: #f1f5f9; /* Slate-100 hover */
+    --accent: #0d9488;      /* Teal-600 primary brand */
+    --accent-hover: #0f766e; /* Teal-700 hover */
+    --secondary: #d97706;   /* Amber-600 secondary */
+    --electric: #0284c7;    /* Cyan-600 tertiary */
+    --green: #16a34a;       /* Success green-600 */
+    --red: #dc2626;         /* Error red-600 */
+    --yellow: #ca8a04;      /* Warning yellow-600 */
+    --text: #0f172a;        /* Slate-900 text */
+    --muted: #64748b;       /* Slate-500 muted text */
+    --border: #e2e8f0;      /* Slate-200 border */
+    --border-strong: #cbd5e1; /* Slate-300 strong border */
+    --glow-purple: 0 10px 25px -5px rgba(13, 148, 136, 0.1), 0 8px 10px -6px rgba(13, 148, 136, 0.1);
+    --glow-cyan: 0 10px 25px -5px rgba(2, 132, 199, 0.1), 0 8px 10px -6px rgba(2, 132, 199, 0.1);
+    --glow-brand: 0 10px 25px -5px rgba(13, 148, 136, 0.08), 0 8px 10px -6px rgba(13, 148, 136, 0.08);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -98,10 +98,10 @@
 
   /* Badges */
   .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
-  .badge.get { background: rgba(6, 182, 212, 0.15); color: var(--electric); border: 1px solid rgba(6, 182, 212, 0.2); }
-  .badge.post { background: rgba(168, 85, 247, 0.15); color: var(--accent); border: 1px solid rgba(168, 85, 247, 0.2); }
-  .badge.delete { background: rgba(239, 68, 68, 0.15); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.2); }
-  .badge.auth { background: rgba(236, 72, 153, 0.12); color: var(--secondary); border: 1px solid rgba(236, 72, 153, 0.18); font-size: 10px; }
+  .badge.get { background: rgba(2, 132, 199, 0.1); color: var(--electric); border: 1px solid rgba(2, 132, 199, 0.15); }
+  .badge.post { background: rgba(13, 148, 136, 0.1); color: var(--accent); border: 1px solid rgba(13, 148, 136, 0.15); }
+  .badge.delete { background: rgba(239, 68, 68, 0.1); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.15); }
+  .badge.auth { background: rgba(217, 119, 6, 0.1); color: var(--secondary); border: 1px solid rgba(217, 119, 6, 0.15); font-size: 10px; }
 
   /* Sections */
   .section { margin-bottom: 56px; }
@@ -119,7 +119,7 @@
     background: var(--surface-card); border: 1px solid var(--border); border-radius: 12px;
     margin-bottom: 16px; overflow: hidden; transition: all .2s ease;
   }
-  .endpoint[open] { border-color: rgba(168, 85, 247, 0.25); box-shadow: var(--glow-purple); }
+  .endpoint[open] { border-color: rgba(13, 148, 136, 0.25); box-shadow: var(--glow-purple); }
   .endpoint summary {
     padding: 18px 24px; cursor: pointer; display: flex; align-items: center; gap: 16px;
     font-size: 14px; font-weight: 600; list-style: none; transition: background .2s;
@@ -138,7 +138,7 @@
   /* Tables */
   table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
   th { text-align: left; padding: 8px 12px; color: var(--muted); border-bottom: 1px solid var(--border-strong); font-weight: 600; font-size: 11px; text-transform: uppercase; }
-  td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: #cbd5e1; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
   tr:last-child td { border: none; }
   .param-name { font-family: 'JetBrains Mono', monospace; color: var(--electric); font-weight: 600; }
   .param-type { font-family: 'JetBrains Mono', monospace; color: var(--secondary); font-size: 11px; }
@@ -146,16 +146,16 @@
 
   /* Code blocks */
   pre {
-    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px;
     padding: 16px 20px; font-size: 13px; overflow-x: auto; color: #cbd5e1;
     font-family: 'JetBrains Mono', monospace; margin: 8px 0; line-height: 1.5;
   }
-  .code-key { color: var(--accent); }
-  .code-str { color: var(--electric); }
-  .code-num { color: var(--secondary); }
-  .code-bool { color: var(--yellow); }
-  .code-null { color: var(--muted); }
-  .code-comment { color: #556075; font-style: italic; }
+  .code-key { color: #c084fc; } /* Purple */
+  .code-str { color: #2dd4bf; } /* Teal */
+  .code-num { color: #f472b6; } /* Pink */
+  .code-bool { color: #fbbf24; } /* Amber */
+  .code-null { color: #94a3b8; } /* Slate */
+  .code-comment { color: #64748b; font-style: italic; } /* Grey comment */
 
   /* Flow Diagrams */
   .flow-diagram {
@@ -174,7 +174,7 @@
 
   /* Info Callout */
   .callout {
-    background: rgba(168, 85, 247, 0.05); border-left: 4px solid var(--accent);
+    background: rgba(13, 148, 136, 0.05); border-left: 4px solid var(--accent);
     padding: 16px 20px; border-radius: 0 12px 12px 0; margin: 16px 0; font-size: 13px;
   }
   .callout strong { color: var(--accent); display: block; margin-bottom: 4px; }
