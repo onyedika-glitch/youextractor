@@ -137,8 +137,8 @@ class VideoController extends Controller
      */
     public function status(Video $video): JsonResponse
     {
-        if ($video->user_id !== auth()->id()) {
-            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        if ($denied = $this->denyUnlessOwns($video)) {
+            return $denied;
         }
 
         return response()->json([
@@ -161,8 +161,8 @@ class VideoController extends Controller
      */
     public function pushToGitHub(Request $request, Video $video): JsonResponse
     {
-        if ($video->user_id !== auth()->id()) {
-            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        if ($denied = $this->denyUnlessOwns($video)) {
+            return $denied;
         }
 
         $validated = $request->validate([
@@ -209,8 +209,8 @@ class VideoController extends Controller
 
     public function downloadCode(Video $video): BinaryFileResponse|JsonResponse
     {
-        if ($video->user_id !== auth()->id()) {
-            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        if ($denied = $this->denyUnlessOwns($video)) {
+            return $denied;
         }
 
         $zipPath = storage_path("app/downloads/{$video->youtube_id}.zip");
@@ -246,8 +246,8 @@ class VideoController extends Controller
 
     public function reExtractCode(Video $video): JsonResponse
     {
-        if ($video->user_id !== auth()->id()) {
-            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        if ($denied = $this->denyUnlessOwns($video)) {
+            return $denied;
         }
 
         $video->update([
@@ -276,8 +276,8 @@ class VideoController extends Controller
      */
     public function chat(Request $request, Video $video): JsonResponse
     {
-        if ($video->user_id !== auth()->id()) {
-            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        if ($denied = $this->denyUnlessOwns($video)) {
+            return $denied;
         }
 
         $validated = $request->validate([
@@ -317,8 +317,8 @@ class VideoController extends Controller
 
     public function show(Video $video): JsonResponse
     {
-        if ($video->user_id !== auth()->id()) {
-            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        if ($denied = $this->denyUnlessOwns($video)) {
+            return $denied;
         }
 
         \Illuminate\Support\Facades\Log::info('Video show: ' . $video->id . ' code_snippets type: ' . gettype($video->code_snippets) . ' count: ' . count($video->code_snippets ?? []) . ' content: ' . json_encode($video->code_snippets));
@@ -343,6 +343,34 @@ class VideoController extends Controller
     // ------------------------------------------------------------------
     // Private helpers
     // ------------------------------------------------------------------
+
+    /**
+     * Ensure the current user can access this video.
+     * Orphan rows (user_id null) — caused by older mass-assignment bugs —
+     * are claimed by the first authenticated user who touches them.
+     */
+    private function denyUnlessOwns(Video $video): ?JsonResponse
+    {
+        $userId = auth()->id();
+
+        if (!$userId) {
+            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        }
+
+        // Claim legacy / broken rows that never got an owner
+        if ($video->user_id === null) {
+            $video->user_id = $userId;
+            $video->save();
+            return null;
+        }
+
+        // Loose compare so int/string DB driver differences don't false-deny
+        if ((int) $video->user_id !== (int) $userId) {
+            return response()->json(['success' => false, 'error' => 'Unauthorized access to this video.'], 403);
+        }
+
+        return null;
+    }
 
     private function extractVideoId(string $url): ?string
     {
