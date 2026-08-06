@@ -115,3 +115,32 @@ Route::middleware('auth')->group(function () {
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Email template previews (local/dev only)
+|--------------------------------------------------------------------------
+| Visit /dev/emails/welcome, /dev/emails/daily-reminder,
+| /dev/emails/activity/login, /dev/emails/activity/logout to see the
+| rendered HTML in your browser. Disabled in production.
+*/
+if (! app()->environment('production')) {
+    Route::get('/dev/emails/welcome', function () {
+        $user = \App\Models\User::first() ?? new \App\Models\User(['name' => 'Ada Lovelace', 'email' => 'ada@example.com']);
+        return new \App\Mail\WelcomeEmail($user);
+    });
+
+    Route::get('/dev/emails/daily-reminder', function () {
+        $user = \App\Models\User::first() ?? new \App\Models\User(['name' => 'Ada Lovelace', 'email' => 'ada@example.com']);
+        return new \App\Mail\DailyReminderEmail($user);
+    });
+
+    Route::get('/dev/emails/activity/{type}', function (string $type) {
+        $user = \App\Models\User::first() ?? new \App\Models\User(['name' => 'Ada Lovelace', 'email' => 'ada@example.com']);
+        return new \App\Mail\ActivityNotification($user, $type, [
+            'ip' => '203.0.113.42',
+            'device' => 'Chrome on macOS',
+            'location' => 'Lagos, Nigeria',
+        ]);
+    });
+}

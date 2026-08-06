@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\UserNotifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +12,10 @@ use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
+    public function __construct(protected UserNotifier $notifier)
+    {
+    }
+
     /**
      * Show the signup form.
      * Supports prefill youtube_url from demo / Chrome extension.
@@ -38,6 +43,9 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // Send the onboarding welcome email to the new user.
+        $this->notifier->welcome($user);
 
         Auth::login($user);
 
@@ -72,6 +80,9 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
+            // Notify the user of a successful sign-in.
+            $this->notifier->activity(Auth::user(), 'login', $request);
 
             $redirect = redirect()->intended(route('dashboard'));
             $prefill = $request->input('youtube_url') ?: $request->input('url');
@@ -131,9 +142,15 @@ class AuthController extends Controller
                     'google_id' => $googleUser->id,
                     'avatar' => $googleUser->avatar,
                 ]);
+
+                // Onboard brand-new Google users.
+                $this->notifier->welcome($user);
             }
 
             Auth::login($user, true);
+
+            // Notify of the sign-in via Google.
+            $this->notifier->activity($user, 'login', request(), ['method' => 'Google']);
 
             return redirect()->route('dashboard')
                 ->withCookie(cookie()->forever('last_used_auth', 'google'))
@@ -192,9 +209,15 @@ class AuthController extends Controller
                     'github_id' => $githubUser->id,
                     'avatar' => $githubUser->avatar,
                 ]);
+
+                // Onboard brand-new GitHub users.
+                $this->notifier->welcome($user);
             }
 
             Auth::login($user, true);
+
+            // Notify of the sign-in via GitHub.
+            $this->notifier->activity($user, 'login', request(), ['method' => 'GitHub']);
 
             return redirect()->route('dashboard')
                 ->withCookie(cookie()->forever('last_used_auth', 'github'))
@@ -213,9 +236,16 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        // Capture the user before the session is cleared so we can notify them.
+        $user = Auth::user();
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        if ($user) {
+            $this->notifier->activity($user, 'logout', $request);
+        }
 
         return redirect()->route('landing')->with('success', 'You have been logged out.');
     }
