@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="canonical" href="{{ rtrim(config('app.url'), '/') . '/' . ltrim(request()->getPathInfo(), '/') }}">
 
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
 
@@ -89,10 +89,10 @@
             {
                 "@type": "WebSite",
                 "name": "YouExtractor",
-                "url": "{{ url('/') }}",
+                "url": "{{ rtrim(config('app.url'), '/') }}/",
                 "potentialAction": {
                     "@type": "SearchAction",
-                    "target": "{{ url('/') }}?q={search_term_string}",
+                    "target": "{{ rtrim(config('app.url'), '/') }}/?q={search_term_string}",
                     "query-input": "required name=search_term_string"
                 }
             },

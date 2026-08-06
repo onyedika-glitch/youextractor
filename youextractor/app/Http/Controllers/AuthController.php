@@ -18,7 +18,8 @@ class AuthController extends Controller
     public function showSignup(Request $request)
     {
         $prefillUrl = $request->query('youtube_url') ?: $request->query('url');
-        return view('auth.signup', ['prefillUrl' => $prefillUrl]);
+        $lastUsedAuth = $request->cookie('last_used_auth');
+        return view('auth.signup', ['prefillUrl' => $prefillUrl, 'lastUsedAuth' => $lastUsedAuth]);
     }
 
     /**
@@ -45,7 +46,7 @@ class AuthController extends Controller
         if ($prefill) {
             $redirect = redirect()->route('dashboard', ['youtube_url' => $prefill]);
         }
-        return $redirect->with('success', 'Welcome to YouTube Code Extractor!');
+        return $redirect->withCookie(cookie()->forever('last_used_auth', 'email'))->with('success', 'Welcome to YouTube Code Extractor!');
     }
 
     /**
@@ -55,7 +56,8 @@ class AuthController extends Controller
     public function showSignin(Request $request)
     {
         $prefillUrl = $request->query('youtube_url') ?: $request->query('url');
-        return view('auth.signin', ['prefillUrl' => $prefillUrl]);
+        $lastUsedAuth = $request->cookie('last_used_auth');
+        return view('auth.signin', ['prefillUrl' => $prefillUrl, 'lastUsedAuth' => $lastUsedAuth]);
     }
 
     /**
@@ -76,7 +78,7 @@ class AuthController extends Controller
             if ($prefill) {
                 $redirect = redirect()->route('dashboard', ['youtube_url' => $prefill]);
             }
-            return $redirect->with('success', 'Welcome back!');
+            return $redirect->withCookie(cookie()->forever('last_used_auth', 'email'))->with('success', 'Welcome back!');
         }
 
         return back()->withErrors([
@@ -93,6 +95,7 @@ class AuthController extends Controller
         if (config('app.env') !== 'production') {
             $driver->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
         }
+        \Illuminate\Support\Facades\Cookie::queue(\Illuminate\Support\Facades\Cookie::forever('last_used_auth', 'google'));
         return $driver->redirect();
     }
 
@@ -132,7 +135,9 @@ class AuthController extends Controller
 
             Auth::login($user, true);
 
-            return redirect()->route('dashboard')->with('success', 'Welcome!');
+            return redirect()->route('dashboard')
+                ->withCookie(cookie()->forever('last_used_auth', 'google'))
+                ->with('success', 'Welcome!');
         } catch (\Exception $e) {
             error_log('Google Auth Error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
             \Illuminate\Support\Facades\Log::error('Google Auth Error: ' . $e->getMessage(), [
@@ -151,6 +156,7 @@ class AuthController extends Controller
         if (config('app.env') !== 'production') {
             $driver->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
         }
+        \Illuminate\Support\Facades\Cookie::queue(\Illuminate\Support\Facades\Cookie::forever('last_used_auth', 'github'));
         return $driver->redirect();
     }
 
@@ -190,7 +196,9 @@ class AuthController extends Controller
 
             Auth::login($user, true);
 
-            return redirect()->route('dashboard')->with('success', 'Welcome!');
+            return redirect()->route('dashboard')
+                ->withCookie(cookie()->forever('last_used_auth', 'github'))
+                ->with('success', 'Welcome!');
         } catch (\Exception $e) {
             error_log('GitHub Auth Error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
             \Illuminate\Support\Facades\Log::error('GitHub Auth Error: ' . $e->getMessage(), [
