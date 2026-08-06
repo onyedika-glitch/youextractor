@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @include('partials.favicon')
     <link rel="canonical" href="{{ rtrim(config('app.url'), '/') . '/' . ltrim(request()->getPathInfo(), '/') }}">
     <title>Blog • YouExtractor</title>
     <meta name="description" content="Articles about AI-assisted learning, building developer tools, and turning passive video watching into active building.">
