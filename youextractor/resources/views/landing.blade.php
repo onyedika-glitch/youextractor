@@ -90,12 +90,7 @@
             {
                 "@type": "WebSite",
                 "name": "YouExtractor",
-                "url": "{{ rtrim(config('app.url'), '/') }}/",
-                "potentialAction": {
-                    "@type": "SearchAction",
-                    "target": "{{ rtrim(config('app.url'), '/') }}/?q={search_term_string}",
-                    "query-input": "required name=search_term_string"
-                }
+                "url": "{{ rtrim(config('app.url'), '/') }}/"
             },
             {
                 "@type": "FAQPage",
