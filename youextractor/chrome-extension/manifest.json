@@ -1,10 +1,32 @@
 {
     "manifest_version": 3,
     "name": "YouExtractor",
-    "version": "1.2",
-    "description": "Extract code and tutorials from YouTube videos directly to YouExtractor.",
+    "version": "2.0",
+    "description": "Extract code and tutorials from YouTube videos directly on the page — no leaving YouTube.",
     "permissions": [
-        "activeTab"
+        "activeTab",
+        "storage",
+        "cookies",
+        "tabs",
+        "clipboardWrite"
+    ],
+    "host_permissions": [
+        "*://*.youtube.com/*",
+        "https://youextractor.me/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.youtube.com/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_idle"
+        }
     ],
     "action": {
         "default_popup": "popup.html",

@@ -232,6 +232,109 @@ class AuthController extends Controller
     }
 
     /**
+     * Return the authenticated user (used by the Chrome extension to
+     * detect whether the visitor is signed in).
+     * Only reachable behind the "auth" middleware -> 401 JSON when logged out.
+     */
+    public function me(Request $request)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id'     => $request->user()->id,
+                'name'   => $request->user()->name,
+                'email'  => $request->user()->email,
+                'avatar' => $request->user()->avatar,
+            ],
+        ]);
+    }
+
+    /**
+     * JSON sign-in used by the Chrome extension's in-panel auth form.
+     * Same credentials + session behaviour as the web form, but returns JSON
+     * and lets the browser store the session cookie (credentials: include).
+     */
+    public function apiLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email'    => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ]);
+
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+
+            $this->notifier->activity(Auth::user(), 'login', $request, ['method' => 'Extension']);
+
+            return response()->json([
+                'success' => true,
+                'data'    => [
+                    'id'     => Auth::id(),
+                    'name'   => Auth::user()->name,
+                    'email'  => Auth::user()->email,
+                    'avatar' => Auth::user()->avatar,
+                ],
+            ])->withCookie(cookie()->forever('last_used_auth', 'email'));
+        }
+
+        return response()->json([
+            'success' => false,
+            'error'   => 'The provided credentials do not match our records.',
+        ], 422);
+    }
+
+    /**
+     * JSON registration used by the Chrome extension's in-panel sign-up form.
+     */
+    public function apiRegister(Request $request)
+    {
+        $validated = $request->validate([
+            'name'                  => ['required', 'string', 'max:255'],
+            'email'                 => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password'              => ['required', 'confirmed', Password::min(8)],
+        ]);
+
+        $user = User::create([
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        $this->notifier->welcome($user);
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return response()->json([
+            'success' => true,
+            'data'    => [
+                'id'     => $user->id,
+                'name'   => $user->name,
+                'email'  => $user->email,
+                'avatar' => $user->avatar,
+            ],
+        ], 201)->withCookie(cookie()->forever('last_used_auth', 'email'));
+    }
+
+    /**
+     * JSON logout used by the Chrome extension's panel.
+     */
+    public function apiLogout(Request $request)
+    {
+        $user = Auth::user();
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        if ($user) {
+            $this->notifier->activity($user, 'logout', $request, ['method' => 'Extension']);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
      * Log the user out.
      */
     public function logout(Request $request)

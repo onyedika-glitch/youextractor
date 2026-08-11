@@ -1239,22 +1239,29 @@
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const url = urlParams.get('url');
+            let openVideoId = null;
+            const vParam = urlParams.get('v');
+            if (vParam && !isNaN(Number(vParam))) openVideoId = Number(vParam);
             if (url) {
                 youtubeUrl.value = url;
                 if (url.includes('youtube.com/') || url.includes('youtu.be/')) {
                     submitBtn.click();
                 }
             }
-            loadLibrary();
+            loadLibrary(openVideoId);
         });
 
         // Fetch user library and render stats & library list
-        async function loadLibrary() {
+        async function loadLibrary(openVideoId) {
             try {
                 const response = await fetch('/api/videos');
                 const data = await response.json();
                 allVideos = data.data || data || [];
                 renderStatsAndLibrary(allVideos);
+                // Deep-link support: /dashboard?v={id} (used by the Chrome extension)
+                if (openVideoId && allVideos.some((v) => v.id === openVideoId)) {
+                    openWorkspace(openVideoId);
+                }
             } catch (error) {
                 console.error('Failed to load library:', error);
                 libraryContainer.innerHTML = `

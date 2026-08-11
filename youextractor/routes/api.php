@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\VideoController;
 
 /*
@@ -19,14 +20,38 @@ Route::get('/health', function () {
     ]);
 });
 
+/*
+|--------------------------------------------------------------------------
+| Public session routes — in-panel auth for the Chrome extension
+|--------------------------------------------------------------------------
+| Session middleware only (no "auth"), so login/register can start a
+| session. No CSRF middleware here: the extension posts from an extension
+| origin with the session cookie attached manually.
+*/
+
+Route::middleware([
+    \Illuminate\Cookie\Middleware\EncryptCookies::class,
+    \Illuminate\Session\Middleware\StartSession::class,
+    \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+])->group(function () {
+    Route::post('/auth/login',    [AuthController::class, 'apiLogin']);
+    Route::post('/auth/register', [AuthController::class, 'apiRegister']);
+});
+
 Route::middleware([
     \Illuminate\Cookie\Middleware\EncryptCookies::class,
     \Illuminate\Session\Middleware\StartSession::class,
     \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
     'auth'
 ])->group(function () {
+    // In-panel logout
+    Route::post('/auth/logout', [AuthController::class, 'apiLogout']);
+
     // Video extraction
     Route::post('/videos/extract',  [VideoController::class, 'extract']);
+
+    // Current user (used by the Chrome extension to detect the login session)
+    Route::get('/me', [AuthController::class, 'me']);
 
     // List & search
     Route::get('/videos',           [VideoController::class, 'index']);
