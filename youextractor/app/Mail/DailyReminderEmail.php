@@ -23,7 +23,7 @@ class DailyReminderEmail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '👋 Your daily dose of code awaits on YouExtractor',
+            subject: 'Your daily dose of code awaits on YouExtractor',
         );
     }
 

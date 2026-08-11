@@ -5,7 +5,7 @@
 <x-mail-layout :title="'Welcome to YouExtractor'" :preheader="'Welcome aboard! Here\'s how to turn your first tutorial video into a full code project.'">
 
 <h1 style="margin:0 0 8px 0; font-size:26px; line-height:1.3; font-weight:700; color:#0f172a;">
-    Welcome aboard, {{ $firstName }}! 🎉
+    Welcome aboard, {{ $firstName }}!
 </h1>
 
 <p style="margin:0 0 20px 0; font-size:16px; line-height:1.7; color:#475569;">
@@ -67,7 +67,7 @@
 
 {{-- Tips --}}
 <h2 style="margin:0 0 14px 0; font-size:18px; font-weight:700; color:#0f172a;">
-    A few things to try first 💡
+    A few things to try first
 </h2>
 <ul style="margin:0 0 24px 0; padding:0 0 0 20px; font-size:15px; line-height:1.8; color:#475569;">
     <li style="margin-bottom:8px;"><strong style="color:#0f172a;">Install the Chrome extension</strong> — extract any tutorial without leaving YouTube.</li>

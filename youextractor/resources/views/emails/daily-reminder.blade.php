@@ -7,7 +7,7 @@
 <x-mail-layout :title="'Your daily YouExtractor reminder'" :preheader="'A quick nudge — turn today\'s tutorial into real, running code.'">
 
 <h1 style="margin:0 0 8px 0; font-size:24px; line-height:1.3; font-weight:700; color:#0f172a;">
-    Ready to learn something today, {{ $firstName }}? 👋
+    Ready to learn something today, {{ $firstName }}?
 </h1>
 
 <p style="margin:0 0 22px 0; font-size:16px; line-height:1.7; color:#475569;">
@@ -18,7 +18,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 26px 0;">
     <tr>
         <td style="background-color:#f0fdfa; border:1px solid #99f6e4; border-left:4px solid #14b8a6; border-radius:8px; padding:18px 20px;">
-            <p style="margin:0 0 4px 0; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#0f766e;">💡 Tip of the day</p>
+            <p style="margin:0 0 4px 0; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#0f766e;">Tip of the day</p>
             <p style="margin:0; font-size:15px; line-height:1.6; color:#334155;">{{ $showTip }}</p>
         </td>
     </tr>
@@ -43,14 +43,14 @@
     <tr>
         <td style="vertical-align:top; padding:0 0 14px 0;">
             <p style="margin:0; font-size:15px; line-height:1.7; color:#475569;">
-                <span style="color:#14b8a6; font-weight:700;">⚡ Consistency beats intensity.</span> Ten minutes a day compounds faster than a weekend cram session you'll forget by Monday.
+                <span style="color:#14b8a6; font-weight:700;">Consistency beats intensity.</span> Ten minutes a day compounds faster than a weekend cram session you'll forget by Monday.
             </p>
         </td>
     </tr>
     <tr>
         <td style="vertical-align:top; padding:0 0 14px 0;">
             <p style="margin:0; font-size:15px; line-height:1.7; color:#475569;">
-                <span style="color:#14b8a6; font-weight:700;">🧠 Learn by doing.</span> Reading code isn't the same as running it. YouExtractor hands you a project you can actually break, fix, and truly understand.
+                <span style="color:#14b8a6; font-weight:700;">Learn by doing.</span> Reading code isn't the same as running it. YouExtractor hands you a project you can actually break, fix, and truly understand.
             </p>
         </td>
     </tr>

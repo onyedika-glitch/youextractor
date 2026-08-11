@@ -24,14 +24,14 @@ class ActivityNotification extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         $subjects = [
-            'login' => '🔐 New login to your YouExtractor account',
-            'logout' => '👋 You logged out of YouExtractor',
-            'video_extracted' => '✅ Video extraction complete!',
-            'profile_updated' => '✏️ Your profile was updated',
+            'login' => 'New login to your YouExtractor account',
+            'logout' => 'You logged out of YouExtractor',
+            'video_extracted' => 'Video extraction complete!',
+            'profile_updated' => 'Your profile was updated',
         ];
 
         return new Envelope(
-            subject: $subjects[$this->activityType] ?? '🔔 Activity on your YouExtractor account',
+            subject: $subjects[$this->activityType] ?? 'Activity on your YouExtractor account',
         );
     }
 

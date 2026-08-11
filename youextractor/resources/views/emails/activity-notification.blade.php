@@ -4,7 +4,6 @@
     // Per-activity presentation config.
     $map = [
         'login' => [
-            'emoji' => '🔐',
             'heading' => 'New sign-in to your account',
             'intro' => 'We noticed a new sign-in to your YouExtractor account. If this was you, you\'re all set — no action needed.',
             'accent' => '#14b8a6',
@@ -12,7 +11,6 @@
             'accentBorder' => '#99f6e4',
         ],
         'logout' => [
-            'emoji' => '👋',
             'heading' => 'You\'ve been signed out',
             'intro' => 'You just signed out of YouExtractor. Your work is saved and waiting for you — come back anytime.',
             'accent' => '#0ea5e9',
@@ -20,7 +18,6 @@
             'accentBorder' => '#bae6fd',
         ],
         'video_extracted' => [
-            'emoji' => '✅',
             'heading' => 'Your extraction is ready',
             'intro' => 'Great news — we finished extracting your video into a structured code project. It\'s ready to view and download.',
             'accent' => '#16a34a',
@@ -28,7 +25,6 @@
             'accentBorder' => '#bbf7d0',
         ],
         'profile_updated' => [
-            'emoji' => '✏️',
             'heading' => 'Your profile was updated',
             'intro' => 'Your YouExtractor profile details were just changed. If this was you, no further action is needed.',
             'accent' => '#7c3aed',
@@ -38,7 +34,6 @@
     ];
 
     $cfg = $map[$activityType] ?? [
-        'emoji' => '🔔',
         'heading' => 'Account activity',
         'intro' => 'There was recent activity on your YouExtractor account.',
         'accent' => '#14b8a6',
@@ -56,7 +51,7 @@
 <x-mail-layout :title="$cfg['heading']" :preheader="$cfg['intro']">
 
 <h1 style="margin:0 0 8px 0; font-size:23px; line-height:1.3; font-weight:700; color:#0f172a;">
-    {{ $cfg['emoji'] }} {{ $cfg['heading'] }}
+    {{ $cfg['heading'] }}
 </h1>
 
 <p style="margin:0 0 22px 0; font-size:16px; line-height:1.7; color:#475569;">
