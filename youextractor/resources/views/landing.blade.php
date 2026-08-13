@@ -88,6 +88,17 @@
                 }
             },
             {
+                "@type": "Organization",
+                "name": "YouExtractor",
+                "url": "https://youextractor.me",
+                "logo": "https://youextractor.me/youextractor_logo_1780582176614.png",
+                "founder": {
+                    "@type": "Person",
+                    "name": "Omogo Peter Onyedika",
+                    "url": "https://devomogo.tech"
+                }
+            },
+            {
                 "@type": "WebSite",
                 "name": "YouExtractor",
                 "url": "{{ rtrim(config('app.url'), '/') }}/"
