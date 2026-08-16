@@ -8,6 +8,12 @@
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
     <title>Support & Help Center • YouExtractor - AI YouTube Code Extractor</title>
     <meta name="description" content="Get support for YouExtractor. Reach out via email, check open GitHub issues, or join our community for help converting YouTube tutorials into code projects.">
+    <meta name="keywords" content="youextractor support, help center, youtube to code help">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="Support & Help Center • YouExtractor">
+    <meta property="og:description" content="Get support for YouExtractor. Reach out via email, check open GitHub issues, or join our community for help converting YouTube tutorials into code projects.">
+    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
     
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">

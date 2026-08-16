@@ -7,6 +7,28 @@
     <link rel="canonical" href="{{ rtrim(config('app.url'), '/') . '/' . ltrim(request()->getPathInfo(), '/') }}">
     <title>Blog • YouExtractor</title>
     <meta name="description" content="Articles about AI-assisted learning, building developer tools, and turning passive video watching into active building.">
+    <meta name="keywords" content="youtube to code, ai code extractor, learn programming faster, youtube tutorial to project, developer tools, ai learning">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="Blog • YouExtractor">
+    <meta property="og:description" content="Articles about AI-assisted learning, building developer tools, and turning passive video watching into active building.">
+    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+            @foreach($posts as $post)
+            {
+                "@type": "ListItem",
+                "position": {{ $loop->iteration }},
+                "url": "{{ rtrim(config('app.url'), '/') }}/blog/{{ $post['slug'] }}",
+                "name": "{{ $post['title'] }}"
+            }@if(!$loop->last),@endif
+            @endforeach
+        ]
+    }
+    </script>
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -7,6 +7,35 @@
     <link rel="canonical" href="{{ rtrim(config('app.url'), '/') . '/' . ltrim(request()->getPathInfo(), '/') }}">
     <title>{{ $post['title'] }} • YouExtractor</title>
     <meta name="description" content="{{ $post['excerpt'] ?? Str::limit(strip_tags($post['content']), 160) }}">
+    <meta name="keywords" content="youtube to code, ai code extractor, learn programming faster, youtube tutorial to project">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $post['title'] }} • YouExtractor">
+    <meta property="og:description" content="{{ $post['excerpt'] ?? Str::limit(strip_tags($post['content']), 160) }}">
+    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "{{ $post['title'] }}",
+        "url": "{{ url()->current() }}",
+        "datePublished": "{{ $post['date'] ?? now()->toDateString() }}",
+        "description": "{{ $post['excerpt'] ?? Str::limit(strip_tags($post['content']), 160) }}",
+        "author": {
+            "@type": "Person",
+            "name": "Omogo Peter Onyedika",
+            "url": "https://devomogo.tech"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "YouExtractor",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{{ asset('/img/youextractor-logo.png') }}"
+            }
+        }
+    }
+    </script>
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

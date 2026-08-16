@@ -8,6 +8,12 @@
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
     <title>Terms of Service • YouExtractor - AI YouTube Code Extractor</title>
     <meta name="description" content="Terms of Service for YouExtractor. Rules for using our AI tool that converts YouTube coding tutorials into complete projects and guides.">
+    <meta name="keywords" content="youextractor terms, terms of service, youtube to code terms">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="Terms of Service • YouExtractor">
+    <meta property="og:description" content="Terms of Service for YouExtractor. Rules for using our AI tool that converts YouTube coding tutorials into complete projects and guides.">
+    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
     
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">

@@ -20,6 +20,7 @@ class SitemapController extends Controller
                 ['path' => '/terms', 'changefreq' => 'yearly', 'priority' => '0.3'],
                 ['path' => '/support', 'changefreq' => 'monthly', 'priority' => '0.5'],
                 ['path' => '/blog', 'changefreq' => 'weekly', 'priority' => '0.7'],
+                ['path' => '/api-docs', 'changefreq' => 'monthly', 'priority' => '0.4'],
             ];
 
             foreach ($staticPages as $page) {
@@ -31,14 +32,19 @@ class SitemapController extends Controller
                 ];
             }
 
-            // Dynamically add blog posts from Markdown files
+            // Dynamically add blog posts from Markdown files (stable lastmod from frontmatter)
             $blogPostsPath = base_path('resources/content/blog');
             if (is_dir($blogPostsPath)) {
                 foreach (glob($blogPostsPath . '/*.md') as $mdFile) {
                     $slug = basename($mdFile, '.md');
+                    $raw = @file_get_contents($mdFile);
+                    $lastmod = now()->toDateString();
+                    if ($raw && preg_match('/^---\s*\n(.*?)\n---/s', $raw, $fm) && preg_match('/^date:\s*(.+)$/m', $fm[1], $dateMatch)) {
+                        $lastmod = trim($dateMatch[1]);
+                    }
                     $urls[] = [
                         'loc' => $baseUrl . '/blog/' . $slug,
-                        'lastmod' => now()->subDays(rand(2, 30))->toAtomString(),
+                        'lastmod' => $lastmod,
                         'changefreq' => 'monthly',
                         'priority' => '0.5',
                     ];

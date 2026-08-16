@@ -54,6 +54,46 @@
     <meta name="twitter:description" content="{{ $pageDescription }}">
     <meta name="twitter:image" content="{{ asset('/img/app-screenshot-2.png') }}">
 
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": "{{ rtrim(config('app.url'), '/') }}/#website",
+                "url": "{{ rtrim(config('app.url'), '/') }}/",
+                "name": "YouExtractor",
+                "description": "Turn YouTube coding tutorials into complete, runnable code projects with AI.",
+                "publisher": { "@id": "{{ rtrim(config('app.url'), '/') }}/#organization" }
+            },
+            {
+                "@type": "SoftwareApplication",
+                "@id": "{{ rtrim(config('app.url'), '/') }}/#software",
+                "name": "YouExtractor",
+                "applicationCategory": "DeveloperApplication",
+                "operatingSystem": "Web",
+                "url": "{{ rtrim(config('app.url'), '/') }}/",
+                "description": "{{ $pageDescription }}",
+                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+                "publisher": { "@id": "{{ rtrim(config('app.url'), '/') }}/#organization" }
+            },
+            {
+                "@type": "Organization",
+                "@id": "{{ rtrim(config('app.url'), '/') }}/#organization",
+                "name": "YouExtractor",
+                "url": "{{ rtrim(config('app.url'), '/') }}/",
+                "logo": "{{ asset('/img/youextractor-logo.png') }}",
+                "founder": {
+                    "@type": "Person",
+                    "name": "Omogo Peter Onyedika",
+                    "url": "https://devomogo.tech"
+                }
+            }
+        ]
+    }
+    </script>
+
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     

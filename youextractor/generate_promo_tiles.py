@@ -22,7 +22,7 @@ def add_rounded_corners(img, radius):
     result.putalpha(mask)
     return result
 
-def draw_badge(draw, x, y, text, font, bg_color, border_color):
+def draw_badge(draw, x, y, text, font, bg_color, border_color, text_color):
     text_bbox = draw.textbbox((0, 0), text, font=font)
     text_width = text_bbox[2] - text_bbox[0]
     text_height = text_bbox[3] - text_bbox[1]
@@ -40,7 +40,7 @@ def draw_badge(draw, x, y, text, font, bg_color, border_color):
         width=1
     )
     # Draw text inside the badge
-    draw.text((x + padding_x, y + padding_y - 2), text, font=font, fill=(243, 244, 246))
+    draw.text((x + padding_x, y + padding_y - 2), text, font=font, fill=text_color)
     return badge_width
 
 def main():
@@ -57,11 +57,13 @@ def main():
         font_regular_path = None
         print("⚠️ System font not found, falling back to default PIL font.")
         
-    # Color Palette
-    bg_start = (9, 13, 26)     # Deep Slate Blue
-    bg_end = (30, 16, 53)      # Deep Neon Purple
-    neon_purple = (167, 139, 250) # light violet/purple
-    neon_border = (88, 28, 135, 100) # Semi-transparent dark purple
+    # Color Palette (Light Theme / White background)
+    bg_start = (255, 255, 255)       # White
+    bg_end = (248, 250, 252)         # Slate 50 (Very light gray)
+    primary_text = (15, 23, 42)       # Slate 900 (Dark Slate)
+    secondary_text = (71, 85, 105)    # Slate 600 (Medium Slate Gray)
+    accent_purple = (109, 40, 217)    # Violet 700 (Deep Purple)
+    border_color = (226, 232, 240)    # Slate 200 (Light border)
     
     # ----------------------------------------------------
     # 1. CREATE SMALL PROMO TILE (440x280)
@@ -69,6 +71,9 @@ def main():
     print("Generating Small Promo Tile (440x280)...")
     small_tile = create_diagonal_gradient(440, 280, bg_start, bg_end)
     draw_small = ImageDraw.Draw(small_tile)
+    
+    # Draw a thin light border around the outer edge of the tile
+    draw_small.rectangle((0, 0, 439, 279), outline=border_color, width=1)
     
     # Load and process logo
     if os.path.exists(logo_path):
@@ -90,9 +95,9 @@ def main():
         font_subtagline = ImageFont.load_default()
         
     # Draw Text
-    draw_small.text((155, 95), "YouExtractor", font=font_title, fill=(255, 255, 255))
-    draw_small.text((155, 145), "YouTube to Code & Course", font=font_tagline, fill=(209, 213, 219))
-    draw_small.text((155, 172), "AI-Powered Project Generator", font=font_subtagline, fill=neon_purple)
+    draw_small.text((155, 95), "YouExtractor", font=font_title, fill=primary_text)
+    draw_small.text((155, 145), "YouTube to Code & Course", font=font_tagline, fill=secondary_text)
+    draw_small.text((155, 172), "AI-Powered Project Generator", font=font_subtagline, fill=accent_purple)
     
     # Save Small Tile
     small_output_path = os.path.join(base_dir, 'chrome-extension', 'promo_small.png')
@@ -105,16 +110,20 @@ def main():
     print("\nGenerating Marquee Promo Tile (1400x560)...")
     marquee_tile = create_diagonal_gradient(1400, 560, bg_start, bg_end)
     
-    # Draw background glow effect on the right for screenshot
-    # We draw a few soft circles/rectangles with low alpha
+    # Draw a thin light border around the outer edge of the tile
+    draw_marquee_border = ImageDraw.Draw(marquee_tile)
+    draw_marquee_border.rectangle((0, 0, 1399, 559), outline=border_color, width=1)
+    
+    # Draw background glow effect on the right for screenshot (adapted for light background)
     glow_layer = Image.new("RGBA", (1400, 560), (0, 0, 0, 0))
     glow_draw = ImageDraw.Draw(glow_layer)
     for i in range(15):
         offset = i * 4
+        # Soft violet shadow/glow behind the screenshot
         glow_draw.rounded_rectangle(
             (640 - offset, 55 - offset, 640 + 720 + offset, 55 + 450 + offset),
             16 + offset,
-            fill=(139, 92, 246, int(15 / (i + 1)))
+            fill=(109, 40, 217, int(8 / (i + 1)))
         )
     marquee_tile = Image.alpha_composite(marquee_tile.convert("RGBA"), glow_layer).convert("RGB")
     draw_marquee = ImageDraw.Draw(marquee_tile)
@@ -127,11 +136,10 @@ def main():
             marquee_tile.paste(ss_rounded, (640, 55), ss_rounded)
             
             # Draw a subtle border around the screenshot
-            # Since we pasted the rounded image, let's draw a rounded border over it
             draw_marquee.rounded_rectangle(
                 (640, 55, 640 + 720, 55 + 450),
                 16,
-                outline=(167, 139, 250, 60), # Soft purple border
+                outline=(109, 40, 217, 80), # Soft purple border
                 width=2
             )
     else:
@@ -148,22 +156,23 @@ def main():
         font_m_badge = ImageFont.load_default()
         
     # Draw Text
-    draw_marquee.text((80, 130), "YouExtractor", font=font_m_title, fill=(255, 255, 255))
+    draw_marquee.text((80, 130), "YouExtractor", font=font_m_title, fill=primary_text)
     
     tagline_text = "Turn YouTube coding tutorials\ninto working projects instantly."
-    draw_marquee.text((80, 240), tagline_text, font=font_m_tagline, fill=(226, 232, 240), spacing=12)
+    draw_marquee.text((80, 240), tagline_text, font=font_m_tagline, fill=secondary_text, spacing=12)
     
-    # Draw Badges
-    badge_bg = (17, 24, 39, 150)
-    badge_border = (75, 85, 99)
+    # Draw Badges (Light theme badge styles)
+    badge_bg = (241, 245, 249)          # Slate 100
+    badge_border = (226, 232, 240)      # Slate 200
+    badge_text_color = (51, 65, 85)     # Slate 700
     
-    w1 = draw_badge(draw_marquee, 80, 390, "🤖 AI-Powered Extraction", font_m_badge, badge_bg, badge_border)
-    w2 = draw_badge(draw_marquee, 80 + w1 + 15, 390, "📦 Downloadable ZIPs", font_m_badge, badge_bg, badge_border)
-    draw_badge(draw_marquee, 80 + w1 + 15 + w2 + 15, 390, "📚 Step-by-Step Guides", font_m_badge, badge_bg, badge_border)
+    w1 = draw_badge(draw_marquee, 80, 390, "🤖 AI-Powered Extraction", font_m_badge, badge_bg, badge_border, badge_text_color)
+    w2 = draw_badge(draw_marquee, 80 + w1 + 15, 390, "📦 Downloadable ZIPs", font_m_badge, badge_bg, badge_border, badge_text_color)
+    draw_badge(draw_marquee, 80 + w1 + 15 + w2 + 15, 390, "📚 Step-by-Step Guides", font_m_badge, badge_bg, badge_border, badge_text_color)
     
-    # Save Marquee Tile (must convert back to RGB just in case, though it is already RGB)
+    # Save Marquee Promo Tile
     marquee_output_path = os.path.join(base_dir, 'chrome-extension', 'promo_marquee.png')
-    marquee_tile.convert("RGB").save(marquee_output_path, "PNG")
+    marquee_tile.save(marquee_output_path, "PNG")
     print(f"✅ Marquee Promo Tile saved to {marquee_output_path}")
 
 if __name__ == "__main__":

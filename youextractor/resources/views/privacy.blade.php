@@ -8,6 +8,12 @@
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
     <title>Privacy Policy • YouExtractor - AI YouTube Code Extractor</title>
     <meta name="description" content="YouExtractor's privacy policy. Learn how we handle your data when you extract code projects from YouTube tutorials using our AI tool.">
+    <meta name="keywords" content="youextractor privacy, privacy policy, youtube to code privacy">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="Privacy Policy • YouExtractor">
+    <meta property="og:description" content="YouExtractor's privacy policy. Learn how we handle your data when you extract code projects from YouTube tutorials using our AI tool.">
+    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
     
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
