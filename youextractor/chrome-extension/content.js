@@ -64,15 +64,28 @@
         return PROGRAMMING_KEYWORDS.some((k) => t.includes(k));
     }
 
-    function sendMessage(msg) {
+    function sendMessage(msg, timeoutMs = 12000) {
+        // MV3 service workers can be killed while idle and drop an in-flight
+        // message response, which would otherwise leave the callback (and the
+        // panel) waiting forever. Time out so the UI always gets an answer.
         return new Promise((resolve) => {
+            let settled = false;
+            const finish = (res) => {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timer);
+                resolve(res);
+            };
+            const timer = setTimeout(() => {
+                finish({ ok: false, error: 'Extension background did not respond. Reload the extension from chrome://extensions and try again.' });
+            }, timeoutMs);
             try {
                 chrome.runtime.sendMessage(msg, (res) => {
-                    if (chrome.runtime.lastError) resolve({ ok: false, error: chrome.runtime.lastError.message });
-                    else resolve(res || { ok: false, error: 'No response from extension' });
+                    if (chrome.runtime.lastError) finish({ ok: false, error: chrome.runtime.lastError.message });
+                    else finish(res || { ok: false, error: 'No response from extension' });
                 });
             } catch (err) {
-                resolve({ ok: false, error: err.message });
+                finish({ ok: false, error: err.message });
             }
         });
     }
@@ -129,41 +142,10 @@
         :host { all: initial; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Floating trigger button */
-        .yex-fab {
-            position: fixed;
-            right: 20px;
-            bottom: 24px;
-            z-index: 2147483645;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #14b8a6;
-            color: #fff;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-            padding: 10px 16px;
-            border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: 0 6px 22px rgba(20,184,166,0.45), 0 2px 6px rgba(0,0,0,0.3);
-            cursor: pointer;
-            user-select: none;
-            transition: transform 160ms ease, box-shadow 160ms ease;
-            animation: yex-fab-in 300ms cubic-bezier(.2,.9,.3,1.2) both;
-        }
-        .yex-fab:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(20,184,166,0.6); }
-        .yex-fab:active { transform: translateY(0) scale(0.97); }
-        .yex-fab .yex-bolt { font-size: 15px; line-height: 1; }
-        @keyframes yex-fab-in { from { opacity: 0; transform: translateY(14px) scale(0.9); } to { opacity: 1; transform: none; } }
-
-        /* Dimmed backdrop — makes the panel read as a browser side panel */
-        .yex-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.45);
-            z-index: 2147483646;
+        /* The hidden attribute must beat the display rules below — otherwise
+           the panel would be permanently visible on every page. */
+        .yex-panel[hidden] {
+            display: none !important;
         }
 
         /* The side panel — full height, docked right (Phantom/MetaMask style) */
@@ -178,7 +160,7 @@
             z-index: 2147483647;
             display: flex;
             flex-direction: column;
-            background: #0c0d10;
+            background: linear-gradient(180deg, #101116 0%, #0b0c10 100%);
             color: #fafafa;
             border-left: 1px solid rgba(255,255,255,0.09);
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -192,8 +174,8 @@
             align-items: center;
             gap: 8px;
             padding: 14px 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-            background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(20,184,166,0.05);
             flex-shrink: 0;
         }
         .yex-logo {
@@ -250,23 +232,50 @@
         .yex-hint b { color: #fff; }
         .yex-pitch { font-size: 12px; color: #a1a1aa; line-height: 1.55; }
 
+        /* ---- Hero (top of the sign-in screen) ---- */
+        .yex-hero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 10px 4px 6px; }
+        .yex-hero-logo {
+            width: 64px; height: 64px; border-radius: 18px; object-fit: cover;
+            border: 1px solid rgba(20,184,166,0.35);
+            box-shadow: 0 8px 24px rgba(20,184,166,0.25);
+        }
+        .yex-hero-title { font-size: 16.5px; font-weight: 800; color: #fff; letter-spacing: -0.3px; line-height: 1.3; }
+        .yex-hero-title em {
+            font-style: normal;
+            background: linear-gradient(90deg, #2dd4bf, #38bdf8);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .yex-hero-sub { font-size: 12px; color: #a1a1aa; line-height: 1.55; max-width: 320px; }
+
         /* ---- In-panel auth ---- */
-        .yex-auth-tabs { display: flex; background: #18181b; border-radius: 10px; padding: 3px; gap: 3px; }
+        .yex-auth-tabs {
+            display: flex; background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 3px; gap: 3px;
+        }
         .yex-auth-tab {
             flex: 1; background: transparent; border: none; color: #a1a1aa;
             padding: 9px 8px; border-radius: 8px; font-size: 12.5px; font-weight: 600;
             cursor: pointer; font-family: inherit; transition: all 140ms ease;
         }
-        .yex-auth-tab.active { background: #27272a; color: #fff; }
+        .yex-auth-tab.active {
+            background: linear-gradient(135deg, #0ea5a4, #14b8a6);
+            color: #fff; box-shadow: 0 2px 8px rgba(20,184,166,0.35);
+        }
         .yex-auth-form { display: none; flex-direction: column; gap: 8px; }
         .yex-auth-form.active { display: flex; }
         .yex-auth-form label { font-size: 11px; color: #a1a1aa; font-weight: 600; margin-top: 4px; }
         .yex-auth-form input {
-            background: #18181b; border: 1px solid rgba(255,255,255,0.1);
-            color: #fafafa; border-radius: 9px; padding: 10px 12px; font-size: 13px;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+            color: #fafafa; border-radius: 10px; padding: 11px 12px; font-size: 13px;
             font-family: inherit; outline: none; width: 100%;
+            transition: border-color 140ms ease, box-shadow 140ms ease;
         }
-        .yex-auth-form input:focus { border-color: #14b8a6; }
+        .yex-auth-form input:focus {
+            border-color: #14b8a6;
+            box-shadow: 0 0 0 3px rgba(20,184,166,0.15);
+        }
         .yex-auth-form input::placeholder { color: #52525b; }
         .yex-auth-error {
             color: #fca5a5; font-size: 12px; line-height: 1.45;
@@ -305,8 +314,14 @@
             border: none; transition: all 150ms ease; color: #fff; position: relative;
         }
         .yex-btn:disabled { opacity: 0.55; cursor: not-allowed; }
-        .yex-btn-primary { background: #14b8a6; box-shadow: 0 2px 10px rgba(20,184,166,0.35); }
-        .yex-btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(20,184,166,0.5); }
+        .yex-btn-primary {
+            background: linear-gradient(135deg, #0ea5a4 0%, #14b8a6 55%, #2dd4bf 100%);
+            box-shadow: 0 4px 14px rgba(20,184,166,0.35), inset 0 1px 0 rgba(255,255,255,0.18);
+        }
+        .yex-btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(20,184,166,0.5), inset 0 1px 0 rgba(255,255,255,0.18);
+        }
         .yex-btn-secondary { background: #27272a; border: 1px solid rgba(255,255,255,0.08); }
         .yex-btn-secondary:hover:not(:disabled) { background: #323236; }
         .yex-btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: #d4d4d8; font-weight: 600; }
@@ -388,17 +403,6 @@
         .yex-footer a:hover { color: #2dd4bf; }
     `;
 
-    // --- Trigger button ---
-    const fab = document.createElement('button');
-    fab.className = 'yex-fab';
-    fab.type = 'button';
-    fab.innerHTML = '<span class="yex-bolt">⚡</span><span>Extract Code</span>';
-
-    // --- Backdrop ---
-    const backdrop = document.createElement('div');
-    backdrop.className = 'yex-backdrop';
-    backdrop.hidden = true;
-
     // --- Panel ---
     const panel = document.createElement('div');
     panel.className = 'yex-panel';
@@ -448,7 +452,11 @@
     const viewAuth = document.createElement('div');
     viewAuth.className = 'yex-view';
     viewAuth.innerHTML = `
-        <div class="yex-hint">Turn any <b>YouTube coding tutorial</b> into a complete codebase — right here on the video page.</div>
+        <div class="yex-hero">
+            <img class="yex-hero-logo" alt="YouExtractor" src="${APP_BASE}/img/youextractor-logo.jpg">
+            <div class="yex-hero-title">Turn any tutorial into a <em>full project</em></div>
+            <div class="yex-hero-sub">Extract the complete code, files and step-by-step guide — right here on the video page.</div>
+        </div>
         <div class="yex-social-row">
             <button type="button" class="yex-btn yex-oauth-btn yex-oauth-google" data-yex-oauth="google">
                 <span class="yex-last-used" data-yex-last="google" style="display:none;">Last used</span>
@@ -523,21 +531,31 @@
     viewError.className = 'yex-view';
     viewError.innerHTML = `<div class="yex-error-box"></div>`;
 
+    // Shown the instant the panel opens, so the body is never blank while the
+    // auth check is still in flight (or if the background never answers).
+    const viewLoading = document.createElement('div');
+    viewLoading.className = 'yex-view';
+    viewLoading.innerHTML = `
+        <div class="yex-spinner-wrap">
+            <div class="yex-spinner"></div>
+            <div class="yex-spinner-text">Checking your session…</div>
+        </div>`;
+
     const body = document.createElement('div');
     body.className = 'yex-body';
-    body.append(viewAuth, viewReady, viewExtracting, viewDone, viewError);
+    body.append(viewAuth, viewLoading, viewReady, viewExtracting, viewDone, viewError);
 
     const footer = document.createElement('div');
     footer.className = 'yex-footer';
-    footer.innerHTML = `Powered by <a href="${APP_BASE}" target="_blank" rel="noopener">youextractor.me</a> — extract code from any tutorial`;
+    footer.innerHTML = `Powered by <a href="${APP_BASE}" target="_blank" rel="noopener">youextractor.me</a> — extract code from any tutorial · v2.0.7`;
 
     panel.append(header, body, footer);
-    shadow.append(style, fab, backdrop, panel);
+    shadow.append(style, panel);
 
     // ------------------------------------------------------------------
     // View switching
     // ------------------------------------------------------------------
-    const VIEWS = { auth: viewAuth, ready: viewReady, extracting: viewExtracting, done: viewDone, error: viewError };
+    const VIEWS = { auth: viewAuth, loading: viewLoading, ready: viewReady, extracting: viewExtracting, done: viewDone, error: viewError };
 
     function showView(name) {
         Object.entries(VIEWS).forEach(([key, el]) => el.classList.toggle('active', key === name));
@@ -552,27 +570,18 @@
     // ------------------------------------------------------------------
     // Open / close
     // ------------------------------------------------------------------
-    fab.addEventListener('click', () => {
-        if (panelOpen) closePanel();
-        else openPanel();
-    });
-    backdrop.addEventListener('click', closePanel);
-
     function openPanel() {
         if (!videoId) return;
         panelOpen = true;
         panel.hidden = false;
-        backdrop.hidden = false;
-        fab.style.display = 'none';
         syncReadyView();
+        showView('loading');
         refreshAuth();
     }
 
     function closePanel() {
         panelOpen = false;
         panel.hidden = true;
-        backdrop.hidden = true;
-        fab.style.display = videoId ? 'flex' : 'none';
         clearTimeout(authPollTimer);
         clearTimeout(statusPollTimer);
         clearInterval(oauthPollTimer);
@@ -617,21 +626,30 @@
     }
 
     async function refreshAuth() {
-        const res = await sendMessage({ type: 'checkAuth' });
-        if (!panelOpen) return;
-        currentLastUsed = res.lastUsed || null;
-        showLastUsed(currentLastUsed);
-        if (res.ok && res.authenticated) {
-            currentUser = { name: res.name, email: res.email, avatar: res.avatar };
-            updateHeader();
-            stopAuthPoll();
-            syncReadyView();
-            showView('ready');
-        } else {
-            currentUser = null;
-            updateHeader();
-            showView('auth');
-            startAuthPoll();
+        try {
+            const res = await sendMessage({ type: 'checkAuth' });
+            if (!panelOpen) return;
+            if (res && res.error) {
+                showError('Extension Connection Error: ' + res.error);
+                return;
+            }
+            currentLastUsed = (res && res.lastUsed) || null;
+            showLastUsed(currentLastUsed);
+            if (res && res.ok && res.authenticated) {
+                currentUser = { name: res.name, email: res.email, avatar: res.avatar };
+                updateHeader();
+                stopAuthPoll();
+                syncReadyView();
+                showView('ready');
+            } else {
+                currentUser = null;
+                updateHeader();
+                showView('auth');
+                startAuthPoll();
+            }
+        } catch (err) {
+            console.error('[YouExtractor] refreshAuth failed:', err);
+            showError('Auth refresh failed: ' + err.message);
         }
     }
 
@@ -697,6 +715,7 @@
         }
 
         oauthWindow = w;
+        const oauthStart = Date.now();
         stopAuthPoll();
         clearTimeout(oauthPollTimer);
         oauthPollTimer = setInterval(async () => {
@@ -706,6 +725,16 @@
                 clearInterval(oauthPollTimer);
                 oauthWindow = null;
                 oauthNote.textContent = '';
+                oauthButtons.forEach((b) => { b.disabled = false; });
+                startAuthPoll();
+                return;
+            }
+            // Give up after 90s so the panel can never sit stuck on
+            // "Opening … sign-in…" — drop back to normal polling.
+            if (Date.now() - oauthStart > 90000) {
+                clearInterval(oauthPollTimer);
+                oauthWindow = null;
+                oauthNote.textContent = 'Sign-in is taking too long — try again.';
                 oauthButtons.forEach((b) => { b.disabled = false; });
                 startAuthPoll();
                 return;
@@ -837,7 +866,9 @@
         setExtractStatus('Starting extraction…');
         showView('extracting');
 
-        const res = await sendMessage({ type: 'extractVideo', url: location.href });
+        // Extraction can legitimately take minutes (transcript + AI), so give
+        // the background a long window instead of the 12s default timeout.
+        const res = await sendMessage({ type: 'extractVideo', url: location.href }, 600000);
         if (!panelOpen) return;
         if (!res.ok) {
             if (res.error === 'unauthorized') {
@@ -1058,15 +1089,14 @@
             videoId = newId;
             videoTitle = getVideoTitle();
             if (videoId) {
-                fab.style.display = panelOpen ? 'none' : 'flex';
-                syncReadyView();
                 if (panelOpen) {
                     clearTimeout(statusPollTimer);
                     stopAuthPoll();
                     refreshAuth();
+                } else {
+                    openPanel();
                 }
             } else {
-                fab.style.display = 'none';
                 if (panelOpen) closePanel();
             }
         } else if (videoId) {
@@ -1087,5 +1117,4 @@
     // ------------------------------------------------------------------
     document.body.appendChild(host);
     handleNavigation();
-    if (!videoId) fab.style.display = 'none';
 })();

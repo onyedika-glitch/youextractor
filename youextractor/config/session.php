@@ -194,6 +194,8 @@ return [
     |
     */
 
-    'same_site' => 'lax',
+    // "none" lets the Chrome extension attach the session cookie from its own
+    // origin via credentials:'include' (requires 'secure' => true).
+    'same_site' => env('SESSION_SAME_SITE', 'lax'),
 
 ];

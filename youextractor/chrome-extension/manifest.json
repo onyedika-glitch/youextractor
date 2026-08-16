@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "YouExtractor",
-    "version": "2.0.1",
+    "version": "2.0.7",
     "description": "Extract code and tutorials from YouTube videos directly on the page — no leaving YouTube.",
     "permissions": [
         "activeTab",

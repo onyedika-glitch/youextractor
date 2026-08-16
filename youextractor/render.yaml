@@ -38,6 +38,10 @@ services:
         value: file
       - key: SESSION_LIFETIME
         value: "120"
+      - key: SESSION_SAME_SITE
+        value: none
+      - key: SESSION_SECURE_COOKIES
+        value: "true"
       - key: LOG_CHANNEL
         value: stack
       - key: LOG_LEVEL

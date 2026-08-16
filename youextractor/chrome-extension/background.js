@@ -1,14 +1,16 @@
 // YouExtractor — background service worker
 //
 // All API calls to the YouExtractor website happen HERE (extension origin),
-// which bypasses CORS entirely. The user's login session on youextractor.me
-// is attached manually by reading the site's session cookie via chrome.cookies
-// (HttpOnly cookies ARE readable through the cookies API), so the extension
-// works even though Laravel's session cookie is SameSite=Lax.
+// which bypasses CORS entirely. The session cookie is handled natively by the
+// browser: the site's session cookie is SameSite=None;Secure (see
+// config/session.php / render.yaml) and every fetch uses
+// `credentials: 'include'`, so the browser attaches the cookie itself.
+// (Setting the Cookie header from fetch() directly is impossible — Chrome
+// strips it as a forbidden header.)
 //
-// In-panel auth (login/register) uses `credentials: 'include'` so the browser
-// itself stores the Set-Cookie session cookie into the jar — after that the
-// normal manual-cookie path takes over for every other request.
+// In-panel auth (login/register) also uses `credentials: 'include'`, so the
+// Set-Cookie session cookie from the response lands in the browser jar and is
+// then attached automatically on every subsequent request.
 //
 // To point this at a self-hosted instance, change APP_BASE below.
 
@@ -17,27 +19,6 @@ const APP_BASE = 'https://youextractor.me'; // Update if self-hosted
 // ---------------------------------------------------------------------------
 // Cookie / fetch plumbing
 // ---------------------------------------------------------------------------
-
-/**
- * Returns the Laravel session cookie for the app domain.
- * Cookie names follow the pattern "<app_name>_session" but we match by
- * suffix so custom SESSION_COOKIE values keep working. Both the apex and
- * www variants are checked so login state is found regardless of which
- * host the user signed in on.
- */
-async function getSessionCookie() {
-    const hosts = [APP_BASE + '/', APP_BASE.replace('//', '//www.') + '/'];
-    for (const url of hosts) {
-        try {
-            const cookies = await chrome.cookies.getAll({ url });
-            const found = cookies.find((c) => c.name.toLowerCase().endsWith('_session'));
-            if (found) return found;
-        } catch (err) {
-            console.error('[YouExtractor] cookies.getAll failed:', err);
-        }
-    }
-    return null;
-}
 
 /**
  * Reads a named (non-session) cookie for the app domain, e.g. the
@@ -60,19 +41,14 @@ async function getCookie(name) {
 /**
  * fetch() against the app API.
  *
- * Two modes:
- *  - default: session is attached via the manual `Cookie` header (works for
- *    SameSite=Lax cookies; credentials are omitted so the browser doesn't
- *    double-send cookies).
- *  - { useCookies: true }: uses `credentials: 'include'` and lets the browser
- *    handle cookies itself. Used ONLY for login/register so the Set-Cookie
- *    session cookie from the response is stored into the browser's jar.
+ * Always uses `credentials: 'include'` so the browser attaches the site's
+ * SameSite=None session cookie natively — never set the Cookie header from
+ * fetch() directly, Chrome strips it.
  *
  * Returns { ok, status, data } where data is the parsed JSON body.
  */
 async function apiFetch(path, options = {}) {
-    const useCookies = !!options.useCookies;
-    const { useCookies: _omit, ...fetchOptions } = options;
+    const { useCookies: _omit, timeout: timeoutMs = 20000, ...fetchOptions } = options;
 
     const headers = {
         Accept: 'application/json',
@@ -80,23 +56,26 @@ async function apiFetch(path, options = {}) {
         ...(options.headers || {}),
     };
 
-    if (!useCookies) {
-        const cookie = await getSessionCookie();
-        if (cookie) {
-            headers['Cookie'] = `${cookie.name}=${cookie.value}`;
-        }
-    }
+    // Never let a stalled request hold the message channel open forever —
+    // if the fetch hangs, the service worker could be killed with the
+    // response undelivered and the content script would wait indefinitely.
+    // Long operations (e.g. extraction) pass a larger `timeout` option.
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
 
     let response;
     try {
         response = await fetch(APP_BASE + path, {
             ...fetchOptions,
             headers,
-            credentials: useCookies ? 'include' : 'omit',
+            credentials: 'include',
+            signal: controller.signal,
         });
     } catch (err) {
         console.error('[YouExtractor] network error:', err);
         return { ok: false, status: 0, data: { error: 'Network error — is youextractor.me reachable?' } };
+    } finally {
+        clearTimeout(timer);
     }
 
     let data = {};
@@ -188,9 +167,12 @@ async function handleMessage(message) {
         }
 
         case 'extractVideo': {
+            // The site runs the whole AI extraction before answering, so give
+            // this request up to 10 minutes (well past the 20s default).
             const res = await apiFetch('/api/videos/extract', {
                 method: 'POST',
                 body: JSON.stringify({ youtube_url: message.url }),
+                timeout: 600000,
             });
             if (!res.ok) {
                 if (res.status === 401) {
