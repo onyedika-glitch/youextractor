@@ -9,6 +9,12 @@ class Video extends Model
 {
     use HasFactory;
 
+    /**
+     * Average time a developer would spend copying a tutorial by hand.
+     * Kept in sync with the dashboard "Est. Time Saved" calculation.
+     */
+    public const HOURS_SAVED_PER_EXTRACTION = 2;
+
     protected $fillable = [
         'user_id',
         'youtube_id',

@@ -1168,7 +1168,7 @@
             </div>
             
             <p style="margin-top: var(--theme-spacing-4); font-size: var(--theme-font-size-xs); color: var(--ds-text-muted);">
-                Used by developers in 140+ countries • 100% free to start extracting
+                Used by {{ number_format($stats['developers'] ?? 0) }} {{ ($stats['developers'] ?? 0) === 1 ? 'developer' : 'developers' }} • 100% free to start extracting
             </p>
         </div>
     </section>
@@ -1439,20 +1439,20 @@
         <div class="container">
             <div class="stats-grid">
                 <div class="stat reveal">
-                    <div class="stat-value count" data-target="128470">0</div>
+                    <div class="stat-value count" data-target="{{ (int) ($stats['tutorials_extracted'] ?? 0) }}">0</div>
                     <div class="stat-label">Tutorials extracted</div>
                 </div>
                 <div class="stat reveal stagger-1">
-                    <div class="stat-value count" data-target="942">0</div>
+                    <div class="stat-value count" data-target="{{ (int) ($stats['hours_saved_this_week'] ?? 0) }}">0</div>
                     <div class="stat-label">Hours saved this week</div>
                 </div>
                 <div class="stat reveal stagger-2">
-                    <div class="stat-value count" data-target="18400">0</div>
+                    <div class="stat-value count" data-target="{{ (int) ($stats['projects_shipped'] ?? 0) }}">0</div>
                     <div class="stat-label">Projects shipped</div>
                 </div>
                 <div class="stat reveal stagger-3">
-                    <div class="stat-value count" data-target="97">0</div>
-                    <div class="stat-label">Countries represented</div>
+                    <div class="stat-value count" data-target="{{ (int) ($stats['developers'] ?? 0) }}">0</div>
+                    <div class="stat-label">Developers</div>
                 </div>
             </div>
         </div>

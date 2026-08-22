@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -10,9 +11,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Landing page
-Route::get('/', function () {
-    return view('landing');
-})->name('landing');
+Route::get('/', [LandingController::class, 'index'])->name('landing');
 
 // Privacy Policy
 Route::get('/privacy', function () {
