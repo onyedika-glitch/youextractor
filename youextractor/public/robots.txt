@@ -1,17 +1,21 @@
 User-agent: *
 Allow: /
-Allow: /signin
-Allow: /signup
-Allow: /support
+Allow: /about
+Allow: /tools
+Allow: /tools/
+Allow: /for/
 Allow: /blog
 Allow: /blog/
+Allow: /support
 Allow: /privacy
 Allow: /terms
 Allow: /api-docs
+Allow: /llms.txt
 
-# Block private/authenticated areas
+# Private / authenticated areas
 Disallow: /dashboard
 Disallow: /videos
 Disallow: /auth/
+Disallow: /logout
 
 Sitemap: https://youextractor.me/sitemap.xml

@@ -16,6 +16,8 @@ services:
         value: "false"
       - key: APP_KEY
         sync: false
+      - key: APP_NAME
+        value: YouExtractor
       - key: APP_URL
         value: https://youextractor.me
       - key: DB_CONNECTION

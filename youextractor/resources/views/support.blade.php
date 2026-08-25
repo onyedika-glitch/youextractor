@@ -4,16 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('partials.favicon')
-    <link rel="canonical" href="{{ rtrim(config('app.url'), '/') . '/' . ltrim(request()->getPathInfo(), '/') }}">
+    @include('partials.seo', [
+        'title' => 'Support & Help Center • YouExtractor',
+        'description' => 'Get support for YouExtractor. Email, GitHub issues, and help converting YouTube coding tutorials into runnable code projects.',
+        'keywords' => 'YouExtractor support, YouExtractor help center, YouTube code extractor help, Chrome extension help, extract code from YouTube support, youextractor.me contact',
+    ])
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
-    <title>Support & Help Center • YouExtractor - AI YouTube Code Extractor</title>
-    <meta name="description" content="Get support for YouExtractor. Reach out via email, check open GitHub issues, or join our community for help converting YouTube tutorials into code projects.">
-    <meta name="keywords" content="youextractor support, help center, youtube to code help">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="Support & Help Center • YouExtractor">
-    <meta property="og:description" content="Get support for YouExtractor. Reach out via email, check open GitHub issues, or join our community for help converting YouTube tutorials into code projects.">
-    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
     
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">

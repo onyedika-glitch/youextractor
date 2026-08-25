@@ -37,7 +37,7 @@ class LandingController extends Controller
         ];
 
         try {
-            return Cache::remember('landing.stats', 300, function () {
+            return Cache::remember('landing.stats', 3600, function () {
                 $weekStart = now()->startOfWeek();
 
                 $completedThisWeek = Video::query()

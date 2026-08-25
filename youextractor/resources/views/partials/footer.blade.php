@@ -9,7 +9,7 @@
                     <span style="font-weight: 700; font-size: 1.15rem; letter-spacing: var(--theme-letter-spacing-tight);">YouExtractor</span>
                 </a>
                 <p style="margin: 0; font-size: var(--theme-font-size-sm); max-width: 280px; line-height: var(--theme-line-height-relaxed);">
-                    Turn programming video tutorials into fully structured codebase projects in seconds. Learn faster, code smarter.
+                    YouExtractor turns YouTube coding tutorials into runnable source-code projects. Not a tags extractor — real code, at youextractor.me.
                 </p>
             </div>
 
@@ -20,12 +20,16 @@
                     <span style="font-weight: 600; font-size: var(--theme-font-size-xs); text-transform: uppercase; letter-spacing: var(--theme-letter-spacing-wider); color: var(--ds-text-primary);">Product</span>
                     <a href="{{ route('landing') }}#how" class="footer-link-item">How it works</a>
                     <a href="{{ route('landing') }}#features" class="footer-link-item">Features</a>
+                    <a href="{{ route('tools.index') }}" class="footer-link-item">Tools</a>
+                    <a href="{{ url('/tools/extract-code-from-youtube') }}" class="footer-link-item">YouTube code extractor</a>
+                    <a href="{{ url('/tools/youtube-to-github') }}" class="footer-link-item">YouTube to GitHub</a>
+                    <a href="{{ route('about') }}" class="footer-link-item">About YouExtractor</a>
                     <a href="{{ route('blog.index') }}" class="footer-link-item">Blog</a>
                 </div>
 
                 <!-- Support & Legal Links -->
                 <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3);">
-                    <span style="font-weight: 600; font-size: var(--theme-font-size-xs); text-transform: uppercase; letter-spacing: var(--theme-letter-spacing-wider); color: var(--ds-text-primary);">Product</span>
+                    <span style="font-weight: 600; font-size: var(--theme-font-size-xs); text-transform: uppercase; letter-spacing: var(--theme-letter-spacing-wider); color: var(--ds-text-primary);">Support</span>
                     <a href="{{ route('support') }}" class="footer-link-item">Support</a>
                     <a href="{{ route('privacy') }}" class="footer-link-item">Privacy Policy</a>
                     <a href="{{ route('terms') }}" class="footer-link-item">Terms of Service</a>
@@ -34,7 +38,9 @@
                 <!-- Community / Social -->
                 <div style="display: flex; flex-direction: column; gap: var(--theme-spacing-3);">
                     <span style="font-weight: 600; font-size: var(--theme-font-size-xs); text-transform: uppercase; letter-spacing: var(--theme-letter-spacing-wider); color: var(--ds-text-primary);">Community</span>
-                    <a href="https://buymeacoffee.com/omogo" target="_blank" class="footer-link-item" style="color: #fbbf24; font-weight: 500;">
+                    <a href="https://github.com/onyedika-glitch/youextractor" target="_blank" rel="noopener" class="footer-link-item">GitHub</a>
+                    <a href="https://chromewebstore.google.com/detail/youextractor/ihajahjkhnelimamilebbcjibbhghbcn" target="_blank" rel="noopener" class="footer-link-item">Chrome extension</a>
+                    <a href="https://buymeacoffee.com/omogo" target="_blank" rel="noopener" class="footer-link-item" style="color: #fbbf24; font-weight: 500;">
                          <i class="ph ph-coffee" style="margin-right: 4px;"></i> Buy Me a Coffee
                     </a>
                 </div>

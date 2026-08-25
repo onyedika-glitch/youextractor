@@ -1,0 +1,23 @@
+# YouExtractor
+
+> YouExtractor (https://youextractor.me) is an AI developer tool that turns YouTube coding tutorials into complete, runnable source-code projects. Paste a public programming video URL and YouExtractor rebuilds the file tree, dependencies, written guide, and learning roadmap.
+
+YouExtractor is not a YouTube tags extractor, title extractor, description copier, or SEO metadata tool. Those products (often searched as "yt extractor") pull video tags and thumbnails. YouExtractor extracts source code from coding tutorials.
+
+- Homepage: https://youextractor.me/
+- Tools: https://youextractor.me/tools
+- Extract code from YouTube: https://youextractor.me/tools/extract-code-from-youtube
+- YouTube to GitHub: https://youextractor.me/tools/youtube-to-github
+- Learn programming faster: https://youextractor.me/tools/learn-programming-faster
+- React: https://youextractor.me/for/react
+- Python: https://youextractor.me/for/python
+- Next.js: https://youextractor.me/for/nextjs
+- About: https://youextractor.me/about
+- Blog: https://youextractor.me/blog
+- What is YouExtractor: https://youextractor.me/blog/what-is-youextractor
+- Support: https://youextractor.me/support
+- API docs: https://youextractor.me/api-docs
+- Privacy: https://youextractor.me/privacy
+- Terms: https://youextractor.me/terms
+- GitHub: https://github.com/onyedika-glitch/youextractor
+- Chrome extension: https://chromewebstore.google.com/detail/youextractor/ihajahjkhnelimamilebbcjibbhghbcn

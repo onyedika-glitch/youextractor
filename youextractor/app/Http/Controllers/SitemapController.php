@@ -14,21 +14,46 @@ class SitemapController extends Controller
 
             $baseUrl = rtrim(config('app.url', 'https://youextractor.me'), '/');
 
+            $viewStamp = function (string $relativeView) {
+                $path = resource_path('views/' . $relativeView);
+                return file_exists($path) ? date('Y-m-d', filemtime($path)) : date('Y-m-d');
+            };
+
             $staticPages = [
-                ['path' => '/', 'changefreq' => 'weekly', 'priority' => '1.0'],
-                ['path' => '/privacy', 'changefreq' => 'yearly', 'priority' => '0.3'],
-                ['path' => '/terms', 'changefreq' => 'yearly', 'priority' => '0.3'],
-                ['path' => '/support', 'changefreq' => 'monthly', 'priority' => '0.5'],
-                ['path' => '/blog', 'changefreq' => 'weekly', 'priority' => '0.7'],
-                ['path' => '/api-docs', 'changefreq' => 'monthly', 'priority' => '0.4'],
+                ['path' => '/', 'changefreq' => 'weekly', 'priority' => '1.0', 'lastmod' => $viewStamp('landing.blade.php')],
+                ['path' => '/about', 'changefreq' => 'monthly', 'priority' => '0.8', 'lastmod' => $viewStamp('about.blade.php')],
+                ['path' => '/tools', 'changefreq' => 'weekly', 'priority' => '0.9', 'lastmod' => $viewStamp('seo/hub.blade.php')],
+                ['path' => '/privacy', 'changefreq' => 'yearly', 'priority' => '0.3', 'lastmod' => $viewStamp('privacy.blade.php')],
+                ['path' => '/terms', 'changefreq' => 'yearly', 'priority' => '0.3', 'lastmod' => $viewStamp('terms.blade.php')],
+                ['path' => '/support', 'changefreq' => 'monthly', 'priority' => '0.5', 'lastmod' => $viewStamp('support.blade.php')],
+                ['path' => '/blog', 'changefreq' => 'weekly', 'priority' => '0.7', 'lastmod' => $viewStamp('blog/index.blade.php')],
+                ['path' => '/api-docs', 'changefreq' => 'monthly', 'priority' => '0.4', 'lastmod' => date('Y-m-d', @filemtime(public_path('api-docs.html')) ?: time())],
             ];
 
             foreach ($staticPages as $page) {
                 $urls[] = [
                     'loc' => $baseUrl . $page['path'],
-                    'lastmod' => now()->toAtomString(),
+                    'lastmod' => $page['lastmod'],
                     'changefreq' => $page['changefreq'],
                     'priority' => $page['priority'],
+                ];
+            }
+
+            $toolStamp = $viewStamp('seo/page.blade.php');
+            foreach (array_keys(config('seo_pages.tools', [])) as $slug) {
+                $urls[] = [
+                    'loc' => $baseUrl . '/tools/' . $slug,
+                    'lastmod' => $toolStamp,
+                    'changefreq' => 'monthly',
+                    'priority' => '0.8',
+                ];
+            }
+            foreach (array_keys(config('seo_pages.stacks', [])) as $slug) {
+                $urls[] = [
+                    'loc' => $baseUrl . '/for/' . $slug,
+                    'lastmod' => $toolStamp,
+                    'changefreq' => 'monthly',
+                    'priority' => '0.7',
                 ];
             }
 

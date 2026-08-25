@@ -4,38 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('partials.favicon')
-    <link rel="canonical" href="{{ rtrim(config('app.url'), '/') . '/' . ltrim(request()->getPathInfo(), '/') }}">
-    <title>{{ $post['title'] }} • YouExtractor</title>
-    <meta name="description" content="{{ $post['excerpt'] ?? Str::limit(strip_tags($post['content']), 160) }}">
-    <meta name="keywords" content="youtube to code, ai code extractor, learn programming faster, youtube tutorial to project">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="{{ $post['title'] }} • YouExtractor">
-    <meta property="og:description" content="{{ $post['excerpt'] ?? Str::limit(strip_tags($post['content']), 160) }}">
-    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": "{{ $post['title'] }}",
-        "url": "{{ url()->current() }}",
-        "datePublished": "{{ $post['date'] ?? now()->toDateString() }}",
-        "description": "{{ $post['excerpt'] ?? Str::limit(strip_tags($post['content']), 160) }}",
-        "author": {
-            "@type": "Person",
-            "name": "Omogo Peter Onyedika",
-            "url": "https://devomogo.tech"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "YouExtractor",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "{{ asset('/img/youextractor-logo.png') }}"
-            }
-        }
-    }
-    </script>
+    @php
+        $base = rtrim(config('app.url') ?: 'https://youextractor.me', '/');
+        $postUrl = $base . '/blog/' . $slug;
+        $postDesc = $post['excerpt'] ?? Str::limit(strip_tags($post['content']), 160);
+        $published = $post['date'] ?? now()->toDateString();
+        $articleGraph = [
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'BlogPosting',
+                    '@id' => $postUrl . '#article',
+                    'headline' => $post['title'],
+                    'name' => $post['title'] . ' • YouExtractor',
+                    'url' => $postUrl,
+                    'datePublished' => $published,
+                    'dateModified' => $published,
+                    'description' => $postDesc,
+                    'image' => $base . '/img/app-screenshot-2.png',
+                    'mainEntityOfPage' => $postUrl,
+                    'author' => [
+                        '@type' => 'Person',
+                        'name' => 'Omogo Peter Onyedika',
+                        'url' => 'https://devomogo.tech',
+                    ],
+                    'publisher' => [
+                        '@type' => 'Organization',
+                        'name' => 'YouExtractor',
+                        'url' => $base . '/',
+                        'logo' => [
+                            '@type' => 'ImageObject',
+                            'url' => $base . '/img/youextractor-logo.png',
+                        ],
+                    ],
+                ],
+                [
+                    '@type' => 'BreadcrumbList',
+                    'itemListElement' => [
+                        ['@type' => 'ListItem', 'position' => 1, 'name' => 'YouExtractor', 'item' => $base . '/'],
+                        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Blog', 'item' => $base . '/blog'],
+                        ['@type' => 'ListItem', 'position' => 3, 'name' => $post['title'], 'item' => $postUrl],
+                    ],
+                ],
+            ],
+        ];
+    @endphp
+    @include('partials.seo', [
+        'title' => $post['title'] . ' • YouExtractor',
+        'description' => $postDesc,
+        'type' => 'article',
+        'published' => $published,
+        'modified' => $published,
+        'keywords' => $post['title'] . ', YouExtractor, YouTube code extractor, extract code from YouTube tutorial, AI code extractor, learn programming faster, coding tutorial to GitHub, youextractor.me',
+    ])
+    <script type="application/ld+json">{!! json_encode($articleGraph, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

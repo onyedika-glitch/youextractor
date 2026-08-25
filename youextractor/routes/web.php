@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\Route;
 // Landing page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
+// About (brand / entity page for search)
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+// Unique SERP tool pages + stack guides
+Route::get('/tools', [\App\Http\Controllers\SeoPageController::class, 'hub'])->name('tools.index');
+Route::get('/tools/{slug}', [\App\Http\Controllers\SeoPageController::class, 'tool'])->name('tools.show');
+Route::get('/for/{slug}', [\App\Http\Controllers\SeoPageController::class, 'stack'])->name('stacks.show');
+
 // Privacy Policy
 Route::get('/privacy', function () {
     return view('privacy');
@@ -35,6 +45,10 @@ Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show']
 // SEO: robots.txt and dynamic sitemap
 Route::get('/robots.txt', function () {
     return response(file_get_contents(public_path('robots.txt')), 200, ['Content-Type' => 'text/plain']);
+});
+
+Route::get('/llms.txt', function () {
+    return response(file_get_contents(public_path('llms.txt')), 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
 });
 
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index']);

@@ -4,31 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('partials.favicon')
-    <link rel="canonical" href="{{ rtrim(config('app.url'), '/') . '/' . ltrim(request()->getPathInfo(), '/') }}">
-    <title>Blog • YouExtractor</title>
-    <meta name="description" content="Articles about AI-assisted learning, building developer tools, and turning passive video watching into active building.">
-    <meta name="keywords" content="youtube to code, ai code extractor, learn programming faster, youtube tutorial to project, developer tools, ai learning">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="Blog • YouExtractor">
-    <meta property="og:description" content="Articles about AI-assisted learning, building developer tools, and turning passive video watching into active building.">
-    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "itemListElement": [
-            @foreach($posts as $post)
-            {
-                "@type": "ListItem",
-                "position": {{ $loop->iteration }},
-                "url": "{{ rtrim(config('app.url'), '/') }}/blog/{{ $post['slug'] }}",
-                "name": "{{ $post['title'] }}"
-            }@if(!$loop->last),@endif
-            @endforeach
-        ]
-    }
-    </script>
+    @include('partials.seo', [
+        'title' => 'Blog • YouExtractor',
+        'description' => 'Articles from YouExtractor about turning YouTube coding tutorials into real projects, AI-assisted learning, and the YouExtractor pipeline.',
+        'keywords' => 'YouExtractor blog, learn programming faster, YouTube coding tutorials, extract code from YouTube, AI-assisted learning, tutorial hell, YouTube to GitHub, coding tutorial to project, youextractor.me blog',
+    ])
+    @php
+        $base = rtrim(config('app.url') ?: 'https://youextractor.me', '/');
+        $blogList = [
+            '@context' => 'https://schema.org',
+            '@type' => 'CollectionPage',
+            'name' => 'YouExtractor Blog',
+            'url' => $base . '/blog',
+            'isPartOf' => ['@id' => $base . '/#website'],
+            'mainEntity' => [
+                '@type' => 'ItemList',
+                'itemListElement' => collect($posts)->values()->map(fn ($post, $i) => [
+                    '@type' => 'ListItem',
+                    'position' => $i + 1,
+                    'url' => $base . '/blog/' . $post['slug'],
+                    'name' => $post['title'],
+                ])->all(),
+            ],
+        ];
+    @endphp
+    <script type="application/ld+json">{!! json_encode($blogList, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -90,7 +90,7 @@
         <!-- Header -->
         <div class="blog-header">
             <div class="ds-badge-brand" style="margin-bottom: 16px;">From the team</div>
-            <h1 class="ds-type-display-sm" style="margin: 0 0 12px;">Blog</h1>
+            <h1 class="ds-type-display-sm" style="margin: 0 0 12px;">YouExtractor Blog</h1>
             <p style="max-width: 520px; margin: 0 auto; color: var(--ds-text-secondary); font-size: 15px;">
                 Deep dives into how we build AI tools that help developers learn faster by doing instead of just watching.
             </p>

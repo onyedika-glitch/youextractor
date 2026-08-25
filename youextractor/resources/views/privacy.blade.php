@@ -4,16 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('partials.favicon')
-    <link rel="canonical" href="{{ rtrim(config('app.url'), '/') . '/' . ltrim(request()->getPathInfo(), '/') }}">
+    @include('partials.seo', [
+        'title' => 'Privacy Policy • YouExtractor',
+        'description' => "YouExtractor's privacy policy. How we handle your data when you extract code projects from YouTube coding tutorials.",
+        'keywords' => 'YouExtractor privacy policy, YouExtractor data, YouTube tutorial extraction privacy, AI code extractor privacy, youextractor.me privacy, developer tool privacy',
+    ])
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
-    <title>Privacy Policy • YouExtractor - AI YouTube Code Extractor</title>
-    <meta name="description" content="YouExtractor's privacy policy. Learn how we handle your data when you extract code projects from YouTube tutorials using our AI tool.">
-    <meta name="keywords" content="youextractor privacy, privacy policy, youtube to code privacy">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="Privacy Policy • YouExtractor">
-    <meta property="og:description" content="YouExtractor's privacy policy. Learn how we handle your data when you extract code projects from YouTube tutorials using our AI tool.">
-    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
     
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">

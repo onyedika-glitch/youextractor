@@ -4,16 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('partials.favicon')
-    <link rel="canonical" href="{{ rtrim(config('app.url'), '/') . '/' . ltrim(request()->getPathInfo(), '/') }}">
+    @include('partials.seo', [
+        'title' => 'Terms of Service • YouExtractor',
+        'description' => 'Terms of Service for YouExtractor, the AI tool that converts YouTube coding tutorials into complete source-code projects and guides.',
+        'keywords' => 'YouExtractor terms of service, YouExtractor user agreement, YouTube to code terms, AI code extractor terms, youextractor.me terms',
+    ])
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
-    <title>Terms of Service • YouExtractor - AI YouTube Code Extractor</title>
-    <meta name="description" content="Terms of Service for YouExtractor. Rules for using our AI tool that converts YouTube coding tutorials into complete projects and guides.">
-    <meta name="keywords" content="youextractor terms, terms of service, youtube to code terms">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="Terms of Service • YouExtractor">
-    <meta property="og:description" content="Terms of Service for YouExtractor. Rules for using our AI tool that converts YouTube coding tutorials into complete projects and guides.">
-    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
     
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">

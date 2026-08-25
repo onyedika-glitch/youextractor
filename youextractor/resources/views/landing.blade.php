@@ -4,95 +4,131 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('partials.favicon')
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{{ rtrim(config('app.url'), '/') . '/' . ltrim(request()->getPathInfo(), '/') }}">
+    @php
+        $pageTitle = 'YouTube Code Extractor Tool — Copy Files, Guide & GitHub | YouExtractor';
+        $pageDescription = 'Free AI tool that extracts complete source code, folders, and a setup guide from any public YouTube coding tutorial. Paste a link. Download a ZIP or push to GitHub.';
+        $baseUrl = rtrim(config('app.url') ?: 'https://youextractor.me', '/');
+        $logoUrl = $baseUrl . '/img/youextractor-logo.png';
+        $seoGraph = [
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'Organization',
+                    '@id' => $baseUrl . '/#organization',
+                    'name' => 'YouExtractor',
+                    'legalName' => 'YouExtractor',
+                    'alternateName' => ['youextractor', 'You Extractor', 'YouExtractor.me', 'YouExtractor AI'],
+                    'url' => $baseUrl . '/',
+                    'logo' => [
+                        '@type' => 'ImageObject',
+                        'url' => $logoUrl,
+                    ],
+                    'image' => $logoUrl,
+                    'description' => 'YouExtractor turns YouTube coding tutorials into complete, runnable source-code projects using AI.',
+                    'disambiguatingDescription' => 'AI tool that extracts source code from YouTube programming tutorials. Not a YouTube tags, title, or SEO metadata extractor.',
+                    'foundingDate' => '2025',
+                    'sameAs' => [
+                        'https://github.com/onyedika-glitch/youextractor',
+                        'https://chromewebstore.google.com/detail/youextractor/ihajahjkhnelimamilebbcjibbhghbcn',
+                        'https://devomogo.tech',
+                        'https://productwatch.io/products/youextractor',
+                    ],
+                    'founder' => [
+                        '@type' => 'Person',
+                        'name' => 'Omogo Peter Onyedika',
+                        'url' => 'https://devomogo.tech',
+                    ],
+                ],
+                [
+                    '@type' => 'WebSite',
+                    '@id' => $baseUrl . '/#website',
+                    'url' => $baseUrl . '/',
+                    'name' => 'YouExtractor',
+                    'alternateName' => ['youextractor', 'YouExtractor.me'],
+                    'description' => 'Official website for YouExtractor, the AI YouTube-to-code tool.',
+                    'inLanguage' => 'en',
+                    'publisher' => ['@id' => $baseUrl . '/#organization'],
+                ],
+                [
+                    '@type' => 'SoftwareApplication',
+                    '@id' => $baseUrl . '/#software',
+                    'name' => 'YouExtractor',
+                    'alternateName' => ['youextractor', 'YouExtractor AI'],
+                    'applicationCategory' => 'DeveloperApplication',
+                    'applicationSubCategory' => 'YouTube coding tutorial to source code extractor',
+                    'operatingSystem' => 'Web',
+                    'url' => $baseUrl . '/',
+                    'image' => $baseUrl . '/img/app-screenshot-2.png',
+                    'description' => $pageDescription,
+                    'disambiguatingDescription' => 'Not a YouTube tags extractor. YouExtractor rebuilds runnable code projects from programming tutorials.',
+                    'offers' => [
+                        '@type' => 'Offer',
+                        'price' => '0',
+                        'priceCurrency' => 'USD',
+                    ],
+                    'publisher' => ['@id' => $baseUrl . '/#organization'],
+                    'brand' => [
+                        '@type' => 'Brand',
+                        'name' => 'YouExtractor',
+                    ],
+                ],
+                [
+                    '@type' => 'FAQPage',
+                    '@id' => $baseUrl . '/#faq',
+                    'mainEntity' => [
+                        [
+                            '@type' => 'Question',
+                            'name' => 'What is YouExtractor?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'YouExtractor is an AI developer tool at youextractor.me that turns YouTube coding tutorials into complete, runnable source-code projects — including the file tree, setup guide, and a learning roadmap.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'Is YouExtractor a YouTube tags or metadata extractor?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'No. YouExtractor is not a yt extractor / YouTube tags, title, or SEO metadata tool. Those products copy video tags and descriptions. YouExtractor extracts source code from programming tutorials.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'Does YouExtractor work with private or members-only videos?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'Currently we support any public YouTube video with available captions/transcripts. Private videos and YouTube Premium content are not supported.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'How accurate is the extracted code?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'Accuracy is highest on well-explained tutorials. The AI reconstructs files from both on-screen code and spoken instructions. You always get the full context and can edit anything.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'Can I push directly to a new GitHub repository?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'Yes. Connect your GitHub account once and every extraction can be pushed as a brand new private or public repo with proper .gitignore and README in a single click.',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    @endphp
+    @include('partials.seo', [
+        'title' => $pageTitle,
+        'description' => $pageDescription,
+        'keywords' => 'YouTube code extractor, YouTube code extractor tool, extract code from YouTube, extract code from YouTube tutorial, AI code extractor, copy code from coding video, YouTube to GitHub, YouTube to code, programming tutorial to project, React tutorial extractor, Python tutorial extractor, Next.js tutorial extractor, Laravel tutorial extractor, learn programming faster, follow along coding tutorial, YouExtractor, youextractor, youextractor.me',
+    ])
 
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
-
-    {{-- A/B Testing for Meta Titles (simple cookie-based persistence) --}}
-    @php
-        $abVariant = request('ab') ?? ($_COOKIE['ab_meta'] ?? null);
-        if (!in_array($abVariant, ['a','b','c'])) {
-            $abVariant = (crc32($_SERVER['REMOTE_ADDR'] ?? 'seed') % 3 === 0) ? 'b' : ((crc32($_SERVER['REMOTE_ADDR'] ?? 'seed') % 3 === 1) ? 'c' : 'a');
-            setcookie('ab_meta', $abVariant, time() + (86400 * 14), '/'); // 14 days
-        }
-
-        $titles = [
-            'a' => 'YouExtractor • Turn YouTube Coding Tutorials into Real Code Projects Instantly',
-            'b' => 'Extract Code from Any YouTube Tutorial in Seconds | YouExtractor',
-            'c' => 'YouExtractor — AI That Turns YouTube Videos Into Complete GitHub Projects',
-        ];
-        $descriptions = [
-            'a' => 'Stop copying code from YouTube tutorials. YouExtractor uses AI to instantly turn any programming video into complete, runnable projects, full file structures, step-by-step guides, IDE recommendations and an interactive learning roadmap. Free to start.',
-            'b' => 'Paste a YouTube coding tutorial URL. Get the full project, roadmap, and AI tutor in under 30 seconds. No more pausing and typing.',
-            'c' => 'The fastest way to go from watching a coding video to having a working codebase on GitHub. AI extracts everything automatically.',
-        ];
-
-        $pageTitle = $titles[$abVariant];
-        $pageDescription = $descriptions[$abVariant];
-    @endphp
-
-    <title>{{ $pageTitle }}</title>
-    <meta name="description" content="{{ $pageDescription }}">
-    <meta name="keywords" content="youtube to code, extract code from youtube, ai code extractor, youtube tutorial to project, coding video to github, learn programming faster, youtube code tutorial">
-    <!-- Current A/B variant for this visitor: {{ $abVariant }} (add ?ab=a to force) -->
-
-    <!-- Open Graph -->
-    <meta property="og:site_name" content="YouExtractor">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="{{ $pageTitle }}">
-    <meta property="og:description" content="{{ $pageDescription }}">
-    <meta property="og:image" content="{{ asset('/img/app-screenshot-2.png') }}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="YouExtractor dashboard showing extracted code project from a YouTube tutorial">
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $pageTitle }}">
-    <meta name="twitter:description" content="{{ $pageDescription }}">
-    <meta name="twitter:image" content="{{ asset('/img/app-screenshot-2.png') }}">
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@graph": [
-            {
-                "@type": "WebSite",
-                "@id": "{{ rtrim(config('app.url'), '/') }}/#website",
-                "url": "{{ rtrim(config('app.url'), '/') }}/",
-                "name": "YouExtractor",
-                "description": "Turn YouTube coding tutorials into complete, runnable code projects with AI.",
-                "publisher": { "@id": "{{ rtrim(config('app.url'), '/') }}/#organization" }
-            },
-            {
-                "@type": "SoftwareApplication",
-                "@id": "{{ rtrim(config('app.url'), '/') }}/#software",
-                "name": "YouExtractor",
-                "applicationCategory": "DeveloperApplication",
-                "operatingSystem": "Web",
-                "url": "{{ rtrim(config('app.url'), '/') }}/",
-                "description": "{{ $pageDescription }}",
-                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-                "publisher": { "@id": "{{ rtrim(config('app.url'), '/') }}/#organization" }
-            },
-            {
-                "@type": "Organization",
-                "@id": "{{ rtrim(config('app.url'), '/') }}/#organization",
-                "name": "YouExtractor",
-                "url": "{{ rtrim(config('app.url'), '/') }}/",
-                "logo": "{{ asset('/img/youextractor-logo.png') }}",
-                "founder": {
-                    "@type": "Person",
-                    "name": "Omogo Peter Onyedika",
-                    "url": "https://devomogo.tech"
-                }
-            }
-        ]
-    }
-    </script>
+    <script type="application/ld+json">{!! json_encode($seoGraph, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 
     <!-- Design System CSS -->
     <link rel="stylesheet" href="/css/youextractor-design-system.css?v=5">
@@ -102,79 +138,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
-
-    <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@graph": [
-            {
-                "@type": "SoftwareApplication",
-                "name": "YouExtractor",
-                "applicationCategory": "DeveloperApplication",
-                "operatingSystem": "Web",
-                "offers": {
-                    "@type": "Offer",
-                    "price": "0",
-                    "priceCurrency": "USD"
-                },
-                "description": "AI-powered tool that extracts complete code projects, file structures, step-by-step guides and interactive roadmaps from YouTube coding tutorials.",
-                "url": "{{ url('/') }}",
-                "image": "{{ asset('/img/generated/app-screenshot-2.png') }}",
-                "aggregateRating": {
-                    "@type": "AggregateRating",
-                    "ratingValue": "4.8",
-                    "ratingCount": "1240"
-                }
-            },
-            {
-                "@type": "Organization",
-                "name": "YouExtractor",
-                "url": "https://youextractor.me",
-                "logo": "https://youextractor.me/youextractor_logo_1780582176614.png",
-                "founder": {
-                    "@type": "Person",
-                    "name": "Omogo Peter Onyedika",
-                    "url": "https://devomogo.tech"
-                }
-            },
-            {
-                "@type": "WebSite",
-                "name": "YouExtractor",
-                "url": "{{ rtrim(config('app.url'), '/') }}/"
-            },
-            {
-                "@type": "FAQPage",
-                "mainEntity": [
-                    {
-                        "@type": "Question",
-                        "name": "Does it work with private or members-only videos?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "Currently we support any public YouTube video with available captions/transcripts. Private videos and YouTube Premium content are not supported."
-                        }
-                    },
-                    {
-                        "@type": "Question",
-                        "name": "How accurate is the extracted code?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "Extremely high on well-explained tutorials. The AI reconstructs files from both on-screen code and spoken instructions. You always get the full context and can edit anything."
-                        }
-                    },
-                    {
-                        "@type": "Question",
-                        "name": "Can I push directly to a new GitHub repository?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "Yes. Connect your GitHub account once and every extraction can be pushed as a brand new private or public repo with proper .gitignore and README in a single click."
-                        }
-                    }
-                ]
-            }
-        ]
-    }
-    </script>
 
     <style>
         body { 
@@ -1078,6 +1041,8 @@
                 <a href="#how" class="nav-link">How it works</a>
                 <a href="#demo" class="nav-link">Live demo</a>
                 <a href="#features" class="nav-link">Features</a>
+                <a href="{{ route('tools.index') }}" class="nav-link">Tools</a>
+                <a href="{{ route('about') }}" class="nav-link">About</a>
                 <a href="{{ route('api-docs') }}" class="nav-link">API Docs</a>
                 <a href="{{ route('blog.index') }}" class="nav-link">Blog</a>
                 <a href="{{ route('support') }}" class="nav-link">Support</a>
@@ -1101,6 +1066,9 @@
                 <a href="#how" class="nav-link">How it works</a>
                 <a href="#demo" class="nav-link">Live demo</a>
                 <a href="#features" class="nav-link">Features</a>
+                <a href="{{ route('tools.index') }}" class="nav-link">Tools</a>
+                <a href="{{ route('about') }}" class="nav-link">About</a>
+                <a href="{{ route('blog.index') }}" class="nav-link">Blog</a>
                 <a href="{{ route('api-docs') }}" class="nav-link">API Docs</a>
                 <a href="{{ route('support') }}" class="nav-link">Support</a>
                 <a href="https://buymeacoffee.com/omogo" target="_blank" class="nav-link" style="color: #fbbf24;">Buy Me a Coffee</a>
@@ -1122,27 +1090,19 @@
         
         
         <div class="container" style="position: relative; z-index: 1;">
-            @php
-                $variant = request('v', request('variant', 'a'));
-                $isB = $variant === 'b';
-            @endphp
-
+            <p class="hero-badge-container" style="font-size: var(--theme-font-size-xs); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ds-text-brand);">
+                YouExtractor · youextractor.me
+            </p>
 
             <h1 class="ds-type-display-md hero-title">
-                @if($isB)
-                    Stop pausing videos.<br> Get <span class="hero-highlight">complete, runnable projects</span> instantly.
-                @else
-                    Turn any YouTube coding tutorial<br>into <span class="hero-highlight">real, runnable code</span> in seconds.
-                @endif
+                YouTube Code Extractor Tool —<br> copy <span class="hero-highlight">files, guide &amp; GitHub</span>
             </h1>
             
             <p class="hero-subtitle">
-                @if($isB)
-                    Our AI watches the tutorial so you don't have to. Full file tree, setup guide, roadmap and AI tutor included.
-                @else
-                    AI extracts the complete project, file structure, dependencies, step-by-step written guide, 
-                    and even a personalized learning roadmap — so you stop copying and start building.
-                @endif
+                Free AI tool that extracts complete source code, folders, and a setup guide from any public YouTube coding tutorial. Paste a link. Download a ZIP or push to GitHub.
+            </p>
+            <p style="margin: -12px auto var(--theme-spacing-8); max-width: 620px; font-size: var(--theme-font-size-sm); color: var(--ds-text-muted);">
+                Not a tags inspector. YouExtractor copies the <em>project</em> — React, Python, Next.js, Laravel, Docker, and other coding videos.
             </p>
             
             <div class="hero-actions">
@@ -1160,15 +1120,17 @@
                         <div class="frame-dot red"></div>
                         <div class="frame-dot yellow"></div>
                         <div class="frame-dot green"></div>
-                        <span style="margin-left:auto; font-size:11px; opacity:.5; font-family:monospace;">youextractor.com</span>
+                        <span style="margin-left:auto; font-size:11px; opacity:.5; font-family:monospace;">youextractor.me</span>
                     </div>
-                    <img src="/img/generated/hero-mockup.jpg" alt="YouExtractor - AI powered YouTube to code project extraction" loading="lazy" width="1200" height="630" style="display:block; width:100%; height:auto;">
+                    <img src="/img/generated/hero-mockup.jpg" alt="YouExtractor dashboard extracting a YouTube coding tutorial into a runnable project" loading="eager" fetchpriority="high" width="1200" height="630" style="display:block; width:100%; height:auto;">
                 </div>
-                <div style="margin-top: 12px; font-size: 11px; color: var(--ds-text-muted); opacity: 0.7;">New custom hero visual</div>
             </div>
             
             <p style="margin-top: var(--theme-spacing-4); font-size: var(--theme-font-size-xs); color: var(--ds-text-muted);">
-                Used by {{ number_format($stats['developers'] ?? 0) }} {{ ($stats['developers'] ?? 0) === 1 ? 'developer' : 'developers' }} • 100% free to start extracting
+                @if(($stats['developers'] ?? 0) > 0)
+                    Used by {{ number_format($stats['developers']) }} {{ $stats['developers'] === 1 ? 'developer' : 'developers' }} •
+                @endif
+                100% free to start extracting on youextractor.me
             </p>
         </div>
     </section>
@@ -1205,7 +1167,7 @@
             <div class="section-header reveal">
                 <div class="ds-badge-brand" style="margin-bottom:12px;">4 steps • under 30 seconds</div>
                 <h2 class="ds-type-heading-lg section-title">From video to project in minutes, not hours.</h2>
-                <p class="section-subtitle">Paste a link. Our AI watches, reads the transcript, understands intent, and builds everything you need.</p>
+                <p class="section-subtitle">Paste a link. YouExtractor watches the tutorial, reads the transcript, understands intent, and builds the project you need.</p>
             </div>
             
             <div class="steps-grid">
@@ -1413,6 +1375,54 @@
         </div>
     </section>
 
+    <!-- Unique tool pages (each is a distinct Google snippet) -->
+    <section id="tools" class="features" style="padding-top: 0;">
+        <div class="container">
+            <div class="features-header reveal">
+                <h2 class="ds-type-heading-lg features-title">Free YouExtractor tools (each with its own Google result)</h2>
+                <p class="ds-type-body-lg" style="color:var(--ds-text-secondary); max-width:560px; margin:4px auto 0;">Same idea as a tags extractor listing — except these pages extract source code, not video SEO tags.</p>
+            </div>
+            <div class="features-grid">
+                <a href="{{ url('/tools/extract-code-from-youtube') }}" style="text-decoration:none; color:inherit;">
+                    <ds-card variant="glass" interactive padding="lg" class="feature-card reveal">
+                        <h3 class="ds-type-heading-sm feature-title">Extract Code from YouTube Tutorials</h3>
+                        <p class="feature-desc">Free AI tool. Paste a public coding tutorial. Get the files, folders, and a setup guide.</p>
+                    </ds-card>
+                </a>
+                <a href="{{ url('/tools/youtube-to-github') }}" style="text-decoration:none; color:inherit;">
+                    <ds-card variant="glass" interactive padding="lg" class="feature-card reveal stagger-1">
+                        <h3 class="ds-type-heading-sm feature-title">YouTube to GitHub Tool</h3>
+                        <p class="feature-desc">Push a reconstructed tutorial project to a new GitHub repo in one click.</p>
+                    </ds-card>
+                </a>
+                <a href="{{ url('/tools/ai-code-extractor') }}" style="text-decoration:none; color:inherit;">
+                    <ds-card variant="glass" interactive padding="lg" class="feature-card reveal stagger-2">
+                        <h3 class="ds-type-heading-sm feature-title">AI Code Extractor</h3>
+                        <p class="feature-desc">Rebuild runnable projects from programming videos — React, Python, Next.js, Laravel, and more.</p>
+                    </ds-card>
+                </a>
+                <a href="{{ url('/tools/learn-programming-faster') }}" style="text-decoration:none; color:inherit;">
+                    <ds-card variant="glass" interactive padding="lg" class="feature-card reveal">
+                        <h3 class="ds-type-heading-sm feature-title">Learn Programming Faster</h3>
+                        <p class="feature-desc">Turn watching into building. Extract, run, modify, commit — without copy-pasting from the player.</p>
+                    </ds-card>
+                </a>
+                <a href="{{ url('/for/react') }}" style="text-decoration:none; color:inherit;">
+                    <ds-card variant="glass" interactive padding="lg" class="feature-card reveal stagger-1">
+                        <h3 class="ds-type-heading-sm feature-title">Extract React / Next.js / Python…</h3>
+                        <p class="feature-desc">Stack guides so searches like “extract React code from YouTube” can land on YouExtractor.</p>
+                    </ds-card>
+                </a>
+                <a href="{{ route('tools.index') }}" style="text-decoration:none; color:inherit;">
+                    <ds-card variant="glass" interactive padding="lg" class="feature-card reveal stagger-2">
+                        <h3 class="ds-type-heading-sm feature-title">All tools &amp; stack guides →</h3>
+                        <p class="feature-desc">YouTube code extractor, GitHub export, follow-along, Docker, Laravel, TypeScript, and more.</p>
+                    </ds-card>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Real Screenshots / Proof -->
     <section class="proof">
         <div class="container">
@@ -1434,7 +1444,8 @@
         </div>
     </section>
 
-    <!-- Animated Stats -->
+    @if((int) ($stats['tutorials_extracted'] ?? 0) > 0 || (int) ($stats['developers'] ?? 0) > 0)
+    <!-- Animated Stats — only shown when we have real numbers -->
     <section class="stats">
         <div class="container">
             <div class="stats-grid">
@@ -1457,44 +1468,46 @@
             </div>
         </div>
     </section>
+    @endif
 
-    <!-- Testimonials -->
+    <!-- Who it's for (no fabricated reviews — those hurt search rankings) -->
     <section class="testimonials">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="ds-type-heading-lg section-title">Loved by developers who hate wasting time</h2>
+                <h2 class="ds-type-heading-lg section-title">Who YouExtractor is for</h2>
+                <p class="section-subtitle">Built for people who learn programming from video and then want the code to actually run.</p>
             </div>
             
             <div class="testimonial-grid">
                 <div class="testimonial reveal">
-                    <p class="testimonial-quote">“I used to spend 40 minutes copying code from a 25 min video. Now I have the full app + guide in under a minute and can actually focus on understanding.”</p>
+                    <p class="testimonial-quote">Stop pausing a 20-minute tutorial to retype every line. YouExtractor rebuilds the project so you can read working code and focus on the concepts.</p>
                     <div class="testimonial-author">
-                        <div class="author-avatar">SM</div>
+                        <div class="author-avatar">ST</div>
                         <div>
-                            <div class="author-name">Sofia M.</div>
-                            <div class="author-role">Bootcamp student @ CodeSmith</div>
+                            <div class="author-name">Bootcamp students</div>
+                            <div class="author-role">Learn by running the project, not by copying</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="testimonial reveal stagger-1">
-                    <p class="testimonial-quote">“The roadmap checklist alone is worth it. I finally finish tutorials instead of getting stuck halfway and forgetting what I learned.”</p>
+                    <p class="testimonial-quote">Turn a framework video into a private reference repo. Keep the file tree, setup notes, and roadmap next to the original tutorial.</p>
                     <div class="testimonial-author">
-                        <div class="author-avatar">TK</div>
+                        <div class="author-avatar">EN</div>
                         <div>
-                            <div class="author-name">Tyler K.</div>
-                            <div class="author-role">Frontend engineer @ Linear</div>
+                            <div class="author-name">Working engineers</div>
+                            <div class="author-role">A searchable library of tutorials you already watched</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="testimonial reveal stagger-2">
-                    <p class="testimonial-quote">“I extract every new framework video I watch. The GitHub integration + AI chat means I have a perfect reference repo + someone to ask questions later.”</p>
+                    <p class="testimonial-quote">Ship from a tutorial the same afternoon. Download a ZIP or push a GitHub repo with .gitignore and README already in place.</p>
                     <div class="testimonial-author">
-                        <div class="author-avatar">AL</div>
+                        <div class="author-avatar">IH</div>
                         <div>
-                            <div class="author-name">Aisha L.</div>
-                            <div class="author-role">Indie hacker &amp; educator</div>
+                            <div class="author-name">Indie hackers</div>
+                            <div class="author-role">From watch-later to a running app</div>
                         </div>
                     </div>
                 </div>
@@ -1512,7 +1525,21 @@
             <div class="faq-list">
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
-                        Does it work with private or members-only videos?
+                        What is YouExtractor?
+                        <i class="ph ph-caret-down"></i>
+                    </button>
+                    <div class="faq-answer">YouExtractor is an AI developer tool at youextractor.me that turns YouTube coding tutorials into complete, runnable source-code projects — including the file tree, setup guide, and a learning roadmap.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Is YouExtractor a YouTube tags or metadata extractor?
+                        <i class="ph ph-caret-down"></i>
+                    </button>
+                    <div class="faq-answer">No. YouExtractor is not a yt extractor / YouTube tags, title, or SEO metadata tool. Those products copy video tags and descriptions. YouExtractor extracts source code from programming tutorials. See <a href="{{ route('about') }}" style="color:var(--ds-text-brand)">About YouExtractor</a>.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Does YouExtractor work with private or members-only videos?
                         <i class="ph ph-caret-down"></i>
                     </button>
                     <div class="faq-answer">Currently we support any public YouTube video with available captions/transcripts. Private videos and YouTube Premium content are not supported.</div>
@@ -1522,7 +1549,7 @@
                         How accurate is the extracted code?
                         <i class="ph ph-caret-down"></i>
                     </button>
-                    <div class="faq-answer">Extremely high on well-explained tutorials. The AI reconstructs files from both on-screen code and spoken instructions. You always get the full context and can edit anything.</div>
+                    <div class="faq-answer">Accuracy is highest on well-explained tutorials. The AI reconstructs files from both on-screen code and spoken instructions. You always get the full context and can edit anything.</div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
@@ -1554,7 +1581,7 @@
         <div class="container">
             <div class="final-cta-card reveal">
                 <h2 class="ds-type-heading-lg" style="margin-bottom:8px;">Ready to never copy-paste from a video again?</h2>
-                <p style="color:var(--ds-text-secondary); margin-bottom:var(--theme-spacing-6);">Join thousands of developers learning and shipping faster.</p>
+                <p style="color:var(--ds-text-secondary); margin-bottom:var(--theme-spacing-6);">Start extracting on YouExtractor — free to try, no credit card.</p>
                 
                 <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
                     <a href="{{ route('signup') }}" style="text-decoration:none;">
