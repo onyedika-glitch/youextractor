@@ -138,6 +138,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
 
     <style>
         body { 
@@ -178,6 +179,17 @@
             align-items: center;
             justify-content: space-between;
             height: 76px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 48px;
+            width: 100%;
+            box-sizing: content-box;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 24px;
+            }
         }
 
         .logo {
@@ -1030,7 +1042,7 @@
 
     <!-- Header -->
     <header id="header">
-        <div class="container header-content">
+        <div class="header-content">
             <a href="{{ route('landing') }}" class="logo">
                 <img src="/img/youextractor-logo.jpg" alt="YouExtractor logo" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(20,184,166,0.25);box-shadow:0 1px 2px rgba(0,0,0,0.2);">
                 <span class="ds-type-heading-sm" style="margin: 0; letter-spacing: -.3px;">YouExtractor</span>
@@ -1085,55 +1097,461 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
-        
-        
-        
-        <div class="container" style="position: relative; z-index: 1;">
-            <p class="hero-badge-container" style="font-size: var(--theme-font-size-xs); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ds-text-brand);">
-                YouExtractor · youextractor.me
-            </p>
+    @php
+        $heroImages = [
+            'images/youextractor_bg_code_bokeh.png',
+            'images/youextractor_bg_workspace.png',
+            'images/youextractor_bg_cyberpunk.png',
+            'images/youextractor_bg_ai_coding.png',
+            'images/youextractor_bg_office.png',
+        ];
+        $cardImages = [
+            'img/app-screenshot-1.png',
+            'img/app-screenshot-2.png',
+            'img/app-screenshot-3.png',
+            'img/app-screenshot-4.png',
+            'img/app-screenshot-5.png',
+        ];
+    @endphp
 
-            <h1 class="ds-type-display-md hero-title">
-                YouTube Code Extractor Tool —<br> copy <span class="hero-highlight">files, guide &amp; GitHub</span>
-            </h1>
-            
-            <p class="hero-subtitle">
-                Free AI tool that extracts complete source code, folders, and a setup guide from any public YouTube coding tutorial. Paste a link. Download a ZIP or push to GitHub.
-            </p>
-            <p style="margin: -12px auto var(--theme-spacing-8); max-width: 620px; font-size: var(--theme-font-size-sm); color: var(--ds-text-muted);">
-                Not a tags inspector. YouExtractor copies the <em>project</em> — React, Python, Next.js, Laravel, Docker, and other coding videos.
-            </p>
-            
-            <div class="hero-actions">
-                <a href="{{ route('signup') }}" style="text-decoration: none;">
-                    <ds-button label="Start for free" variant="primary" size="lg" ></ds-button>
-                </a>
-                <a href="#demo" style="text-decoration: none;">
-                    <ds-button label="See 15-second demo" variant="secondary" size="lg" icon="play-circle"></ds-button>
-                </a>
-            </div>
-            
-            <div class="hero-visual reveal">
-                <div class="screenshot-frame" style="transform: perspective(1100px) rotateX(4deg);">
-                    <div class="frame-topbar">
-                        <div class="frame-dot red"></div>
-                        <div class="frame-dot yellow"></div>
-                        <div class="frame-dot green"></div>
-                        <span style="margin-left:auto; font-size:11px; opacity:.5; font-family:monospace;">youextractor.me</span>
+    <section class="hero-slider-section" style="position:relative; min-height:92vh; display:flex; align-items:center; overflow:hidden; padding-top:76px; background:#0F172A; color:white;">
+        <!-- Automatic Sliding Background Images -->
+        <div class="hero-slides">
+            @foreach ($heroImages as $index => $img)
+                <div class="hero-slide {{ $index === 0 ? 'active' : '' }}" style="background-image: url('{{ asset($img) }}');"></div>
+            @endforeach
+            <!-- Gradient Darkness Overlay for readability -->
+            <div class="hero-slide-overlay"></div>
+        </div>
+
+        <!-- Hero Content Grid -->
+        <div class="hero-grid" style="position:relative; z-index:4; max-width:1600px; margin:0 auto; padding:60px 48px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; width:100%;">
+            <div class="hero-grid-text" style="max-width:640px; text-align:left; justify-self:start;">
+                <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.12); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.25); border-radius:100px; padding:6px 16px; font-size:13px; font-weight:600; color:white; margin-bottom:28px; box-shadow:0 4px 16px rgba(0,0,0,0.15);">
+                    <div style="width:8px; height:8px; background:#10B981; border-radius:50%; box-shadow:0 0 10px #10B981; animation:pulse 2s infinite;"></div>
+                    YouTube Code Extractor Tool
+                </div>
+
+                <h1 style="font-size:clamp(36px,4vw,62px); font-weight:800; color:white; line-height:1.1; letter-spacing:-2px; margin-bottom:24px; text-shadow:0 4px 20px rgba(0,0,0,0.4);">
+                    From <span style="background:linear-gradient(135deg, #60A5FA 0%, #34D399 50%, #A78BFA 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">Video</span><br>to Workspace
+                </h1>
+                <p style="font-size:18px; font-weight:400; color:rgba(255,255,255,0.9); line-height:1.75; margin-bottom:40px; max-width:540px; text-shadow:0 2px 8px rgba(0,0,0,0.4);">
+                    Free AI tool that extracts complete source code, folders, and a setup guide from any public YouTube coding tutorial. Paste a link. Download a ZIP or push to GitHub.
+                </p>
+                <div class="hero-cta" style="display:flex; align-items:flex-start; gap:24px; margin-bottom:48px; flex-wrap:wrap;">
+                    <div style="display:flex; flex-direction:column; gap:8px; width:100%; max-width:270px;">
+                        <a href="{{ route('signup') }}" class="btn-primary" style="background:#1A56DB; color:white; border:none; padding:15px 30px; border-radius:10px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 8px 24px rgba(26,86,219,0.5); transition:all 0.3s; width:100%; text-align:center;">
+                            <i class="fas fa-play"></i>
+                            Start for free
+                        </a>
+                        <span style="font-size:12px; color:rgba(255,255,255,0.72); font-weight:500; text-shadow:0 1px 3px rgba(0,0,0,0.3); padding-left:4px; line-height:1.4;">
+                            Extract in under 30 seconds
+                        </span>
                     </div>
-                    <img src="/img/generated/hero-mockup.jpg" alt="YouExtractor dashboard extracting a YouTube coding tutorial into a runnable project" loading="eager" fetchpriority="high" width="1200" height="630" style="display:block; width:100%; height:auto;">
+                    <div style="display:flex; flex-direction:column; gap:8px; width:100%; max-width:270px;">
+                        <a href="#demo" class="btn-outline" style="background:rgba(255,255,255,0.12); backdrop-filter:blur(8px); color:white; border:1.5px solid rgba(255,255,255,0.35); padding:15px 30px; border-radius:10px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:all 0.3s; width:100%; text-align:center;">
+                            <i class="fas fa-play-circle"></i>
+                            See 15-second demo
+                        </a>
+                        <span style="font-size:12px; color:rgba(255,255,255,0.72); font-weight:500; text-shadow:0 1px 3px rgba(0,0,0,0.3); padding-left:4px; line-height:1.4;">
+                            Watch how it works
+                        </span>
+                    </div>
+                </div>
+                <div class="hero-social-proof" style="display:flex; align-items:center; gap:16px;">
+                    <div style="display:flex; align-items:center;">
+                        <img src="{{ asset('images/avatar_dev_1.png') }}" alt="" width="36" height="36" style="width:36px; height:36px; border-radius:50%; border:2px solid white; object-fit:cover; margin-left:0;">
+                        <img src="{{ asset('images/avatar_dev_2.png') }}" alt="" width="36" height="36" style="width:36px; height:36px; border-radius:50%; border:2px solid white; object-fit:cover; margin-left:-10px;">
+                        <img src="{{ asset('images/avatar_dev_3.png') }}" alt="" width="36" height="36" style="width:36px; height:36px; border-radius:50%; border:2px solid white; object-fit:cover; margin-left:-10px;">
+                        <img src="{{ asset('images/avatar_dev_4.png') }}" alt="" width="36" height="36" style="width:36px; height:36px; border-radius:50%; border:2px solid white; object-fit:cover; margin-left:-10px;">
+                    </div>
+                    <p style="font-size:14px; color:rgba(255,255,255,0.92); font-weight:500; text-shadow:0 2px 4px rgba(0,0,0,0.4);">
+                        @if(($stats['developers'] ?? 0) > 0)
+                            Used by <strong style="color:white; font-weight:700;">{{ number_format($stats['developers']) }}+ developers</strong> worldwide
+                        @else
+                            Used by <strong style="color:white; font-weight:700;">developers</strong> worldwide
+                        @endif
+                    </p>
                 </div>
             </div>
-            
-            <p style="margin-top: var(--theme-spacing-4); font-size: var(--theme-font-size-xs); color: var(--ds-text-muted);">
-                @if(($stats['developers'] ?? 0) > 0)
-                    Used by {{ number_format($stats['developers']) }} {{ $stats['developers'] === 1 ? 'developer' : 'developers' }} •
-                @endif
-                100% free to start extracting on youextractor.me
-            </p>
+
+            <!-- Floating Glass Showcase Card Synchronized Slider -->
+            <div class="hero-grid-visual" style="position:relative; display:flex; align-items:center; justify-content:center;">
+                <div style="position:relative; width:100%; max-width:520px; aspect-ratio:4/3; border-radius:24px; overflow:hidden; border:1px solid rgba(255,255,255,0.25); box-shadow:0 30px 80px rgba(0,0,0,0.5); background:rgba(255,255,255,0.05); backdrop-filter:blur(16px);">
+                    <!-- Dynamic Image Slides inside Frame -->
+                    <div class="hero-card-slides">
+                        @foreach ($cardImages as $index => $img)
+                            <img src="{{ asset($img) }}" alt="YouExtractor Showcase" class="hero-card-slide {{ $index === 0 ? 'active' : '' }}">
+                        @endforeach
+                    </div>
+                    <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(15,23,42,0.88) 0%, transparent 60%); pointer-events:none;"></div>
+                    
+                    <div style="position:absolute; bottom:24px; left:24px; right:24px; color:white; z-index:3; text-align:left;">
+                        <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#34D399; background:rgba(16,185,129,0.25); padding:4px 10px; border-radius:6px; border:1px solid rgba(16,185,129,0.4);">AI Code Extractor</span>
+                        <h3 style="font-size:20px; font-weight:800; margin-top:8px; margin-bottom:4px; text-shadow:0 2px 8px rgba(0,0,0,0.6);">Reconstruct Source Code</h3>
+                        <p style="font-size:13px; color:rgba(255,255,255,0.85); line-height:1.4;">Extract folders, config files, and complete guides in one click.</p>
+                    </div>
+                </div>
+
+                <!-- Floating Interactive Stat Badges -->
+                <div style="position:absolute; bottom:20px; left:-20px; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); border-radius:16px; box-shadow:0 16px 40px rgba(0,0,0,0.25); padding:14px 20px; display:flex; align-items:center; gap:14px; animation:cardFloat 4s ease-in-out infinite; z-index:5;">
+                    <div style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; background:#ECFDF5; color:#10B981;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div style="text-align:left;">
+                        <span style="font-size:11px; color:#64748B; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Extraction Done</span>
+                        <span style="font-size:15px; font-weight:800; color:#0F172A; display:block;">ZIP Ready</span>
+                    </div>
+                </div>
+
+                <div style="position:absolute; top:20px; right:-20px; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); border-radius:16px; box-shadow:0 16px 40px rgba(0,0,0,0.25); padding:14px 20px; display:flex; align-items:center; gap:14px; animation:cardFloat 4s ease-in-out infinite; animation-delay:-2s; z-index:5;">
+                    <div style="width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; background:#EFF6FF; color:#1A56DB;">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <div style="text-align:left;">
+                        <span style="font-size:11px; color:#64748B; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">GitHub Sync</span>
+                        <span style="font-size:15px; font-weight:800; color:#0F172A; display:block;">1-Click Push</span>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- Slide Navigation Arrows -->
+        <button class="hero-arrow hero-prev" id="heroPrevBtn" aria-label="Previous Slide"><i class="fas fa-chevron-left"></i></button>
+        <button class="hero-arrow hero-next" id="heroNextBtn" aria-label="Next Slide"><i class="fas fa-chevron-right"></i></button>
+
+        <!-- Slide Indicator Dots -->
+        <div class="hero-dots" id="heroDots">
+            @foreach ($cardImages as $index => $img)
+                <button class="hero-dot {{ $index === 0 ? 'active' : '' }}" data-slide="{{ $index }}" aria-label="Slide {{ $index + 1 }}"></button>
+            @endforeach
+        </div>
+
+        <style>
+            .hero-slider-section {
+                position: relative;
+                min-height: 92vh;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                padding-top: 76px;
+                background: #0F172A;
+            }
+
+            .hero-slides {
+                position: absolute;
+                inset: 0;
+                z-index: 1;
+            }
+
+            .hero-slide {
+                position: absolute;
+                inset: 0;
+                background-size: cover;
+                background-position: center center;
+                opacity: 0;
+                transform: scale(1.08);
+                transition: opacity 1.2s ease-in-out, transform 7s ease-out;
+                z-index: 1;
+            }
+
+            .hero-slide.active {
+                opacity: 1;
+                transform: scale(1);
+                z-index: 2;
+            }
+
+            .hero-slide-overlay {
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg, rgba(15, 23, 42, 0.82) 0%, rgba(15, 23, 42, 0.68) 50%, rgba(15, 23, 42, 0.85) 100%);
+                z-index: 3;
+            }
+
+            .hero-card-slides {
+                position: absolute;
+                inset: 0;
+            }
+
+            .hero-card-slide {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                opacity: 0;
+                transition: opacity 1s ease-in-out, transform 1s ease-out;
+                transform: scale(1.06);
+            }
+
+            .hero-card-slide.active {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            .hero-dots {
+                position: absolute;
+                bottom: 28px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                z-index: 10;
+            }
+
+            .hero-dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.35);
+                border: 2px solid transparent;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                padding: 0;
+            }
+
+            .hero-dot.active {
+                width: 36px;
+                border-radius: 100px;
+                background: #10B981;
+                box-shadow: 0 0 14px rgba(16, 185, 129, 0.7);
+            }
+
+            .hero-arrow {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.25);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                cursor: pointer;
+                z-index: 10;
+                transition: all 0.3s ease;
+            }
+
+            .hero-arrow:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: translateY(-50%) scale(1.1);
+            }
+
+            .hero-prev { left: 32px; }
+            .hero-next { right: 32px; }
+
+            .hero-cta .btn-primary:hover {
+                background: #1444B8 !important;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(26,86,219,0.7) !important;
+            }
+            .hero-cta .btn-outline:hover {
+                background: rgba(255, 255, 255, 0.25) !important;
+                border-color: rgba(255, 255, 255, 0.5) !important;
+                transform: translateY(-2px);
+            }
+
+            @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.3); } }
+            @keyframes cardFloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+
+            @media (max-width: 1024px) {
+                .hero-grid { grid-template-columns: 1fr !important; text-align: center; gap: 40px !important; }
+                .hero-grid-text { max-width: 100% !important; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+                .hero-cta { justify-content: center; }
+                .hero-social-proof { justify-content: center; }
+                .hero-prev, .hero-next { display: none; }
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const bgSlides = document.querySelectorAll('.hero-slide');
+                const cardSlides = document.querySelectorAll('.hero-card-slide');
+                const dots = document.querySelectorAll('.hero-dot');
+                const prevBtn = document.getElementById('heroPrevBtn');
+                const nextBtn = document.getElementById('heroNextBtn');
+                
+                if (!bgSlides.length) return;
+
+                let currentIndex = 0;
+                const totalSlides = bgSlides.length;
+                let autoSlideInterval;
+
+                function goToSlide(index) {
+                    bgSlides[currentIndex].classList.remove('active');
+                    if (cardSlides.length) cardSlides[currentIndex].classList.remove('active');
+                    if (dots.length) dots[currentIndex].classList.remove('active');
+
+                    currentIndex = (index + totalSlides) % totalSlides;
+
+                    bgSlides[currentIndex].classList.add('active');
+                    if (cardSlides.length) cardSlides[currentIndex].classList.add('active');
+                    if (dots.length) dots[currentIndex].classList.add('active');
+                }
+
+                function nextSlide() {
+                    goToSlide(currentIndex + 1);
+                }
+
+                function prevSlide() {
+                    goToSlide(currentIndex - 1);
+                }
+
+                function startAutoSlide() {
+                    stopAutoSlide();
+                    autoSlideInterval = setInterval(nextSlide, 4500);
+                }
+
+                function stopAutoSlide() {
+                    if (autoSlideInterval) clearInterval(autoSlideInterval);
+                }
+
+                if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); startAutoSlide(); });
+                if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); startAutoSlide(); });
+
+                dots.forEach((dot, idx) => {
+                    dot.addEventListener('click', () => {
+                        goToSlide(idx);
+                        startAutoSlide();
+                    });
+                });
+
+                const heroSection = document.querySelector('.hero-slider-section');
+                if (heroSection) {
+                    heroSection.addEventListener('mouseenter', stopAutoSlide);
+                    heroSection.addEventListener('mouseleave', startAutoSlide);
+                }
+
+                startAutoSlide();
+            });
+        </script>
     </section>
+
+    <!-- ─── MARQUEE TICKER BANNER ──────────────────────────────────────── -->
+    <div class="hero-marquee-bar">
+        <div class="marquee-track">
+            <div class="marquee-content">
+                <span class="marquee-label">Extract folders &amp; files from any stack</span>
+                <span class="marquee-item" style="--pill-bg: rgba(96, 165, 250, 0.08); --pill-border: rgba(96, 165, 250, 0.25); --pill-text: #60A5FA; --pill-shadow: rgba(96, 165, 250, 0.15);"><i class="fab fa-react" style="color: #60A5FA;"></i> React</span>
+                <span class="marquee-item" style="--pill-bg: rgba(255, 255, 255, 0.05); --pill-border: rgba(255, 255, 255, 0.2); --pill-text: #FFFFFF; --pill-shadow: rgba(255, 255, 255, 0.05);"><i class="fas fa-layer-group" style="color: #FFFFFF;"></i> Next.js</span>
+                <span class="marquee-item" style="--pill-bg: rgba(45, 212, 191, 0.08); --pill-border: rgba(45, 212, 191, 0.25); --pill-text: #2DD4BF; --pill-shadow: rgba(45, 212, 191, 0.15);"><i class="fab fa-css3-alt" style="color: #2DD4BF;"></i> Tailwind CSS</span>
+                <span class="marquee-item" style="--pill-bg: rgba(251, 191, 36, 0.08); --pill-border: rgba(251, 191, 36, 0.25); --pill-text: #FBBF24; --pill-shadow: rgba(251, 191, 36, 0.15);"><i class="fab fa-python" style="color: #FBBF24;"></i> Python</span>
+                <span class="marquee-item" style="--pill-bg: rgba(239, 68, 68, 0.08); --pill-border: rgba(239, 68, 68, 0.25); --pill-text: #EF4444; --pill-shadow: rgba(239, 68, 68, 0.15);"><i class="fab fa-laravel" style="color: #EF4444;"></i> Laravel</span>
+                <span class="marquee-item" style="--pill-bg: rgba(52, 211, 153, 0.08); --pill-border: rgba(52, 211, 153, 0.25); --pill-text: #34D399; --pill-shadow: rgba(52, 211, 153, 0.15);"><i class="fab fa-node-js" style="color: #34D399;"></i> Node.js</span>
+                <span class="marquee-item" style="--pill-bg: rgba(16, 185, 129, 0.08); --pill-border: rgba(16, 185, 129, 0.25); --pill-text: #10B981; --pill-shadow: rgba(16, 185, 129, 0.15);"><i class="fab fa-vuejs" style="color: #10B981;"></i> Vue.js</span>
+                <span class="marquee-item" style="--pill-bg: rgba(59, 130, 246, 0.08); --pill-border: rgba(59, 130, 246, 0.25); --pill-text: #3B82F6; --pill-shadow: rgba(59, 130, 246, 0.15);"><i class="fab fa-docker" style="color: #3B82F6;"></i> Docker</span>
+                <span class="marquee-item" style="--pill-bg: rgba(245, 158, 11, 0.08); --pill-border: rgba(245, 158, 11, 0.25); --pill-text: #F59E0B; --pill-shadow: rgba(245, 158, 11, 0.15);"><i class="fab fa-js" style="color: #F59E0B;"></i> JavaScript</span>
+                <span class="marquee-item" style="--pill-bg: rgba(37, 99, 235, 0.08); --pill-border: rgba(37, 99, 235, 0.25); --pill-text: #2563EB; --pill-shadow: rgba(37, 99, 235, 0.15);"><i class="fas fa-code" style="color: #2563EB;"></i> TypeScript</span>
+                <span class="marquee-item" style="--pill-bg: rgba(167, 139, 250, 0.08); --pill-border: rgba(167, 139, 250, 0.25); --pill-text: #A78BFA; --pill-shadow: rgba(167, 139, 250, 0.15);"><i class="fab fa-github" style="color: #A78BFA;"></i> GitHub</span>
+                <span class="marquee-item" style="--pill-bg: rgba(2, 132, 199, 0.08); --pill-border: rgba(2, 132, 199, 0.25); --pill-text: #0284C7; --pill-shadow: rgba(2, 132, 199, 0.15);"><i class="fas fa-mobile-alt" style="color: #0284C7;"></i> Flutter</span>
+                <span class="marquee-item" style="--pill-bg: rgba(6, 182, 212, 0.08); --pill-border: rgba(6, 182, 212, 0.25); --pill-text: #06B6D4; --pill-shadow: rgba(6, 182, 212, 0.15);"><i class="fas fa-cube" style="color: #06B6D4;"></i> Go</span>
+                <span class="marquee-item" style="--pill-bg: rgba(249, 115, 22, 0.08); --pill-border: rgba(249, 115, 22, 0.25); --pill-text: #F97316; --pill-shadow: rgba(249, 115, 22, 0.15);"><i class="fas fa-cog" style="color: #F97316;"></i> Rust</span>
+            </div>
+            <!-- Duplicated for infinite seamless marquee loop -->
+            <div class="marquee-content" aria-hidden="true">
+                <span class="marquee-label">Extract folders &amp; files from any stack</span>
+                <span class="marquee-item" style="--pill-bg: rgba(96, 165, 250, 0.08); --pill-border: rgba(96, 165, 250, 0.25); --pill-text: #60A5FA; --pill-shadow: rgba(96, 165, 250, 0.15);"><i class="fab fa-react" style="color: #60A5FA;"></i> React</span>
+                <span class="marquee-item" style="--pill-bg: rgba(255, 255, 255, 0.05); --pill-border: rgba(255, 255, 255, 0.2); --pill-text: #FFFFFF; --pill-shadow: rgba(255, 255, 255, 0.05);"><i class="fas fa-layer-group" style="color: #FFFFFF;"></i> Next.js</span>
+                <span class="marquee-item" style="--pill-bg: rgba(45, 212, 191, 0.08); --pill-border: rgba(45, 212, 191, 0.25); --pill-text: #2DD4BF; --pill-shadow: rgba(45, 212, 191, 0.15);"><i class="fab fa-css3-alt" style="color: #2DD4BF;"></i> Tailwind CSS</span>
+                <span class="marquee-item" style="--pill-bg: rgba(251, 191, 36, 0.08); --pill-border: rgba(251, 191, 36, 0.25); --pill-text: #FBBF24; --pill-shadow: rgba(251, 191, 36, 0.15);"><i class="fab fa-python" style="color: #FBBF24;"></i> Python</span>
+                <span class="marquee-item" style="--pill-bg: rgba(239, 68, 68, 0.08); --pill-border: rgba(239, 68, 68, 0.25); --pill-text: #EF4444; --pill-shadow: rgba(239, 68, 68, 0.15);"><i class="fab fa-laravel" style="color: #EF4444;"></i> Laravel</span>
+                <span class="marquee-item" style="--pill-bg: rgba(52, 211, 153, 0.08); --pill-border: rgba(52, 211, 153, 0.25); --pill-text: #34D399; --pill-shadow: rgba(52, 211, 153, 0.15);"><i class="fab fa-node-js" style="color: #34D399;"></i> Node.js</span>
+                <span class="marquee-item" style="--pill-bg: rgba(16, 185, 129, 0.08); --pill-border: rgba(16, 185, 129, 0.25); --pill-text: #10B981; --pill-shadow: rgba(16, 185, 129, 0.15);"><i class="fab fa-vuejs" style="color: #10B981;"></i> Vue.js</span>
+                <span class="marquee-item" style="--pill-bg: rgba(59, 130, 246, 0.08); --pill-border: rgba(59, 130, 246, 0.25); --pill-text: #3B82F6; --pill-shadow: rgba(59, 130, 246, 0.15);"><i class="fab fa-docker" style="color: #3B82F6;"></i> Docker</span>
+                <span class="marquee-item" style="--pill-bg: rgba(245, 158, 11, 0.08); --pill-border: rgba(245, 158, 11, 0.25); --pill-text: #F59E0B; --pill-shadow: rgba(245, 158, 11, 0.15);"><i class="fab fa-js" style="color: #F59E0B;"></i> JavaScript</span>
+                <span class="marquee-item" style="--pill-bg: rgba(37, 99, 235, 0.08); --pill-border: rgba(37, 99, 235, 0.25); --pill-text: #2563EB; --pill-shadow: rgba(37, 99, 235, 0.15);"><i class="fas fa-code" style="color: #2563EB;"></i> TypeScript</span>
+                <span class="marquee-item" style="--pill-bg: rgba(167, 139, 250, 0.08); --pill-border: rgba(167, 139, 250, 0.25); --pill-text: #A78BFA; --pill-shadow: rgba(167, 139, 250, 0.15);"><i class="fab fa-github" style="color: #A78BFA;"></i> GitHub</span>
+                <span class="marquee-item" style="--pill-bg: rgba(2, 132, 199, 0.08); --pill-border: rgba(2, 132, 199, 0.25); --pill-text: #0284C7; --pill-shadow: rgba(2, 132, 199, 0.15);"><i class="fas fa-mobile-alt" style="color: #0284C7;"></i> Flutter</span>
+                <span class="marquee-item" style="--pill-bg: rgba(6, 182, 212, 0.08); --pill-border: rgba(6, 182, 212, 0.25); --pill-text: #06B6D4; --pill-shadow: rgba(6, 182, 212, 0.15);"><i class="fas fa-cube" style="color: #06B6D4;"></i> Go</span>
+                <span class="marquee-item" style="--pill-bg: rgba(249, 115, 22, 0.08); --pill-border: rgba(249, 115, 22, 0.25); --pill-text: #F97316; --pill-shadow: rgba(249, 115, 22, 0.15);"><i class="fas fa-cog" style="color: #F97316;"></i> Rust</span>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .hero-marquee-bar {
+            width: 100%;
+            overflow: hidden;
+            background: rgba(10, 17, 34, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(167, 139, 250, 0.15);
+            border-bottom: 1px solid rgba(167, 139, 250, 0.15);
+            padding: 16px 0;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marqueeScroll 45s linear infinite;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        .marquee-content {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding-right: 24px;
+            white-space: nowrap;
+        }
+
+        .marquee-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #E2E8F0;
+            margin-right: 12px;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.15) 0%, rgba(167, 139, 250, 0.15) 100%);
+            padding: 8px 18px;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .marquee-item {
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 100px;
+            background: var(--pill-bg);
+            border: 1px solid var(--pill-border);
+            color: var(--pill-text);
+            box-shadow: 0 4px 12px var(--pill-shadow);
+            transition: all 0.25s ease-in-out;
+            cursor: default;
+        }
+
+        .marquee-item:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px var(--pill-shadow);
+            filter: brightness(1.15);
+        }
+
+        .marquee-item i {
+            font-size: 15px;
+        }
+
+        @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
 
     <!-- Trust Bar -->
     <div class="trust-bar">
