@@ -183,7 +183,7 @@
             margin: 0 auto;
             padding: 0 48px;
             width: 100%;
-            box-sizing: content-box;
+            box-sizing: border-box;
         }
 
         @media (max-width: 768px) {
@@ -281,6 +281,7 @@
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
+            .nav-actions a { display: none; }
             .mobile-menu-btn { display: block; }
         }
 
