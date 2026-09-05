@@ -10,7 +10,7 @@ return [
         'extract-code-from-youtube' => [
             'title' => 'Extract Code from YouTube Tutorials — Free AI Tool | YouExtractor',
             'description' => 'YouExtractor extracts source code from YouTube coding tutorials — files, folders, README, and a learning roadmap. Free tool. Not a YouTube tags or metadata extractor.',
-            'keywords' => 'extract code from YouTube, extract code from YouTube tutorial, YouTube code extractor, YouTube code extractor tool, copy code from YouTube, AI code extractor, programming tutorial to project, not a YouTube tags extractor, YouExtractor, youextractor.me',
+            'keywords' => 'how to extract code from YouTube tutorial, what is YouTube code extractor, why extract code from YouTube videos, who uses YouTube code extractor, when to extract code from video, where to download extracted project, which frameworks are supported, can I extract code from YouTube, could I convert tutorial to repository, should I use YouExtractor for courses, would it work on long tutorials, does it extract dependencies, do I need to install software, how did YouExtractor rebuild project, extract code from YouTube, YouTube code extractor, YouTube code extractor tool, copy code from YouTube, AI code extractor, programming tutorial to project, YouExtractor, youextractor.me',
             'h1' => 'Extract Code from YouTube Tutorials',
             'eyebrow' => 'Free YouTube code extractor tool',
             'intro' => 'YouExtractor is a free AI tool for developers: paste a public YouTube coding tutorial and get the full project back — not a single snippet, and not the video’s tags. Copy the files, follow the written guide, or push a new GitHub repo.',

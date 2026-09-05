@@ -21,7 +21,7 @@
     $image = $image ?: ($base . '/img/app-screenshot-2.png');
     $seoTitle = trim(strip_tags((string) $title));
     $seoDesc = \Illuminate\Support\Str::limit(trim(strip_tags((string) $description)), 160, '');
-    $seoKeywords = trim(strip_tags((string) ($keywords ?: 'YouExtractor, youextractor, YouTube code extractor tool, extract code from YouTube tutorial, AI code extractor, YouTube to GitHub, copy code from coding video, learn programming faster, youextractor.me')));
+    $seoKeywords = trim(strip_tags((string) ($keywords ?: 'how to extract code from YouTube tutorial, what is YouExtractor, why extract code from video, who uses YouExtractor, when to use YouTube code extractor, where to download extracted repo, which frameworks supported, can I push to GitHub, could I convert video to project, should I use YouExtractor, would it work on long courses, does it extract dependencies, do I need extension, YouTube code extractor tool, AI code extractor, YouTube to GitHub, copy code from coding video, learn programming faster, YouExtractor, youextractor, youextractor.me')));
 @endphp
 
 <title>{{ $seoTitle }}</title>

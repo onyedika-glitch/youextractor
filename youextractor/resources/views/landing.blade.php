@@ -78,42 +78,114 @@
                     'mainEntity' => [
                         [
                             '@type' => 'Question',
+                            'name' => 'How do I extract source code from a YouTube coding tutorial?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'Paste any public YouTube video tutorial URL into YouExtractor at youextractor.me and click extract. The AI analyzes the spoken transcript and code walkthrough to generate complete files, dependencies, and setup instructions.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
                             'name' => 'What is YouExtractor?',
                             'acceptedAnswer' => [
                                 '@type' => 'Answer',
-                                'text' => 'YouExtractor is an AI developer tool at youextractor.me that turns YouTube coding tutorials into complete, runnable source-code projects — including the file tree, setup guide, and a learning roadmap.',
+                                'text' => 'YouExtractor is an AI developer tool that turns YouTube coding tutorials into complete, runnable source-code projects — including file trees, setup guides, and learning roadmaps.',
                             ],
                         ],
                         [
                             '@type' => 'Question',
-                            'name' => 'Is YouExtractor a YouTube tags or metadata extractor?',
+                            'name' => 'Why use an AI code extractor instead of copy-pasting from YouTube?',
                             'acceptedAnswer' => [
                                 '@type' => 'Answer',
-                                'text' => 'No. YouExtractor is not a yt extractor / YouTube tags, title, or SEO metadata tool. Those products copy video tags and descriptions. YouExtractor extracts source code from programming tutorials.',
+                                'text' => 'Manual copy-pasting forces you to pause every ten seconds and drops hidden project files. YouExtractor rebuilds the entire project structure in seconds so you can learn by running code.',
                             ],
                         ],
                         [
                             '@type' => 'Question',
-                            'name' => 'Does YouExtractor work with private or members-only videos?',
+                            'name' => 'Who is YouExtractor designed for?',
                             'acceptedAnswer' => [
                                 '@type' => 'Answer',
-                                'text' => 'Currently we support any public YouTube video with available captions/transcripts. Private videos and YouTube Premium content are not supported.',
+                                'text' => 'YouExtractor is built for bootcamp students, self-taught developers, software engineers, and indie hackers who want to build projects alongside video courses without typing boilerplate.',
                             ],
                         ],
                         [
                             '@type' => 'Question',
-                            'name' => 'How accurate is the extracted code?',
+                            'name' => 'When should I use YouExtractor on a video tutorial?',
                             'acceptedAnswer' => [
                                 '@type' => 'Answer',
-                                'text' => 'Accuracy is highest on well-explained tutorials. The AI reconstructs files from both on-screen code and spoken instructions. You always get the full context and can edit anything.',
+                                'text' => 'Use YouExtractor whenever you watch a programming tutorial, conference presentation, or framework course and want a runnable codebase open in your editor.',
                             ],
                         ],
                         [
                             '@type' => 'Question',
-                            'name' => 'Can I push directly to a new GitHub repository?',
+                            'name' => 'Where are extracted code files saved and exported?',
                             'acceptedAnswer' => [
                                 '@type' => 'Answer',
-                                'text' => 'Yes. Connect your GitHub account once and every extraction can be pushed as a brand new private or public repo with proper .gitignore and README in a single click.',
+                                'text' => 'Extracted files are saved in your account dashboard. You can download a ZIP archive or push the project directly to a new GitHub repository.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'Which programming languages and frameworks does YouExtractor support?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'YouExtractor supports React, Next.js, Python, Node.js, TypeScript, Laravel, Docker, Vue, PHP, JavaScript, and any public coding tutorial with captions.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'Can I push extracted code directly to a GitHub repository?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'Yes. Connect your GitHub account once and every extraction can be pushed as a brand new private or public repository with README and .gitignore included.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'Could YouExtractor extract private or members-only videos?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'Currently We support public YouTube videos with available captions and transcripts. Private or members-only videos are not supported.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'Should I use YouExtractor for long multi-hour video courses?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'Yes! Long course videos are a great fit because YouExtractor organizes multi-step code walkthroughs into structured folders and a checklist roadmap.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'Would YouExtractor work if the instructor skips showing file creation?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'Yes. The AI infers missing configuration files, environment variables, and folder structures using contextual speech and stack conventions.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'Does YouExtractor extract package dependencies like package.json or requirements.txt?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'Yes. YouExtractor detects packages installed or mentioned in the video and automatically generates manifest files such as package.json, requirements.txt, or composer.json.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'Do I need to install a browser extension to use YouExtractor?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'No. You can paste any YouTube URL directly into the web application at youextractor.me. A Chrome extension is optionally available for watch-page convenience.',
+                            ],
+                        ],
+                        [
+                            '@type' => 'Question',
+                            'name' => 'How did YouExtractor reconstruct the project workspace?',
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => 'YouExtractor uses multi-stage code AI models trained to analyze spoken explanations, code snippets, and framework rules into a clean, runnable directory structure.',
                             ],
                         ],
                     ],
@@ -124,7 +196,7 @@
     @include('partials.seo', [
         'title' => $pageTitle,
         'description' => $pageDescription,
-        'keywords' => 'YouTube code extractor, YouTube code extractor tool, extract code from YouTube, extract code from YouTube tutorial, AI code extractor, copy code from coding video, YouTube to GitHub, YouTube to code, programming tutorial to project, React tutorial extractor, Python tutorial extractor, Next.js tutorial extractor, Laravel tutorial extractor, learn programming faster, follow along coding tutorial, YouExtractor, youextractor, youextractor.me',
+        'keywords' => 'how to extract code from YouTube tutorial, what is YouExtractor, why use YouTube code extractor, who uses YouExtractor, when to extract code from video, where to download extracted project, which programming frameworks are supported, can I push code to GitHub, could I convert tutorial to repo, should I use YouExtractor for bootcamps, would it work on long courses, does it extract package dependencies, do I need an extension, how did YouExtractor rebuild project, YouTube code extractor tool, extract code from YouTube, AI code extractor, copy code from coding video, YouTube to GitHub, YouTube to code, programming tutorial to project, React tutorial extractor, Python tutorial extractor, Next.js tutorial extractor, Laravel tutorial extractor, learn programming faster, follow along coding tutorial, YouExtractor, youextractor, youextractor.me',
     ])
 
     <script async src="https://aromatic-caribou-889.convex.site/api/a/am_qYeSPvXGoob8W5b-"></script>
