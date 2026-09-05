@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: youextractor_app
+    restart: always
+    ports:
+      - "10001:10000"
+    env_file:
+      - .env
+    volumes:
+      - ./storage:/var/www/html/storage
