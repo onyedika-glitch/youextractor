@@ -8,29 +8,15 @@ YouExtractor is a powerful Laravel application that transforms passive video wat
 
 ---
 
-## 📖 Overview
-
-YouExtractor solves the problem of "tutorial hell" by converting video information into structured, actionable data. Instead of pausing and rewinding to copy code, YouExtractor provides you with the complete source code, a detailed written guide, and a structured learning path in seconds. It allows you to download the entire project as a ZIP file, ready to run.
-
----
-
 ## 🚀 Features
 
-*   **🤖 AI-Powered Extraction**: Automatically converts video content into structured learning guides using state-of-the-art AI models.
+*   **🤖 AI-Powered Extraction**: Automatically converts video content into structured learning guides.
 *   **📄 Full Source Code**: Generates complete, downloadable project files (ZIP) from video tutorials.
 *   **📚 Comprehensive Guides**: Creates detailed "blog-post" style tutorials with key concepts and learning outcomes.
 *   **🧩 Chrome Extension**: Start extractions directly from YouTube with a single click.
 *   **🔍 Search & Filter**: Easily find previously extracted videos in your library.
-*   **⚡ Modern UI**: Built with TailwindCSS and a sleek dark mode design for comfortable reading.
+*   **⚡ Modern UI**: Built with TailwindCSS and a sleek dark mode design.
 *   **💾 Database Integration**: Stores all extractions in PostgreSQL/MySQL for easy retrieval.
-
----
-
-## 📸 Screenshots
-
-![Dashboard](image.png)
-![Extraction View](image-1.png)
-![Extraction View](image-2.png)
 
 ---
 
@@ -47,6 +33,20 @@ YouExtractor solves the problem of "tutorial hell" by converting video informati
 
 ---
 
+## 📂 Project Structure
+
+The project is organized to be scalable and maintainable:
+
+| Directory | Description |
+|------|-------------|
+| `app/Services/CodeExtractorService.php` | Core logic for interacting with AI and parsing transcripts. |
+| `app/Http/Controllers/Api/VideoController.php` | Handles API requests for video extraction and data management. |
+| `resources/views/index.blade.php` | The main dashboard UI for the application. |
+| `chrome-extension/` | Source code for the companion Chrome Extension. |
+| `routes/web.php` | Application route definitions. |
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -56,37 +56,37 @@ YouExtractor solves the problem of "tutorial hell" by converting video informati
 *   Database (MySQL/PostgreSQL)
 *   Google Gemini API Key (or OpenAI Key)
 
-### Installation
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/yourusername/youextractor.git
+cd youextractor
+```
 
-1.  **Clone the Repository**
-    ```bash
-    git clone https://github.com/onyedika-glitch/youextractor.git
-    cd youextractor
-    ```
+### Step 2: Install Dependencies
+```bash
+composer install
+npm install
+```
 
-2.  **Install Dependencies**
-    ```bash
-    composer install
-    npm install
-    ```
+### Step 3: Configure Environment
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+*Edit `.env` and add your database credentials and `GEMINI_API_KEY`.*
 
-3.  **Configure Environment**
-    ```bash
-    cp .env.example .env
-    php artisan key:generate
-    ```
-    *Edit `.env` and add your database credentials and `GEMINI_API_KEY`.*
+### Step 4: Run Migrations
+```bash
+php artisan migrate
+```
 
-4.  **Run Migrations**
-    ```bash
-    php artisan migrate
-    ```
+### Step 5: Start the Server
+```bash
+php artisan serve
+npm run dev
+```
 
-5.  **Start the Server**
-    ```bash
-    php artisan serve
-    npm run dev
-    ```
+Visit `http://localhost:8000` to start extracting!
 
 ---
 
@@ -100,32 +100,10 @@ YouExtractor solves the problem of "tutorial hell" by converting video informati
 
 ---
 
-## 👨‍💻 Founder
-
-**Built and maintained by me as founder.**
-
-YouExtractor was created to solve my own need for better learning tools. I am passionate about making technical education more accessible and efficient.
-
----
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-## 📜 License
-
-This project is licensed under the MIT License.
-
----
-
-## 📝 Contact
-
-For questions or support, please contact me at omogopeter48@gmail.com
-
----
-
-> *Built with ❤️ by @onyedika-glitch*
-
-> *Project maintained by @onyedika-glitch*
+> *Built with ❤️ by YouExtractor Team*

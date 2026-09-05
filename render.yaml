@@ -3,8 +3,8 @@ services:
     name: youextractor
     env: docker
     plan: free
-    dockerfilePath: ./youextractor/Dockerfile
-    dockerContext: ./youextractor
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /api/health
     domains:
       - youextractor.me
@@ -16,6 +16,8 @@ services:
         value: "false"
       - key: APP_KEY
         sync: false
+      - key: APP_NAME
+        value: YouExtractor
       - key: APP_URL
         value: https://youextractor.me
       - key: DB_CONNECTION
@@ -38,12 +40,16 @@ services:
         value: file
       - key: SESSION_LIFETIME
         value: "120"
+      - key: SESSION_SAME_SITE
+        value: none
+      - key: SESSION_SECURE_COOKIES
+        value: "true"
       - key: LOG_CHANNEL
         value: stack
       - key: LOG_LEVEL
         value: error
       - key: QUEUE_CONNECTION
-        value: sync
+        value: database
       - key: GEMINI_API_KEY
         sync: false
       - key: OPENAI_API_KEY
@@ -62,3 +68,11 @@ services:
         sync: false
       - key: GITHUB_REDIRECT_URI
         value: https://youextractor.me/auth/github/callback
+      - key: MAIL_MAILER
+        value: resend
+      - key: MAIL_FROM_ADDRESS
+        value: info@youextractor.me
+      - key: MAIL_FROM_NAME
+        value: YouExtractor
+      - key: RESEND_API_KEY
+        sync: false
