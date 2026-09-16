@@ -6,7 +6,7 @@
     @include('partials.favicon')
     @include('partials.seo', [
         'title' => 'YouExtractor Tools — YouTube Code Extractor, GitHub Export & Guides',
-        'description' => 'Free YouExtractor developer tools: extract code from YouTube tutorials, push projects to GitHub, and follow along with React, Python, Next.js, Laravel, and more.',
+        'description' => 'YouExtractor developer tools: extract code from YouTube tutorials, push projects to GitHub, and follow along with React, Python, Next.js, Laravel, and more.',
         'keywords' => 'YouExtractor tools, YouTube code extractor, YouTube to GitHub, AI code extractor, extract React code, extract Python code, extract Next.js code, extract Laravel code, extract Docker compose, copy code from coding video, learn programming faster, follow along coding tutorials, youextractor.me tools',
     ])
     @php
@@ -59,10 +59,10 @@
                 <img src="/img/youextractor-logo.jpg" alt="YouExtractor" width="28" height="28" style="width:28px;height:28px;border-radius:5px;object-fit:cover;border:1px solid rgba(20,184,166,.25);">
                 YouExtractor
             </a>
-            <a href="{{ route('signup') }}" style="text-decoration:none;"><ds-button label="Start free" variant="primary" size="sm"></ds-button></a>
+            <a href="{{ route('signup') }}" style="text-decoration:none;"><ds-button label="Get Started" variant="primary" size="sm"></ds-button></a>
         </div>
 
-        <p style="font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ds-text-brand); margin:0 0 10px;">Free developer tools</p>
+        <p style="font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ds-text-brand); margin:0 0 10px;">Developer tools</p>
         <h1>YouExtractor Tools — YouTube Code Extractor, GitHub Export &amp; Guides</h1>
         <p class="lede">
             Unique tools and stack guides. Each page is a real result Google can show — like “Extract Code from YouTube Tutorials” or “Extract React Code” — not a YouTube tags inspector.

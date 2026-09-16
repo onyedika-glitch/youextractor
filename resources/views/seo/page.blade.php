@@ -126,7 +126,7 @@
                 YouExtractor
             </a>
             <a href="{{ route('signup') }}" style="text-decoration:none;">
-                <ds-button label="Start free" variant="primary" size="sm"></ds-button>
+                <ds-button label="Get Started" variant="primary" size="sm"></ds-button>
             </a>
         </div>
 
@@ -141,7 +141,7 @@
         <p class="lede">{{ $page['intro'] }}</p>
 
         <div class="cta-row">
-            <a href="{{ route('signup') }}"><ds-button label="Extract a tutorial free" variant="primary" size="md"></ds-button></a>
+            <a href="{{ route('signup') }}"><ds-button label="Extract a tutorial" variant="primary" size="md"></ds-button></a>
             <a href="{{ route('landing') }}"><ds-button label="See how it works" variant="secondary" size="md"></ds-button></a>
         </div>
 

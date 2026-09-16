@@ -173,7 +173,7 @@
                 Enjoyed this? Try turning your next YouTube tutorial into a real project.
             </p>
             <a href="{{ route('landing') }}" style="text-decoration: none;">
-                <ds-button label="Start extracting for free" variant="gradient" size="md" icon="rocket-launch" icon-position="right"></ds-button>
+                <ds-button label="Start extracting today" variant="gradient" size="md" icon="rocket-launch" icon-position="right"></ds-button>
             </a>
         </div>
     </div>

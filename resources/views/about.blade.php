@@ -174,7 +174,7 @@
                     <li><a href="{{ route('blog.index') }}">Blog</a></li>
                     <li><a href="https://chromewebstore.google.com/detail/youextractor/ihajahjkhnelimamilebbcjibbhghbcn" target="_blank" rel="noopener">Chrome extension</a></li>
                     <li><a href="{{ route('support') }}">Support</a></li>
-                    <li><a href="{{ route('signup') }}">Create a free account</a></li>
+                    <li><a href="{{ route('signup') }}">Create an account</a></li>
                 </ul>
             </div>
         </ds-card>

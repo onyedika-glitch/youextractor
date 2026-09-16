@@ -6,7 +6,7 @@
     @include('partials.favicon')
     @php
         $pageTitle = 'YouTube Code Extractor Tool — Copy Files, Guide & GitHub | YouExtractor';
-        $pageDescription = 'Free AI tool that extracts complete source code, folders, and a setup guide from any public YouTube coding tutorial. Paste a link. Download a ZIP or push to GitHub.';
+        $pageDescription = 'AI tool that extracts complete source code, folders, and a setup guide from any public YouTube coding tutorial. Paste a link. Download a ZIP or push to GitHub.';
         $baseUrl = rtrim(config('app.url') ?: 'https://youextractor.me', '/');
         $logoUrl = $baseUrl . '/img/youextractor-logo.png';
         $seoGraph = [
@@ -1139,7 +1139,7 @@
                     <ds-button label="Sign In" variant="ghost" size="sm"></ds-button>
                 </a>
                 <a href="{{ route('signup') }}" style="text-decoration: none;">
-                    <ds-button label="Start Free" variant="primary" size="sm"></ds-button>
+                    <ds-button label="Get Started" variant="primary" size="sm"></ds-button>
                 </a>
                 <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
                     <i class="ph ph-list"></i>
@@ -1162,7 +1162,7 @@
                         <ds-button label="Sign In" variant="ghost" size="sm" full-width></ds-button>
                     </a>
                     <a href="{{ route('signup') }}" style="flex:1; text-decoration:none;">
-                        <ds-button label="Start Free" variant="primary" size="sm" full-width></ds-button>
+                        <ds-button label="Get Started" variant="primary" size="sm" full-width></ds-button>
                     </a>
                 </div>
             </div>
@@ -1209,13 +1209,13 @@
                     From <span style="background:linear-gradient(135deg, #60A5FA 0%, #34D399 50%, #A78BFA 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">Video</span><br>to Workspace
                 </h1>
                 <p style="font-size:18px; font-weight:400; color:rgba(255,255,255,0.9); line-height:1.75; margin-bottom:40px; max-width:540px; text-shadow:0 2px 8px rgba(0,0,0,0.4);">
-                    Free AI tool that extracts complete source code, folders, and a setup guide from any public YouTube coding tutorial. Paste a link. Download a ZIP or push to GitHub.
+                    AI tool that extracts complete source code, folders, and a setup guide from any public YouTube coding tutorial. Paste a link. Download a ZIP or push to GitHub.
                 </p>
                 <div class="hero-cta" style="display:flex; align-items:flex-start; gap:24px; margin-bottom:48px; flex-wrap:wrap;">
                     <div style="display:flex; flex-direction:column; gap:8px; width:100%; max-width:270px;">
                         <a href="{{ route('signup') }}" class="btn-primary" style="background:#1A56DB; color:white; border:none; padding:15px 30px; border-radius:10px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 8px 24px rgba(26,86,219,0.5); transition:all 0.3s; width:100%; text-align:center;">
                             <i class="fas fa-play"></i>
-                            Start for free
+                            Start Extracting
                         </a>
                         <span style="font-size:12px; color:rgba(255,255,255,0.72); font-weight:500; text-shadow:0 1px 3px rgba(0,0,0,0.3); padding-left:4px; line-height:1.4;">
                             Extract in under 30 seconds
@@ -2058,10 +2058,10 @@
                 </div>
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
-                        Do you have a free plan? What's included?
+                        How does pricing and the free trial work?
                         <i class="ph ph-caret-down"></i>
                     </button>
-                    <div class="faq-answer">Yes — the core extraction experience is free forever. You get unlimited extractions on the free tier with reasonable rate limits. Paid plans add faster queues, private repo defaults, and more AI tutor messages.</div>
+                    <div class="faq-answer">You get 1 free extraction to test YouExtractor on any public YouTube tutorial. After your first extraction, you can purchase credit packs starting at $2 for 5 extractions or get an Unlimited Pro monthly subscription for $12.</div>
                 </div>
             </div>
         </div>
@@ -2071,12 +2071,12 @@
     <section class="final-cta">
         <div class="container">
             <div class="final-cta-card reveal">
-                <h2 class="ds-type-heading-lg" style="margin-bottom:8px;">Ready to never copy-paste from a video again?</h2>
-                <p style="color:var(--ds-text-secondary); margin-bottom:var(--theme-spacing-6);">Start extracting on YouExtractor — free to try, no credit card.</p>
+                <h2 class="ds-type-heading-lg" style="margin-bottom:8px;">Ready to never copy paste from a video again?</h2>
+                <p style="color:var(--ds-text-secondary); margin-bottom:var(--theme-spacing-6);">Start extracting on YouExtractor with 1 free extraction to test any tutorial.</p>
                 
                 <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
                     <a href="{{ route('signup') }}" style="text-decoration:none;">
-                        <ds-button label="Create free account" variant="primary" size="lg" icon="arrow-right" icon-position="right"></ds-button>
+                        <ds-button label="Create Account" variant="primary" size="lg" icon="arrow-right" icon-position="right"></ds-button>
                     </a>
                     <a href="#demo" style="text-decoration:none;">
                         <ds-button label="Watch the demo again" variant="secondary" size="lg"></ds-button>
