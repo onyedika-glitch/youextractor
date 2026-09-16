@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,11 @@ Route::get('/about', function () {
 Route::get('/tools', [\App\Http\Controllers\SeoPageController::class, 'hub'])->name('tools.index');
 Route::get('/tools/{slug}', [\App\Http\Controllers\SeoPageController::class, 'tool'])->name('tools.show');
 Route::get('/for/{slug}', [\App\Http\Controllers\SeoPageController::class, 'stack'])->name('stacks.show');
+
+// Pricing Page, Webhooks and Payment Callback
+Route::get('/pricing', [PaymentController::class, 'index'])->name('pricing');
+Route::post('/webhooks/bachs', [PaymentController::class, 'webhook'])->name('webhooks.bachs');
+Route::get('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
 
 // Privacy Policy
 Route::get('/privacy', function () {
@@ -124,6 +130,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/videos/{video}', function (\App\Models\Video $video) {
         return view('videos.show', ['video' => $video]);
     })->name('videos.show');
+
+    // Payment & Subscription
+    Route::post('/checkout/bachs', [PaymentController::class, 'checkout'])->name('checkout.bachs');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

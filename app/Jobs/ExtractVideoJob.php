@@ -131,6 +131,11 @@ class ExtractVideoJob implements ShouldQueue
                 'extracted_at'        => now(),
             ]);
 
+            // Deduct credit or record free sample usage
+            if ($this->video->user) {
+                $this->video->user->recordSuccessfulExtraction();
+            }
+
             // Pre-generate the ZIP so downloads are instant
             if (!empty($codeData['files'])) {
                 $extractor->generateZipFile($this->video->youtube_id, $codeData);

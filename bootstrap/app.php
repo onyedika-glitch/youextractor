@@ -13,6 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->trustProxies(at: '*');
+        $middleware->validateCsrfTokens(except: [
+            'api/webhooks/*',
+            'webhooks/*',
+            'api/webhooks/bachs',
+            'webhooks/bachs',
+        ]);
         $middleware->redirectTo(
             guests: '/signin',
             users: '/dashboard'

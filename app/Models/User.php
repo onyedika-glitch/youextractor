@@ -22,6 +22,10 @@ class User extends Authenticatable
         'google_id',
         'github_id',
         'avatar',
+        'free_extractions_used',
+        'credits',
+        'is_pro',
+        'pro_until',
     ];
 
     /**
@@ -44,6 +48,10 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_pro' => 'boolean',
+            'pro_until' => 'datetime',
+            'free_extractions_used' => 'integer',
+            'credits' => 'integer',
         ];
     }
 
@@ -54,4 +62,58 @@ class User extends Authenticatable
     {
         return $this->hasMany(Video::class);
     }
-}
+
+    /**
+     * Get the user's payments.
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Check if user is on active Pro subscription.
+     */
+    public function isProActive(): bool
+    {
+        if ($this->is_pro) {
+            if ($this->pro_until === null || $this->pro_until->isFuture()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if user can perform an extraction.
+     */
+    public function canExtract(): bool
+    {
+        if ($this->isProActive()) {
+            return true;
+        }
+
+        if ($this->credits > 0) {
+            return true;
+        }
+
+        return $this->free_extractions_used < 1;
+    }
+
+    /**
+     * Deduct credit or record free extraction usage on successful extraction.
+     */
+    public function recordSuccessfulExtraction(): void
+    {
+        if ($this->isProActive()) {
+            return;
+        }
+
+        if ($this->credits > 0) {
+            $this->decrement('credits');
+            return;
+        }
+
+        $this->increment('free_extractions_used');
+    }
+}

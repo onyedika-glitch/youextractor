@@ -946,6 +946,10 @@
                             <span class="username">{{ Auth::user()->name }}</span>
                         </div>
                         
+                        <a href="/pricing" style="text-decoration: none;">
+                            <ds-button label="Pricing" variant="ghost" size="sm" icon="credit-card"></ds-button>
+                        </a>
+
                         <a href="/videos" style="text-decoration: none;">
                             <ds-button label="My Library" variant="ghost" size="sm" icon="books"></ds-button>
                         </a>
@@ -1447,6 +1451,10 @@
                 }
 
                 if (!response.ok || !data.success) {
+                    if (data && data.requires_payment) {
+                        window.location.href = data.pricing_url || '/pricing';
+                        return;
+                    }
                     throw new Error(data.error || 'Failed to extract video');
                 }
 

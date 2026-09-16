@@ -29,5 +29,11 @@ return [
     'resend' => [
         'key' => env('RESEND_API_KEY'),
     ],
+    'bachs' => [
+        'secret_key' => env('BACHS_SECRET_KEY'),
+        'webhook_secret' => env('BACHS_WEBHOOK_SECRET'),
+        'currency' => env('BACHS_CURRENCY', 'USD'),
+    ],
 ];
+
 

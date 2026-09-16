@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Api\VideoController;
 
 /*
@@ -9,6 +10,8 @@ use App\Http\Controllers\Api\VideoController;
 | API Routes — YouExtractor
 |--------------------------------------------------------------------------
 */
+
+Route::post('/webhooks/bachs', [PaymentController::class, 'webhook'])->name('api.webhooks.bachs');
 
 Route::get('/health', function () {
     return response()->json([

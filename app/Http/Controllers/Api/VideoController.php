@@ -38,6 +38,17 @@ class VideoController extends Controller
             'force_refresh'   => 'boolean',
         ]);
 
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+        if ($user && !$user->canExtract()) {
+            return response()->json([
+                'success'          => false,
+                'requires_payment' => true,
+                'error'            => 'You have used your free extraction limit. Please upgrade your plan or purchase credits to continue extracting.',
+                'pricing_url'      => route('pricing'),
+            ], 402);
+        }
+
         $videoId = $this->extractVideoId($validated['youtube_url']);
 
         if (!$videoId) {
