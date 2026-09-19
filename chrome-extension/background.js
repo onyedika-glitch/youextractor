@@ -178,7 +178,12 @@ async function handleMessage(message) {
                 if (res.status === 401) {
                     return { ok: false, error: 'unauthorized' };
                 }
-                return { ok: false, error: (res.data && res.data.error) || 'Extraction failed' };
+                return {
+                    ok: false,
+                    error: (res.data && res.data.error) || 'Extraction failed',
+                    requires_payment: !!(res.data && res.data.requires_payment),
+                    pricing_url: (res.data && res.data.pricing_url) || 'https://youextractor.me/pricing',
+                };
             }
             return { ok: true, video: res.data.data, cached: !!res.data.cached, message: res.data.message };
         }

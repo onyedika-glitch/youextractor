@@ -547,7 +547,7 @@
 
     const footer = document.createElement('div');
     footer.className = 'yex-footer';
-    footer.innerHTML = `Powered by <a href="${APP_BASE}" target="_blank" rel="noopener">youextractor.me</a> — extract code from any tutorial · v2.0.7`;
+    footer.innerHTML = `Powered by <a href="${APP_BASE}" target="_blank" rel="noopener">youextractor.me</a> — extract code from any tutorial · v2.0.8`;
 
     panel.append(header, body, footer);
     shadow.append(style, panel);
@@ -567,9 +567,26 @@
         showView('error');
     }
 
+    function showPaymentRequiredError(message, targetUrl) {
+        const box = viewError.querySelector('.yex-error-box');
+        box.innerHTML = `
+            <div style="text-align:center; padding:12px 0;">
+                <p style="margin-bottom:16px; line-height:1.55; color:#fca5a5; font-size:13px;">${escapeHtml(message)}</p>
+                <a href="${escapeHtml(targetUrl || APP_BASE + '/pricing')}" target="_blank" rel="noopener" style="display:inline-block; background:#2563eb; color:#ffffff; padding:10px 18px; border-radius:8px; text-decoration:none; font-weight:600; font-size:13px;">Buy Extractions or Upgrade ↗</a>
+            </div>
+        `;
+        showView('error');
+    }
+
     // ------------------------------------------------------------------
     // Open / close
     // ------------------------------------------------------------------
+    window.addEventListener('focus', () => {
+        if (panelOpen) {
+            refreshAuth();
+        }
+    });
+
     function openPanel() {
         if (!videoId) return;
         panelOpen = true;
@@ -878,6 +895,10 @@
                 startAuthPoll();
                 return;
             }
+            if (res.requires_payment) {
+                showPaymentRequiredError(res.error || 'You have used your free extraction limit. Please upgrade or top up credits to continue.', res.pricing_url);
+                return;
+            }
             showError(res.error || 'Extraction failed. Please try again.');
             return;
         }
@@ -1049,6 +1070,15 @@
         note.className = 'yex-note';
         note.textContent = 'The full workspace opens in a new tab — your video keeps playing here.';
         viewDone.appendChild(note);
+
+        const reviewBox = document.createElement('div');
+        reviewBox.style.cssText = 'margin-top:12px; padding:12px 14px; background:rgba(20,184,166,0.08); border:1px solid rgba(20,184,166,0.25); border-radius:10px; text-align:center; font-size:12px; color:#d4d4d8;';
+        reviewBox.innerHTML = `
+            <div style="font-weight:600; color:#fff; margin-bottom:4px;">Enjoying YouExtractor?</div>
+            <div style="color:#a1a1aa; margin-bottom:8px; font-size:11px;">Leave a 5 star review on Chrome Web Store to help other developers!</div>
+            <a href="https://chromewebstore.google.com/detail/youextractor/ihajahjkhnelimamilebbcjibbhghbcn/reviews" target="_blank" rel="noopener" style="display:inline-block; background:#14b8a6; color:#ffffff; padding:6px 14px; border-radius:6px; text-decoration:none; font-weight:600; font-size:11px;">Leave a Review ⭐</a>
+        `;
+        viewDone.appendChild(reviewBox);
 
         showView('done');
     }
