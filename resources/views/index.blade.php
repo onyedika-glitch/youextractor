@@ -2485,6 +2485,10 @@
 
                 const data = await response.json();
                 if (!response.ok || !data.success) {
+                    if (data && data.requires_payment) {
+                        window.location.href = data.pricing_url || '/pricing';
+                        return;
+                    }
                     throw new Error(data.error || 'Failed to trigger re-extraction');
                 }
 

@@ -40,13 +40,8 @@ class VideoController extends Controller
 
         /** @var \App\Models\User|null $user */
         $user = auth()->user();
-        if ($user && !$user->canExtract()) {
-            return response()->json([
-                'success'          => false,
-                'requires_payment' => true,
-                'error'            => 'You have used your free extraction limit. Please upgrade your plan or purchase credits to continue extracting.',
-                'pricing_url'      => route('pricing'),
-            ], 402);
+        if (! $user) {
+            return response()->json(['success' => false, 'error' => 'Unauthorized'], 401);
         }
 
         $videoId = $this->extractVideoId($validated['youtube_url']);
@@ -58,73 +53,95 @@ class VideoController extends Controller
             ], 400);
         }
 
-        // -------- Cache check (skip if force_refresh requested) ----------
-        if (!($validated['force_refresh'] ?? false)) {
-            $cached = Video::where('youtube_id', $videoId)
-                ->where('user_id', auth()->id())
-                ->where('extraction_status', 'completed')
+        $forceRefresh = (bool) ($validated['force_refresh'] ?? false);
+
+        // Re-opening a video this user already owns is not a new extraction.
+        if (! $forceRefresh) {
+            $owned = Video::where('youtube_id', $videoId)
+                ->where('user_id', $user->id)
                 ->first();
 
-            if ($cached) {
+            if ($owned && ($owned->extraction_status === 'completed' || $owned->isProcessing())) {
                 return response()->json([
                     'success' => true,
-                    'cached'  => true,
-                    'message' => 'Retrieved from cache',
-                    'data'    => $cached,
-                ]);
-            }
-
-            // Clone from another user if exists!
-            $otherCached = Video::where('youtube_id', $videoId)
-                ->whereNotNull('extracted_at')
-                ->where('extraction_status', 'completed')
-                ->first();
-
-            if ($otherCached) {
-                $video = $otherCached->replicate();
-                $video->user_id = auth()->id();
-                $video->save();
-
-                return response()->json([
-                    'success' => true,
-                    'cached'  => true,
-                    'message' => 'Retrieved from public cache',
-                    'data'    => $video,
+                    'cached'  => $owned->extraction_status === 'completed',
+                    'queued'  => $owned->isProcessing(),
+                    'message' => $owned->extraction_status === 'completed'
+                        ? 'Retrieved from cache'
+                        : 'Extraction already in progress',
+                    'data'    => $owned,
                 ]);
             }
         }
 
-        // -------- Fetch video metadata -----------------------------------
-        $videoData = $this->getVideoMetadata($videoId);
-
-        if (!$videoData) {
-            return response()->json([
-                'success' => false,
-                'error'   => 'Could not fetch video information. The video might be private or unavailable.',
-            ], 400);
+        // One free extraction, then plans. Reserve the slot before any slow work
+        // so a second click cannot start another extract while this one runs.
+        $consumed = $user->consumeExtraction();
+        if ($consumed === null) {
+            return $this->paymentRequiredResponse();
         }
 
-        // -------- Delete any stale record and create a fresh stub --------
-        Video::where('youtube_id', $videoId)->where('user_id', auth()->id())->delete();
+        try {
+            // Drop a failed attempt for this URL so a clone or new row can
+            // take the unique (user_id, youtube_id) slot.
+            Video::where('youtube_id', $videoId)->where('user_id', $user->id)->delete();
 
-        $transcript = $this->getTranscript($videoId);
+            // Clone a finished extraction from another account. This is still
+            // a new video for this user, so the reservation above stands.
+            if (! $forceRefresh) {
+                $otherCached = Video::where('youtube_id', $videoId)
+                    ->where('user_id', '!=', $user->id)
+                    ->whereNotNull('extracted_at')
+                    ->where('extraction_status', 'completed')
+                    ->first();
 
-        $video = Video::create([
-            'user_id'            => auth()->id(),
-            'youtube_id'         => $videoId,
-            'title'              => $videoData['title'],
-            'description'        => $videoData['description'],
-            'transcript'         => $transcript,
-            'explanation'        => 'Extraction in progress...',
-            'summary'            => 'Pending extraction...',
-            'duration'           => $videoData['duration'],
-            'published_at'       => now(),
-            'extracted_at'       => now(),
-            'extraction_status'  => 'pending',
-        ]);
+                if ($otherCached) {
+                    $video = $otherCached->replicate();
+                    $video->user_id = $user->id;
+                    $video->save();
+
+                    return response()->json([
+                        'success' => true,
+                        'cached'  => true,
+                        'message' => 'Retrieved from public cache',
+                        'data'    => $video,
+                    ]);
+                }
+            }
+
+            $videoData = $this->getVideoMetadata($videoId);
+
+            if (!$videoData) {
+                $user->refundExtraction($consumed);
+
+                return response()->json([
+                    'success' => false,
+                    'error'   => 'Could not fetch video information. The video might be private or unavailable.',
+                ], 400);
+            }
+
+            $transcript = $this->getTranscript($videoId);
+
+            $video = Video::create([
+                'user_id'            => $user->id,
+                'youtube_id'         => $videoId,
+                'title'              => $videoData['title'],
+                'description'        => $videoData['description'],
+                'transcript'         => $transcript,
+                'explanation'        => 'Extraction in progress...',
+                'summary'            => 'Pending extraction...',
+                'duration'           => $videoData['duration'],
+                'published_at'       => now(),
+                'extracted_at'       => now(),
+                'extraction_status'  => 'pending',
+            ]);
+        } catch (\Throwable $e) {
+            $user->refundExtraction($consumed);
+            throw $e;
+        }
 
         // -------- Dispatch background job --------------------------------
-        ExtractVideoJob::dispatch($video);
+        ExtractVideoJob::dispatch($video, $consumed);
 
         // If the queue runs synchronously, reload the completed attributes from the DB
         $video->refresh();
@@ -261,13 +278,25 @@ class VideoController extends Controller
             return $denied;
         }
 
-        $video->update([
-            'extraction_status' => 'pending',
-            'extraction_error' => null,
-            'transcript' => null,
-            'code_snippets' => null,
-        ]);
-        ExtractVideoJob::dispatch($video);
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+        $consumed = $user?->consumeExtraction();
+        if ($consumed === null) {
+            return $this->paymentRequiredResponse();
+        }
+
+        try {
+            $video->update([
+                'extraction_status' => 'pending',
+                'extraction_error' => null,
+                'transcript' => null,
+                'code_snippets' => null,
+            ]);
+            ExtractVideoJob::dispatch($video, $consumed);
+        } catch (\Throwable $e) {
+            $user->refundExtraction($consumed);
+            throw $e;
+        }
 
         return response()->json([
             'success' => true,
@@ -354,6 +383,19 @@ class VideoController extends Controller
     // ------------------------------------------------------------------
     // Private helpers
     // ------------------------------------------------------------------
+
+    /**
+     * Paywall payload. The dashboard and extension send the user to pricing.
+     */
+    private function paymentRequiredResponse(): JsonResponse
+    {
+        return response()->json([
+            'success'          => false,
+            'requires_payment' => true,
+            'error'            => 'You have used your free extraction limit. Please upgrade your plan or purchase credits to continue extracting.',
+            'pricing_url'      => route('pricing'),
+        ], 402);
+    }
 
     /**
      * Ensure the current user can access this video.

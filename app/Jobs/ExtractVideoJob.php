@@ -37,8 +37,14 @@ class ExtractVideoJob implements ShouldQueue
     /** Retry once more if the job throws an unhandled exception */
     public int $tries = 2;
 
-    public function __construct(private Video $video)
-    {
+    /**
+     * @param  'pro'|'credit'|'free'|null  $consumedEntitlement
+     *         What consumeExtraction() reserved. Refunded if every attempt fails.
+     */
+    public function __construct(
+        private Video $video,
+        public ?string $consumedEntitlement = null,
+    ) {
     }
 
     public function handle(CodeExtractorService $extractor): void
@@ -131,11 +137,6 @@ class ExtractVideoJob implements ShouldQueue
                 'extracted_at'        => now(),
             ]);
 
-            // Deduct credit or record free sample usage
-            if ($this->video->user) {
-                $this->video->user->recordSuccessfulExtraction();
-            }
-
             // Pre-generate the ZIP so downloads are instant
             if (!empty($codeData['files'])) {
                 $extractor->generateZipFile($this->video->youtube_id, $codeData);
@@ -150,6 +151,14 @@ class ExtractVideoJob implements ShouldQueue
             ]);
             throw $e; // re-throw so the queue marks the job as failed
         }
+    }
+
+    /**
+     * All attempts failed. Give the reserved free extraction or credit back.
+     */
+    public function failed(\Throwable $e): void
+    {
+        $this->video->user?->refundExtraction($this->consumedEntitlement);
     }
 
     /**

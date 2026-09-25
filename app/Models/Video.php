@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Video extends Model
 {
@@ -52,6 +53,15 @@ class Video extends Model
         'published_at' => 'datetime',
         'extracted_at' => 'datetime',
     ];
+
+    /**
+     * Owner of this extraction. Required so a finished job can record
+     * free-tier usage or spend a credit.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * Check if video has extracted code

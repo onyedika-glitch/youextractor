@@ -67,36 +67,40 @@ class PaymentController extends Controller
 
         $callbackUrl = route('payment.callback', ['reference' => $reference]);
 
-        $result = $this->bachsService->initializeTransaction(
-            amount: $selectedPlan['amount'],
-            email: $user->email,
-            reference: $reference,
-            callbackUrl: $callbackUrl,
-            metadata: [
+        $result = $this->bachsService->initializeTransaction([
+            'amount'       => $selectedPlan['amount'],
+            'email'        => $user->email,
+            'name'         => $user->name,
+            'reference'    => $reference,
+            'callback_url' => $callbackUrl,
+            'currency'     => config('services.bachs.currency', 'USD'),
+            'metadata'     => [
                 'user_id' => $user->id,
                 'plan'    => $request->input('plan'),
-            ]
-        );
+            ],
+        ]);
 
-        if (!$result['success']) {
-            Log::error('Bachs checkout initialization failed', ['error' => $result['error'] ?? 'Unknown']);
+        $checkoutUrl = is_array($result) ? ($result['data']['authorization_url'] ?? null) : null;
+        if (! $checkoutUrl) {
+            Log::error('Bachs checkout initialization failed');
             return back()->with('error', 'Could not initiate payment session. Please try again.');
         }
 
-        // Store pending payment record
+        // Store pending payment record using the columns that actually exist.
         Payment::create([
             'user_id'       => $user->id,
             'reference'     => $reference,
-            'plan'          => $request->input('plan'),
+            'checkout_id'   => $result['data']['session_id'] ?? null,
             'amount'        => $selectedPlan['amount'],
             'currency'      => config('services.bachs.currency', 'USD'),
+            'plan_type'     => $request->input('plan'),
             'credits_added' => $selectedPlan['credits'],
-            'is_pro_plan'   => $selectedPlan['is_pro'],
             'status'        => 'pending',
-            'raw_response'  => $result['data'] ?? [],
+            'metadata'      => [
+                'is_pro' => $selectedPlan['is_pro'],
+                'plan'   => $request->input('plan'),
+            ],
         ]);
-
-        $checkoutUrl = $result['checkout_url'];
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -133,11 +137,15 @@ class PaymentController extends Controller
             return redirect()->route('dashboard')->with('success', 'Payment already processed successfully!');
         }
 
-        // Verify transaction status with Bachs API
-        $verification = $this->bachsService->verifyTransaction($reference);
+        // Verify by checkout id. BachsService reports a paid session as status "success".
+        $verification = $this->bachsService->verifyTransaction($payment->checkout_id ?: $reference);
+        $verifiedStatus = strtolower((string) (is_array($verification) ? ($verification['data']['status'] ?? '') : ''));
+        $verified = is_array($verification)
+            && (bool) ($verification['status'] ?? false)
+            && in_array($verifiedStatus, ['success', 'completed', 'succeeded', 'paid'], true);
 
-        if ($verification['success'] && ($verification['data']['status'] ?? '') === 'completed') {
-            $this->fulfillPayment($payment, $verification['data']);
+        if ($verified) {
+            $this->fulfillPayment($payment, $verification['data'] ?? []);
             return redirect()->route('dashboard')->with('success', 'Payment successful! Your account has been credited.');
         }
 
@@ -157,9 +165,11 @@ class PaymentController extends Controller
     public function webhook(Request $request): JsonResponse
     {
         $signature = $request->header('X-Bachs-Signature') ?? $request->header('x-bachs-signature');
+        $timestamp = $request->header('X-Bachs-Timestamp') ?? $request->header('x-bachs-timestamp');
         $payload = $request->getContent();
+        $secret = config('services.bachs.webhook_secret') ?: config('services.bachs.secret_key');
 
-        if ($signature && !$this->bachsService->verifySignature($payload, $signature)) {
+        if ($signature && $secret && ! BachsService::verifySignature($payload, $timestamp, $signature, $secret)) {
             Log::warning('Invalid Bachs webhook signature received');
             return response()->json(['status' => 'invalid_signature'], 400);
         }
@@ -191,9 +201,13 @@ class PaymentController extends Controller
             return;
         }
 
+        $metadata = $payment->metadata ?? [];
+        $metadata['verification'] = $responseData;
+
         $payment->update([
-            'status'       => 'completed',
-            'raw_response' => array_merge($payment->raw_response ?? [], $responseData),
+            'status'      => 'completed',
+            'metadata'    => $metadata,
+            'checkout_id' => $payment->checkout_id ?: ($responseData['checkout_id'] ?? null),
         ]);
 
         $user = $payment->user;
@@ -202,9 +216,12 @@ class PaymentController extends Controller
             return;
         }
 
-        if ($payment->is_pro_plan) {
+        $isPro = ! empty($metadata['is_pro']) || $payment->plan_type === 'pro_monthly';
+
+        if ($isPro) {
             $user->is_pro = true;
-            $user->pro_until = now()->addMonth();
+            $base = ($user->pro_until && $user->pro_until->isFuture()) ? $user->pro_until : now();
+            $user->pro_until = $base->copy()->addMonth();
             $user->save();
         } else if ($payment->credits_added > 0) {
             $user->increment('credits', $payment->credits_added);

@@ -439,6 +439,10 @@
                             }
                         });
                         const d = await res.json();
+                        if (d.requires_payment) {
+                            window.location.href = d.pricing_url || '/pricing';
+                            return;
+                        }
                         if (d.success) {
                             const toast = document.createElement('div');
                             toast.style.position = 'fixed';

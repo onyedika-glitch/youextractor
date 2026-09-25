@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -85,6 +86,20 @@ class User extends Authenticatable
     }
 
     /**
+     * Whether this account already received its one free extraction.
+     * Completed videos count even when free_extractions_used was never
+     * incremented (the counter was not wired up for earlier extractions).
+     */
+    public function hasUsedFreeExtraction(): bool
+    {
+        if ((int) $this->free_extractions_used >= 1) {
+            return true;
+        }
+
+        return $this->videos()->where('extraction_status', 'completed')->exists();
+    }
+
+    /**
      * Check if user can perform an extraction.
      */
     public function canExtract(): bool
@@ -93,11 +108,63 @@ class User extends Authenticatable
             return true;
         }
 
-        if ($this->credits > 0) {
+        if ((int) $this->credits > 0) {
             return true;
         }
 
-        return $this->free_extractions_used < 1;
+        return ! $this->hasUsedFreeExtraction();
+    }
+
+    /**
+     * Reserve one extraction before work starts so a second request
+     * cannot slip through while the first job is still running.
+     *
+     * @return 'pro'|'credit'|'free'|null null when the free slot is gone and nothing is paid
+     */
+    public function consumeExtraction(): ?string
+    {
+        return DB::transaction(function () {
+            /** @var self|null $fresh */
+            $fresh = static::query()->whereKey($this->id)->lockForUpdate()->first();
+
+            if (! $fresh || ! $fresh->canExtract()) {
+                return null;
+            }
+
+            if ($fresh->isProActive()) {
+                return 'pro';
+            }
+
+            if ((int) $fresh->credits > 0) {
+                $fresh->decrement('credits');
+
+                return 'credit';
+            }
+
+            $fresh->increment('free_extractions_used');
+
+            return 'free';
+        });
+    }
+
+    /**
+     * Give back an entitlement reserved by consumeExtraction() when the
+     * extraction never succeeds.
+     */
+    public function refundExtraction(?string $kind): void
+    {
+        if ($kind === 'credit') {
+            $this->newQuery()->whereKey($this->id)->increment('credits');
+
+            return;
+        }
+
+        if ($kind === 'free') {
+            $this->newQuery()
+                ->whereKey($this->id)
+                ->where('free_extractions_used', '>', 0)
+                ->decrement('free_extractions_used');
+        }
     }
 
     /**
@@ -105,15 +172,6 @@ class User extends Authenticatable
      */
     public function recordSuccessfulExtraction(): void
     {
-        if ($this->isProActive()) {
-            return;
-        }
-
-        if ($this->credits > 0) {
-            $this->decrement('credits');
-            return;
-        }
-
-        $this->increment('free_extractions_used');
+        $this->consumeExtraction();
     }
 }

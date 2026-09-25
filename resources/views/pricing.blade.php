@@ -308,7 +308,7 @@
                         Unlimited Pro Active until {{ auth()->user()->pro_until?->format('M d, Y') }}
                     @elseif(auth()->user()->credits > 0)
                         {{ auth()->user()->credits }} Extractions Remaining
-                    @elseif(auth()->user()->free_extractions_used == 0)
+                    @elseif(auth()->user()->canExtract())
                         1 Free Extraction Available
                     @else
                         0 Extractions Remaining. Upgrade Below
