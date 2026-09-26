@@ -1200,11 +1200,6 @@
         <!-- Hero Content Grid -->
         <div class="hero-grid" style="position:relative; z-index:4; max-width:1600px; margin:0 auto; padding:60px 48px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; width:100%;">
             <div class="hero-grid-text" style="max-width:640px; text-align:left; justify-self:start;">
-                <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.12); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.25); border-radius:100px; padding:6px 16px; font-size:13px; font-weight:600; color:white; margin-bottom:28px; box-shadow:0 4px 16px rgba(0,0,0,0.15);">
-                    <div style="width:8px; height:8px; background:#10B981; border-radius:50%; box-shadow:0 0 10px #10B981; animation:pulse 2s infinite;"></div>
-                    YouTube Code Extractor Tool
-                </div>
-
                 <h1 style="font-size:clamp(36px,4vw,62px); font-weight:800; color:white; line-height:1.1; letter-spacing:-2px; margin-bottom:24px; text-shadow:0 4px 20px rgba(0,0,0,0.4);">
                     From <span style="background:linear-gradient(135deg, #60A5FA 0%, #34D399 50%, #A78BFA 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">Video</span><br>to Workspace
                 </h1>
