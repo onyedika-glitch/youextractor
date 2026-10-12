@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
@@ -63,7 +64,7 @@ class PaymentController extends Controller
         ];
 
         $selectedPlan = $plans[$request->input('plan')];
-        $reference = 'BACH_' . strtoupper(uniqid()) . '_' . time();
+        $reference = 'BACH_' . strtoupper(Str::random(32));
 
         $callbackUrl = route('payment.callback', ['reference' => $reference]);
 
@@ -129,33 +130,32 @@ class PaymentController extends Controller
             return redirect()->route('pricing')->with('error', 'Payment record not found.');
         }
 
-        if (!auth()->check() && $payment->user) {
-            auth()->login($payment->user);
-        }
+        // Never log a visitor in from a payment reference: send them to sign in instead.
+        $destination = auth()->check() ? 'dashboard' : 'signin';
 
         if ($payment->status === 'completed') {
-            return redirect()->route('dashboard')->with('success', 'Payment already processed successfully!');
+            return redirect()->route($destination)->with('success', 'Payment already processed successfully!');
         }
 
-        // Verify by checkout id. BachsService reports a paid session as status "success".
+        // Only Bachs' own verification API can confirm a payment; query parameters are ignored.
         $verification = $this->bachsService->verifyTransaction($payment->checkout_id ?: $reference);
         $verifiedStatus = strtolower((string) (is_array($verification) ? ($verification['data']['status'] ?? '') : ''));
+        $verifiedReference = is_array($verification) ? ($verification['data']['reference'] ?? null) : null;
         $verified = is_array($verification)
             && (bool) ($verification['status'] ?? false)
-            && in_array($verifiedStatus, ['success', 'completed', 'succeeded', 'paid'], true);
+            && in_array($verifiedStatus, ['success', 'completed', 'succeeded', 'paid'], true)
+            && ($verifiedReference === null || $verifiedReference === $payment->reference);
 
         if ($verified) {
             $this->fulfillPayment($payment, $verification['data'] ?? []);
-            return redirect()->route('dashboard')->with('success', 'Payment successful! Your account has been credited.');
+            return redirect()->route($destination)->with('success', 'Payment successful! Your account has been credited.');
         }
 
-        // In case callback parameter confirms success directly when local API verification mode differs
-        if ($request->query('status') === 'success' || $request->query('status') === 'completed') {
-            $this->fulfillPayment($payment, $request->all());
-            return redirect()->route('dashboard')->with('success', 'Payment completed successfully!');
+        // A session that is still open may complete later via webhook, so leave it pending.
+        if ($verifiedStatus !== 'pending') {
+            $payment->update(['status' => 'failed']);
         }
 
-        $payment->update(['status' => 'failed']);
         return redirect()->route('pricing')->with('error', 'Payment verification was not successful.');
     }
 
@@ -169,12 +169,16 @@ class PaymentController extends Controller
         $payload = $request->getContent();
         $secret = config('services.bachs.webhook_secret') ?: config('services.bachs.secret_key');
 
-        if ($signature && $secret && ! BachsService::verifySignature($payload, $timestamp, $signature, $secret)) {
-            Log::warning('Invalid Bachs webhook signature received');
+        // Reject every webhook that is unsigned or signed with the wrong secret.
+        if (! $secret || ! BachsService::verifySignature($payload, $timestamp, $signature, $secret)) {
+            Log::warning('Invalid or missing Bachs webhook signature received');
             return response()->json(['status' => 'invalid_signature'], 400);
         }
 
-        $data = json_decode($payload, true) ?? $request->all();
+        $data = json_decode($payload, true);
+        if (! is_array($data)) {
+            return response()->json(['status' => 'invalid_payload'], 400);
+        }
         $reference = $data['reference'] ?? $data['data']['reference'] ?? null;
 
         if ($reference) {
