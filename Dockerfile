@@ -12,7 +12,7 @@ RUN npm install && npm run build
 # NOTE: Nothing is copied from this stage to final image
 
 # Stage 3: PHP-FPM + Nginx
-FROM php:8.2-fpm
+FROM php:8.2.35-fpm
 
 # Install required packages
 RUN apt-get update && apt-get install -y \
