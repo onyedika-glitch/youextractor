@@ -12,6 +12,7 @@
     'published' => null,
     'modified' => null,
     'keywords' => null,
+    'aiSummary' => null,
 ])
 
 @php
@@ -21,12 +22,15 @@
     $image = $image ?: ($base . '/img/app-screenshot-2.png');
     $seoTitle = trim(strip_tags((string) $title));
     $seoDesc = \Illuminate\Support\Str::limit(trim(strip_tags((string) $description)), 160, '');
+    $seoAiSummary = trim(strip_tags((string) ($aiSummary ?: $description)));
+    $markdownUrl = \App\Markdown\Format::mdUrl(parse_url($canonical, PHP_URL_PATH) ?: '/');
     $seoKeywords = trim(strip_tags((string) ($keywords ?: 'how to extract code from YouTube tutorial, what is YouExtractor, why extract code from video, who uses YouExtractor, when to use YouTube code extractor, where to download extracted repo, which frameworks supported, can I push to GitHub, could I convert video to project, should I use YouExtractor, would it work on long courses, does it extract dependencies, do I need extension, YouTube code extractor tool, AI code extractor, YouTube to GitHub, copy code from coding video, learn programming faster, YouExtractor, youextractor, youextractor.me')));
 @endphp
 
 <title>{{ $seoTitle }}</title>
 <meta name="description" content="{{ $seoDesc }}">
 <meta name="keywords" content="{{ $seoKeywords }}">
+<meta name="ai-summary" content="{{ $seoAiSummary }}">
 <meta name="robots" content="{{ $robots }}">
 <meta name="googlebot" content="{{ $robots }}">
 <meta name="application-name" content="YouExtractor">
@@ -35,6 +39,7 @@
 <meta name="language" content="English">
 <link rel="canonical" href="{{ $canonical }}">
 <link rel="alternate" type="application/xml" title="Sitemap" href="{{ $base }}/sitemap.xml">
+<link rel="alternate" type="text/markdown" href="{{ $markdownUrl }}">
 
 <meta property="og:site_name" content="YouExtractor">
 <meta property="og:locale" content="en_US">

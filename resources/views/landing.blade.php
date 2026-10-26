@@ -196,6 +196,7 @@
     @include('partials.seo', [
         'title' => $pageTitle,
         'description' => $pageDescription,
+        'aiSummary' => 'Homepage of YouExtractor (youextractor.me), an AI developer tool that turns public YouTube coding tutorials into runnable source-code projects with a setup guide, learning roadmap, ZIP download and GitHub push. 1 free extraction, then credit packs from $2 or Unlimited Pro at $12/month. Not a YouTube tags extractor.',
         'keywords' => 'how to extract code from YouTube tutorial, what is YouExtractor, why use YouTube code extractor, who uses YouExtractor, when to extract code from video, where to download extracted project, which programming frameworks are supported, can I push code to GitHub, could I convert tutorial to repo, should I use YouExtractor for bootcamps, would it work on long courses, does it extract package dependencies, do I need an extension, how did YouExtractor rebuild project, YouTube code extractor tool, extract code from YouTube, AI code extractor, copy code from coding video, YouTube to GitHub, YouTube to code, programming tutorial to project, React tutorial extractor, Python tutorial extractor, Next.js tutorial extractor, Laravel tutorial extractor, learn programming faster, follow along coding tutorial, YouExtractor, youextractor, youextractor.me',
     ])
 

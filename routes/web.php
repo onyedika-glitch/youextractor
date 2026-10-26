@@ -48,15 +48,7 @@ Route::get('/support', function () {
 Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
 
-// SEO: robots.txt and dynamic sitemap
-Route::get('/robots.txt', function () {
-    return response(file_get_contents(public_path('robots.txt')), 200, ['Content-Type' => 'text/plain']);
-});
-
-Route::get('/llms.txt', function () {
-    return response(file_get_contents(public_path('llms.txt')), 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
-});
-
+// SEO: dynamic sitemap (robots.txt, llms.txt, ai.txt live in routes/ai.php)
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index']);
 
 // API Documentation
