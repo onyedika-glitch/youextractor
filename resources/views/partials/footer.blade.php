@@ -25,6 +25,7 @@
                     <a href="{{ url('/tools/youtube-to-github') }}" class="footer-link-item">YouTube to GitHub</a>
                     <a href="{{ route('about') }}" class="footer-link-item">About YouExtractor</a>
                     <a href="{{ route('blog.index') }}" class="footer-link-item">Blog</a>
+                    <a href="{{ url('/articles') }}" class="footer-link-item">Articles</a>
                 </div>
 
                 <!-- Support & Legal Links -->

@@ -58,6 +58,7 @@ class AiFilesController extends Controller
             Format::link('Markdown catalog', '/api/md/_catalog') . ': every markdown route',
             Format::link('Sitemap', '/sitemap.xml') . ': canonical HTML URLs',
             Format::link('AI usage policy', '/ai.txt') . ': permissions, restrictions and attribution',
+            Format::link('Articles', '/articles') . ': SEO articles about learning to code from video (HTML, hosted by Outrank)',
             Format::link('API reference', '/api-docs') . ': REST API docs (HTML)',
             Format::link('Chrome extension', $site['chrome_extension']) . ': extract from the YouTube watch page',
         ]) . "\n";

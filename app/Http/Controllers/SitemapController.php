@@ -27,6 +27,8 @@ class SitemapController extends Controller
                 ['path' => '/terms', 'changefreq' => 'yearly', 'priority' => '0.3', 'lastmod' => $viewStamp('terms.blade.php')],
                 ['path' => '/support', 'changefreq' => 'monthly', 'priority' => '0.5', 'lastmod' => $viewStamp('support.blade.php')],
                 ['path' => '/blog', 'changefreq' => 'weekly', 'priority' => '0.7', 'lastmod' => $viewStamp('blog/index.blade.php')],
+                // Served by Outrank through the host nginx proxy (docker/vps-nginx.conf)
+                ['path' => '/articles', 'changefreq' => 'daily', 'priority' => '0.7', 'lastmod' => date('Y-m-d')],
                 ['path' => '/api-docs', 'changefreq' => 'monthly', 'priority' => '0.4', 'lastmod' => date('Y-m-d', @filemtime(public_path('api-docs.html')) ?: time())],
             ];
 
