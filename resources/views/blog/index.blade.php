@@ -101,6 +101,9 @@
             @foreach($posts as $post)
                 <a href="{{ route('blog.show', $post['slug']) }}" style="text-decoration: none; color: inherit;">
                     <ds-card variant="glass" padding="lg" class="blog-card" style="height: 100%; display: flex; flex-direction: column;">
+                        @if(!empty($post['image']))
+                            <img src="{{ $post['image'] }}" alt="{{ $post['image_alt'] ?? $post['title'] }}" width="1200" height="630" loading="lazy" style="display:block; width:100%; height:auto; aspect-ratio:1200/630; object-fit:cover; border-radius:10px; margin-bottom:16px; border:1px solid var(--ds-border-subtle);">
+                        @endif
                         <div class="post-meta" style="margin-bottom: 12px;">
                             <span>{{ \Carbon\Carbon::parse($post['date'])->format('M j, Y') }}</span>
                             <span style="opacity: 0.4;">•</span>

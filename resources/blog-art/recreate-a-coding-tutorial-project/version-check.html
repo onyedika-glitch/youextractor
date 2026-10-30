@@ -1,0 +1,30 @@
+<!-- size: 1000x430 -->
+<!doctype html>
+<html style="--w:1000px; --h:430px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 28px; background: #fff; border: 2px solid var(--border); border-radius: 16px; overflow: hidden; }
+  th, td { text-align: left; padding: 14px 18px; font-size: 16.5px; border-bottom: 1px solid var(--border); }
+  th { background: #f1f5f9; font-size: 14px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-muted); }
+  tr:last-child td { border-bottom: 0; }
+  td.m { font: 600 15.5px "JetBrains Mono"; font-variant-ligatures: none; }
+  .v { color: #b91c1c; } .ok { color: #0f766e; }
+</style>
+</head>
+<body class="light">
+  <h2>Match the instructor's versions first</h2>
+  <p class="lead">Write these down before you write any code. Upgrade later, once it works.</p>
+  <table>
+    <tr><th>What</th><th>Where to find it</th><th>Pin it with</th></tr>
+    <tr><td>Language runtime</td><td>Terminal output, <code>.nvmrc</code>, upload date</td><td class="m ok">nvm use 20</td></tr>
+    <tr><td>Framework version</td><td><code>package.json</code> on screen, install command</td><td class="m ok">npm i next@14.2.3</td></tr>
+    <tr><td>Key libraries</td><td>Transcript: "now install…"</td><td class="m ok">pip install django==4.2</td></tr>
+    <tr><td>Package manager</td><td>Lock file shown in the sidebar</td><td class="m ok">npm / pnpm / yarn</td></tr>
+  </table>
+</body>
+</html>

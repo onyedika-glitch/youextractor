@@ -1,0 +1,36 @@
+<!-- size: 1200x360 -->
+<!doctype html>
+<html style="--w:1200px; --h:360px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .flow { display: flex; align-items: stretch; gap: 0; margin-top: 36px; }
+  .step { flex: 1; background: #fff; border: 2px solid var(--border); border-radius: 16px; padding: 18px 18px; }
+  .step .n { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; color: #fff; font-weight: 800; font-size: 15px; margin-bottom: 10px; }
+  .step b { display: block; font-size: 18px; margin-bottom: 6px; }
+  .step p { color: var(--ink-muted); font-size: 14.5px; line-height: 1.4; }
+  .step code { font: 600 13px 'JetBrains Mono'; background: #f1f5f9; padding: 1px 6px; border-radius: 5px; }
+  .ar { flex: 0 0 36px; display: grid; place-items: center; color: #94a3b8; font-size: 26px; font-weight: 700; }
+  .last { border-color: var(--teal); background: #f0fdfa; }
+</style>
+</head>
+<body class="light">
+  <h2>From tutorial to GitHub in five steps</h2>
+  <p class="lead">Skipping step 3 is how API keys end up public. Do the steps in this order.</p>
+  <div class="flow">
+    <div class="step"><span class="n" style="background:#0284c7">1</span><b>Get the code</b><p>Clone, recreate or extract the project.</p></div>
+    <div class="ar">→</div>
+    <div class="step"><span class="n" style="background:#7c3aed">2</span><b>Make it run</b><p>Install, set up <code>.env</code>, start it once.</p></div>
+    <div class="ar">→</div>
+    <div class="step"><span class="n" style="background:#dc2626">3</span><b>Add .gitignore</b><p>Before the first commit. Keep secrets out.</p></div>
+    <div class="ar">→</div>
+    <div class="step"><span class="n" style="background:#d97706">4</span><b>Write the README</b><p>Source, run steps, your changes.</p></div>
+    <div class="ar">→</div>
+    <div class="step last"><span class="n" style="background:#0d9488">5</span><b>Push</b><p>New repo, private first if unsure.</p></div>
+  </div>
+</body>
+</html>

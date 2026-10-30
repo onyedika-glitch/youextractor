@@ -1,0 +1,44 @@
+<!-- size: 1000x620 -->
+<!doctype html>
+<html style="--w:1000px; --h:620px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; position: relative; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .step { position: absolute; width: 230px; border-radius: 16px; padding: 18px 20px; background: #fff; border: 2px solid var(--border); box-shadow: 0 6px 18px rgba(15,23,42,.06); }
+  .step b { display: flex; align-items: center; gap: 10px; font-size: 19px; }
+  .step span.n { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: #fff; font-size: 14px; font-weight: 800; }
+  .step p { margin-top: 6px; color: var(--ink-muted); font-size: 15px; line-height: 1.4; }
+  .s1 .n { background: #0284c7; } .s2 .n { background: #7c3aed; } .s3 .n { background: #d97706; } .s4 .n { background: var(--teal); }
+  .s4 { border-color: var(--teal); background: #f0fdfa; }
+  .center { position: absolute; left: 380px; top: 330px; width: 240px; text-align: center; }
+  .center .big { font-size: 22px; font-weight: 800; }
+  .center p { color: var(--ink-muted); font-size: 15px; margin-top: 6px; line-height: 1.4; }
+  svg { position: absolute; left: 0; top: 0; }
+  .fail { position: absolute; left: 714px; top: 560px; font-size: 14.5px; font-weight: 600; color: #991b1b; background: #fee2e2; padding: 6px 12px; border-radius: 10px; }
+</style>
+</head>
+<body class="light">
+  <h2>Work in checkpoints, not one long session</h2>
+  <p class="lead">Each loop ends with something that runs, and a commit you can return to.</p>
+
+  <svg width="1000" height="620" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round">
+    <defs><marker id="h" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8" stroke="none"/></marker></defs>
+    <path d="M290 210 H 700" marker-end="url(#h)"/>
+    <path d="M830 260 V 420" marker-end="url(#h)"/>
+    <path d="M700 480 H 300" marker-end="url(#h)"/>
+    <path d="M170 420 V 266" marker-end="url(#h)"/>
+  </svg>
+
+  <div class="step s1" style="left:56px; top:150px"><b><span class="n">1</span>Watch a chunk</b><p>One chapter, no typing. Note what it should do.</p></div>
+  <div class="step s2" style="left:714px; top:150px"><b><span class="n">2</span>Build it</b><p>Recreate just that chunk in your project.</p></div>
+  <div class="step s3" style="left:714px; top:420px"><b><span class="n">3</span>Run it</b><p>Confirm it works like the video.</p></div>
+  <div class="step s4" style="left:56px; top:420px"><b><span class="n">4</span>Commit</b><p>git commit -m "checkpoint: login works"</p></div>
+
+  <div class="center"><div class="big">Repeat per chapter</div><p>A broken step costs you one chunk, not the whole project.</p></div>
+  <div class="fail">Fails? Fix before the next chunk</div>
+</body>
+</html>

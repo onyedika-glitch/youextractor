@@ -1,0 +1,72 @@
+<!-- size: 1200x630 -->
+<!doctype html>
+<html style="--w:1200px; --h:630px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<link rel="stylesheet" href="../_sketch.css">
+</head>
+<body class="sketch">
+  <svg class="ink" viewBox="0 0 1200 630" width="1200" height="630">
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+    <filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="29"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+
+    <g fill="none" stroke="#111" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Video player (top left) -->
+      <g transform="translate(70 34) rotate(-6)" filter="url(#rough)">
+        <rect x="0" y="0" width="280" height="180" rx="16" stroke-width="5"/>
+        <rect x="4" y="3" width="274" height="176" rx="15" stroke-width="1.6"/>
+        <path d="M118 56 L118 112 L164 84 Z" fill="#111" stroke-width="3"/>
+        <path d="M28 150 H252" stroke-width="3"/>
+        <circle cx="120" cy="150" r="7" fill="#fff" stroke-width="3"/>
+        <path d="M28 150 H113" stroke-width="5.5"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M30 280 L58 290"/><path d="M36 312 L62 304"/>
+        <path d="M352 30 L366 10"/><path d="M372 64 L398 50"/>
+      </g>
+
+      <!-- Dotted path with checkpoint flags (top centre/right) -->
+      <g stroke-width="3.4" filter="url(#rough2)">
+        <path d="M410 150 C 470 210, 540 60, 610 110 S 720 190, 790 120" stroke-dasharray="2 14"/>
+      </g>
+      <g filter="url(#rough)" stroke-width="3.6">
+        <!-- flag 1 -->
+        <path d="M470 168 V 106"/><path d="M470 106 L506 118 L470 132" fill="#111"/>
+        <!-- flag 2 -->
+        <path d="M610 112 V 50"/><path d="M610 50 L646 62 L610 76" fill="#111"/>
+        <!-- flag 3 -->
+        <path d="M760 136 V 74"/><path d="M760 74 L796 86 L760 100" fill="#111"/>
+      </g>
+
+      <!-- Checklist card (top right) -->
+      <g transform="translate(860 36) rotate(5)" filter="url(#rough)">
+        <rect x="0" y="0" width="260" height="226" rx="14" stroke-width="5"/>
+        <rect x="3" y="3" width="254" height="220" rx="13" stroke-width="1.6"/>
+        <rect x="26" y="30" width="30" height="30" rx="5" stroke-width="3.4"/><path d="M32 44 L40 54 L54 34" stroke-width="4"/>
+        <path d="M72 46 H220" stroke-width="4"/>
+        <rect x="26" y="84" width="30" height="30" rx="5" stroke-width="3.4"/><path d="M32 98 L40 108 L54 88" stroke-width="4"/>
+        <path d="M72 100 H200" stroke-width="4"/>
+        <rect x="26" y="138" width="30" height="30" rx="5" stroke-width="3.4"/><path d="M32 152 L40 162 L54 142" stroke-width="4"/>
+        <path d="M72 154 H210" stroke-width="4"/>
+        <rect x="26" y="182" width="30" height="30" rx="5" stroke-width="3.4"/>
+        <path d="M72 198 H170" stroke-width="4"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M1150 300 L1176 290"/><path d="M1148 330 L1170 336"/>
+      </g>
+
+      <!-- Loops and swooshes (bottom) -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M40 420 C 20 470, 30 540, 90 556 C 150 572, 150 500, 110 498 C 70 496, 70 560, 130 600"/>
+        <path d="M1150 400 C 1180 460, 1170 540, 1110 552 C 1050 564, 1050 498, 1090 494 C 1130 490, 1140 556, 1080 604"/>
+        <path d="M330 576 C 480 550, 640 558, 760 570 S 900 582, 940 558"/>
+        <path d="M360 590 C 500 570, 640 576, 760 584" stroke-width="1.6"/>
+      </g>
+    </g>
+  </svg>
+
+  <h1 class="sketch-title" style="top: 290px; font-size: 68px">How to Recreate a<br>Coding Tutorial Project</h1>
+  <p class="sketch-sub" style="top: 480px">without getting lost halfway</p>
+</body>
+</html>

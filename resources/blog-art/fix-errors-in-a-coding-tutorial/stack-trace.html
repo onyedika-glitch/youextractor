@@ -1,0 +1,46 @@
+<!-- size: 1100x560 -->
+<!doctype html>
+<html style="--w:1100px; --h:560px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; position: relative; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .term { margin-top: 26px; width: 640px; background: #0f172a; border-radius: 14px; padding: 18px 20px; font: 500 14.5px/1.75 'JetBrains Mono'; color: #cbd5e1; box-shadow: 0 10px 30px rgba(15,23,42,.18); }
+  .l { padding: 0 8px; border-radius: 6px; white-space: nowrap; }
+  .err { color: #fca5a5; background: rgba(248,113,113,.14); font-weight: 700; }
+  .mine { color: #5eead4; background: rgba(20,184,166,.18); font-weight: 700; }
+  .dim { color: #64748b; }
+  .tag { position: absolute; left: 730px; width: 320px; border-radius: 12px; padding: 12px 16px; font-size: 16px; line-height: 1.4; font-weight: 600; }
+  .tag b { display: block; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 3px; }
+  .t1 { background: #fee2e2; color: #991b1b; }
+  .t2 { background: var(--teal-soft); color: #115e59; }
+  .t3 { background: #f1f5f9; color: var(--ink-muted); }
+  svg { position: absolute; left: 0; top: 0; }
+</style>
+</head>
+<body class="light">
+  <h2>How to read an error message</h2>
+  <p class="lead">Three things to find before you search anything.</p>
+  <div class="term">
+    <div class="l err">TypeError: Cannot read properties of undefined (reading 'map')</div>
+    <div class="l mine">&nbsp;&nbsp;at TaskList (src/components/TaskList.jsx:12:18)</div>
+    <div class="l dim">&nbsp;&nbsp;at renderWithHooks (node_modules/react-dom/...)</div>
+    <div class="l dim">&nbsp;&nbsp;at mountIndeterminateComponent (node_modules/...)</div>
+    <div class="l dim">&nbsp;&nbsp;at beginWork (node_modules/react-dom/...)</div>
+    <div class="l dim">&nbsp;&nbsp;at performUnitOfWork (node_modules/...)</div>
+    <div class="l dim">&nbsp;&nbsp;at workLoopSync (node_modules/react-dom/...)</div>
+  </div>
+  <svg width="1100" height="560" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round">
+    <defs><marker id="h" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8" stroke="none"/></marker></defs>
+    <path d="M724 180 C 700 180, 696 162, 678 162" marker-end="url(#h)"/>
+    <path d="M724 290 C 700 290, 698 194, 678 190" marker-end="url(#h)"/>
+    <path d="M724 420 C 700 420, 698 300, 678 292" marker-end="url(#h)"/>
+  </svg>
+  <div class="tag t1" style="top:140px"><b>1 · What happened</b>Something you expected to be a list was undefined.</div>
+  <div class="tag t2" style="top:250px"><b>2 · Where, in your code</b>The first line that points at your own file: TaskList.jsx, line 12.</div>
+  <div class="tag t3" style="top:376px"><b>3 · Skip the rest</b>Lines inside node_modules are the library calling your code. Rarely the cause.</div>
+</body>
+</html>

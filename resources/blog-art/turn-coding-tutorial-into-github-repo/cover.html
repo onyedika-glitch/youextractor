@@ -1,0 +1,74 @@
+<!-- size: 1200x630 -->
+<!doctype html>
+<html style="--w:1200px; --h:630px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<link rel="stylesheet" href="../_sketch.css">
+</head>
+<body class="sketch">
+  <svg class="ink" viewBox="0 0 1200 630" width="1200" height="630">
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+    <filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="29"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+
+    <g fill="none" stroke="#111" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Video player (top left) -->
+      <g transform="translate(80 36) rotate(-6)" filter="url(#rough)">
+        <rect x="0" y="0" width="270" height="170" rx="18" stroke-width="5"/>
+        <rect x="4" y="3" width="264" height="166" rx="17" stroke-width="1.6"/>
+        <path d="M112 52 L112 112 L160 82 Z" fill="#111" stroke-width="3"/>
+        <path d="M26 140 H244" stroke-width="3"/>
+        <circle cx="96" cy="140" r="7" fill="#fff" stroke-width="3"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M40 250 L66 258"/><path d="M48 282 L72 272"/>
+        <path d="M368 30 L384 10"/><path d="M386 62 L410 48"/>
+      </g>
+
+      <!-- Squiggle arrow -->
+      <g stroke-width="3.4" filter="url(#rough2)">
+        <path d="M420 120 C 460 60, 520 62, 548 100 S 610 150, 640 104 S 710 58, 780 84"/>
+        <path d="M758 64 L784 84 L756 102"/>
+      </g>
+
+      <!-- Repository card (top right) -->
+      <g transform="translate(840 30) rotate(5)" filter="url(#rough)">
+        <rect x="0" y="0" width="290" height="230" rx="14" stroke-width="5"/>
+        <rect x="3" y="3" width="284" height="224" rx="13" stroke-width="1.6"/>
+        <!-- branch icon -->
+        <circle cx="34" cy="34" r="9" stroke-width="3"/>
+        <circle cx="34" cy="86" r="9" stroke-width="3"/>
+        <circle cx="74" cy="52" r="9" stroke-width="3"/>
+        <path d="M34 43 V77" stroke-width="3"/>
+        <path d="M74 61 C 74 74, 50 74, 38 80" stroke-width="3"/>
+        <path d="M102 40 H250" stroke-width="4"/>
+        <path d="M102 64 H200" stroke-width="2.4"/>
+        <path d="M0 108 H290" stroke-width="3"/>
+        <!-- folder row -->
+        <path d="M24 128 H44 L50 134 H66 V150 H24 Z" stroke-width="3"/>
+        <path d="M84 141 H170" stroke-width="3.4"/>
+        <!-- file rows -->
+        <path d="M28 166 H50 V188 H28 Z" stroke-width="2.6"/>
+        <path d="M84 177 H210" stroke-width="3.4"/>
+        <path d="M28 200 H50" stroke-width="2.6"/>
+        <path d="M84 206 H150" stroke-width="3.4"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M812 160 L828 178"/><path d="M800 206 L824 208"/>
+        <path d="M1152 300 L1176 290"/><path d="M1150 330 L1172 336"/>
+      </g>
+
+      <!-- Loops and swooshes -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M44 430 C 24 478, 34 540, 92 556 C 150 572, 150 504, 112 502 C 74 500, 74 562, 132 604"/>
+        <path d="M1150 410 C 1180 466, 1170 540, 1110 552 C 1050 564, 1050 500, 1090 496 C 1130 492, 1140 556, 1080 606"/>
+        <path d="M340 576 C 480 552, 640 558, 760 568 S 900 580, 940 556"/>
+        <path d="M370 590 C 500 572, 640 576, 760 584" stroke-width="1.6"/>
+      </g>
+    </g>
+  </svg>
+
+  <h1 class="sketch-title" style="top: 290px; font-size: 60px">How to Turn a YouTube Tutorial<br>into a GitHub Project</h1>
+  <p class="sketch-sub" style="top: 450px">a repo you'll actually use again</p>
+</body>
+</html>

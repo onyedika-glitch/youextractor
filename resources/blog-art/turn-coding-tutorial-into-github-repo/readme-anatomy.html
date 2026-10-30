@@ -1,0 +1,38 @@
+<!-- size: 1100x640 -->
+<!doctype html>
+<html style="--w:1100px; --h:640px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; position: relative; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .doc { position: absolute; left: 56px; top: 150px; width: 520px; background: #fff; border: 2px solid var(--border); border-radius: 16px; padding: 24px 28px; box-shadow: 0 10px 30px rgba(15,23,42,.06); font-family: 'JetBrains Mono'; font-size: 15px; line-height: 1.55; color: #334155; }
+  .doc .h { font-weight: 700; color: var(--ink); }
+  .doc .blk { padding: 6px 10px; margin: 0 -10px 8px; border-radius: 8px; }
+  .b1 { background: #e0f2fe; } .b2 { background: #ede9fe; } .b3 { background: #ccfbf1; } .b4 { background: #fef3c7; }
+  .notes { position: absolute; left: 620px; top: 150px; width: 424px; }
+  .note { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
+  .n { flex: 0 0 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 16px; }
+  .note b { display: block; font-size: 18px; margin-bottom: 3px; }
+  .note p { color: var(--ink-muted); font-size: 15.5px; line-height: 1.4; }
+</style>
+</head>
+<body class="light">
+  <h2>Anatomy of a good tutorial README</h2>
+  <p class="lead">Four sections answer every question your future self will have.</p>
+  <div class="doc">
+    <div class="blk b1"><div class="h"># Task Tracker (React)</div>A to-do app with filters and<br>a JSON server backend.</div>
+    <div class="blk b2"><div class="h">## Source</div>Built following "React Crash Course"<br>by &lt;creator&gt; · youtube.com/watch?v=…</div>
+    <div class="blk b3"><div class="h">## Run it</div>npm install<br>cp .env.example .env<br>npm run dev</div>
+    <div class="blk b4"><div class="h">## What I changed</div>- Added due dates and sorting<br>- Replaced json-server with SQLite</div>
+  </div>
+  <div class="notes">
+    <div class="note"><span class="n" style="background:#0284c7">1</span><div><b>What is this?</b><p>One or two sentences. What the project does and the stack.</p></div></div>
+    <div class="note"><span class="n" style="background:#7c3aed">2</span><div><b>Where is it from?</b><p>Video link and the instructor's name. Always credit the creator.</p></div></div>
+    <div class="note"><span class="n" style="background:#0d9488">3</span><div><b>How do I run it?</b><p>The exact commands, in order, including the .env step.</p></div></div>
+    <div class="note"><span class="n" style="background:#d97706">4</span><div><b>What did I change?</b><p>Your additions. This is what turns a copy into your project.</p></div></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!-- size: 1200x600 -->
+<!doctype html>
+<html style="--w:1200px; --h:600px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 34px; }
+  .cell { background: #fff; border: 2px solid var(--border); border-radius: 16px; padding: 20px 22px; }
+  .pair { font: 700 34px 'JetBrains Mono'; display: flex; align-items: center; gap: 16px; }
+  .pair .vs { font: 600 15px Inter; color: #94a3b8; }
+  .bad { color: #dc2626; } .good { color: #0f766e; }
+  .cell p { color: var(--ink-muted); font-size: 15.5px; margin-top: 10px; line-height: 1.4; }
+  .ex { font: 500 14px 'JetBrains Mono'; background: #f1f5f9; border-radius: 8px; padding: 6px 10px; margin-top: 10px; display: inline-block; }
+</style>
+</head>
+<body class="light">
+  <h2>What screen-copy gets wrong in code</h2>
+  <p class="lead">Text recognition reads letters, not syntax. Check these before you run anything.</p>
+  <div class="grid">
+    <div class="cell"><div class="pair"><span class="good">O</span><span class="vs">vs</span><span class="good">0</span></div><p>Letter O and zero swap in ports, IDs and hex colours.</p><span class="ex">port: 3<span class="bad">O</span>00</span></div>
+    <div class="cell"><div class="pair"><span class="good">l</span><span class="vs">vs</span><span class="good">1</span><span class="vs">vs</span><span class="good">I</span></div><p>Lowercase L, one and capital i look the same in many fonts.</p><span class="ex">items.<span class="bad">1</span>ength</span></div>
+    <div class="cell"><div class="pair"><span class="good">{ }</span><span class="vs">vs</span><span class="good">( )</span></div><p>Braces and parentheses get mixed up, or dropped at line ends.</p><span class="ex">if (ok) <span class="bad">(</span></span></div>
+    <div class="cell"><div class="pair"><span class="good">'</span><span class="vs">vs</span><span class="good">`</span><span class="vs">vs</span><span class="good">’</span></div><p>Quotes turn into backticks or curly quotes that break strings.</p><span class="ex">import x from <span class="bad">’</span>react’</span></div>
+    <div class="cell"><div class="pair"><span class="good">⇥</span><span class="vs">→</span><span class="bad">·</span></div><p>Indentation is lost. In Python and YAML that changes the meaning.</p><span class="ex">def run():<br><span class="bad">▯</span>return True</span></div>
+    <div class="cell"><div class="pair"><span class="good">…</span><span class="vs">→</span><span class="bad">?</span></div><p>Lines cut off at the editor edge or hidden behind the webcam.</p><span class="ex">fetch(url, { header<span class="bad">…</span></span></div>
+  </div>
+</body>
+</html>

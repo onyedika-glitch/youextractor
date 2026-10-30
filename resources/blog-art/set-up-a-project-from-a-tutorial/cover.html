@@ -1,0 +1,86 @@
+<!-- size: 1200x630 -->
+<!doctype html>
+<html style="--w:1200px; --h:630px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<link rel="stylesheet" href="../_sketch.css">
+<style>
+  .term { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 17px; fill: #111; stroke: none; }
+  .file { font-family: 'Caveat', cursive; font-weight: 700; font-size: 25px; fill: #111; stroke: none; }
+</style>
+</head>
+<body class="sketch">
+  <svg class="ink" viewBox="0 0 1200 630" width="1200" height="630">
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+    <filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="29"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+    <filter id="roughText"><feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="1" seed="5"/><feDisplacementMap in="SourceGraphic" scale="1.4"/></filter>
+
+    <g fill="none" stroke="#111" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Terminal window (top left) -->
+      <g transform="translate(60 44) rotate(-6)">
+        <g filter="url(#rough)">
+          <rect x="0" y="0" width="320" height="200" rx="14" stroke-width="5"/>
+          <rect x="3" y="3" width="314" height="194" rx="13" stroke-width="1.6"/>
+          <path d="M0 38 H320" stroke-width="3.4"/>
+          <circle cx="24" cy="19" r="6" stroke-width="2.6"/><circle cx="46" cy="19" r="6" stroke-width="2.6"/><circle cx="68" cy="19" r="6" stroke-width="2.6"/>
+          <path d="M28 172 H44" stroke-width="4"/>
+        </g>
+        <g filter="url(#roughText)">
+          <text class="term" x="24" y="74">$ nvm use 20</text>
+          <text class="term" x="24" y="104">$ npm install</text>
+          <text class="term" x="24" y="134">$ cp .env.example .env</text>
+          <text class="term" x="24" y="164" style="fill:#0f766e">✓ ready on :3000</text>
+        </g>
+      </g>
+      <!-- sparkle lines near terminal -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M24 270 L54 278"/><path d="M34 300 L60 292"/>
+        <path d="M392 36 L408 14"/><path d="M404 70 L430 56"/>
+      </g>
+
+      <!-- Squiggle arrow (top centre) -->
+      <g stroke-width="3.4" filter="url(#rough2)">
+        <path d="M450 120 C 490 64, 540 70, 560 104 S 620 146, 650 106 S 712 64, 772 88"/>
+        <path d="M750 68 L776 88 L748 106"/>
+      </g>
+
+      <!-- Folder with project files (top right) -->
+      <g transform="translate(830 40) rotate(5)">
+        <g filter="url(#rough)">
+          <path d="M0 30 L0 210 Q0 222 12 222 L286 222 Q298 222 298 210 L298 52 Q298 40 286 40 L130 40 L108 14 L12 14 Q0 14 0 26 Z" stroke-width="5"/>
+          <path d="M4 32 L4 208 Q4 218 14 218 L284 218" stroke-width="1.6"/>
+          <path d="M0 64 H298" stroke-width="2.4"/>
+        </g>
+        <g filter="url(#roughText)">
+          <text class="file" x="26" y="104">package.json</text>
+          <text class="file" x="26" y="140">requirements.txt</text>
+          <text class="file" x="26" y="176">composer.json</text>
+          <text class="file" x="190" y="104" style="fill:#0f766e">.env</text>
+        </g>
+        <!-- wrench -->
+        <g filter="url(#rough)" transform="translate(262 160) rotate(-35)">
+          <path d="M0 0 L0 74" stroke-width="9"/>
+          <path d="M-14 -6 Q-16 -26 0 -30 Q16 -26 14 -6" stroke-width="4"/>
+          <path d="M-6 -20 L-6 -6 M6 -20 L6 -6" stroke-width="3"/>
+        </g>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M800 150 L818 170"/><path d="M790 196 L814 202"/>
+        <path d="M1150 300 L1176 290"/><path d="M1148 330 L1170 336"/>
+      </g>
+
+      <!-- Loops and swooshes (bottom) -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M40 420 C 20 470, 30 540, 90 556 C 150 572, 150 500, 110 498 C 70 496, 70 560, 130 600"/>
+        <path d="M1150 400 C 1180 460, 1170 540, 1110 552 C 1050 564, 1050 498, 1090 494 C 1130 490, 1140 556, 1080 604"/>
+        <path d="M330 566 C 480 540, 640 548, 760 560 S 900 572, 940 548"/>
+        <path d="M360 580 C 500 560, 640 566, 760 574" stroke-width="1.6"/>
+      </g>
+    </g>
+  </svg>
+
+  <h1 class="sketch-title" style="top: 280px">How to Set Up a Project<br>from a Tutorial</h1>
+  <p class="sketch-sub" style="top: 478px">Node, Python and PHP, step by step</p>
+</body>
+</html>

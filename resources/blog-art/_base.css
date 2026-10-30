@@ -1,0 +1,36 @@
+/* Shared look for blog illustrations. Rendered to PNG/WebP by scripts/render-blog-art.sh */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=block');
+
+:root {
+  --navy: #0b1220;
+  --navy-2: #111a2e;
+  --line: #22304d;
+  --teal: #14b8a6;
+  --teal-soft: rgba(20, 184, 166, 0.14);
+  --blue: #3b82f6;
+  --violet: #a78bfa;
+  --amber: #f59e0b;
+  --red: #f87171;
+  --text: #e8eefc;
+  --muted: #8ea0c2;
+  --paper: #f8fafc;
+  --ink: #0f172a;
+  --ink-muted: #475569;
+  --border: #e2e8f0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: var(--w); height: var(--h); overflow: hidden; }
+body { font-family: Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+.mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+/* Dark canvas used by covers */
+.dark { background: radial-gradient(1200px 600px at 85% -10%, rgba(59,130,246,.22), transparent 60%),
+                    radial-gradient(900px 500px at -10% 110%, rgba(20,184,166,.20), transparent 60%),
+                    var(--navy); color: var(--text); }
+/* Light canvas used by diagrams */
+.light { background: var(--paper); color: var(--ink); }
+
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; letter-spacing: -.01em; }
+.brand-dot { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, var(--teal), var(--blue)); }
+.pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; font-size: 15px; font-weight: 600; }
+.card { border-radius: 16px; }

@@ -1,0 +1,51 @@
+<!-- size: 1000x470 -->
+<!doctype html>
+<html style="--w:1000px; --h:470px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+  .col { border-radius: 18px; padding: 24px 26px; }
+  .col h3 { font-size: 21px; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+  .col ul { list-style: none; }
+  .col li { font-size: 16.5px; padding: 9px 0; border-bottom: 1px solid rgba(15,23,42,.08); display: flex; gap: 10px; align-items: baseline; }
+  .col li:last-child { border-bottom: 0; }
+  .col li code { font: 500 14.5px 'JetBrains Mono'; }
+  .copy { background: #f1f5f9; border: 2px solid var(--border); }
+  .copy h3 { color: #334155; }
+  .type { background: #f0fdfa; border: 2px solid var(--teal); }
+  .type h3 { color: #0f766e; }
+  .ic { font-size: 15px; color: #94a3b8; } .type .ic { color: var(--teal); }
+</style>
+</head>
+<body class="light">
+  <h2>What to copy, and what to type yourself</h2>
+  <p class="lead">Spend your typing on the ideas the tutorial is actually teaching.</p>
+  <div class="cols">
+    <div class="col copy">
+      <h3>📋 Copy, clone or extract</h3>
+      <ul>
+        <li><span class="ic">●</span>Folder structure and scaffolding</li>
+        <li><span class="ic">●</span><code>package.json</code>, <code>requirements.txt</code></li>
+        <li><span class="ic">●</span>Config: Vite, Tailwind, ESLint</li>
+        <li><span class="ic">●</span>Styling and long CSS class lists</li>
+        <li><span class="ic">●</span>Boilerplate imports</li>
+      </ul>
+    </div>
+    <div class="col type">
+      <h3>⌨️ Type it yourself</h3>
+      <ul>
+        <li><span class="ic">●</span>The data model and database queries</li>
+        <li><span class="ic">●</span>API routes and request handling</li>
+        <li><span class="ic">●</span>State logic: hooks, stores, reducers</li>
+        <li><span class="ic">●</span>Anything you don't understand yet</li>
+        <li><span class="ic">●</span>Your own changes after the tutorial</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

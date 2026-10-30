@@ -1,0 +1,70 @@
+<!-- size: 1200x630 -->
+<!doctype html>
+<html style="--w:1200px; --h:630px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<link rel="stylesheet" href="../_sketch.css">
+</head>
+<body class="sketch">
+  <svg class="ink" viewBox="0 0 1200 630" width="1200" height="630">
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+    <filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="21"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+
+    <g fill="none" stroke="#111" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Laptop with video (top left) -->
+      <g transform="translate(70 30) rotate(-7)" filter="url(#rough)">
+        <rect x="0" y="0" width="290" height="185" rx="16" stroke-width="5"/>
+        <rect x="4" y="3" width="284" height="181" rx="15" stroke-width="1.6"/>
+        <rect x="20" y="18" width="250" height="148" rx="6" stroke-width="2.6"/>
+        <path d="M-28 196 L318 196 L300 214 L-10 214 Z" stroke-width="4.5"/>
+        <path d="M-24 199 L314 199" stroke-width="1.6"/>
+        <path d="M118 66 L118 120 L162 93 Z" fill="#111" stroke-width="3"/>
+        <path d="M40 146 H250" stroke-width="3"/>
+        <circle cx="72" cy="146" r="7" fill="#fff" stroke-width="3"/>
+        <circle cx="46" cy="146" r="4" stroke-width="2"/>
+      </g>
+      <!-- sparkle lines around laptop -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M30 300 L60 306"/><path d="M40 330 L64 322"/><path d="M28 270 L56 282"/>
+        <path d="M352 40 L366 18"/><path d="M380 58 L404 40"/><path d="M372 92 L398 86"/>
+      </g>
+
+      <!-- Squiggle arrow (top centre) -->
+      <g stroke-width="3.4" filter="url(#rough2)">
+        <path d="M430 128 C 470 70, 520 70, 540 104 S 600 150, 630 108 S 700 60, 770 86"/>
+        <path d="M748 66 L774 86 L746 104"/>
+      </g>
+
+      <!-- Code window (top right) -->
+      <g transform="translate(850 40) rotate(6)" filter="url(#rough)">
+        <rect x="0" y="0" width="270" height="220" rx="14" stroke-width="5"/>
+        <rect x="3" y="3" width="264" height="214" rx="13" stroke-width="1.6"/>
+        <path d="M0 40 H270" stroke-width="3.4"/>
+        <circle cx="26" cy="20" r="6" stroke-width="2.6"/><circle cx="48" cy="20" r="6" stroke-width="2.6"/><circle cx="70" cy="20" r="6" stroke-width="2.6"/>
+        <path d="M30 70 H190" stroke-width="4"/><path d="M30 70 H150" stroke-width="1.4" transform="translate(2 3)"/>
+        <path d="M48 98 H220" stroke-width="4"/>
+        <path d="M48 126 H180" stroke-width="4"/>
+        <path d="M30 154 H140" stroke-width="4"/>
+        <path d="M30 182 H110" stroke-width="4"/>
+        <path d="M190 160 L172 176 L190 192" stroke-width="3.6"/><path d="M212 154 L200 196" stroke-width="3.6"/><path d="M222 160 L240 176 L222 192" stroke-width="3.6"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M818 150 L834 170"/><path d="M806 196 L830 200"/>
+        <path d="M1150 300 L1176 290"/><path d="M1148 330 L1170 336"/>
+      </g>
+
+      <!-- Loops and swooshes (bottom) -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M40 420 C 20 470, 30 540, 90 556 C 150 572, 150 500, 110 498 C 70 496, 70 560, 130 600"/>
+        <path d="M1150 400 C 1180 460, 1170 540, 1110 552 C 1050 564, 1050 498, 1090 494 C 1130 490, 1140 556, 1080 604"/>
+        <path d="M330 566 C 480 540, 640 548, 760 560 S 900 572, 940 548"/>
+        <path d="M360 580 C 500 560, 640 566, 760 574" stroke-width="1.6"/>
+      </g>
+    </g>
+  </svg>
+
+  <h1 class="sketch-title" style="top: 272px">How to Get Code from<br>a YouTube Tutorial</h1>
+  <p class="sketch-sub" style="top: 470px">5 methods that actually work</p>
+</body>
+</html>

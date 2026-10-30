@@ -1,0 +1,30 @@
+/* Hand-drawn ink style for blog covers (inspired by editorial sketch illustrations). */
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,700;8..60,800&family=Caveat:wght@600;700&display=block');
+
+body.sketch {
+  position: relative;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(0,0,0,.025), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(0,0,0,.03), transparent 45%),
+    #fdfdfb;
+  color: #111;
+}
+.sketch .ink { position: absolute; inset: 0; }
+.sketch-title {
+  position: absolute; left: 0; right: 0;
+  text-align: center;
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-weight: 800;
+  font-size: 74px;
+  line-height: 1.08;
+  letter-spacing: -.015em;
+  color: #0b0b0b;
+}
+.sketch-sub {
+  position: absolute; left: 0; right: 0;
+  text-align: center;
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 44px;
+  color: #0f766e;
+}

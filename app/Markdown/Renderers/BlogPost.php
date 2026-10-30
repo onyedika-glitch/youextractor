@@ -44,6 +44,9 @@ class BlogPost implements Renderer
 
         // The H1 comes from MarkdownPage; drop a leading H1 in the source.
         $body = preg_replace('/\A#\s+.+\R+/', '', $post['body']);
+        if (!empty($post['image'])) {
+            $body = '![' . ($post['image_alt'] ?: $post['title']) . '](' . $post['image'] . ")\n\n" . $body;
+        }
 
         return new MarkdownPage(
             title: $post['title'],

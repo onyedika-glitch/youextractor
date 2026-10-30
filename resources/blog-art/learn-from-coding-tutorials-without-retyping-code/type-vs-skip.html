@@ -1,0 +1,51 @@
+<!-- size: 1100x500 -->
+<!doctype html>
+<html style="--w:1100px; --h:500px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
+  .col { border-radius: 18px; padding: 24px 26px; border: 2px solid; }
+  .type { background: #ecfdf5; border-color: #6ee7b7; }
+  .skip { background: #f8fafc; border-color: var(--border); }
+  .col h3 { font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .type h3 { color: #065f46; } .skip h3 { color: #334155; }
+  .ic { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; font-size: 18px; color: #fff; }
+  .type .ic { background: #059669; } .skip .ic { background: #64748b; }
+  ul { list-style: none; }
+  li { font-size: 17px; line-height: 1.4; padding: 9px 0; border-bottom: 1px dashed rgba(15,23,42,.12); display: flex; gap: 10px; }
+  li:last-child { border-bottom: 0; }
+  li code { font: 500 14.5px 'JetBrains Mono'; background: rgba(255,255,255,.8); padding: 1px 6px; border-radius: 5px; }
+  .type li:before { content: "✎"; color: #059669; font-weight: 700; }
+  .skip li:before { content: "⧉"; color: #64748b; }
+</style>
+</head>
+<body class="light">
+  <h2>What to type yourself, and what to skip</h2>
+  <p class="lead">Spend your typing on the idea the tutorial is teaching. Copy, clone or extract the rest.</p>
+  <div class="cols">
+    <div class="col type">
+      <h3><span class="ic">✓</span>Type it yourself</h3>
+      <ul>
+        <li>The core logic the video is about (the hook, the query, the algorithm)</li>
+        <li>Anything you will need to write again from scratch</li>
+        <li>Code you do not fully understand yet</li>
+        <li>Your own changes and extensions</li>
+      </ul>
+    </div>
+    <div class="col skip">
+      <h3><span class="ic">→</span>Copy, clone or extract</h3>
+      <ul>
+        <li>Project scaffolding and folder setup</li>
+        <li>Config files: <code>vite.config.js</code>, <code>tsconfig.json</code></li>
+        <li>Package manifests and lock files</li>
+        <li>Styling classes and generated boilerplate</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

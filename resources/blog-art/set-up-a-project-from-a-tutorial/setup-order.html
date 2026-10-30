@@ -1,0 +1,43 @@
+<!-- size: 1200x495 -->
+<!doctype html>
+<html style="--w:1200px; --h:495px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .row { display: flex; align-items: stretch; gap: 0; margin-top: 40px; }
+  .step { flex: 1; background: #fff; border: 2px solid var(--border); border-radius: 16px; padding: 18px 16px; text-align: left; position: relative; }
+  .n { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; color: #fff; font-weight: 800; font-size: 15px; }
+  .step h3 { font-size: 19px; margin: 12px 0 8px; letter-spacing: -.01em; }
+  .step p { font-size: 14.5px; color: var(--ink-muted); line-height: 1.45; }
+  .step code { display: block; margin-top: 12px; font: 500 13px 'JetBrains Mono'; background: #f1f5f9; border-radius: 8px; padding: 6px 8px; color: var(--ink); }
+  .arrow { width: 34px; display: grid; place-items: center; color: #94a3b8; font-size: 26px; font-weight: 800; }
+  .s1 .n { background: #0284c7; } .s2 .n { background: #7c3aed; } .s3 .n { background: #d97706; }
+  .s4 .n { background: #db2777; } .s5 .n { background: #4f46e5; } .s6 .n { background: var(--teal); }
+  .s6 { border-color: var(--teal); background: #f0fdfa; }
+  .foot { margin-top: 26px; font-size: 16px; color: var(--ink-muted); }
+  .foot b { color: var(--ink); }
+</style>
+</head>
+<body class="light">
+  <h2>Set up in this order</h2>
+  <p class="lead">Each step depends on the one before it. Skipping ahead is where most setup errors come from.</p>
+  <div class="row">
+    <div class="step s1"><span class="n">1</span><h3>Version</h3><p>Match the language version used in the video</p><code>nvm use 20</code></div>
+    <div class="arrow">›</div>
+    <div class="step s2"><span class="n">2</span><h3>Install</h3><p>Install dependencies from the lock file</p><code>npm ci</code></div>
+    <div class="arrow">›</div>
+    <div class="step s3"><span class="n">3</span><h3>.env</h3><p>Copy the example and fill in your values</p><code>cp .env.example .env</code></div>
+    <div class="arrow">›</div>
+    <div class="step s4"><span class="n">4</span><h3>Database</h3><p>Start it and create an empty database</p><code>createdb myapp</code></div>
+    <div class="arrow">›</div>
+    <div class="step s5"><span class="n">5</span><h3>Migrate</h3><p>Create the tables the app expects</p><code>php artisan migrate</code></div>
+    <div class="arrow">›</div>
+    <div class="step s6"><span class="n">6</span><h3>Run</h3><p>Start it once before you change anything</p><code>npm run dev</code></div>
+  </div>
+  <p class="foot"><b>Not every project needs every step.</b> No database? Skip 4 and 5. No <code>.env.example</code>? Search the code for the settings it reads.</p>
+</body>
+</html>

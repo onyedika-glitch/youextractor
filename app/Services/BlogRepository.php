@@ -67,6 +67,8 @@ class BlogRepository
      * date: 2026-06-01
      * excerpt: ...
      * reading_time: 6
+     * image: /img/blog/my-post/cover.png   (optional cover, also used for social cards)
+     * image_alt: Short description of the cover
      * ---
      * # Markdown content here
      *
@@ -81,6 +83,8 @@ class BlogRepository
             'reading_time' => 5,
             'content' => '',
             'body' => '',
+            'image' => null,
+            'image_alt' => null,
         ];
 
         // Extract frontmatter
@@ -97,10 +101,12 @@ class BlogRepository
                     if ($key === 'date') $post['date'] = $value;
                     if ($key === 'excerpt') $post['excerpt'] = $value;
                     if ($key === 'reading_time') $post['reading_time'] = (int)$value;
+                    if ($key === 'image') $post['image'] = $value;
+                    if ($key === 'image_alt') $post['image_alt'] = $value;
                 }
             }
 
-            $post['content'] = Str::markdown($body);
+            $post['content'] = $this->lazyImages(Str::markdown($body));
             $post['body'] = trim($body);
         } else {
             // No frontmatter - treat whole thing as markdown, use first heading as title
@@ -112,5 +118,13 @@ class BlogRepository
         }
 
         return $post;
+    }
+
+    /**
+     * Lazy-load inline images so long, illustrated posts stay fast.
+     */
+    private function lazyImages(string $html): string
+    {
+        return str_replace('<img ', '<img loading="lazy" decoding="async" ', $html);
     }
 }

@@ -1,0 +1,49 @@
+<!-- size: 1100x530 -->
+<!doctype html>
+<html style="--w:1100px; --h:530px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 30px; }
+  .col { border-radius: 16px; padding: 22px 24px; border: 2px solid var(--border); background: #fff; }
+  .col h3 { font-size: 19px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+  .tag { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .in h3 .tag { background: var(--teal-soft); color: #0f766e; }
+  .out { background: #fff7f7; border-color: #fecaca; }
+  .out h3 .tag { background: #fee2e2; color: #b91c1c; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 9px 0; border-bottom: 1px dashed #e2e8f0; }
+  .row:last-child { border-bottom: 0; }
+  .row code { font: 600 16px 'JetBrains Mono'; }
+  .row span { color: var(--ink-muted); font-size: 14.5px; text-align: right; }
+  .out .row code { color: #b91c1c; }
+</style>
+</head>
+<body class="light">
+  <h2>What goes in the repo, and what stays out</h2>
+  <p class="lead">Commit the source and the instructions. Let .gitignore keep out anything that is huge, generated or secret.</p>
+  <div class="cols">
+    <div class="col in">
+      <h3><span class="tag">COMMIT</span>Goes in the repo</h3>
+      <div class="row"><code>src/</code><span>your source code</span></div>
+      <div class="row"><code>package.json</code><span>dependency list</span></div>
+      <div class="row"><code>package-lock.json</code><span>exact versions</span></div>
+      <div class="row"><code>.env.example</code><span>setting names, no values</span></div>
+      <div class="row"><code>README.md</code><span>what it is, how to run it</span></div>
+      <div class="row"><code>.gitignore</code><span>the list on the right</span></div>
+    </div>
+    <div class="col out">
+      <h3><span class="tag">IGNORE</span>Kept out by .gitignore</h3>
+      <div class="row"><code>.env</code><span>API keys and passwords</span></div>
+      <div class="row"><code>node_modules/</code><span>huge, reinstallable</span></div>
+      <div class="row"><code>.venv/ &nbsp;vendor/</code><span>same, for Python / PHP</span></div>
+      <div class="row"><code>dist/ &nbsp;build/</code><span>generated output</span></div>
+      <div class="row"><code>*.log</code><span>local noise</span></div>
+      <div class="row"><code>.DS_Store &nbsp;.idea/</code><span>OS and editor files</span></div>
+    </div>
+  </div>
+</body>
+</html>

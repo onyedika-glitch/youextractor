@@ -1,0 +1,44 @@
+<!-- size: 1100x640 -->
+<!doctype html>
+<html style="--w:1100px; --h:640px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; position: relative; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .step { position: absolute; width: 300px; border-radius: 16px; padding: 18px 22px; box-shadow: 0 6px 18px rgba(15,23,42,.06); }
+  .step h3 { font-size: 21px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+  .step .n { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 15px; font-weight: 800; }
+  .step p { font-size: 15.5px; line-height: 1.45; margin-top: 8px; }
+  .s1 { background: #e0f2fe; color: #075985; } .s1 .n { background: #0284c7; }
+  .s2 { background: #ccfbf1; color: #115e59; } .s2 .n { background: var(--teal); }
+  .s3 { background: #fef3c7; color: #92400e; } .s3 .n { background: #d97706; }
+  .s4 { background: #ede9fe; color: #5b21b6; } .s4 .n { background: #7c3aed; }
+  .center { position: absolute; left: 400px; top: 360px; width: 300px; text-align: center; }
+  .center b { display: block; font-size: 22px; font-weight: 800; color: var(--ink); }
+  .center span { font-size: 15px; color: var(--ink-muted); }
+  svg { position: absolute; left: 0; top: 0; }
+</style>
+</head>
+<body class="light">
+  <h2>The read → run → change → recall loop</h2>
+  <p class="lead">Repeat it once per section of the tutorial, not once per video.</p>
+
+  <svg width="1100" height="640" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linecap="round">
+    <defs><marker id="h" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8" stroke="none"/></marker></defs>
+    <path d="M370 222 H 720" marker-end="url(#h)"/>
+    <path d="M880 300 V 470" marker-end="url(#h)"/>
+    <path d="M720 560 H 370" marker-end="url(#h)"/>
+    <path d="M220 470 V 300" marker-end="url(#h)"/>
+  </svg>
+
+  <div class="step s1" style="left:56px; top:150px"><h3><span class="n">1</span>Read</h3><p>Watch one section without typing. Note what is built and why.</p></div>
+  <div class="step s2" style="left:730px; top:150px"><h3><span class="n">2</span>Run</h3><p>Get the working code onto your machine and run it as-is.</p></div>
+  <div class="step s3" style="left:730px; top:480px"><h3><span class="n">3</span>Change</h3><p>Make one change the tutorial did not. Predict the result first.</p></div>
+  <div class="step s4" style="left:56px; top:480px"><h3><span class="n">4</span>Recall</h3><p>Close the video. Rewrite the core function from memory.</p></div>
+
+  <div class="center"><b>One section</b><span>15–20 minutes per lap</span></div>
+</body>
+</html>

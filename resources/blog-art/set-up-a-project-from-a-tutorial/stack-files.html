@@ -1,0 +1,37 @@
+<!-- size: 1200x540 -->
+<!doctype html>
+<html style="--w:1200px; --h:540px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 34px; }
+  .cell { background: #fff; border: 2px solid var(--border); border-radius: 16px; padding: 18px 22px; }
+  .file { font: 700 21px 'JetBrains Mono'; color: var(--ink); }
+  .stack { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .cmd { margin-top: 14px; font: 500 15.5px 'JetBrains Mono'; background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 10px 12px; }
+  .cmd span { color: #5eead4; }
+  .node { background: #dcfce7; color: #166534; }
+  .py { background: #dbeafe; color: #1e40af; }
+  .php { background: #ede9fe; color: #5b21b6; }
+  .ruby { background: #fee2e2; color: #991b1b; }
+  .go { background: #cffafe; color: #155e75; }
+  .dock { background: #e0f2fe; color: #075985; }
+</style>
+</head>
+<body class="light">
+  <h2>Which file tells you the stack</h2>
+  <p class="lead">Look at the project root. The manifest file tells you what to install and with which tool.</p>
+  <div class="grid">
+    <div class="cell"><div class="file">package.json</div><span class="stack node">Node · JS · TS</span><div class="cmd"><span>$</span> npm install</div></div>
+    <div class="cell"><div class="file">requirements.txt</div><span class="stack py">Python</span><div class="cmd"><span>$</span> pip install -r requirements.txt</div></div>
+    <div class="cell"><div class="file">composer.json</div><span class="stack php">PHP · Laravel</span><div class="cmd"><span>$</span> composer install</div></div>
+    <div class="cell"><div class="file">Gemfile</div><span class="stack ruby">Ruby · Rails</span><div class="cmd"><span>$</span> bundle install</div></div>
+    <div class="cell"><div class="file">go.mod</div><span class="stack go">Go</span><div class="cmd"><span>$</span> go mod download</div></div>
+    <div class="cell"><div class="file">docker-compose.yml</div><span class="stack dock">Docker</span><div class="cmd"><span>$</span> docker compose up</div></div>
+  </div>
+</body>
+</html>

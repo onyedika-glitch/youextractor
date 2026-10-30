@@ -1,0 +1,79 @@
+<!-- size: 1200x630 -->
+<!doctype html>
+<html style="--w:1200px; --h:630px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<link rel="stylesheet" href="../_sketch.css">
+</head>
+<body class="sketch">
+  <svg class="ink" viewBox="0 0 1200 630" width="1200" height="630">
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+    <filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="27"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+
+    <g fill="none" stroke="#111" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Terminal with error (top left) -->
+      <g transform="translate(74 46) rotate(-6)" filter="url(#rough)">
+        <rect x="0" y="0" width="300" height="200" rx="14" stroke-width="5"/>
+        <rect x="3" y="3" width="294" height="194" rx="13" stroke-width="1.6"/>
+        <path d="M0 38 H300" stroke-width="3.4"/>
+        <circle cx="24" cy="19" r="6" stroke-width="2.6"/><circle cx="46" cy="19" r="6" stroke-width="2.6"/><circle cx="68" cy="19" r="6" stroke-width="2.6"/>
+        <path d="M24 68 L38 80 L24 92" stroke-width="3.4"/>
+        <path d="M50 92 H130" stroke-width="3.4"/>
+        <path d="M24 122 H170" stroke="#b91c1c" stroke-width="4"/>
+        <path d="M24 146 H140" stroke="#b91c1c" stroke-width="4"/>
+        <path d="M24 170 H100" stroke="#b91c1c" stroke-width="4"/>
+        <!-- big X -->
+        <path d="M206 92 L262 150 M262 92 L206 150" stroke="#b91c1c" stroke-width="7"/>
+      </g>
+      <!-- bug doodle -->
+      <g transform="translate(430 168)" filter="url(#rough2)" stroke-width="3">
+        <ellipse cx="0" cy="0" rx="22" ry="30"/>
+        <circle cx="0" cy="-38" r="12"/>
+        <path d="M-6 -48 L-14 -62 M6 -48 L14 -62"/>
+        <path d="M0 -30 V30"/>
+        <path d="M-22 -12 L-40 -22 M-22 4 L-42 4 M-20 20 L-38 34"/>
+        <path d="M22 -12 L40 -22 M22 4 L42 4 M20 20 L38 34"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M30 300 L60 306"/><path d="M40 330 L64 322"/><path d="M28 268 L56 280"/>
+        <path d="M450 70 L466 50"/><path d="M470 98 L494 84"/>
+      </g>
+
+      <!-- Squiggle arrow -->
+      <g stroke-width="3.4" filter="url(#rough2)">
+        <path d="M520 150 C 560 92, 610 92, 630 126 S 690 170, 720 130 S 780 86, 820 104"/>
+        <path d="M798 84 L824 104 L796 122"/>
+      </g>
+
+      <!-- Magnifying glass + wrench (top right) -->
+      <g transform="translate(940 140)" filter="url(#rough)">
+        <circle cx="0" cy="0" r="78" stroke-width="5"/>
+        <circle cx="0" cy="0" r="72" stroke-width="1.6"/>
+        <path d="M56 56 L130 130" stroke-width="12"/>
+        <path d="M-40 -20 C -30 -44, -8 -54, 14 -52" stroke-width="3"/>
+        <!-- check inside -->
+        <path d="M-30 4 L-8 26 L34 -22" stroke="#0f766e" stroke-width="7"/>
+      </g>
+      <g transform="translate(1110 70) rotate(40)" filter="url(#rough2)" stroke-width="3.6">
+        <path d="M-10 0 L-10 110 Q0 122 10 110 L10 0"/>
+        <path d="M-22 -6 C -26 -36, 26 -36, 22 -6 L10 -2 L10 -20 L-10 -20 L-10 -2 Z"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M1150 330 L1176 320"/><path d="M1148 360 L1170 366"/>
+      </g>
+
+      <!-- Loops and swooshes (bottom) -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M40 420 C 20 470, 30 540, 90 556 C 150 572, 150 500, 110 498 C 70 496, 70 560, 130 600"/>
+        <path d="M1150 410 C 1180 470, 1170 540, 1110 552 C 1050 564, 1050 498, 1090 494 C 1130 490, 1140 556, 1080 604"/>
+        <path d="M330 566 C 480 540, 640 548, 760 560 S 900 572, 940 548"/>
+        <path d="M360 580 C 500 560, 640 566, 760 574" stroke-width="1.6"/>
+      </g>
+    </g>
+  </svg>
+
+  <h1 class="sketch-title" style="top: 272px">How to Fix Errors in<br>a Coding Tutorial</h1>
+  <p class="sketch-sub" style="top: 470px">when it works for them but not for you</p>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!-- size: 990x800 -->
+<!doctype html>
+<html style="--w:990px; --h:800px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; position: relative; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .q, .a { position: absolute; border-radius: 14px; padding: 16px 20px; font-size: 18px; line-height: 1.35; }
+  .q { background: #fff; border: 2px solid var(--border); font-weight: 600; width: 330px; box-shadow: 0 6px 18px rgba(15,23,42,.06); }
+  .a { width: 400px; font-weight: 600; }
+  .a small { display: block; font-weight: 500; font-size: 14.5px; margin-top: 4px; opacity: .8; }
+  .a .n { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font-size: 14px; font-weight: 800; margin-right: 8px; color: #fff; }
+  .m1 { background: #e0f2fe; color: #075985; } .m1 .n { background: #0284c7; }
+  .m2 { background: #ede9fe; color: #5b21b6; } .m2 .n { background: #7c3aed; }
+  .m4 { background: #fef3c7; color: #92400e; } .m4 .n { background: #d97706; }
+  .m5 { background: #ccfbf1; color: #115e59; border: 2px solid var(--teal); } .m5 .n { background: var(--teal); }
+  .side { position: absolute; left: 56px; top: 640px; width: 400px; background: #fff; border: 2px dashed #cbd5e1; border-radius: 14px; padding: 16px 20px; font-size: 16px; color: var(--ink-muted); line-height: 1.45; }
+  .side b { color: var(--ink); }
+  .lbl { position: absolute; font-size: 14px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--paper); }
+  .yes { color: #15803d; } .no { color: #b91c1c; }
+  svg { position: absolute; left: 0; top: 0; }
+</style>
+</head>
+<body class="light">
+  <h2>Where is the code? Pick your method</h2>
+  <p class="lead">Start at the top. Most tutorials are solved by the first question.</p>
+
+  <svg width="990" height="800" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round">
+    <defs><marker id="h" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8" stroke="none"/></marker></defs>
+    <!-- Q1 -> A1 -->  <path d="M386 195 H 520" marker-end="url(#h)"/>
+    <!-- Q1 -> Q2 -->  <path d="M221 232 V 300" marker-end="url(#h)"/>
+    <!-- Q2 -> A2 -->  <path d="M386 343 H 520" marker-end="url(#h)"/>
+    <!-- Q2 -> Q3 -->  <path d="M221 380 V 450" marker-end="url(#h)"/>
+    <!-- Q3 -> A4 -->  <path d="M386 478 H 520" marker-end="url(#h)"/>
+    <!-- Q3 -> A5 -->  <path d="M221 532 V 556 H 470 V 640 H 520" marker-end="url(#h)"/>
+  </svg>
+
+  <div class="q" style="left:56px; top:156px">Is there a repo link in the description or pinned comment?</div>
+  <div class="q" style="left:56px; top:304px">Does the creator have a public GitHub?</div>
+  <div class="q" style="left:56px; top:454px">Do you need one snippet or the whole project?</div>
+
+  <span class="lbl yes" style="left:426px; top:168px">yes</span>
+  <span class="lbl no"  style="left:230px; top:255px">no</span>
+  <span class="lbl yes" style="left:426px; top:316px">yes</span>
+  <span class="lbl no"  style="left:230px; top:403px">no</span>
+  <span class="lbl"     style="left:410px; top:452px; color:#92400e">snippet</span>
+  <span class="lbl"     style="left:330px; top:528px; color:#115e59">whole project</span>
+
+  <div class="a m1" style="left:526px; top:160px"><span class="n">1</span>Clone the repo<small>Check out the commit from the upload date</small></div>
+  <div class="a m2" style="left:526px; top:308px"><span class="n">2</span>Search their repositories<small>Repo names usually match the video title</small></div>
+  <div class="a m4" style="left:526px; top:444px"><span class="n">4</span>Copy text from a paused frame<small>Live Text, Snipping Tool or Google Lens</small></div>
+  <div class="a m5" style="left:526px; top:600px"><span class="n">5</span>Extract the full project<small>Files, dependencies and a setup guide</small></div>
+
+  <div class="side"><b>③ Use the transcript with every method.</b> It gives you the package names, commands and the order of steps, even when the code itself is only on screen.</div>
+</body>
+</html>

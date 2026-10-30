@@ -1,0 +1,40 @@
+<!-- size: 1200x520 -->
+<!doctype html>
+<html style="--w:1200px; --h:520px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; position: relative; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .track { position: absolute; left: 80px; right: 80px; top: 280px; height: 6px; border-radius: 6px; background: linear-gradient(90deg, var(--teal) 0 52%, #cbd5e1 52%); }
+  .c { position: absolute; top: 268px; width: 30px; height: 30px; border-radius: 50%; background: #fff; border: 5px solid var(--teal); }
+  .c.late { border-color: #94a3b8; }
+  .c.pick { width: 44px; height: 44px; top: 261px; border-width: 7px; box-shadow: 0 0 0 8px rgba(20,184,166,.18); }
+  .msg { position: absolute; top: 322px; width: 170px; text-align: center; font: 500 13.5px 'JetBrains Mono'; color: var(--ink-muted); line-height: 1.4; }
+  .msg.pick { color: var(--ink); font-weight: 700; }
+  .upload { position: absolute; left: 620px; top: 200px; height: 190px; border-left: 3px dashed var(--red); }
+  .upload span { position: absolute; left: -96px; top: -42px; width: 190px; text-align: center; background: #fee2e2; color: #991b1b; font-weight: 700; font-size: 15px; padding: 7px 10px; border-radius: 10px; }
+  .note { position: absolute; font-size: 15.5px; font-weight: 600; padding: 10px 14px; border-radius: 12px; line-height: 1.35; }
+  .note.good { left: 110px; top: 400px; background: var(--teal-soft); color: #115e59; width: 380px; }
+  .note.bad { right: 90px; top: 400px; background: #f1f5f9; color: var(--ink-muted); width: 360px; }
+</style>
+</head>
+<body class="light">
+  <h2>Match the repo to the video, not to today</h2>
+  <p class="lead">Check out the last commit before the upload date so the code matches what you watch.</p>
+
+  <div class="track"></div>
+  <div class="upload"><span>Video uploaded</span></div>
+
+  <div class="c" style="left:120px"></div>      <div class="msg" style="left:50px">initial setup</div>
+  <div class="c" style="left:300px"></div>      <div class="msg" style="left:230px">add routes</div>
+  <div class="c pick" style="left:520px"></div> <div class="msg pick" style="left:440px">add auth<br>✓ use this one</div>
+  <div class="c late" style="left:760px"></div> <div class="msg" style="left:690px">upgrade to v5</div>
+  <div class="c late" style="left:1000px"></div><div class="msg" style="left:930px">rename API</div>
+
+  <div class="note good">✓ Matches the code in the video</div>
+  <div class="note bad">Later commits may change versions and break the steps you are following</div>
+</body>
+</html>

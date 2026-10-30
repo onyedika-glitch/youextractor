@@ -9,6 +9,7 @@
         $postUrl = $base . '/blog/' . $slug;
         $postDesc = $post['excerpt'] ?? Str::limit(strip_tags($post['content']), 160);
         $published = $post['date'] ?? now()->toDateString();
+        $coverUrl = !empty($post['image']) ? $base . '/' . ltrim($post['image'], '/') : $base . '/img/app-screenshot-2.png';
         $articleGraph = [
             '@context' => 'https://schema.org',
             '@graph' => [
@@ -21,7 +22,7 @@
                     'datePublished' => $published,
                     'dateModified' => $published,
                     'description' => $postDesc,
-                    'image' => $base . '/img/app-screenshot-2.png',
+                    'image' => $coverUrl,
                     'mainEntityOfPage' => $postUrl,
                     'author' => [
                         '@type' => 'Person',
@@ -53,6 +54,7 @@
         'title' => $post['title'] . ' • YouExtractor',
         'description' => $postDesc,
         'type' => 'article',
+        'image' => $coverUrl,
         'published' => $published,
         'modified' => $published,
         'keywords' => $post['title'] . ', YouExtractor, YouTube code extractor, extract code from YouTube tutorial, AI code extractor, learn programming faster, coding tutorial to GitHub, youextractor.me',
@@ -121,6 +123,70 @@
             padding: 0;
             color: inherit;
         }
+        .article-content a {
+            color: var(--ds-text-brand);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 3px;
+        }
+        .article-content a:hover { text-decoration-thickness: 2px; }
+        .article-cover {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1200 / 630;
+            object-fit: cover;
+            border-radius: var(--theme-radius-lg);
+            border: 1px solid var(--ds-border-subtle);
+            margin-top: 32px;
+        }
+        .article-content img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 2em auto 0.6em;
+            border-radius: var(--theme-radius-lg);
+            border: 1px solid var(--ds-border-subtle);
+            box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+        }
+        /* Caption: an *italic line* directly under an image */
+        .article-content p:has(> img) {
+            margin-bottom: 2em;
+        }
+        .article-content p:has(> img) > em {
+            display: block;
+            text-align: center;
+            font-size: 13.5px;
+            color: var(--ds-text-muted);
+        }
+        .article-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.6em 0 2em;
+            font-size: 14.5px;
+            display: block;
+            overflow-x: auto;
+        }
+        .article-content th, .article-content td {
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--ds-border-subtle);
+            vertical-align: top;
+        }
+        .article-content th {
+            color: var(--ds-text-primary);
+            font-weight: 600;
+            background: var(--theme-neutral-50);
+        }
+        .article-content blockquote {
+            margin: 1.8em 0;
+            padding: 14px 20px;
+            border-left: 3px solid var(--ds-text-brand);
+            background: var(--theme-neutral-50);
+            border-radius: 0 var(--theme-radius-lg) var(--theme-radius-lg) 0;
+            color: var(--ds-text-primary);
+        }
+        .article-content blockquote p:last-child { margin-bottom: 0; }
         .reading-meta {
             display: flex;
             gap: 14px;
@@ -159,6 +225,10 @@
                 <p style="margin: 16px 0 0; font-size: 15.5px; color: var(--ds-text-secondary); max-width: 62ch;">
                     {{ $post['excerpt'] }}
                 </p>
+            @endif
+
+            @if(!empty($post['image']))
+                <img class="article-cover" src="{{ $post['image'] }}" alt="{{ $post['image_alt'] ?? $post['title'] }}" width="1200" height="630" fetchpriority="high">
             @endif
         </div>
 

@@ -1,0 +1,47 @@
+<!-- size: 1200x520 -->
+<!doctype html>
+<html style="--w:1200px; --h:520px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 48px 56px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .wrap { display: grid; grid-template-columns: 1.25fr 1fr; gap: 26px; margin-top: 30px; }
+  .term { background: #0f172a; border-radius: 16px; padding: 18px 20px; font: 500 14.5px/1.75 'JetBrains Mono'; color: #94a3b8; }
+  .term .dots { display: flex; gap: 7px; margin-bottom: 12px; }
+  .term .dots i { width: 11px; height: 11px; border-radius: 50%; background: #334155; display: block; }
+  .first { color: #fca5a5; background: rgba(248,113,113,.14); border-left: 3px solid #f87171; margin: 0 -20px; padding: 0 17px; }
+  .mine { color: #fde68a; background: rgba(253,230,138,.12); border-left: 3px solid #fbbf24; margin: 0 -20px; padding: 0 17px; }
+  .dim { color: #475569; }
+  .tips { display: flex; flex-direction: column; gap: 14px; }
+  .tip { background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 14px 18px; font-size: 16px; line-height: 1.4; color: var(--ink-muted); }
+  .tip b { color: var(--ink); display: block; margin-bottom: 2px; font-size: 17px; }
+  .tip.red { border-color: #fecaca; } .tip.amber { border-color: #fde68a; }
+</style>
+</head>
+<body class="light">
+  <h2>Read the first error, not the last</h2>
+  <p class="lead">Long error output looks scary, but you only need two lines from it.</p>
+  <div class="wrap">
+    <div class="term">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div>$ npm run dev</div>
+      <div class="first">Error: Cannot find module 'dotenv'</div>
+      <div class="dim">Require stack:</div>
+      <div class="mine">- /app/src/config.js:1</div>
+      <div class="dim">- /app/src/server.js:3</div>
+      <div class="dim">    at Module._resolveFilename (node:internal/...)</div>
+      <div class="dim">    at Module._load (node:internal/...)</div>
+      <div class="dim">    at require (node:internal/...)</div>
+      <div class="dim">  code: 'MODULE_NOT_FOUND'</div>
+    </div>
+    <div class="tips">
+      <div class="tip red"><b>① The first error line</b>What went wrong: a package called dotenv is missing.</div>
+      <div class="tip amber"><b>② The first line in your code</b>Where it happened: line 1 of src/config.js. Skip the node_modules and internal lines.</div>
+      <div class="tip"><b>The fix here</b>The package was never installed. Run <code>npm install dotenv</code>, or run <code>npm install</code> if it is already in package.json.</div>
+    </div>
+  </div>
+</body>
+</html>

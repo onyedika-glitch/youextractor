@@ -1,0 +1,39 @@
+<!-- size: 1100x470 -->
+<!doctype html>
+<html style="--w:1100px; --h:470px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .row { display: flex; align-items: stretch; gap: 0; margin-top: 34px; }
+  .step { flex: 1; background: #fff; border: 2px solid var(--border); border-radius: 16px; padding: 18px; position: relative; }
+  .step .n { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; font-weight: 800; font-size: 15px; }
+  .step h3 { font-size: 18px; margin: 10px 0 6px; line-height: 1.25; }
+  .step p { font-size: 14.5px; color: var(--ink-muted); line-height: 1.4; }
+  .arr { width: 34px; display: grid; place-items: center; color: #94a3b8; font-size: 26px; font-weight: 700; }
+  .step.last { border-color: var(--teal); background: #f0fdfa; }
+  .step.last .n { background: var(--teal); }
+  .foot { margin-top: 26px; font-size: 16px; color: var(--ink-muted); background: #fff; border: 2px dashed #cbd5e1; border-radius: 14px; padding: 14px 18px; }
+  .foot b { color: var(--ink); }
+</style>
+</head>
+<body class="light">
+  <h2>A debugging order that works</h2>
+  <p class="lead">Go left to right, and stop as soon as one step solves it.</p>
+  <div class="row">
+    <div class="step"><span class="n">1</span><h3>Read the first error</h3><p>Message, your file, your line number.</p></div>
+    <div class="arr">→</div>
+    <div class="step"><span class="n">2</span><h3>Compare with the video</h3><p>Same timestamp, character by character.</p></div>
+    <div class="arr">→</div>
+    <div class="step"><span class="n">3</span><h3>Check the comments</h3><p>Search for the error or "doesn't work".</p></div>
+    <div class="arr">→</div>
+    <div class="step"><span class="n">4</span><h3>Search the message</h3><p>Generic part, in quotes, plus the framework.</p></div>
+    <div class="arr">→</div>
+    <div class="step last"><span class="n">5</span><h3>Isolate it</h3><p>Log values, comment out code, shrink the problem.</p></div>
+  </div>
+  <div class="foot"><b>Still stuck?</b> Ask for help with the exact error, the code around it, your versions, the tutorial link and timestamp, and what you already tried.</div>
+</body>
+</html>
