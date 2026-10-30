@@ -64,7 +64,7 @@ That is what [YouExtractor](/tools/extract-code-from-youtube) does. You paste a 
 - A `.env.example` when the video uses environment variables
 - A written setup guide and a step-by-step roadmap of the tutorial
 
-You can download it as a ZIP or push it to a new [GitHub repository](/tools/youtube-to-github). It works with public videos that have captions; private and members-only videos are not supported. Every account gets one free extraction, so you can try it on the tutorial you are watching right now.
+You can download it as a ZIP or push it to a new [GitHub repository](/tools/youtube-to-github). It works with public videos that have captions; private and members-only videos are not supported. Every account gets one free extraction, so you can try it on the tutorial you are watching right now. Once you have the files, [check them before you trust them](/articles/the-fastest-way-to-extract-source-code-from-a-youtube-tutorial).
 
 ## Which method should you use?
 
@@ -81,6 +81,7 @@ Whatever method you use, the code still belongs to the person who made the tutor
 
 ## Related
 
+- [The fastest way to extract source code from a YouTube tutorial](/articles/the-fastest-way-to-extract-source-code-from-a-youtube-tutorial): a deeper guide to verifying extracted code before you trust it
 - [How to recreate a coding tutorial project](/blog/recreate-a-coding-tutorial-project)
 - [How to set up a project from a tutorial](/blog/set-up-a-project-from-a-tutorial)
 - [Extract code from YouTube tutorials](/tools/extract-code-from-youtube)
