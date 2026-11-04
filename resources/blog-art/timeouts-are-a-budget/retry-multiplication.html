@@ -1,0 +1,43 @@
+<!-- size: 1200x730 -->
+<!doctype html>
+<html style="--w:1200px; --h:730px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .rows { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; }
+  .row { display: grid; grid-template-columns: 300px 1fr 190px; align-items: center; gap: 18px; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 14px 18px; }
+  .row h3 { font-size: 17px; font-weight: 700; }
+  .row .d { font-size: 14px; color: var(--ink-muted); margin-top: 3px; }
+  .boxes { display: flex; gap: 6px; flex-wrap: wrap; }
+  .b { height: 22px; border-radius: 6px; background: #ccfbf1; border: 1.5px solid #5eead4; }
+  .x { font: 700 22px 'JetBrains Mono'; color: #0f766e; text-align: right; }
+  .x small { display: block; font: 500 12.5px Inter; color: var(--ink-muted); }
+  .total { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .t { border-radius: 14px; padding: 16px 20px; }
+  .t1 { background: #fef2f2; border: 2px solid #fecaca; }
+  .t2 { background: #f0fdfa; border: 2px solid #99f6e4; }
+  .t b { display: block; font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+  .t1 b { color: #b91c1c; } .t2 b { color: #0f766e; }
+  .t span { font-size: 14.5px; color: var(--ink-muted); }
+</style>
+</head>
+<body class="light">
+  <h2>How sensible numbers multiply</h2>
+  <p class="lead">Each layer of one AI extraction, as it was set up in YouExtractor.</p>
+  <div class="rows">
+    <div class="row"><div><h3>One AI request</h3><div class="d">timeout per attempt</div></div><div class="boxes"><div class="b" style="width:180px"></div></div><div class="x">180s</div></div>
+    <div class="row"><div><h3>Attempted twice</h3><div class="d">HTTP client retry, 3s pause</div></div><div class="boxes"><div class="b" style="width:180px"></div><div class="b" style="width:180px"></div></div><div class="x">× 2<small>≈ 363s per call</small></div></div>
+    <div class="row"><div><h3>2–3 calls per extraction</h3><div class="d">plan, code, sometimes a repair</div></div><div class="boxes"><div class="b" style="width:120px"></div><div class="b" style="width:120px"></div><div class="b" style="width:120px"></div></div><div class="x">× 3<small>≈ 18 min</small></div></div>
+    <div class="row"><div><h3>4 providers as fallback</h3><div class="d">one also loops over 5 models</div></div><div class="boxes"><div class="b" style="width:80px"></div><div class="b" style="width:80px"></div><div class="b" style="width:80px"></div><div class="b" style="width:80px"></div></div><div class="x">× 4+<small>hours, on paper</small></div></div>
+    <div class="row"><div><h3>Job retried once</h3><div class="d">by the queue</div></div><div class="boxes"><div class="b" style="width:300px"></div><div class="b" style="width:300px"></div></div><div class="x">× 2</div></div>
+  </div>
+  <div class="total">
+    <div class="t t1"><b>Hours</b><span>Theoretical worst case if every layer ran to its limit.</span></div>
+    <div class="t t2"><b>≈ 20 minutes</b><span>Real ceiling: the 600s job timeout, run twice. Then a failure.</span></div>
+  </div>
+</body>
+</html>

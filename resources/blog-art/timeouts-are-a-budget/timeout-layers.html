@@ -1,0 +1,46 @@
+<!-- size: 1200x430 -->
+<!doctype html>
+<html style="--w:1200px; --h:430px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; display: grid; grid-template-columns: 1fr 360px; gap: 36px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .nest { margin-top: 26px; }
+  .layer { border-radius: 18px; padding: 14px 18px 18px; border: 2px solid; }
+  .layer > .lbl { display: flex; justify-content: space-between; font-weight: 700; font-size: 16px; margin-bottom: 12px; }
+  .layer > .lbl span { font: 600 14px 'JetBrains Mono'; }
+  .l1 { background: #eff6ff; border-color: #bfdbfe; }
+  .l2 { background: #f5f3ff; border-color: #ddd6fe; }
+  .l3 { background: #f0fdfa; border-color: #99f6e4; }
+  .l4 { background: #fff; border-color: #e2e8f0; }
+  .l4 .lbl { margin-bottom: 0; }
+  .side { padding-top: 80px; display: flex; flex-direction: column; gap: 16px; }
+  .rule { background: #0f172a; color: #fff; border-radius: 16px; padding: 18px 20px; font-size: 17px; line-height: 1.45; }
+  .rule b { color: #5eead4; }
+  .bad { background: #fef2f2; border: 2px solid #fecaca; border-radius: 16px; padding: 16px 18px; font-size: 15px; color: #7f1d1d; line-height: 1.45; }
+  .bad b { display: block; color: #b91c1c; margin-bottom: 4px; }
+</style>
+</head>
+<body class="light">
+  <div>
+    <h2>Each box must give up before the one around it</h2>
+    <p class="lead">From the outside in. Leave room at each level to fail cleanly.</p>
+    <div class="nest">
+      <div class="layer l1"><div class="lbl">User's patience <span>~ seconds</span></div>
+        <div class="layer l2"><div class="lbl">Load balancer / proxy <span>60s</span></div>
+          <div class="layer l3"><div class="lbl">App request or job <span>55s</span></div>
+            <div class="layer l4"><div class="lbl">Outgoing HTTP call <span>≤ time left − margin</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="side">
+    <div class="rule"><b>inner &lt; outer</b><br>Every timeout is shorter than the layer that is waiting on it.</div>
+    <div class="bad"><b>If an inner one is longer</b>The outer layer returns an error, but the inner work keeps running. Nobody sees the result, and the user's retry runs it twice.</div>
+  </div>
+</body>
+</html>

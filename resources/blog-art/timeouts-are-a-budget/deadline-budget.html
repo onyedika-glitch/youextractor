@@ -1,0 +1,42 @@
+<!-- size: 1200x400 -->
+<!doctype html>
+<html style="--w:1200px; --h:400px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .scale { display: flex; justify-content: space-between; margin-top: 30px; font: 500 13px 'JetBrains Mono'; color: var(--ink-muted); }
+  .bar { display: flex; height: 64px; border-radius: 14px; overflow: hidden; border: 2px solid #cbd5e1; margin-top: 8px; }
+  .p { display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 14.5px; text-align: center; line-height: 1.2; }
+  .p small { display: block; font: 500 12px 'JetBrains Mono'; opacity: .85; }
+  .left { background: repeating-linear-gradient(135deg, #f0fdfa 0 12px, #ccfbf1 12px 24px); color: #0f766e; }
+  .margin { background: #e2e8f0; color: #475569; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px; }
+  .c { border-radius: 14px; padding: 16px 18px; font-size: 15.5px; line-height: 1.45; }
+  .c1 { background: #fef2f2; border: 2px solid #fecaca; }
+  .c2 { background: #f0fdfa; border: 2px solid #99f6e4; }
+  .c b { display: block; margin-bottom: 4px; }
+  .c1 b { color: #b91c1c; } .c2 b { color: #0f766e; }
+  code { font: 500 13.5px 'JetBrains Mono'; background: rgba(15,23,42,.06); padding: 1px 6px; border-radius: 6px; }
+</style>
+</head>
+<body class="light">
+  <h2>One budget for the whole job</h2>
+  <p class="lead">600-second job. Every call spends from the same clock.</p>
+  <div class="scale"><span>0s</span><span>150s</span><span>300s</span><span>450s</span><span>600s</span></div>
+  <div class="bar">
+    <div class="p" style="width:2.5%; background:#3b82f6"></div>
+    <div class="p" style="width:23.3%; background:#8b5cf6">Plan<small>140s</small></div>
+    <div class="p" style="width:43.3%; background:#0d9488">Code<small>260s</small></div>
+    <div class="p left" style="width:20.9%">Left for next call<small>≤ 125s</small></div>
+    <div class="p margin" style="width:10%">Clean up<small>60s</small></div>
+  </div>
+  <div class="cards">
+    <div class="c c1"><b>Fresh timer per call</b>Each call gets <code>timeout(180)</code>, no matter how much time is already gone. Three calls can need 540s.</div>
+    <div class="c c2"><b>Deadline passed down</b>Each call gets <code>min(time left − margin, cap)</code>. When the budget is gone, stop and fail clearly.</div>
+  </div>
+</body>
+</html>

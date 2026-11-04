@@ -1,0 +1,43 @@
+<!-- size: 1200x450 -->
+<!doctype html>
+<html style="--w:1200px; --h:450px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .track { position: relative; margin-top: 34px; height: 64px; }
+  .seg { position: absolute; top: 14px; height: 36px; border-radius: 10px; display: grid; place-items: center; font: 600 14px 'JetBrains Mono'; color: #fff; }
+  .s1 { left: 0; width: 12%; background: #3b82f6; }
+  .s2 { left: 12%; width: 10%; background: #94a3b8; }
+  .s3 { left: 22%; width: 48%; background: repeating-linear-gradient(90deg, #14b8a6 0 34px, #0d9488 34px 40px); }
+  .s4 { left: 70%; width: 30%; background: #e2e8f0; color: #475569; }
+  .brace { position: absolute; top: 0; height: 64px; border: 2px dashed; border-radius: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 26px; }
+  .cell { background: #fff; border: 2px solid var(--border); border-radius: 16px; padding: 18px; }
+  .tag { display: inline-block; width: 14px; height: 14px; border-radius: 4px; vertical-align: -1px; margin-right: 8px; }
+  h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  p { font-size: 14.5px; color: var(--ink-muted); line-height: 1.45; }
+  .ex { margin-top: 10px; font: 500 12.5px/1.4 'JetBrains Mono'; color: #0f172a; background: #f1f5f9; border-radius: 8px; padding: 6px 8px; }
+</style>
+</head>
+<body class="light">
+  <h2>"Timeout" is really four different timers</h2>
+  <p class="lead">One request, from opening the connection to the end of the job around it.</p>
+  <div class="track">
+    <div class="seg s1">connect</div>
+    <div class="seg s2">wait</div>
+    <div class="seg s3">data arriving · data arriving · data arriving</div>
+    <div class="seg s4">rest of the job</div>
+    <div class="brace" style="left:-4px; width:calc(70% + 4px); border-color:#0f172a"></div>
+  </div>
+  <div class="grid">
+    <div class="cell"><h3><span class="tag" style="background:#3b82f6"></span>Connect</h3><p>Time to open the connection. Keep it short.</p><div class="ex">connectTimeout(5)</div></div>
+    <div class="cell"><h3><span class="tag" style="background:#14b8a6"></span>Read / idle</h3><p>Time <b>between</b> bytes. Resets when data arrives, so a slow trickle never trips it.</p><div class="ex">timeout=(3.05, 27)</div></div>
+    <div class="cell"><h3><span class="tag" style="background:#0f172a"></span>Total deadline</h3><p>The whole request, start to finish, no matter what. Often the one that's missing.</p><div class="ex">AbortSignal.timeout(5000)</div></div>
+    <div class="cell"><h3><span class="tag" style="background:#94a3b8"></span>Job / worker</h3><p>The whole unit of work. The last line of defense around everything inside.</p><div class="ex">public $timeout = 600;</div></div>
+  </div>
+</body>
+</html>

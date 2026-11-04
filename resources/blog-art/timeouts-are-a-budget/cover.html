@@ -1,0 +1,83 @@
+<!-- size: 1200x630 -->
+<!doctype html>
+<html style="--w:1200px; --h:630px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<link rel="stylesheet" href="../_sketch.css">
+</head>
+<body class="sketch">
+  <svg class="ink" viewBox="0 0 1200 630" width="1200" height="630">
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+    <filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="19"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+
+    <g fill="none" stroke="#111" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Stopwatch (top left) -->
+      <g transform="translate(200 150) rotate(-8)" filter="url(#rough)">
+        <circle cx="0" cy="0" r="92" stroke-width="5"/>
+        <circle cx="0" cy="0" r="85" stroke-width="1.6"/>
+        <rect x="-16" y="-122" width="32" height="22" rx="5" stroke-width="4"/>
+        <path d="M0 -100 V-92" stroke-width="5"/>
+        <path d="M64 -78 L80 -94" stroke-width="5"/>
+        <!-- ticks -->
+        <path d="M0 -72 V-60 M72 0 H60 M0 72 V60 M-72 0 H-60" stroke-width="3.4"/>
+        <!-- spent budget wedge -->
+        <path d="M0 0 L0 -56 A56 56 0 0 1 48 28 Z" stroke="#b91c1c" stroke-width="3" fill="rgba(185,28,28,.10)"/>
+        <path d="M0 0 L40 24" stroke-width="5"/>
+        <circle cx="0" cy="0" r="6" stroke-width="4"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M60 120 L84 128"/><path d="M56 160 L82 158"/><path d="M66 198 L88 188"/>
+      </g>
+
+      <!-- Squiggle arrow -->
+      <g stroke-width="3.4" filter="url(#rough2)">
+        <path d="M330 120 C 380 70, 440 80, 470 116 S 540 160, 580 120 S 650 80, 700 96"/>
+        <path d="M676 76 L702 96 L674 114"/>
+      </g>
+
+      <!-- Retry loops (middle top) -->
+      <g transform="translate(560 40)" stroke-width="2.6" filter="url(#rough2)">
+        <path d="M0 40 C -10 10, 30 -4, 44 20 C 54 40, 26 54, 16 36"/>
+        <path d="M70 34 C 60 4, 100 -10, 114 14 C 124 34, 96 48, 86 30"/>
+        <path d="M140 28 C 130 -2, 170 -16, 184 8 C 194 28, 166 42, 156 24"/>
+      </g>
+
+      <!-- Unplugged cable (top right) -->
+      <g transform="translate(880 120) rotate(10)" filter="url(#rough)">
+        <path d="M-120 60 C -80 60, -70 0, -30 0" stroke-width="5"/>
+        <rect x="-30" y="-24" width="56" height="48" rx="8" stroke-width="5"/>
+        <path d="M26 -10 H48 M26 10 H48" stroke-width="5"/>
+        <rect x="96" y="-30" width="60" height="60" rx="10" stroke-width="5"/>
+        <path d="M156 0 C 196 0, 200 70, 250 70" stroke-width="5"/>
+        <path d="M110 -10 H96 M110 10 H96" stroke-width="3"/>
+        <!-- spark gap -->
+        <path d="M62 -36 L70 -22 L60 -16 L72 -2" stroke="#b91c1c" stroke-width="3.4"/>
+        <path d="M80 30 L86 44 M60 36 L56 50" stroke="#b91c1c" stroke-width="3"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M1130 260 L1160 252"/><path d="M1126 290 L1152 298"/>
+      </g>
+
+      <!-- Hourglass (bottom left) -->
+      <g transform="translate(120 470) rotate(-12)" filter="url(#rough)">
+        <path d="M-40 -60 H40 M-40 60 H40" stroke-width="5"/>
+        <path d="M-32 -60 C -32 -20, 0 -10, 0 0 C 0 10, -32 20, -32 60" stroke-width="4"/>
+        <path d="M32 -60 C 32 -20, 0 -10, 0 0 C 0 10, 32 20, 32 60" stroke-width="4"/>
+        <path d="M-18 48 C -8 36, 8 36, 18 48 Z" stroke-width="2.6" fill="rgba(15,118,110,.18)" stroke="#0f766e"/>
+        <path d="M0 4 V40" stroke="#0f766e" stroke-width="2"/>
+      </g>
+
+      <!-- Swooshes (bottom) -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M1150 420 C 1180 480, 1170 540, 1110 552 C 1050 564, 1050 498, 1090 494 C 1130 490, 1140 556, 1080 604"/>
+        <path d="M300 566 C 460 540, 640 548, 760 560 S 900 572, 960 548"/>
+        <path d="M330 580 C 480 560, 640 566, 760 574" stroke-width="1.6"/>
+      </g>
+    </g>
+  </svg>
+
+  <h1 class="sketch-title" style="top: 262px">Timeouts Are a Budget,<br>Not a Number</h1>
+  <p class="sketch-sub" style="top: 462px">every retry and every layer spends from it</p>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!-- size: 1200x450 -->
+<!doctype html>
+<html style="--w:1200px; --h:450px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 28px; }
+  .col { background: #fff; border: 2px solid var(--border); border-radius: 18px; padding: 20px 22px; }
+  .col.good { border-color: #99f6e4; background: #f0fdfa; }
+  .col h3 { font-size: 19px; font-weight: 800; margin-bottom: 16px; }
+  .col.bad h3 { color: #b91c1c; } .col.good h3 { color: #0f766e; }
+  .msg { display: flex; align-items: center; gap: 10px; margin: 10px 0; font: 500 14px 'JetBrains Mono'; }
+  .who { width: 84px; font: 700 13px Inter; color: var(--ink-muted); }
+  .line { flex: 1; height: 2px; background: #94a3b8; position: relative; }
+  .line.long { background: repeating-linear-gradient(90deg, #f87171 0 10px, transparent 10px 16px); }
+  .line::after { content: ""; position: absolute; right: -2px; top: -5px; border: 6px solid transparent; border-left: 9px solid #94a3b8; }
+  .line.long::after { border-left-color: #f87171; }
+  .lab { min-width: 210px; }
+  .err { margin-top: 14px; background: #fef2f2; color: #b91c1c; border-radius: 10px; padding: 10px 12px; font: 600 14px 'JetBrains Mono'; }
+  .ok { margin-top: 14px; background: #fff; color: #0f766e; border: 1.5px solid #99f6e4; border-radius: 10px; padding: 10px 12px; font-size: 14.5px; }
+</style>
+</head>
+<body class="light">
+  <h2>Short requests, long jobs</h2>
+  <p class="lead">If the work takes minutes, don't hold an HTTP request open for it.</p>
+  <div class="cols">
+    <div class="col bad">
+      <h3>Wait inside the request</h3>
+      <div class="msg"><span class="who">Browser</span><span class="line"></span><span class="lab">POST /extract</span></div>
+      <div class="msg"><span class="who">Server</span><span class="line long"></span><span class="lab">working… 60s… 90s…</span></div>
+      <div class="msg"><span class="who">Proxy</span><span class="line"></span><span class="lab">gives up</span></div>
+      <div class="err">504 Gateway Timeout</div>
+    </div>
+    <div class="col good">
+      <h3>Queue it and poll</h3>
+      <div class="msg"><span class="who">Browser</span><span class="line"></span><span class="lab">POST /extract</span></div>
+      <div class="msg"><span class="who">Server</span><span class="line"></span><span class="lab">202 Accepted · id 42</span></div>
+      <div class="msg"><span class="who">Worker</span><span class="line"></span><span class="lab">does the slow part</span></div>
+      <div class="msg"><span class="who">Browser</span><span class="line"></span><span class="lab">GET /status/42 every few s</span></div>
+      <div class="ok">Every request is short. Failures show up as a status, not a blank gateway error.</div>
+    </div>
+  </div>
+</body>
+</html>
