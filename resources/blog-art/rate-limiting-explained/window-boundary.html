@@ -1,0 +1,40 @@
+<!-- size: 1200x470 -->
+<!doctype html>
+<html style="--w:1200px; --h:470px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .timeline { position: relative; margin-top: 40px; height: 170px; }
+  .win { position: absolute; top: 20px; height: 100px; border: 2px solid #cbd5e1; background: #fff; border-radius: 14px; }
+  .win span { position: absolute; top: -26px; left: 8px; font: 600 13px 'JetBrains Mono'; color: var(--ink-muted); }
+  .win b { position: absolute; bottom: 8px; right: 12px; font: 700 14px 'JetBrains Mono'; color: #0f766e; }
+  .req { position: absolute; top: 52px; width: 10px; height: 36px; border-radius: 4px; background: #3b82f6; }
+  .slide { position: absolute; top: 4px; height: 132px; border: 2.5px dashed #b91c1c; border-radius: 16px; background: rgba(254,226,226,.35); }
+  .slide span { position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 700 14px Inter; color: #b91c1c; }
+  .ticks { position: absolute; top: 128px; left: 0; right: 0; display: flex; justify-content: space-between; font: 500 12.5px 'JetBrains Mono'; color: #94a3b8; }
+  .note { margin-top: 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .n { border-radius: 14px; padding: 14px 18px; font-size: 15px; line-height: 1.45; }
+  .n1 { background: #fef2f2; border: 2px solid #fecaca; color: #7f1d1d; }
+  .n2 { background: #f0fdfa; border: 2px solid #99f6e4; color: #134e4a; }
+</style>
+</head>
+<body class="light">
+  <h2>The fixed-window boundary problem</h2>
+  <p class="lead">Limit: 5 requests per minute.</p>
+  <div class="timeline">
+    <div class="win" style="left:0; width:49.5%"><span>12:00:00 – 12:00:59</span><b style="right:auto;left:12px">5 / 5 ✓</b></div>
+    <div class="win" style="left:50.5%; width:49.5%"><span style="left:auto;right:8px">12:01:00 – 12:01:59</span><b>5 / 5 ✓</b></div>
+    <div class="req" style="left:42%"></div><div class="req" style="left:43.4%"></div><div class="req" style="left:44.8%"></div><div class="req" style="left:46.2%"></div><div class="req" style="left:47.6%"></div>
+    <div class="req" style="left:51.6%"></div><div class="req" style="left:53%"></div><div class="req" style="left:54.4%"></div><div class="req" style="left:55.8%"></div><div class="req" style="left:57.2%"></div>
+    <div class="slide" style="left:40.5%; width:18.5%"><span>10 requests in ~2 seconds</span></div>
+  </div>
+  <div class="note">
+    <div class="n n1"><b>Fixed window:</b> each minute is counted on its own, so both bursts pass. Double the limit, right at the edge.</div>
+    <div class="n n2"><b>Sliding window or token bucket:</b> looks at the last 60 seconds from now, so the second burst is rejected.</div>
+  </div>
+</body>
+</html>

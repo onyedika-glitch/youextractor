@@ -1,0 +1,46 @@
+<!-- size: 1200x440 -->
+<!doctype html>
+<html style="--w:1200px; --h:440px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .wrap { display: grid; grid-template-columns: 560px 1fr; gap: 30px; margin-top: 26px; }
+  .term { background: var(--navy); color: var(--text); border-radius: 16px; padding: 22px 24px; font: 500 15px/1.75 'JetBrains Mono'; }
+  .term .st { color: #fca5a5; font-weight: 700; }
+  .term .h { color: #5eead4; }
+  .term .v { color: #e8eefc; }
+  .term .j { color: #c4b5fd; }
+  .term .m { color: #8ea0c2; }
+  .notes { display: flex; flex-direction: column; gap: 12px; }
+  .n { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 14px; font-size: 15px; color: var(--ink-muted); line-height: 1.4; }
+  .n i { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 800 13px Inter; color: #fff; font-style: normal; }
+  .n b { color: var(--ink); }
+</style>
+</head>
+<body class="light">
+  <h2>A 429 that clients can actually use</h2>
+  <p class="lead">Say what happened, when to come back, and how much room is left.</p>
+  <div class="wrap">
+    <div class="term">
+<span class="st">HTTP/1.1 429 Too Many Requests</span><br>
+<span class="h">Retry-After:</span> <span class="v">40</span><br>
+<span class="h">X-RateLimit-Limit:</span> <span class="v">3</span><br>
+<span class="h">X-RateLimit-Remaining:</span> <span class="v">0</span><br>
+<span class="m">Content-Type: application/json</span><br>
+<br>
+<span class="j">{ "error": "You can start 3 extractions</span><br>
+<span class="j">&nbsp;&nbsp;per minute. Try again in 40 seconds." }</span>
+    </div>
+    <div class="notes">
+      <div class="n"><i style="background:#b91c1c">1</i><div><b>429, not 503.</b> 503 looks like your server is down.</div></div>
+      <div class="n"><i style="background:#0d9488">2</i><div><b>Retry-After</b> in seconds. Good clients wait exactly this long.</div></div>
+      <div class="n"><i style="background:#0d9488">3</i><div><b>Limit and remaining</b>, so clients slow down before they hit the wall.</div></div>
+      <div class="n"><i style="background:#7c3aed">4</i><div><b>A human message</b> your UI can show with a countdown.</div></div>
+    </div>
+  </div>
+</body>
+</html>

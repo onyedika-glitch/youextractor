@@ -1,0 +1,39 @@
+<!-- size: 1200x400 -->
+<!doctype html>
+<html style="--w:1200px; --h:400px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .row { display: flex; align-items: stretch; margin-top: 30px; }
+  .box { flex: 1; background: #fff; border: 2px solid var(--border); border-radius: 16px; padding: 18px; }
+  .box .tag { font: 700 12px 'JetBrains Mono'; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-muted); }
+  .box h3 { font-size: 19px; margin: 8px 0 8px; }
+  .box p { font-size: 14.5px; color: var(--ink-muted); line-height: 1.45; }
+  .box code { font: 500 12.5px 'JetBrains Mono'; background: #f1f5f9; border-radius: 6px; padding: 2px 6px; color: #0f172a; }
+  .arr { width: 40px; display: grid; place-items: center; color: #94a3b8; font-size: 26px; font-weight: 700; }
+  .box.api { background: var(--navy); border-color: var(--navy); color: var(--text); }
+  .box.api .tag { color: var(--muted); } .box.api p { color: #c7d2ea; }
+  .box.api code { background: rgba(255,255,255,.1); color: #5eead4; }
+  .foot { margin-top: 22px; background: #fef2f2; border: 2px solid #fecaca; border-radius: 14px; padding: 14px 18px; font-size: 15.5px; color: #7f1d1d; }
+  .foot b { color: #b91c1c; }
+</style>
+</head>
+<body class="light">
+  <h2>Being a good client of someone else's API</h2>
+  <p class="lead">The best 429 is the one you never trigger.</p>
+  <div class="row">
+    <div class="box"><div class="tag">Your users</div><h3>Many clicks</h3><p>Bursty, unpredictable, sometimes all at once.</p></div>
+    <div class="arr">→</div>
+    <div class="box"><div class="tag">Your queue</div><h3>Steady pace</h3><p>A fixed number of workers. <b>Worker count is a rate limit.</b></p></div>
+    <div class="arr">→</div>
+    <div class="box"><div class="tag">Your client</div><h3>Read the headers</h3><p>Slow down when <code>remaining</code> gets low. On 429, wait <code>Retry-After</code> + jitter.</p></div>
+    <div class="arr">→</div>
+    <div class="box api"><div class="tag">AI provider</div><h3>Their limits</h3><p>Requests per minute <b>and</b> tokens per minute.</p></div>
+  </div>
+  <div class="foot"><b>Never retry</b> a 400 or 401: it will fail the same way every time. Cap attempts, and count every retry against your <b>time budget</b>.</div>
+</body>
+</html>

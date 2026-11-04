@@ -1,0 +1,51 @@
+<!-- size: 1200x470 -->
+<!doctype html>
+<html style="--w:1200px; --h:470px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; display: grid; grid-template-columns: 420px 1fr; gap: 40px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  svg text { font-family: 'JetBrains Mono'; }
+  .steps { margin-top: 26px; display: flex; flex-direction: column; gap: 12px; }
+  .s { background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px; display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 12px; }
+  .s b { font: 700 14px 'JetBrains Mono'; }
+  .s p { font-size: 15px; color: var(--ink-muted); line-height: 1.4; }
+  .tk { display: inline-flex; gap: 4px; }
+  .tk i { width: 10px; height: 10px; border-radius: 50%; background: #14b8a6; display: inline-block; }
+  .tk i.e { background: #e2e8f0; }
+</style>
+</head>
+<body class="light">
+  <div>
+    <h2>Token bucket</h2>
+    <p class="lead">Two settings: burst size and refill rate.</p>
+    <svg viewBox="0 0 420 300" width="420" height="300" style="margin-top:14px">
+      <path d="M190 18 h60 v26 h-14" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="236" cy="60" r="6" fill="#14b8a6"/>
+      <text x="262" y="66" font-size="14" fill="#0f766e" font-weight="700">+1 token / 6s</text>
+      <path d="M100 90 L124 270 H316 L340 90" fill="#f8fafc" stroke="#0f172a" stroke-width="5" stroke-linejoin="round"/>
+      <ellipse cx="220" cy="90" rx="120" ry="16" fill="#fff" stroke="#0f172a" stroke-width="5"/>
+      <g fill="#14b8a6" stroke="#0f766e" stroke-width="2">
+        <circle cx="160" cy="246" r="16"/><circle cx="198" cy="248" r="16"/><circle cx="236" cy="248" r="16"/><circle cx="274" cy="246" r="16"/>
+        <circle cx="178" cy="214" r="16"/><circle cx="216" cy="216" r="16"/><circle cx="254" cy="214" r="16"/>
+        <circle cx="196" cy="182" r="16"/><circle cx="234" cy="182" r="16"/>
+        <circle cx="216" cy="150" r="16"/>
+      </g>
+      <text x="40" y="180" font-size="14" fill="#475569" font-weight="700">holds 10</text>
+      <path d="M340 230 C 370 230, 380 250, 400 250" fill="none" stroke="#3b82f6" stroke-width="3"/>
+      <text x="410" y="292" text-anchor="end" font-size="14" fill="#1d4ed8" font-weight="700">−1 per request</text>
+    </svg>
+  </div>
+  <div style="padding-top: 40px">
+    <div class="steps">
+      <div class="s"><b>Full</b><p>A user opens a page and fires 6 requests at once. All pass. <span class="tk"><i></i><i></i><i></i><i></i><i class="e"></i><i class="e"></i><i class="e"></i><i class="e"></i><i class="e"></i><i class="e"></i></span></p></div>
+      <div class="s"><b>Quiet</b><p>Nothing for a minute. Tokens drip back in until the bucket is full again.</p></div>
+      <div class="s"><b>Script</b><p>Nonstop requests empty the bucket. After that, only 1 every 6 seconds gets through.</p></div>
+      <div class="s"><b>Settings</b><p>Bucket size = biggest burst you allow. Refill rate = long-term average.</p></div>
+    </div>
+  </div>
+</body>
+</html>

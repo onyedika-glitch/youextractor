@@ -1,0 +1,80 @@
+<!-- size: 1200x630 -->
+<!doctype html>
+<html style="--w:1200px; --h:630px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<link rel="stylesheet" href="../_sketch.css">
+</head>
+<body class="sketch">
+  <svg class="ink" viewBox="0 0 1200 630" width="1200" height="630">
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+    <filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="31"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+
+    <g fill="none" stroke="#111" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Token bucket (top left) -->
+      <g transform="translate(190 60) rotate(-6)" filter="url(#rough)">
+        <!-- dripping tap -->
+        <path d="M-10 0 H40 V24 H28" stroke-width="5"/>
+        <path d="M28 34 C 24 44, 32 44, 28 34" stroke="#0f766e" stroke-width="3"/>
+        <path d="M28 58 C 24 68, 32 68, 28 58" stroke="#0f766e" stroke-width="3"/>
+        <!-- bucket -->
+        <path d="M-60 84 L-40 230 H96 L116 84" stroke-width="5"/>
+        <ellipse cx="28" cy="84" rx="88" ry="16" stroke-width="5"/>
+        <ellipse cx="28" cy="84" rx="82" ry="12" stroke-width="1.6"/>
+        <!-- tokens -->
+        <circle cx="-8" cy="196" r="15" stroke-width="3.4"/>
+        <circle cx="28" cy="200" r="15" stroke-width="3.4"/>
+        <circle cx="64" cy="196" r="15" stroke-width="3.4"/>
+        <circle cx="10" cy="164" r="15" stroke-width="3.4"/>
+        <circle cx="46" cy="166" r="15" stroke-width="3.4"/>
+        <path d="M-12 196 h8 M24 200 h8 M60 196 h8 M6 164 h8 M42 166 h8" stroke-width="2.4"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M60 110 L86 120"/><path d="M54 150 L82 148"/>
+      </g>
+
+      <!-- Arrows funnelling (middle top) -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M400 60 C 470 70, 520 100, 560 140"/>
+        <path d="M400 110 C 470 112, 520 124, 560 146"/>
+        <path d="M400 160 C 470 150, 520 150, 560 152"/>
+        <path d="M400 210 C 470 190, 520 170, 560 158"/>
+        <!-- funnel -->
+        <path d="M560 90 L640 140 L640 166 L560 214 Z" stroke-width="4.4"/>
+        <path d="M640 153 C 690 153, 720 150, 770 140" stroke-width="3.6"/>
+        <path d="M748 124 L774 140 L750 158" stroke-width="3.6"/>
+      </g>
+
+      <!-- Stop sign 429 (top right) -->
+      <g transform="translate(940 150) rotate(8)" filter="url(#rough)">
+        <path d="M-38 -92 H38 L92 -38 V38 L38 92 H-38 L-92 38 V-38 Z" stroke="#b91c1c" stroke-width="6"/>
+        <path d="M-32 -82 H32 L82 -32 V32 L32 82 H-32 L-82 32 V-32 Z" stroke="#b91c1c" stroke-width="1.8"/>
+        <path d="M184 120 V 230" stroke-width="5" transform="translate(-184 -28)"/>
+      </g>
+      <text x="940" y="168" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="64" fill="#b91c1c" transform="rotate(8 940 150)">429</text>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M1110 80 L1136 66"/><path d="M1120 120 L1150 116"/><path d="M1112 160 L1140 170"/>
+      </g>
+
+      <!-- Clock with refill arrow (bottom left) -->
+      <g transform="translate(110 488)" filter="url(#rough)">
+        <circle cx="0" cy="0" r="48" stroke-width="4.4"/>
+        <path d="M0 0 V-30 M0 0 L22 12" stroke-width="4"/>
+        <path d="M60 -30 C 80 0, 70 40, 40 60" stroke="#0f766e" stroke-width="3.4"/>
+        <path d="M52 66 L38 62 L44 48" stroke="#0f766e" stroke-width="3.4"/>
+      </g>
+
+      <!-- Swooshes (bottom) -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M1150 420 C 1180 480, 1170 540, 1110 552 C 1050 564, 1050 498, 1090 494 C 1130 490, 1140 556, 1080 604"/>
+        <path d="M300 566 C 460 540, 640 548, 760 560 S 900 572, 960 548"/>
+        <path d="M330 580 C 480 560, 640 566, 760 574" stroke-width="1.6"/>
+      </g>
+    </g>
+  </svg>
+
+  <h1 class="sketch-title" style="top: 282px">Rate Limiting,<br>From Both Sides</h1>
+  <p class="sketch-sub" style="top: 472px">protect your API, respect someone else's</p>
+</body>
+</html>

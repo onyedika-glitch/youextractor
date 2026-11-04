@@ -1,0 +1,49 @@
+<!-- size: 1200x450 -->
+<!doctype html>
+<html style="--w:1200px; --h:450px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 26px; }
+  .col { border-radius: 18px; padding: 18px 20px; border: 2px solid; }
+  .bad { background: #fff; border-color: #fecaca; }
+  .good { background: #f0fdfa; border-color: #99f6e4; }
+  .col h3 { font-size: 19px; font-weight: 800; margin-bottom: 14px; }
+  .bad h3 { color: #b91c1c; } .good h3 { color: #0f766e; }
+  .lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .lane h4 { font: 700 13px 'JetBrains Mono'; color: var(--ink-muted); margin-bottom: 8px; }
+  .st { font: 500 13.5px 'JetBrains Mono'; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 9px; padding: 7px 9px; margin-bottom: 7px; }
+  .st.ok { background: #ccfbf1; border-color: #5eead4; }
+  .st.no { background: #fee2e2; border-color: #fca5a5; }
+  .st.wait { background: #fff; border-style: dashed; color: #64748b; }
+  .res { margin-top: 10px; font-size: 15px; font-weight: 600; }
+  .bad .res { color: #b91c1c; } .good .res { color: #0f766e; }
+</style>
+</head>
+<body class="light">
+  <h2>Two requests, one free extraction</h2>
+  <p class="lead">A double click or a script sends both at the same moment.</p>
+  <div class="cols">
+    <div class="col bad">
+      <h3>Check, then act</h3>
+      <div class="lanes">
+        <div class="lane"><h4>Request A</h4><div class="st">check: 1 left</div><div class="st ok">start work</div><div class="st">mark used</div></div>
+        <div class="lane"><h4>Request B</h4><div class="st">check: 1 left</div><div class="st ok">start work</div><div class="st">mark used</div></div>
+      </div>
+      <div class="res">Both win. Two extractions for the price of none.</div>
+    </div>
+    <div class="col good">
+      <h3>Reserve first, inside a lock</h3>
+      <div class="lanes">
+        <div class="lane"><h4>Request A</h4><div class="st">lock row</div><div class="st ok">1 left → take it</div><div class="st">commit, start work</div></div>
+        <div class="lane"><h4>Request B</h4><div class="st wait">waits for lock…</div><div class="st no">0 left → reject</div><div class="st wait">—</div></div>
+      </div>
+      <div class="res">One wins. If A's job fails, the slot is given back.</div>
+    </div>
+  </div>
+</body>
+</html>
