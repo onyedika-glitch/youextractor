@@ -170,16 +170,32 @@ A few rules that would have prevented most of my problems:
 
 ```php
 // Retry only temporary failures, with backoff, and stay inside the budget.
-Http::connectTimeout(5)
-    ->timeout((int) min(remaining($deadline) - 5, 150))
-    ->retry(
-        [1000, 3000],          // wait 1s, then 3s
-        when: fn ($e) => $e instanceof ConnectionException
-            || in_array($e->response?->status(), [429, 502, 503, 504]),
-        throw: false,
-    )
-    ->post($url, $payload);
+// The time left is recomputed before every attempt, after the backoff.
+foreach ([0, 1000, 3000] as $delayMs) {
+    usleep($delayMs * 1000);
+
+    $left = remaining($deadline) - 5;
+    if ($left < 5) {
+        break; // budget gone, stop retrying
+    }
+
+    try {
+        $response = Http::connectTimeout(5)
+            ->timeout((int) min($left, 150))
+            ->post($url, $payload);
+    } catch (ConnectionException $e) {
+        continue; // temporary, try again
+    }
+
+    if (! in_array($response->status(), [429, 502, 503, 504])) {
+        return $response; // success, or an error not worth retrying
+    }
+}
+
+throw new RuntimeException('Out of time budget, failing fast.');
 ```
+
+Thanks to a reader for pointing out that an earlier version calculated the timeout only once, so retries could run past the deadline.
 
 ## How to pick the actual numbers
 
