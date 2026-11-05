@@ -1,0 +1,49 @@
+<!-- size: 1200x430 -->
+<!doctype html>
+<html style="--w:1200px; --h:430px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+  .col { background: #fff; border: 2px solid var(--border); border-radius: 18px; padding: 18px 20px 14px; }
+  .col h3 { font-size: 18px; font-weight: 800; }
+  .bad h3 { color: #b91c1c; } .good h3 { color: #0f766e; }
+  .col p { font-size: 14px; color: var(--ink-muted); margin-top: 2px; }
+  .chart { height: 170px; margin-top: 14px; display: flex; align-items: flex-end; gap: 3px; border-bottom: 2px solid #cbd5e1; position: relative; }
+  .chart i { flex: 1; border-radius: 3px 3px 0 0; display: block; }
+  .bad .chart i { background: #f87171; }
+  .good .chart i { background: #14b8a6; }
+  .axis { display: flex; justify-content: space-between; font: 500 12.5px 'JetBrains Mono'; color: #94a3b8; margin-top: 6px; }
+  .cap { position: absolute; left: 0; right: 0; border-top: 2px dashed #64748b; font: 600 12px 'JetBrains Mono'; color: #475569; }
+  .cap span { position: absolute; left: 0; top: -20px; background: #fff; padding-right: 6px; }
+</style>
+</head>
+<body class="light">
+  <h2>Why backoff needs jitter</h2>
+  <p class="lead">1,000 clients fail at the same moment and retry with backoff.</p>
+  <div class="cols">
+    <div class="col bad"><h3>Backoff only</h3><p>Everyone waits exactly 1s, 2s, 4s, and comes back together.</p>
+      <div class="chart" id="a"><div class="cap" style="bottom:56px"><span>capacity</span></div></div>
+      <div class="axis"><span>0s</span><span>2s</span><span>4s</span><span>6s</span><span>8s</span></div></div>
+    <div class="col good"><h3>Backoff + full jitter</h3><p>Each wait is random between 0 and the backoff, so retries spread out.</p>
+      <div class="chart" id="b"><div class="cap" style="bottom:56px"><span>capacity</span></div></div>
+      <div class="axis"><span>0s</span><span>2s</span><span>4s</span><span>6s</span><span>8s</span></div></div>
+  </div>
+<script>
+  const N = 40;
+  const a = document.getElementById('a'), b = document.getElementById('b');
+  for (let i = 0; i < N; i++) {
+    const t = i / N * 8;
+    let h = 3;
+    if (Math.abs(t - 1) < 0.15) h = 160; else if (Math.abs(t - 3) < 0.15) h = 120; else if (Math.abs(t - 7) < 0.15) h = 80;
+    const e = document.createElement('i'); e.style.height = h + 'px'; a.appendChild(e);
+    const g = [42,44,40,46,43,45,41,44,38,36,37,35,34,36,33,35,30,28,29,27,26,28,25,24,22,21,20,21,19,18,17,18,16,15,14,15,13,12,12,11][i];
+    const f = document.createElement('i'); f.style.height = g + 'px'; b.appendChild(f);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!-- size: 1200x420 -->
+<!doctype html>
+<html style="--w:1200px; --h:420px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .seq { margin-top: 26px; display: grid; grid-template-columns: 140px 1fr 140px 360px; row-gap: 12px; align-items: center; }
+  .actor { font: 800 15px Inter; text-align: center; background: #0f172a; color: #fff; border-radius: 10px; padding: 8px 0; }
+  .actor.s { background: #0d9488; }
+  .msg { position: relative; height: 34px; display: flex; align-items: center; justify-content: center; font: 600 14px 'JetBrains Mono'; }
+  .msg::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: #94a3b8; }
+  .msg.r::after { content: ""; position: absolute; right: -2px; top: calc(50% - 6px); border: 6px solid transparent; border-left: 10px solid #94a3b8; }
+  .msg.l::after { content: ""; position: absolute; left: -2px; top: calc(50% - 6px); border: 6px solid transparent; border-right: 10px solid #94a3b8; }
+  .msg span { position: relative; background: var(--paper); padding: 0 10px; }
+  .msg.lost::before { background: repeating-linear-gradient(90deg, #f87171 0 8px, transparent 8px 14px); }
+  .msg.lost::after { border-right-color: #f87171; }
+  .msg.lost span { color: #b91c1c; }
+  .note { font-size: 14.5px; color: var(--ink-muted); padding-left: 18px; line-height: 1.35; }
+  .note b { color: var(--ink); }
+  .store { font: 600 13px 'JetBrains Mono'; background: #ccfbf1; color: #0f766e; border-radius: 8px; padding: 4px 8px; }
+  .hl { grid-column: 1 / -1; margin-top: 8px; background: #f0fdfa; border: 2px solid #99f6e4; border-radius: 14px; padding: 12px 16px; font-size: 15.5px; color: #134e4a; }
+</style>
+</head>
+<body class="light">
+  <h2>An idempotency key makes a retry safe</h2>
+  <p class="lead">The key belongs to the operation, not to each attempt.</p>
+  <div class="seq">
+    <div class="actor">Client</div><div class="msg r"><span>POST /charge · key abc-123</span></div><div class="actor s">Server</div><div class="note">charges the card, saves <span class="store">abc-123 → done</span></div>
+    <div class="actor">Client</div><div class="msg l lost"><span>response lost (timeout)</span></div><div class="actor s">Server</div><div class="note">client doesn't know if it worked</div>
+    <div class="actor">Client</div><div class="msg r"><span>retry · same key abc-123</span></div><div class="actor s">Server</div><div class="note">finds <span class="store">abc-123</span> already done</div>
+    <div class="actor">Client</div><div class="msg l"><span>same result, no new charge</span></div><div class="actor s">Server</div><div class="note"><b>Charged once.</b></div>
+    <div class="hl">Check and save the key in <b>one atomic step</b> (unique index or row lock), or two attempts at once can both get through.</div>
+  </div>
+</body>
+</html>

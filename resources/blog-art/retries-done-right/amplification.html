@@ -1,0 +1,42 @@
+<!-- size: 1200x420 -->
+<!doctype html>
+<html style="--w:1200px; --h:420px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .rows { margin-top: 26px; display: flex; flex-direction: column; gap: 14px; }
+  .row { display: grid; grid-template-columns: 200px 1fr 110px; align-items: center; gap: 18px; }
+  .lab h3 { font-size: 17px; font-weight: 700; } .lab p { font-size: 13.5px; color: var(--ink-muted); }
+  .dots { display: flex; flex-wrap: wrap; gap: 5px; }
+  .dots i { width: 22px; height: 22px; border-radius: 6px; display: block; }
+  .n { font: 800 26px 'JetBrains Mono'; text-align: right; }
+  .foot { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .f { border-radius: 14px; padding: 13px 16px; font-size: 15px; line-height: 1.4; }
+  .f1 { background: #fef2f2; border: 2px solid #fecaca; color: #7f1d1d; }
+  .f2 { background: #f0fdfa; border: 2px solid #99f6e4; color: #134e4a; }
+</style>
+</head>
+<body class="light">
+  <h2>Retries at every layer multiply</h2>
+  <p class="lead">Three layers, each trying 3 times, all calling the same struggling database.</p>
+  <div class="rows">
+    <div class="row"><div class="lab"><h3>Browser</h3><p>1 click, 3 tries</p></div><div class="dots" id="r1"></div><div class="n" style="color:#3b82f6">3</div></div>
+    <div class="row"><div class="lab"><h3>API</h3><p>3 tries per request</p></div><div class="dots" id="r2"></div><div class="n" style="color:#8b5cf6">9</div></div>
+    <div class="row"><div class="lab"><h3>Service → database</h3><p>3 tries per call</p></div><div class="dots" id="r3"></div><div class="n" style="color:#dc2626">27</div></div>
+  </div>
+  <div class="foot">
+    <div class="f f1"><b>One click, 27 calls</b> to the thing that's already failing because it's overloaded.</div>
+    <div class="f f2"><b>Retry at one layer only.</b> Every layer above passes the failure up.</div>
+  </div>
+<script>
+  [['r1',3,'#3b82f6'],['r2',9,'#8b5cf6'],['r3',27,'#dc2626']].forEach(([id,n,c])=>{
+    const el=document.getElementById(id);
+    for(let i=0;i<n;i++){const d=document.createElement('i');d.style.background=c;el.appendChild(d);}
+  });
+</script>
+</body>
+</html>

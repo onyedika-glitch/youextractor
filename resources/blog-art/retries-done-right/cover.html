@@ -1,0 +1,73 @@
+<!-- size: 1200x630 -->
+<!doctype html>
+<html style="--w:1200px; --h:630px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<link rel="stylesheet" href="../_sketch.css">
+</head>
+<body class="sketch">
+  <svg class="ink" viewBox="0 0 1200 630" width="1200" height="630">
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="13"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+    <filter id="rough2"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="41"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+
+    <g fill="none" stroke="#111" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Circular retry arrow (top left) -->
+      <g transform="translate(200 150)" filter="url(#rough)">
+        <path d="M70 -40 A80 80 0 1 0 78 24" stroke-width="6"/>
+        <path d="M48 -66 L74 -40 L44 -22" stroke-width="6"/>
+        <path d="M58 -30 A62 62 0 1 0 62 18" stroke-width="1.8"/>
+        <text x="0" y="16" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="48" fill="#111" stroke="none">×3</text>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M60 110 L86 120"/><path d="M54 150 L82 148"/><path d="M62 190 L88 180"/>
+      </g>
+
+      <!-- Staircase of growing waits (middle top) -->
+      <g transform="translate(400 210)" filter="url(#rough2)" stroke-width="4">
+        <path d="M0 0 H40 V-30 H110 V-70 H230 V-130 H330"/>
+        <path d="M0 14 H40" stroke-width="1.6"/>
+        <path d="M30 30 C 60 52, 110 52, 140 34" stroke="#0f766e" stroke-width="2.6"/>
+        <path d="M130 26 L142 34 L128 42" stroke="#0f766e" stroke-width="2.6"/>
+      </g>
+      <text x="404" y="196" font-family="Caveat, cursive" font-weight="700" font-size="30" fill="#0f766e">1s</text>
+      <text x="506" y="206" font-family="Caveat, cursive" font-weight="700" font-size="30" fill="#0f766e">2s</text>
+      <text x="600" y="166" font-family="Caveat, cursive" font-weight="700" font-size="30" fill="#0f766e">4s</text>
+      <text x="690" y="106" font-family="Caveat, cursive" font-weight="700" font-size="30" fill="#0f766e">8s</text>
+
+      <!-- Coins with check (top right) -->
+      <g transform="translate(930 150)" filter="url(#rough)">
+        <ellipse cx="0" cy="40" rx="70" ry="22" stroke-width="5"/>
+        <path d="M-70 40 V10 M70 40 V10" stroke-width="5"/>
+        <ellipse cx="0" cy="10" rx="70" ry="22" stroke-width="5"/>
+        <path d="M-70 10 V-20 M70 10 V-20" stroke-width="5"/>
+        <ellipse cx="0" cy="-20" rx="70" ry="22" stroke-width="5"/>
+        <ellipse cx="0" cy="-20" rx="56" ry="15" stroke-width="1.6"/>
+        <!-- crossed duplicate coin -->
+        <ellipse cx="140" cy="-60" rx="44" ry="15" stroke-width="3" stroke-dasharray="8 7"/>
+        <path d="M112 -86 L168 -34 M168 -86 L112 -34" stroke="#b91c1c" stroke-width="5"/>
+      </g>
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M1120 260 L1150 252"/><path d="M1118 292 L1144 300"/>
+      </g>
+
+      <!-- Key (bottom left) -->
+      <g transform="translate(110 480) rotate(-20)" filter="url(#rough)">
+        <circle cx="0" cy="0" r="30" stroke-width="4.4"/>
+        <circle cx="0" cy="0" r="10" stroke-width="3"/>
+        <path d="M30 0 H120 M90 0 V22 M110 0 V16" stroke-width="4.4"/>
+      </g>
+
+      <!-- Swooshes (bottom) -->
+      <g stroke-width="3" filter="url(#rough2)">
+        <path d="M1150 420 C 1180 480, 1170 540, 1110 552 C 1050 564, 1050 498, 1090 494 C 1130 490, 1140 556, 1080 604"/>
+        <path d="M300 566 C 460 540, 640 548, 760 560 S 900 572, 960 548"/>
+        <path d="M330 580 C 480 560, 640 566, 760 574" stroke-width="1.6"/>
+      </g>
+    </g>
+  </svg>
+
+  <h1 class="sketch-title" style="top: 282px">Retries Done Right</h1>
+  <p class="sketch-sub" style="top: 400px">when to retry, how to wait,<br>and how not to charge someone twice</p>
+</body>
+</html>

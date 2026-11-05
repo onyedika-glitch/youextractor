@@ -1,0 +1,39 @@
+<!-- size: 1200x410 -->
+<!doctype html>
+<html style="--w:1200px; --h:410px">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../_base.css">
+<style>
+  body { padding: 44px 52px; }
+  h2 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+  .lead { color: var(--ink-muted); font-size: 17px; margin-top: 6px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 28px; }
+  .cell { border-radius: 18px; padding: 20px; border: 2px solid; }
+  .g { background: #f0fdfa; border-color: #99f6e4; }
+  .r { background: #fef2f2; border-color: #fecaca; }
+  .a { background: #fffbeb; border-color: #fde68a; }
+  .v { font: 800 14px 'JetBrains Mono'; letter-spacing: .04em; text-transform: uppercase; }
+  .g .v { color: #0f766e; } .r .v { color: #b91c1c; } .a .v { color: #b45309; }
+  h3 { font-size: 21px; font-weight: 800; margin: 8px 0 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip { font: 600 13.5px 'JetBrains Mono'; background: #fff; border-radius: 8px; padding: 5px 9px; border: 1.5px solid #e2e8f0; }
+  p { margin-top: 14px; font-size: 15px; color: var(--ink-muted); line-height: 1.45; }
+</style>
+</head>
+<body class="light">
+  <h2>Should I retry this error?</h2>
+  <p class="lead">Sort the error first. The retry logic comes second.</p>
+  <div class="grid">
+    <div class="cell g"><span class="v">Retry</span><h3>Temporary</h3>
+      <div class="chips"><span class="chip">connection reset</span><span class="chip">429</span><span class="chip">502</span><span class="chip">503</span><span class="chip">504</span></div>
+      <p>Might work next time. Back off, add jitter, cap attempts.</p></div>
+    <div class="cell r"><span class="v">Don't retry</span><h3>Permanent</h3>
+      <div class="chips"><span class="chip">400</span><span class="chip">401</span><span class="chip">403</span><span class="chip">404</span><span class="chip">422</span></div>
+      <p>The request itself is wrong. It will fail the same way every time.</p></div>
+    <div class="cell a"><span class="v">Careful</span><h3>Ambiguous</h3>
+      <div class="chips"><span class="chip">timeout after sending</span><span class="chip">connection lost mid-reply</span></div>
+      <p>It may already have happened. Only retry if it's idempotent.</p></div>
+  </div>
+</body>
+</html>
