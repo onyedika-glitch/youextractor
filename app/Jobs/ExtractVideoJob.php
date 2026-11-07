@@ -170,7 +170,12 @@ class ExtractVideoJob implements ShouldQueue
             Log::info("[ExtractVideoJob] Attempting transcript fetch from youtube-transcript.ai for {$videoId}");
             $response = Http::timeout(25)
                 ->withoutVerifying()
+                ->when(config('services.youtube_transcript.key'), fn ($http, $key) => $http->withToken($key))
                 ->get("https://youtube-transcript.ai/transcript/{$videoId}.txt");
+
+            if (! $response->successful()) {
+                Log::warning("[ExtractVideoJob] youtube-transcript.ai returned HTTP {$response->status()} for {$videoId}");
+            }
 
             if ($response->successful() && strlen($response->body()) > 200) {
                 Log::info("[ExtractVideoJob] Successfully fetched transcript from youtube-transcript.ai for {$videoId} (length: " . strlen($response->body()) . ")");

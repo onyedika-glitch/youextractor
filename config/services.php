@@ -34,6 +34,9 @@ return [
         'webhook_secret' => env('BACHS_WEBHOOK_SECRET'),
         'currency' => env('BACHS_CURRENCY', 'USD'),
     ],
+    'youtube_transcript' => [
+        'key' => env('YOUTUBE_TRANSCRIPT_API_KEY'),
+    ],
 ];
 
 
