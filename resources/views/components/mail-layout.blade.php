@@ -4,7 +4,7 @@
     Inline styles + table layout for maximum email-client compatibility.
     Brand: teal (#14b8a6) accent on a clean light canvas.
 --}}
-@props(['title' => 'YouExtractor', 'preheader' => 'Turn programming video tutorials into structured code projects in seconds.'])
+@props(['title' => 'YouExtractor', 'preheader' => 'Turn programming video tutorials into structured code projects in seconds.', 'unsubscribeUrl' => null])
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -80,7 +80,11 @@
                             </p>
                             <p style="margin:0; font-size:11px; color:#cbd5e1; line-height:1.6;">
                                 You're receiving this email because you have a YouExtractor account.<br>
-                                <a href="https://youextractor.me/support" style="color:#94a3b8; text-decoration:underline;">Contact support</a>
+                                @if ($unsubscribeUrl)
+                                    <a href="{{ $unsubscribeUrl }}" style="color:#94a3b8; text-decoration:underline;">Unsubscribe from reminder emails</a>
+                                @else
+                                    <a href="https://youextractor.me/support" style="color:#94a3b8; text-decoration:underline;">Contact support</a>
+                                @endif
                             </p>
                         </td>
                     </tr>

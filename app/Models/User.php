@@ -27,6 +27,7 @@ class User extends Authenticatable
         'credits',
         'is_pro',
         'pro_until',
+        'email_reminders',
     ];
 
     /**
@@ -53,6 +54,7 @@ class User extends Authenticatable
             'pro_until' => 'datetime',
             'free_extractions_used' => 'integer',
             'credits' => 'integer',
+            'email_reminders' => 'boolean',
         ];
     }
 
@@ -174,4 +176,4 @@ class User extends Authenticatable
     {
         $this->consumeExtraction();
     }
-}
+}

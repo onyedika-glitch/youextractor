@@ -46,6 +46,7 @@ class Registry
         '/ai.txt' => 'machine file',
         '/payment/callback' => 'payment redirect',
         '/up' => 'health check',
+        '/unsubscribe/{user}' => 'signed email link',
     ];
 
     /** @var list<Renderer>|null */

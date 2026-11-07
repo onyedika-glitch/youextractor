@@ -82,6 +82,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/github/callback', [AuthController::class, 'handleGitHubCallback'])->name('auth.github.callback');
 });
 
+// Unsubscribe from reminder emails (signed link, no login needed)
+Route::match(['get', 'post'], '/unsubscribe/{user}', function (\App\Models\User $user) {
+    $user->forceFill(['email_reminders' => false])->save();
+    return response()->view('unsubscribed')->header('X-Robots-Tag', 'noindex');
+})->middleware('signed')->name('email.unsubscribe');
+
 /*
 |--------------------------------------------------------------------------
 | Protected Routes (require authentication)

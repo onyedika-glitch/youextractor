@@ -22,7 +22,7 @@ class SendDailyReminders extends Command
      *
      * @var string
      */
-    protected $description = 'Send the daily engagement reminder email to all registered users.';
+    protected $description = 'Send the reminder email to every user who has not unsubscribed (scheduled every 3 days).';
 
     /**
      * A rotating set of tips so the daily email stays fresh.
@@ -47,7 +47,7 @@ class SendDailyReminders extends Command
         // Pick today's tip deterministically so every user in a run gets the same one.
         $tip = $this->tips[(int) date('z') % count($this->tips)];
 
-        $query = User::query()->whereNotNull('email');
+        $query = User::query()->whereNotNull('email')->where('email_reminders', true);
         if ($limit > 0) {
             $query->limit($limit);
         }

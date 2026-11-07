@@ -4,7 +4,7 @@
     $showTip = $tip !== '' ? $tip : $defaultTip;
 @endphp
 
-<x-mail-layout :title="'Your daily YouExtractor reminder'" :preheader="'A quick nudge — turn today\'s tutorial into real, running code.'">
+<x-mail-layout :title="'Your YouExtractor reminder'" :preheader="'A quick nudge — turn your next tutorial into real, running code.'" :unsubscribe-url="$unsubscribeUrl">
 
 <h1 style="margin:0 0 8px 0; font-size:24px; line-height:1.3; font-weight:700; color:#0f172a;">
     Ready to learn something today, {{ $firstName }}?
@@ -18,7 +18,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 26px 0;">
     <tr>
         <td style="background-color:#f0fdfa; border:1px solid #99f6e4; border-left:4px solid #14b8a6; border-radius:8px; padding:18px 20px;">
-            <p style="margin:0 0 4px 0; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#0f766e;">Tip of the day</p>
+            <p style="margin:0 0 4px 0; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#0f766e;">Quick tip</p>
             <p style="margin:0; font-size:15px; line-height:1.6; color:#334155;">{{ $showTip }}</p>
         </td>
     </tr>
@@ -37,13 +37,13 @@
 
 {{-- Why it matters --}}
 <h2 style="margin:0 0 14px 0; font-size:18px; font-weight:700; color:#0f172a;">
-    Why show up every day?
+    Why keep showing up?
 </h2>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td style="vertical-align:top; padding:0 0 14px 0;">
             <p style="margin:0; font-size:15px; line-height:1.7; color:#475569;">
-                <span style="color:#14b8a6; font-weight:700;">Consistency beats intensity.</span> Ten minutes a day compounds faster than a weekend cram session you'll forget by Monday.
+                <span style="color:#14b8a6; font-weight:700;">Consistency beats intensity.</span> A little learning every few days compounds faster than a weekend cram session you'll forget by Monday.
             </p>
         </td>
     </tr>
@@ -67,7 +67,7 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #f1f5f9; font-size:0; line-height:0; padding:24px 0;">&nbsp;</td></tr></table>
 
 <p style="margin:0 0 6px 0; font-size:14px; line-height:1.7; color:#64748b;">
-    Not in the mood today? No worries — we'll be here tomorrow. But if you've got even five minutes, one small extraction keeps your streak (and your momentum) alive.
+    Not in the mood today? No worries — we'll be here when you're ready. But if you've got even five minutes, one small extraction keeps your momentum going.
 </p>
 
 <p style="margin:22px 0 4px 0; font-size:15px; line-height:1.6; color:#475569;">

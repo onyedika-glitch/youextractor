@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'webhooks/*',
             'api/webhooks/bachs',
             'webhooks/bachs',
+            'unsubscribe/*',
         ]);
         $middleware->redirectTo(
             guests: '/signin',
