@@ -6,7 +6,6 @@ use App\Mail\DailyReminderEmail;
 use App\Models\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
@@ -29,7 +28,7 @@ class EmailRemindersTest extends TestCase
     {
         return ! in_array($this->name(), [
             'test_reminder_email_has_unsubscribe_link_and_headers',
-            'test_reminder_is_scheduled_every_third_day',
+            'test_reminder_runs_daily_in_batches_of_20',
         ], true);
     }
 
@@ -105,22 +104,31 @@ class EmailRemindersTest extends TestCase
         Mail::assertNotQueued(DailyReminderEmail::class, fn ($m) => $m->hasTo($unsubscribed->email));
     }
 
-    public function test_reminder_is_scheduled_every_third_day(): void
+    public function test_reminder_runs_daily_in_batches_of_20(): void
     {
         $event = collect(app(Schedule::class)->events())
             ->first(fn ($e) => str_contains($e->command ?? '', 'youextractor:daily-reminders'));
         $this->assertNotNull($event);
+        $this->assertStringContainsString('--limit=20', $event->command);
+        $this->assertSame('0 9 * * *', $event->expression);
+    }
 
-        $runs = 0;
-        $start = Carbon::parse('2026-11-01 09:00:00', 'UTC');
-        for ($day = 0; $day < 30; $day++) {
-            Carbon::setTestNow($start->copy()->addDays($day));
-            if ($event->filtersPass(app())) {
-                $runs++;
-            }
-        }
-        Carbon::setTestNow();
+    public function test_command_sends_at_most_the_limit_and_skips_recently_reminded(): void
+    {
+        Mail::fake();
+        $recent = $this->makeUser(['email' => 'recent@example.com']);
+        $recent->forceFill(['last_reminder_at' => now()->subDay()])->save();
+        $old = $this->makeUser(['email' => 'old@example.com']);
+        $old->forceFill(['last_reminder_at' => now()->subDays(4)])->save();
+        $new1 = $this->makeUser(['email' => 'new1@example.com']);
+        $new2 = $this->makeUser(['email' => 'new2@example.com']);
 
-        $this->assertSame(10, $runs);
+        $this->artisan('youextractor:daily-reminders', ['--limit' => 2])->assertSuccessful();
+
+        Mail::assertQueued(DailyReminderEmail::class, 2);
+        Mail::assertQueued(DailyReminderEmail::class, fn ($m) => $m->hasTo('new1@example.com'));
+        Mail::assertQueued(DailyReminderEmail::class, fn ($m) => $m->hasTo('new2@example.com'));
+        Mail::assertNotQueued(DailyReminderEmail::class, fn ($m) => $m->hasTo('recent@example.com'));
+        $this->assertNotNull($new1->fresh()->last_reminder_at);
     }
 }

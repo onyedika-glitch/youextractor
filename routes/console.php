@@ -8,10 +8,9 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-// Send the reminder email every 3 days at 9:00 AM (UTC) to users who haven't unsubscribed.
-// Counting whole days since 1970 keeps the 3-day rhythm steady across month ends.
-Schedule::command('youextractor:daily-reminders')
+// Send reminders at 9:00 AM (UTC) in small batches: 20 users a day, so we stay well under
+// the email provider's daily limit. A user gets at most one reminder every 3 days.
+Schedule::command('youextractor:daily-reminders --limit=20')
     ->dailyAt('09:00')
-    ->when(fn () => intdiv(now()->timestamp, 86400) % 3 === 0)
     ->withoutOverlapping()
     ->onOneServer();

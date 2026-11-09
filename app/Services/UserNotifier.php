@@ -43,24 +43,28 @@ class UserNotifier
     /**
      * Send the daily engagement reminder.
      */
-    public function dailyReminder(User $user, string $tip = ''): void
+    public function dailyReminder(User $user, string $tip = ''): bool
     {
-        $this->dispatch($user, fn () => Mail::to($user->email)->send(new DailyReminderEmail($user, $tip)), 'daily-reminder');
+        return $this->dispatch($user, fn () => Mail::to($user->email)->send(new DailyReminderEmail($user, $tip)), 'daily-reminder');
     }
 
     /**
      * Run a send closure without ever letting a mail failure break the request.
      */
-    protected function dispatch(User $user, callable $send, string $label): void
+    protected function dispatch(User $user, callable $send, string $label): bool
     {
         if (empty($user->email)) {
-            return;
+            return false;
         }
 
         try {
             $send();
+
+            return true;
         } catch (\Throwable $e) {
             Log::error("Failed to send {$label} email to user {$user->id}: " . $e->getMessage());
+
+            return false;
         }
     }
 }

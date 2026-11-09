@@ -14,7 +14,7 @@ class SendDailyReminders extends Command
      * @var string
      */
     protected $signature = 'youextractor:daily-reminders
-                            {--limit=0 : Max number of users to email (0 = no limit)}
+                            {--limit=20 : Max number of users to email in one run (0 = no limit)}
                             {--dry-run : List recipients without actually sending}';
 
     /**
@@ -22,7 +22,7 @@ class SendDailyReminders extends Command
      *
      * @var string
      */
-    protected $description = 'Send the reminder email to every user who has not unsubscribed (scheduled every 3 days).';
+    protected $description = 'Send the reminder email to the next batch of users (at most one email per user every 3 days).';
 
     /**
      * A rotating set of tips so the daily email stays fresh.
@@ -47,7 +47,16 @@ class SendDailyReminders extends Command
         // Pick today's tip deterministically so every user in a run gets the same one.
         $tip = $this->tips[(int) date('z') % count($this->tips)];
 
-        $query = User::query()->whereNotNull('email')->where('email_reminders', true);
+        // Users who haven't unsubscribed and haven't had a reminder in the last 3 days.
+        // Never-reminded users go first, then whoever waited longest.
+        $query = User::query()
+            ->whereNotNull('email')
+            ->where('email_reminders', true)
+            ->where(fn ($q) => $q->whereNull('last_reminder_at')
+                ->orWhere('last_reminder_at', '<=', now()->subDays(3)))
+            ->orderByRaw('last_reminder_at IS NOT NULL')
+            ->orderBy('last_reminder_at')
+            ->orderBy('id');
         if ($limit > 0) {
             $query->limit($limit);
         }
@@ -55,25 +64,25 @@ class SendDailyReminders extends Command
         $sent = 0;
         $failed = 0;
 
-        $query->chunkById(200, function ($users) use ($notifier, $tip, $dryRun, &$sent, &$failed) {
-            foreach ($users as $user) {
-                if ($dryRun) {
-                    $this->line("  would email: {$user->email}");
-                    $sent++;
-                    continue;
-                }
-
-                try {
-                    $notifier->dailyReminder($user, $tip);
-                    $sent++;
-                } catch (\Throwable $e) {
-                    $failed++;
-                    $this->error("  failed for {$user->email}: {$e->getMessage()}");
-                }
+        foreach ($query->get() as $user) {
+            if ($dryRun) {
+                $this->line("  would email: {$user->email}");
+                $sent++;
+                continue;
             }
-        });
 
-        $this->info(($dryRun ? '[dry-run] ' : '') . "Daily reminders processed. Sent: {$sent}, Failed: {$failed}.");
+            if ($notifier->dailyReminder($user, $tip)) {
+                $user->forceFill(['last_reminder_at' => now()])->save();
+                $sent++;
+            } else {
+                // Most likely the email provider's daily limit: stop now and let tomorrow's run continue.
+                $failed++;
+                $this->error("  failed for user {$user->id}, stopping this run");
+                break;
+            }
+        }
+
+        $this->info(($dryRun ? '[dry-run] ' : '') . "Reminders processed. Sent: {$sent}, Failed: {$failed}.");
 
         return self::SUCCESS;
     }
